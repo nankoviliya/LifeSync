@@ -1,8 +1,8 @@
 using PersonalFinances.API.Shared;
 
-namespace PersonalFinances.API.Models;
+namespace PersonalFinances.API.Features.IncomeTracking.Models;
 
-public class IncomeTransaction
+public class GetIncomeDto
 {
     public Guid Id { get; init; } // Primary Key
 
@@ -11,8 +11,4 @@ public class IncomeTransaction
     public DateTime Date { get; init; } // Date of income
 
     public string Description { get; init; } = default!; // Optional details
-    
-    public Guid UserId { get; init; } // Foreign Key to User
-
-    public User User { get; init; } = default!; // Owner of the transaction
 }

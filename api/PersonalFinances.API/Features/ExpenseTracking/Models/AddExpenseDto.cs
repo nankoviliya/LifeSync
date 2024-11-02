@@ -1,8 +1,9 @@
+using PersonalFinances.API.Models;
 using PersonalFinances.API.Shared;
 
-namespace PersonalFinances.API.Models;
+namespace PersonalFinances.API.Features.ExpenseTracking.Models;
 
-public class ExpenseTransaction
+public class AddExpenseDto
 {
     public Guid Id { get; init; } // Primary Key
 
@@ -13,15 +14,4 @@ public class ExpenseTransaction
     public string Description { get; init; } = default!; // Optional details
     
     public ExpenseType ExpenseType { get; init; }
-    
-    public Guid UserId { get; init; } // Foreign Key to User
-
-    public User User { get; init; } = default!; // Owner of the transaction
-}
-
-public enum ExpenseType
-{
-    Needs,
-    Wants,
-    Savings,
 }

@@ -27,7 +27,7 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
                                    $"User Id={databaseSecret.Username};" +
                                    $"Password={databaseSecret.Password};" +
                                    $"Encrypt=True;" + 
-                                   $"TrustServerCertificate=False;";
+                                   $"TrustServerCertificate=True;";
 
             return connectionString;
         }

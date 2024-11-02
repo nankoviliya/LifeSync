@@ -4,7 +4,7 @@ namespace PersonalFinances.API.Models;
 
 public class User
 {
-    public int Id { get; init; } // Primary Key
+    public Guid Id { get; init; } // Primary Key
     
     public string Username { get; init; } = default!;
     
