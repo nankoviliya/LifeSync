@@ -1,5 +1,7 @@
 using Amazon.SecretsManager;
 using Microsoft.AspNetCore.Http.Json;
+using PersonalFinances.API.Features.ExpenseTracking.Services;
+using PersonalFinances.API.Features.IncomeTracking.Services;
 using PersonalFinances.API.Persistence;
 using PersonalFinances.API.Secrets;
 
@@ -20,6 +22,21 @@ builder.Services.AddSingleton<ISecretsManager, SecretsManager>();
 
 builder.Services.AddDbContext<ApplicationDbContext>();
 
+builder.Services.AddScoped<IExpenseTrackingService, ExpenseTrackingService>();
+
+builder.Services.AddScoped<IIncomeTrackingService, IncomeTrackingService>();
+
+// Add CORS policy to allow the frontend to communicate with the backend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200") // Update with your React app's URL
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -33,6 +50,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 

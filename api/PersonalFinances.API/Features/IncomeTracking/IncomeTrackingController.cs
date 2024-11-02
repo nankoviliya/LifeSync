@@ -5,7 +5,7 @@ using PersonalFinances.API.Features.IncomeTracking.Services;
 namespace PersonalFinances.API.Features.IncomeTracking;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/income")]
 public class IncomeTrackingController : ControllerBase
 {
     private readonly IIncomeTrackingService incomeTrackingService;
@@ -15,10 +15,10 @@ public class IncomeTrackingController : ControllerBase
         this.incomeTrackingService = incomeTrackingService;
     }
     
-    [HttpGet(Name = nameof(Transactions))]
-    public async Task<IActionResult> Transactions()
+    [HttpGet("transactions", Name = nameof(GetIncomeTransactions))]
+    public async Task<IActionResult> GetIncomeTransactions()
     {
-        var result = await incomeTrackingService.GetUserIncomesAsync(Guid.Empty);
+        var result = await incomeTrackingService.GetUserIncomesAsync(Guid.NewGuid());
         
         return Ok(result);  
     }
@@ -26,7 +26,7 @@ public class IncomeTrackingController : ControllerBase
     [HttpPost(Name = nameof(AddIncome))]
     public async Task<IActionResult> AddIncome(AddIncomeDto request)
     {
-        var result = await incomeTrackingService.AddIncomeAsync(Guid.Empty, request);
+        var result = await incomeTrackingService.AddIncomeAsync(Guid.NewGuid(), request);
         
         return Ok(result);  
     }

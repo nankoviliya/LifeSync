@@ -5,13 +5,15 @@ namespace PersonalFinances.API.Features.ExpenseTracking.Models;
 
 public class GetExpenseDto
 {
-    public Guid Id { get; init; } // Primary Key
+    public Guid Id { get; init; } 
 
-    public Money Amount { get; init; } = default!; // Expense amount
+    public decimal  Amount { get; init; } = default!;
     
-    public DateTime Date { get; init; } // Date of expense
+    public string  Currency { get; init; } = default!;
+    
+    public DateTime Date { get; init; } 
 
-    public string Description { get; init; } = default!; // Optional details
+    public string Description { get; init; } = default!;
     
     public ExpenseType ExpenseType { get; init; }
 }

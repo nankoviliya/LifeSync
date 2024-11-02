@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinances.API.Features.IncomeTracking.Models;
 using PersonalFinances.API.Models;
 using PersonalFinances.API.Persistence;
+using PersonalFinances.API.Shared;
 
 namespace PersonalFinances.API.Features.IncomeTracking.Services;
 
@@ -37,7 +38,7 @@ public class IncomeTrackingService : IIncomeTrackingService
         var incomeTransaction = new IncomeTransaction
         {
             Id = Guid.NewGuid(),
-            Amount = request.Amount,
+            Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
             Date = request.Date,
             Description = request.Description,
             UserId = userId

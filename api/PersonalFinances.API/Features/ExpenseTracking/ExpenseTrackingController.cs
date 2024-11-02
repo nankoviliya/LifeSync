@@ -5,7 +5,7 @@ using PersonalFinances.API.Features.ExpenseTracking.Services;
 namespace PersonalFinances.API.Features.ExpenseTracking;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/expense")]
 public class ExpenseTrackingController : ControllerBase
 {
     private readonly IExpenseTrackingService expenseTrackingService;
@@ -15,18 +15,18 @@ public class ExpenseTrackingController : ControllerBase
         this.expenseTrackingService = expenseTrackingService;
     }
     
-    [HttpGet(Name = nameof(Transactions))]
-    public async Task<IActionResult> Transactions()
+    [HttpGet("transactions", Name = nameof(GetExpenseTransactions))]
+    public async Task<IActionResult> GetExpenseTransactions()
     {
-        var result = await expenseTrackingService.GetUserExpensesAsync(Guid.Empty);
-        
+        var result = await expenseTrackingService.GetUserExpensesAsync(Guid.NewGuid());
+
         return Ok(result);  
     }
 
     [HttpPost(Name = nameof(AddExpense))]
     public async Task<IActionResult> AddExpense(AddExpenseDto request)
     {
-        var result = await expenseTrackingService.AddExpenseAsync(Guid.Empty, request);
+        var result = await expenseTrackingService.AddExpenseAsync(Guid.NewGuid(), request);
         
         return Ok(result);  
     }

@@ -5,7 +5,9 @@ namespace PersonalFinances.API.Features.IncomeTracking.Models;
 
 public record AddIncomeDto
 {
-    public Money Amount { get; init; } = default!;
+    public decimal Amount { get; init; } = default!;
+    
+    public string Currency { get; init; } = default!;
     
     public DateTime Date { get; init; } 
 

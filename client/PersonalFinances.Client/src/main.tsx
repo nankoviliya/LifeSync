@@ -5,6 +5,11 @@ import { routes } from '@infrastructure/routing/routes';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './infrastructure/api/queryClient/queryClient';
 import { createRoot } from 'react-dom/client';
+import { PrimeReactProvider } from 'primereact/api';
+
+import 'primereact/resources/themes/lara-light-blue/theme.css'; // Theme (you can choose different themes)
+import 'primereact/resources/primereact.min.css'; // Core CSS
+import 'primeicons/primeicons.css'; // Icons
 
 export const router = createBrowserRouter(routes);
 
@@ -14,8 +19,10 @@ const root = createRoot(appRoot);
 
 root.render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <PrimeReactProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </PrimeReactProvider>
   </StrictMode>,
 );
