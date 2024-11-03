@@ -1,20 +1,14 @@
+using Microsoft.AspNetCore.Identity;
 using PersonalFinances.API.Shared;
 
 namespace PersonalFinances.API.Models;
 
-public class User
+public class User : IdentityUser
 {
-    public Guid Id { get; init; } // Primary Key
-    
-    public string Username { get; init; } = default!;
-    
     public string FirstName { get; init; } = default!;
-    
     public string LastName { get; init; } = default!;
     
-    public string Email { get; init; } = default!;
-    
-    public string PasswordHash { get; init; } = default!;
+    public string PasswordSalt { get; init; } = default!;
     
     public Money Balance { get; init; } = default!;
 

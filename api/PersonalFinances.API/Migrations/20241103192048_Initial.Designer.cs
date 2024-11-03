@@ -12,7 +12,7 @@ using PersonalFinances.API.Persistence;
 namespace PersonalFinances.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241102191007_Initial")]
+    [Migration("20241103192048_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -44,9 +44,12 @@ namespace PersonalFinances.API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("ExpenseTransactions", (string)null);
                 });
@@ -67,23 +70,33 @@ namespace PersonalFinances.API.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("IncomeTransactions", (string)null);
                 });
 
             modelBuilder.Entity("PersonalFinances.API.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(320)
                         .HasColumnType("nvarchar(320)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -95,18 +108,45 @@ namespace PersonalFinances.API.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -115,9 +155,7 @@ namespace PersonalFinances.API.Migrations
                 {
                     b.HasOne("PersonalFinances.API.Models.User", "User")
                         .WithMany("ExpenseTransactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.OwnsOne("PersonalFinances.API.Shared.Money", "Amount", b1 =>
                         {
@@ -149,9 +187,7 @@ namespace PersonalFinances.API.Migrations
                 {
                     b.HasOne("PersonalFinances.API.Models.User", "User")
                         .WithMany("IncomeTransactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.OwnsOne("PersonalFinances.API.Shared.Money", "Amount", b1 =>
                         {
@@ -183,8 +219,8 @@ namespace PersonalFinances.API.Migrations
                 {
                     b.OwnsOne("PersonalFinances.API.Shared.Money", "Balance", b1 =>
                         {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<string>("UserId")
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<decimal>("Amount")
                                 .HasColumnType("decimal(18,2)");
@@ -203,8 +239,8 @@ namespace PersonalFinances.API.Migrations
 
                     b.OwnsOne("PersonalFinances.API.Shared.Currency", "CurrencyPreference", b1 =>
                         {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<string>("UserId")
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<string>("Code")
                                 .IsRequired()
