@@ -1,6 +1,6 @@
-import { useReadQuery } from '@infrastructure/api/hooks/useReadQuery';
-import { endpointsOptions } from '@infrastructure/api/endpoints/endpointsOptions';
-import { IExpenseTransactionGetModel } from '../models/expenseTransactionModel';
+import { IExpenseTransactionGetModel } from '@/features/expenseTracking/models/expenseTransactionModel';
+import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
+import { useReadQuery } from '@/infrastructure/api/hooks/useReadQuery';
 
 export const useExpenseTracking = () => {
   const { data, isLoading, isSuccess } = useReadQuery<

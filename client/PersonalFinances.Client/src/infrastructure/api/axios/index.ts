@@ -1,4 +1,4 @@
-import { environment } from '@environments/currentEnvironment';
+import { environment } from '@/environments/currentEnvironment';
 import axios from 'axios';
 
 const axiosInstance = axios.create({

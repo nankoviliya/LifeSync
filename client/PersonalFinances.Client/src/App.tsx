@@ -1,9 +1,8 @@
-import { useReadQuery } from '@infrastructure/api/hooks/useReadQuery';
-import styles from './App.module.scss';
-import { endpointsOptions } from '@infrastructure/api/endpoints/endpointsOptions';
+import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
+import { useReadQuery } from '@/infrastructure/api/hooks/useReadQuery';
+import { routePaths } from '@/infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
-import { routes } from '@infrastructure/routing/routes';
-import { routePaths } from '@infrastructure/routing/routePaths';
+import styles from './App.module.scss';
 
 function AppTest() {
   const { data, isLoading, isSuccess } = useReadQuery<string[]>({

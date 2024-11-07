@@ -1,8 +1,9 @@
-import App from '@App';
+import App from '@/App';
+import { ExpenseTracking } from '@/features/expenseTracking/components/ExpenseTracking';
+import { IncomeTracking } from '@/features/incomeTracking/components/IncomeTracking';
+import { routePaths } from '@/infrastructure/routing/routePaths';
+import * as React from 'react';
 import { RouteObject } from 'react-router-dom';
-import { routePaths } from '@infrastructure/routing/routePaths';
-import { IncomeTracking } from '@features/incomeTracking/components/IncomeTracking';
-import { ExpenseTracking } from '@features/expenseTracking/components/ExpenseTracking';
 
 export const routes: RouteObject[] = [
   {

@@ -1,13 +1,13 @@
-import local_env_var from '@environments/environment.local';
+import localEnvironment from '@/environments/environment.local';
 
 const { VITE_APP_ENV: APP_ENV } = import.meta.env;
 
 const getCurrentEnvironment = (env: string) => {
   switch (env) {
     case 'local':
-      return local_env_var;
+      return localEnvironment;
     default:
-      return local_env_var;
+      return localEnvironment;
   }
 };
 

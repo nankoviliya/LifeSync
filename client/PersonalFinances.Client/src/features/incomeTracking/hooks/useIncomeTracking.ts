@@ -1,6 +1,6 @@
-import { useReadQuery } from '@infrastructure/api/hooks/useReadQuery';
-import { IIncomeTransactionGetModel } from '../models/incomeTransactionModel';
-import { endpointsOptions } from '@infrastructure/api/endpoints/endpointsOptions';
+import { IIncomeTransactionGetModel } from '@/features/incomeTracking/models/incomeTransactionModel';
+import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
+import { useReadQuery } from '@/infrastructure/api/hooks/useReadQuery';
 
 export const useIncomeTracking = () => {
   const { data, isLoading, isSuccess } = useReadQuery<

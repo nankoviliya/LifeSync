@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PersonalFinances.API.Features.ExpenseTracking.Models;
 using PersonalFinances.API.Features.ExpenseTracking.Services;
@@ -18,7 +19,9 @@ public class ExpenseTrackingController : ControllerBase
     [HttpGet("transactions", Name = nameof(GetExpenseTransactions))]
     public async Task<IActionResult> GetExpenseTransactions()
     {
-        var result = await expenseTrackingService.GetUserExpensesAsync(Guid.NewGuid());
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var result = await expenseTrackingService.GetUserExpensesAsync(Guid.Parse(userId));
 
         return Ok(result);  
     }
@@ -26,7 +29,9 @@ public class ExpenseTrackingController : ControllerBase
     [HttpPost(Name = nameof(AddExpense))]
     public async Task<IActionResult> AddExpense(AddExpenseDto request)
     {
-        var result = await expenseTrackingService.AddExpenseAsync(Guid.NewGuid(), request);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var result = await expenseTrackingService.AddExpenseAsync(Guid.Parse(userId), request);
         
         return Ok(result);  
     }

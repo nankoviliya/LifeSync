@@ -21,6 +21,7 @@ public class ExpenseTrackingService: IExpenseTrackingService
         var userExpenseTransactions = await databaseContext.ExpenseTransactions
             .Where(x => x.UserId == userId)
             .AsNoTracking()
+            .OrderByDescending(x => x.Date)
             .ToListAsync();
 
         var userExpenseTransactionsDto = userExpenseTransactions.Select(x => new GetExpenseDto

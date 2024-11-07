@@ -3,11 +3,11 @@ export const endpoints = {
     getBaseInfo: 'Base/Get',
   },
   income: {
-    getUserTransactions: "Income/Transactions",
-    addUserTransaction: "Income/AddIncome"
+    getUserTransactions: 'Income/Transactions',
+    addUserTransaction: 'Income/AddIncome',
   },
   expense: {
-    getUserTransactions: "Expense/Transactions",
-    addUserTransaction: "Expense/AddExpense"
-  }
+    getUserTransactions: 'Expense/Transactions',
+    addUserTransaction: 'Expense/AddExpense',
+  },
 };

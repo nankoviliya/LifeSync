@@ -5,7 +5,7 @@ using PersonalFinances.API.Features.Authentication.Models;
 
 namespace PersonalFinances.API.Secrets;
 
-public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration configuration)
+public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration configuration, IHostEnvironment _hostEnvironment)
     : ISecretsManager
 {
     public async Task<string> GetConnectionStringAsync()
@@ -22,14 +22,24 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
         if (response.SecretString != null)
         {
             var databaseSecret = JsonSerializer.Deserialize<DbConnectionSecret>(response.SecretString);
+
+            if (_hostEnvironment.IsDevelopment())
+            {
+                var devConnectionString = $"Server=localhost;" +
+                                       $"Database={databaseSecret.DbInstanceIdentifier};" +
+                                       $"Trusted_Connection=True;" +
+                                       $"TrustServerCertificate=True;";
+        
+                return devConnectionString;
+            }
             
             var connectionString = $"Server={databaseSecret.Host},{databaseSecret.Port};" +
                                    $"Database={databaseSecret.DbInstanceIdentifier};" +
                                    $"User Id={databaseSecret.Username};" +
                                    $"Password={databaseSecret.Password};" +
-                                   $"Encrypt=True;" + 
-                                   $"TrustServerCertificate=True;";
-
+                                   $"Encrypt=True;" +
+                                   $"TrustServerCertificate=False;";
+        
             return connectionString;
         }
 

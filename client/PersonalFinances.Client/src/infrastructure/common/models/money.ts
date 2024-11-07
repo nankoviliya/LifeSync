@@ -1,4 +1,4 @@
-export interface IMoney{
-    amount: number;
-    currency: string;
+export interface IMoney {
+  amount: number;
+  currency: string;
 }

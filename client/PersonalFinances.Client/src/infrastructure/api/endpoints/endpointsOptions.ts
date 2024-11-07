@@ -1,4 +1,4 @@
-import { IEndpointsOptions } from '@infrastructure/api/models/endpointsOptions';
+import { IEndpointsOptions } from '@/infrastructure/api/models/endpointsOptions';
 import { endpoints } from './endpoints';
 
 export const endpointsOptions: IEndpointsOptions = {

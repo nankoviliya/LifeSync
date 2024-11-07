@@ -1,6 +1,6 @@
 {
-  "files": [],
   "compilerOptions": {
+    "composite": true,
     "outDir": "build/dist",
     "module": "ESNext",
     "target": "ESNext",
@@ -11,7 +11,6 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
@@ -25,7 +24,5 @@
     "esModuleInterop": true,
     "strict": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"],
-  "references": [{ "path": "./tsconfig.app.json" }]
+  "include": ["vite.config.ts", "scripts", "plugins"]
 }

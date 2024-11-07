@@ -10,7 +10,7 @@ interface IUseReadQueryOptions {
 export const useReadQuery = <TResponse>(
   options: IUseReadQueryOptions & UseQueryOptions<TResponse, AxiosError>,
 ) => {
-  const queryFn = () => api.GET<TResponse>(options.endpoint, );
+  const queryFn = () => api.GET<TResponse>(options.endpoint);
 
   const query = useQuery({ queryFn, ...options });
 

@@ -1,4 +1,4 @@
-export interface IReadQueryBaseOptions{
-    endpoint: string;
-    key: string;
+export interface IReadQueryBaseOptions {
+  endpoint: string;
+  key: string;
 }

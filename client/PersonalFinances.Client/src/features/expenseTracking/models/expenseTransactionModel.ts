@@ -1,5 +1,3 @@
-import { IMoney } from '@infrastructure/common/models/money';
-
 export interface IExpenseTransactionGetModel {
   id: string;
   amount: number;

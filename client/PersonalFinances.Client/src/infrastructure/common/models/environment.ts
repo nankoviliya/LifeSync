@@ -1,4 +1,4 @@
-import { EnvironmentDefaultUrlType } from '@infrastructure/common/enums/environmentDefaultUrlType';
+import { EnvironmentDefaultUrlType } from '@/infrastructure/common/enums/environmentDefaultUrlType';
 
 export interface IEnvironment {
   version: string;

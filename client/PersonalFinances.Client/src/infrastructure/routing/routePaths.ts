@@ -10,10 +10,10 @@ export const routePaths = {
   },
   incomeTracking: {
     path: '/income-tracking',
-    name: "Income Tracking",
+    name: 'Income Tracking',
   },
   expenseTracking: {
     path: '/expense-tracking',
-    name: "Expense Tracking",
-  }
+    name: 'Expense Tracking',
+  },
 };
