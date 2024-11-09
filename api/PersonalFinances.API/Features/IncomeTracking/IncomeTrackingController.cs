@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalFinances.API.Features.IncomeTracking.Models;
 using PersonalFinances.API.Features.IncomeTracking.Services;
@@ -5,6 +6,7 @@ using PersonalFinances.API.Features.IncomeTracking.Services;
 namespace PersonalFinances.API.Features.IncomeTracking;
 
 [ApiController]
+[Authorize]
 [Route("api/income")]
 public class IncomeTrackingController : ControllerBase
 {

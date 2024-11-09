@@ -4,8 +4,16 @@ export interface IRoutePath {
 }
 
 export const routePaths = {
-  home: {
+  app: {
     path: '/',
+    name: 'App',
+  },
+  login: {
+    path: '/login',
+    name: 'Login',
+  },
+  home: {
+    path: '/home',
     name: 'Home',
   },
   incomeTracking: {

@@ -1,2 +1,11 @@
 .expense-tracking {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
 }

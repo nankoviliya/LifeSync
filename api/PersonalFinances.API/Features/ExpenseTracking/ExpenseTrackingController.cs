@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalFinances.API.Features.ExpenseTracking.Models;
 using PersonalFinances.API.Features.ExpenseTracking.Services;
@@ -6,6 +7,7 @@ using PersonalFinances.API.Features.ExpenseTracking.Services;
 namespace PersonalFinances.API.Features.ExpenseTracking;
 
 [ApiController]
+[Authorize]
 [Route("api/expense")]
 public class ExpenseTrackingController : ControllerBase
 {

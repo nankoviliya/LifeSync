@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     {
         var token = await _authService.LoginAsync(request);
         
-        if (token == null)
+        if (token is null)
         {
             return Unauthorized();
         }

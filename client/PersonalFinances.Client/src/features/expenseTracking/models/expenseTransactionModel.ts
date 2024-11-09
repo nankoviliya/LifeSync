@@ -8,7 +8,7 @@ export interface IExpenseTransactionGetModel {
 }
 
 export enum ExpenseType {
-  Needs,
-  Wants,
-  Savings,
+  Needs = 'Needs',
+  Wants = 'Wants',
+  Savings = 'Savings',
 }
