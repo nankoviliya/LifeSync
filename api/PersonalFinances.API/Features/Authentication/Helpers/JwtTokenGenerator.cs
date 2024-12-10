@@ -6,16 +6,17 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PersonalFinances.API.Features.Authentication.Models;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Secrets;
 
 namespace PersonalFinances.API.Features.Authentication.Helpers;
 
 public class JwtTokenGenerator
 {
-    private readonly JwtSettings _jwtSettings;
+    private readonly JwtSecrets _jwtSecrets;
 
-    public JwtTokenGenerator(JwtSettings jwtSettings)
+    public JwtTokenGenerator(JwtSecrets jwtSecrets)
     {
-        _jwtSettings = jwtSettings;
+        _jwtSecrets = jwtSecrets;
     }
     
     public TokenResponse GenerateJwtToken(User user)
@@ -27,14 +28,14 @@ public class JwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecrets.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _jwtSettings.Issuer,
-            audience: _jwtSettings.Audience,
+            issuer: _jwtSecrets.Issuer,
+            audience: _jwtSecrets.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+            expires: DateTime.UtcNow.AddMinutes(_jwtSecrets.ExpiryMinutes),
             signingCredentials: creds);
 
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);

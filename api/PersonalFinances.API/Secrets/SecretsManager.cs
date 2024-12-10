@@ -10,7 +10,7 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
 {
     public async Task<string> GetConnectionStringAsync()
     {
-        string secretName = configuration["SecretsManager:ConnectionStringSecretName"];
+        string secretName = configuration["SecretsManager"];
         
         var request = new GetSecretValueRequest
         {
@@ -21,8 +21,10 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
         var response = await secretsManager.GetSecretValueAsync(request);
         if (response.SecretString != null)
         {
-            var databaseSecret = JsonSerializer.Deserialize<DbConnectionSecret>(response.SecretString);
+            var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
 
+            var databaseSecret = appSecrets.Database;
+            
             if (_hostEnvironment.IsDevelopment())
             {
                 var devConnectionString = $"Server=localhost;" +
@@ -46,9 +48,9 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
         throw new Exception("Secret not found or is in binary format.");
     }
 
-    public async Task<JwtSettings> GetJwtSettingsAsync()
+    public async Task<JwtSecrets> GetJwtSecretAsync()
     {
-        string secretName = configuration["SecretsManager:JwtSettingsSecretName"];
+        string secretName = configuration["SecretsManager"];
         
         var request = new GetSecretValueRequest
         {
@@ -57,11 +59,12 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
         };
 
         var response = await secretsManager.GetSecretValueAsync(request);
+        
         if (response.SecretString != null)
         {
-            var jwtSettings = JsonSerializer.Deserialize<JwtSettings>(response.SecretString);
+            var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
 
-            return jwtSettings;
+            return appSecrets.JWT;
         }
 
         throw new Exception("Secret not found or is in binary format.");

@@ -6,5 +6,5 @@ public interface ISecretsManager
 {
     Task<string> GetConnectionStringAsync();
     
-    Task<JwtSettings> GetJwtSettingsAsync();
+    Task<JwtSecrets> GetJwtSecretAsync();
 }

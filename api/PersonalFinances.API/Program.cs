@@ -35,8 +35,8 @@ builder.Services.AddSingleton<ISecretsManager, SecretsManager>();
 // Get JwtSettings from AWS Secrets Manager
 var serviceProvider = builder.Services.BuildServiceProvider();
 var secretsManager = serviceProvider.GetService<ISecretsManager>();
-var jwtSettings = secretsManager.GetJwtSettingsAsync().Result;
-builder.Services.AddSingleton<JwtSettings>(jwtSettings);
+var jwtSecrets = secretsManager.GetJwtSecretAsync().Result;
+builder.Services.AddSingleton<JwtSecrets>(jwtSecrets);
 
 // Add authentication service
 builder.Services.AddAuthentication(options =>
@@ -52,9 +52,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings.Issuer,
-        ValidAudience = jwtSettings.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)) // use a secret key here
+        ValidIssuer = jwtSecrets.Issuer,
+        ValidAudience = jwtSecrets.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey)) // use a secret key here
     };
 });
 

@@ -2,23 +2,23 @@ using System.Text.Json.Serialization;
 
 namespace PersonalFinances.API.Secrets;
 
-public class DbConnectionSecret
+public class DbConnectionSecrets
 {
-    [JsonPropertyName("username")]
+    [JsonPropertyName("Username")]
     public string Username { get; set; }
 
-    [JsonPropertyName("password")]
+    [JsonPropertyName("Password")]
     public string Password { get; set; }
 
-    [JsonPropertyName("engine")]
+    [JsonPropertyName("Engine")]
     public string Engine { get; set; }
 
-    [JsonPropertyName("host")]
+    [JsonPropertyName("Host")]
     public string Host { get; set; }
 
-    [JsonPropertyName("port")]
+    [JsonPropertyName("Port")]
     public int Port { get; set; }
 
-    [JsonPropertyName("dbInstanceIdentifier")]
+    [JsonPropertyName("DbInstanceIdentifier")]
     public string DbInstanceIdentifier { get; set; }
 }
