@@ -8,6 +8,7 @@ import { Calendar } from 'primereact/calendar';
 import { ExpenseType } from '@/features/expenseTracking/models/expenseTransactionModel';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
+import { parseCalendarDate } from '@/infrastructure/common/utilities/utilities';
 
 export interface INewExpenseTransactionProps {
   control: Control<INewExpenseTransactionRequest>;
@@ -70,6 +71,10 @@ export const NewExpenseTransaction = ({
               id={field.name}
               {...field}
               className={classNames({ 'p-invalid': fieldState.invalid })}
+              onChange={(e) => {
+                const utcDate = parseCalendarDate(e.value);
+                field.onChange(utcDate);
+              }}
             />
           </>
         )}
