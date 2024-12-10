@@ -1,5 +1,5 @@
 import { useNewExpenseTransactionMutation } from '@/features/expenseTracking/addTransaction/hooks/useNewExpenseTransactionMutation';
-import { INewExpenseTransactionRequest } from '@/features/expenseTracking/models/newExpenseTransactionRequest';
+import { INewExpenseTransactionRequest } from '@/features/expenseTracking/addTransaction/models/newExpenseTransactionRequest';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

@@ -4,11 +4,13 @@ namespace PersonalFinances.API.Features.IncomeTracking.Models;
 
 public class GetIncomeDto
 {
-    public Guid Id { get; init; } // Primary Key
+    public Guid Id { get; init; } 
 
-    public Money Amount { get; init; } = default!;// Income amount
+    public decimal  Amount { get; init; } = default!;
     
-    public DateTime Date { get; init; } // Date of income
+    public string  Currency { get; init; } = default!;
+    
+    public DateTime Date { get; init; } 
 
-    public string Description { get; init; } = default!; // Optional details
+    public string Description { get; init; } = default!;
 }

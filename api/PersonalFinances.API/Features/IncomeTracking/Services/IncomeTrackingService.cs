@@ -19,13 +19,15 @@ public class IncomeTrackingService : IIncomeTrackingService
     {
         var userIncomeTransactions = await databaseContext.IncomeTransactions
             .Where(x => x.UserId == userId)
+            .OrderByDescending(x => x.Date)
             .AsNoTracking()
             .ToListAsync();
 
         var userIncomeTransactionsDto = userIncomeTransactions.Select(x => new GetIncomeDto
         {
             Id = x.Id,
-            Amount = x.Amount,
+            Amount = x.Amount.Amount,
+            Currency = x.Amount.Currency.Code,
             Date = x.Date,
             Description = x.Description
         });

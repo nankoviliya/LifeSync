@@ -1,29 +1,22 @@
 import { Control, Controller } from 'react-hook-form';
-import styles from './NewExpenseTransaction.module.scss';
-import { INewExpenseTransactionRequest } from '@/features/expenseTracking/addTransaction/models/newExpenseTransactionRequest';
+import styles from './NewIncomeTransaction.module.scss';
 import { InputNumber } from 'primereact/inputnumber';
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
-import { ExpenseType } from '@/features/expenseTracking/models/expenseTransactionModel';
-import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import { parseCalendarDate } from '@/infrastructure/common/utilities/utilities';
+import { INewIncomeTransactionRequest } from '@/features/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
 
 export interface INewExpenseTransactionProps {
-  control: Control<INewExpenseTransactionRequest>;
+  control: Control<INewIncomeTransactionRequest>;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
-export const NewExpenseTransaction = ({
+export const NewIncomeTransaction = ({
   control,
   handleSubmit,
 }: INewExpenseTransactionProps) => {
-  const expenseTypeOptions = Object.values(ExpenseType).map((type) => ({
-    label: type,
-    value: type,
-  }));
-
   return (
     <form className={styles['form']} onSubmit={handleSubmit}>
       <Controller
@@ -90,22 +83,6 @@ export const NewExpenseTransaction = ({
               id={field.name}
               {...field}
               autoFocus
-              className={classNames({ 'p-invalid': fieldState.invalid })}
-            />
-          </>
-        )}
-      />
-      <Controller
-        name={'expenseType'}
-        control={control}
-        rules={{ required: 'Expense type is required.' }}
-        render={({ field, fieldState }) => (
-          <>
-            <label htmlFor="expenseType">Expense Type</label>
-            <Dropdown
-              id={field.name}
-              {...field}
-              options={expenseTypeOptions}
               className={classNames({ 'p-invalid': fieldState.invalid })}
             />
           </>

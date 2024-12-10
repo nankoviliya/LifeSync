@@ -2,7 +2,8 @@ import { IMoney } from '@/infrastructure/common/models/money';
 
 export interface IIncomeTransactionGetModel {
   id: string;
-  amount: IMoney;
+  amount: number;
+  currency: string;
   date: string;
   description: string;
 }

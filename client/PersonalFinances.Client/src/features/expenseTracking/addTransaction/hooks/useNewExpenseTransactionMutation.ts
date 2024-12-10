@@ -1,4 +1,4 @@
-import { INewExpenseTransactionRequest } from '@/features/expenseTracking/models/newExpenseTransactionRequest';
+import { INewExpenseTransactionRequest } from '@/features/expenseTracking/addTransaction/models/newExpenseTransactionRequest';
 import { endpoints } from '@/infrastructure/api/endpoints/endpoints';
 import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
 import { useQueryInvalidation } from '@/infrastructure/api/hooks/useQueryInvalidation';

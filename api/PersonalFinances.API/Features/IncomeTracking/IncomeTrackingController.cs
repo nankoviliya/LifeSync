@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalFinances.API.Features.IncomeTracking.Models;
@@ -20,7 +21,9 @@ public class IncomeTrackingController : ControllerBase
     [HttpGet("transactions", Name = nameof(GetIncomeTransactions))]
     public async Task<IActionResult> GetIncomeTransactions()
     {
-        var result = await incomeTrackingService.GetUserIncomesAsync(Guid.NewGuid());
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var result = await incomeTrackingService.GetUserIncomesAsync(Guid.Parse(userId));
         
         return Ok(result);  
     }
@@ -28,7 +31,9 @@ public class IncomeTrackingController : ControllerBase
     [HttpPost(Name = nameof(AddIncome))]
     public async Task<IActionResult> AddIncome(AddIncomeDto request)
     {
-        var result = await incomeTrackingService.AddIncomeAsync(Guid.NewGuid(), request);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        var result = await incomeTrackingService.AddIncomeAsync(Guid.Parse(userId), request);
         
         return Ok(result);  
     }
