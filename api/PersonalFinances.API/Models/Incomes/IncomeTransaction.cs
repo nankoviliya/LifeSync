@@ -1,11 +1,10 @@
+using PersonalFinances.API.Models.Abstractions;
 using PersonalFinances.API.Shared;
 
 namespace PersonalFinances.API.Models;
 
-public class IncomeTransaction
+public class IncomeTransaction : Entity
 {
-    public Guid Id { get; init; } // Primary Key
-
     public Money Amount { get; init; } = default!;// Income amount
     
     public DateTime Date { get; init; } // Date of income

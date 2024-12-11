@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinances.API.Features.ExpenseTracking.Models;
 using PersonalFinances.API.Features.IncomeTracking.Models;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.Events;
 using PersonalFinances.API.Persistence;
 using PersonalFinances.API.Shared;
 
@@ -49,6 +50,9 @@ public class ExpenseTrackingService: IExpenseTrackingService
         };
         
         await databaseContext.ExpenseTransactions.AddAsync(expenseTransaction);
+        
+        expenseTransaction.RaiseDomainEvent(new ExpenseTransactionCreatedDomainEvent(userId, expenseTransaction));
+        
         await databaseContext.SaveChangesAsync();
 
         return expenseTransaction.Id;

@@ -8,9 +8,13 @@ using Microsoft.IdentityModel.Tokens;
 using PersonalFinances.API.Features.Authentication.Helpers;
 using PersonalFinances.API.Features.Authentication.Models;
 using PersonalFinances.API.Features.Authentication.Services;
+using PersonalFinances.API.Features.ExpenseTracking.EventHandlers;
 using PersonalFinances.API.Features.ExpenseTracking.Services;
+using PersonalFinances.API.Features.IncomeTracking.EventHandlers;
 using PersonalFinances.API.Features.IncomeTracking.Services;
+using PersonalFinances.API.Infrastructure.DomainEvents;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.Events;
 using PersonalFinances.API.Persistence;
 using PersonalFinances.API.Secrets;
 
@@ -61,6 +65,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<ApplicationDbContext>();
+
+builder.Services.AddTransient<IDomainEventDispatcher, DomainEventDispatcher>();
+
+builder.Services.AddTransient<IDomainEventHandler<IncomeTransactionCreatedDomainEvent>, IncomeTransactionCreatedDomainEventHandler>();
+builder.Services.AddTransient<IDomainEventHandler<ExpenseTransactionCreatedDomainEvent>, ExpenseTransactionCreatedDomainEventHandler>();
 
 builder.Services.AddScoped<IExpenseTrackingService, ExpenseTrackingService>();
 

@@ -10,7 +10,7 @@ public class User : IdentityUser
     
     public string PasswordSalt { get; init; } = default!;
     
-    public Money Balance { get; init; } = default!;
+    public Money Balance { get; set; } = default!;
 
     public Currency CurrencyPreference { get; init; } = default!;
     
