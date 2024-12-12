@@ -19,30 +19,19 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
         };
 
         var response = await secretsManager.GetSecretValueAsync(request);
-        if (response.SecretString != null)
+        
+        if (response.SecretString is not null)
         {
             var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
 
             var databaseSecret = appSecrets.Database;
             
-            if (_hostEnvironment.IsDevelopment())
-            {
-                var devConnectionString = $"Server=localhost;" +
-                                       $"Database={databaseSecret.DbInstanceIdentifier};" +
-                                       $"Trusted_Connection=True;" +
-                                       $"TrustServerCertificate=True;";
-        
-                return devConnectionString;
-            }
-            
-            var connectionString = $"Server={databaseSecret.Host},{databaseSecret.Port};" +
+            var devConnectionString = $"Server=localhost;" +
                                    $"Database={databaseSecret.DbInstanceIdentifier};" +
-                                   $"User Id={databaseSecret.Username};" +
-                                   $"Password={databaseSecret.Password};" +
-                                   $"Encrypt=True;" +
-                                   $"TrustServerCertificate=False;";
-        
-            return connectionString;
+                                   $"Trusted_Connection=True;" +
+                                   $"TrustServerCertificate=True;";
+    
+            return devConnectionString;
         }
 
         throw new Exception("Secret not found or is in binary format.");
