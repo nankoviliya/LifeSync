@@ -1,0 +1,79 @@
+# JetBrains Rider and IDE-specific files
+.idea/
+*.DotSettings.user
+
+# Visual Studio-specific files
+.vs/
+*.suo
+*.v17/
+
+# Build output directories
+bin/
+obj/
+
+# Debug and cache files
+*.cache
+*.log
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+*.sourcelink.json
+
+# NuGet
+*.nuget.dgspec.json
+*.nuget.g.props
+*.nuget.g.targets
+project.assets.json
+project.nuget.cache
+project.packagespec.json
+rider.project.model.nuget.info
+rider.project.restore.info
+
+# Localization resource files
+**/*.resources.dll
+
+# Test-related files
+*.testadapter.dll
+*.execution.dotnet.dll
+.testhost.*
+*.CoverageSourceRootsMapping_*
+
+# Runtime-specific directories
+runtimes/
+runtimes/unix/
+runtimes/win/
+runtimes/win-arm/
+runtimes/win-arm64/
+runtimes/win-x64/
+runtimes/win-x86/
+
+# Temporary and generated files
+*.TemporaryGeneratedFile*
+*.GeneratedMSBuildEditorConfig.editorconfig
+*.AssemblyReference.cache
+*.CoreCompileInputs.cache
+*.FileListAbsolute.txt
+*.genruntimeconfig.cache
+*.AssemblyInfoInputs.cache
+*.GlobalUsings.g.cs
+*.sln.docstates
+
+# Exclude any specific DLLs or executables
+*.dll
+*.exe
+*.vsidx
+
+# Localization resource directories
+/cs/
+/de/
+/es/
+/fr/
+/it/
+/ja/
+/ko/
+/pl/
+/pt-BR/
+/ru/
+/tr/
+/zh-Hans/
+/zh-Hant/
