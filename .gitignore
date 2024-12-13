@@ -77,3 +77,8 @@ runtimes/win-x86/
 /tr/
 /zh-Hans/
 /zh-Hant/
+api/PersonalFinances.API/obj/PersonalFinances.API.csproj.nuget.dgspec.json
+api/PersonalFinances.API/obj/PersonalFinances.API.csproj.nuget.g.props
+api/PersonalFinances.API/obj/project.assets.json
+api/PersonalFinances.API/obj/project.nuget.cache
+api/PersonalFinances.API/obj/project.nuget.cache
