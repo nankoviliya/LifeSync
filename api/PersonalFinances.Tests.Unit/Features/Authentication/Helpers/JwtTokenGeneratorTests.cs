@@ -100,6 +100,6 @@ public class JwtTokenGeneratorTests
 
         Action action = () => generator.GenerateJwtToken(null);
 
-        action.Should().Throw<ApplicationException>();
+        action.Should().Throw<NullReferenceException>();
     }
 }
