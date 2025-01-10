@@ -1,4 +1,5 @@
 using PersonalFinances.API.Models.Abstractions;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Shared;
 
 namespace PersonalFinances.API.Models;

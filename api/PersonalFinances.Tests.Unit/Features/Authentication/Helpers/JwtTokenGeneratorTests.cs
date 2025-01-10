@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using FluentAssertions;
 using PersonalFinances.API.Features.Authentication.Helpers;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Secrets;
 
 namespace PersonalFinances.UnitTests.Features.Authentication.Helpers;

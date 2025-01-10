@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PersonalFinances.API.Features.Authentication.Models;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Secrets;
 
 namespace PersonalFinances.API.Features.Authentication.Helpers;

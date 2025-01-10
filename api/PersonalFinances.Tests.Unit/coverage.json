@@ -1,0 +1,2395 @@
+{
+  "PersonalFinances.API.dll": {
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Program.cs": {
+      "Program": {
+        "System.Void Program::<Main>$(System.String[])": {
+          "Lines": {
+            "21": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "33": 0,
+            "35": 0,
+            "37": 0,
+            "40": 0,
+            "41": 0,
+            "42": 0,
+            "43": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "50": 0,
+            "51": 0,
+            "52": 0,
+            "53": 0,
+            "54": 0,
+            "55": 0,
+            "56": 0,
+            "57": 0,
+            "58": 0,
+            "59": 0,
+            "60": 0,
+            "61": 0,
+            "62": 0,
+            "63": 0,
+            "65": 0,
+            "67": 0,
+            "69": 0,
+            "71": 0,
+            "72": 0,
+            "74": 0,
+            "76": 0,
+            "78": 0,
+            "80": 0,
+            "83": 0,
+            "84": 0,
+            "85": 0,
+            "86": 0,
+            "87": 0,
+            "88": 0,
+            "89": 0,
+            "90": 0,
+            "91": 0,
+            "93": 0,
+            "94": 0,
+            "95": 0,
+            "96": 0,
+            "97": 0,
+            "100": 0,
+            "101": 0,
+            "103": 0,
+            "106": 0,
+            "107": 0,
+            "108": 0,
+            "109": 0,
+            "110": 0,
+            "112": 0,
+            "114": 0,
+            "116": 0,
+            "117": 0,
+            "119": 0,
+            "121": 0
+          },
+          "Branches": [
+            {
+              "Line": 106,
+              "Offset": 492,
+              "EndOffset": 494,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 106,
+              "Offset": 492,
+              "EndOffset": 514,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Shared\\Currency.cs": {
+      "PersonalFinances.API.Shared.Currency": {
+        "PersonalFinances.API.Shared.Currency PersonalFinances.API.Shared.Currency::FromCode(System.String)": {
+          "Lines": {
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0
+          },
+          "Branches": [
+            {
+              "Line": 17,
+              "Offset": 37,
+              "EndOffset": 39,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 17,
+              "Offset": 37,
+              "EndOffset": 51,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        },
+        "System.String PersonalFinances.API.Shared.Currency::get_Code()": {
+          "Lines": {
+            "25": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Shared.Currency::.ctor(System.String)": {
+          "Lines": {
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Shared.Currency::.cctor()": {
+          "Lines": {
+            "5": 0,
+            "6": 0,
+            "7": 0,
+            "8": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0,
+            "13": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Shared\\Money.cs": {
+      "PersonalFinances.API.Shared.Money": {
+        "System.Decimal PersonalFinances.API.Shared.Money::get_Amount()": {
+          "Lines": {
+            "5": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Currency PersonalFinances.API.Shared.Money::get_Currency()": {
+          "Lines": {
+            "6": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Shared.Money::op_Addition(PersonalFinances.API.Shared.Money,PersonalFinances.API.Shared.Money)": {
+          "Lines": {
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "25": 0,
+            "26": 0
+          },
+          "Branches": [
+            {
+              "Line": 20,
+              "Offset": 20,
+              "EndOffset": 22,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 20,
+              "Offset": 20,
+              "EndOffset": 34,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        },
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Shared.Money::op_Subtraction(PersonalFinances.API.Shared.Money,PersonalFinances.API.Shared.Money)": {
+          "Lines": {
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "35": 0,
+            "36": 0
+          },
+          "Branches": [
+            {
+              "Line": 30,
+              "Offset": 20,
+              "EndOffset": 22,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 30,
+              "Offset": 20,
+              "EndOffset": 34,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        },
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Shared.Money::Zero()": {
+          "Lines": {
+            "38": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Shared.Money::Zero(PersonalFinances.API.Shared.Currency)": {
+          "Lines": {
+            "40": 0
+          },
+          "Branches": []
+        },
+        "System.Boolean PersonalFinances.API.Shared.Money::IsZero(PersonalFinances.API.Shared.Currency)": {
+          "Lines": {
+            "42": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Shared.Money::.ctor()": {
+          "Lines": {
+            "9": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Shared.Money::.ctor(System.Decimal,PersonalFinances.API.Shared.Currency)": {
+          "Lines": {
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Secrets\\AppSecrets.cs": {
+      "PersonalFinances.API.Secrets.AppSecrets": {
+        "PersonalFinances.API.Secrets.DbConnectionSecrets PersonalFinances.API.Secrets.AppSecrets::get_Database()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Secrets.JwtSecrets PersonalFinances.API.Secrets.AppSecrets::get_JWT()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Secrets\\DbConnectionSecrets.cs": {
+      "PersonalFinances.API.Secrets.DbConnectionSecrets": {
+        "System.String PersonalFinances.API.Secrets.DbConnectionSecrets::get_Username()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Secrets.DbConnectionSecrets::get_Password()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Secrets.DbConnectionSecrets::get_Engine()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Secrets.DbConnectionSecrets::get_Host()": {
+          "Lines": {
+            "17": 0
+          },
+          "Branches": []
+        },
+        "System.Int32 PersonalFinances.API.Secrets.DbConnectionSecrets::get_Port()": {
+          "Lines": {
+            "20": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Secrets.DbConnectionSecrets::get_DbInstanceIdentifier()": {
+          "Lines": {
+            "23": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Secrets\\JwtSecrets.cs": {
+      "PersonalFinances.API.Secrets.JwtSecrets": {
+        "System.String PersonalFinances.API.Secrets.JwtSecrets::get_SecretKey()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Secrets.JwtSecrets::get_Issuer()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Secrets.JwtSecrets::get_Audience()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "System.Int32 PersonalFinances.API.Secrets.JwtSecrets::get_ExpiryMinutes()": {
+          "Lines": {
+            "17": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Secrets\\SecretsManager.cs": {
+      "PersonalFinances.API.Secrets.SecretsManager": {
+        "System.Void PersonalFinances.API.Secrets.SecretsManager::.ctor(Amazon.SecretsManager.IAmazonSecretsManager,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Hosting.IHostEnvironment)": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Secrets.SecretsManager/<GetConnectionStringAsync>d__3": {
+        "System.Void PersonalFinances.API.Secrets.SecretsManager/<GetConnectionStringAsync>d__3::MoveNext()": {
+          "Lines": {
+            "12": 0,
+            "13": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "21": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "27": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "34": 0,
+            "37": 0,
+            "38": 0
+          },
+          "Branches": [
+            {
+              "Line": 23,
+              "Offset": 248,
+              "EndOffset": 253,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 23,
+              "Offset": 248,
+              "EndOffset": 410,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "PersonalFinances.API.Secrets.SecretsManager/<GetJwtSecretAsync>d__4": {
+        "System.Void PersonalFinances.API.Secrets.SecretsManager/<GetJwtSecretAsync>d__4::MoveNext()": {
+          "Lines": {
+            "41": 0,
+            "42": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "50": 0,
+            "52": 0,
+            "53": 0,
+            "54": 0,
+            "56": 0,
+            "59": 0,
+            "60": 0
+          },
+          "Branches": [
+            {
+              "Line": 52,
+              "Offset": 245,
+              "EndOffset": 247,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 52,
+              "Offset": 245,
+              "EndOffset": 285,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Persistence\\ApplicationDbContext.cs": {
+      "PersonalFinances.API.Persistence.ApplicationDbContext": {
+        "System.Void PersonalFinances.API.Persistence.ApplicationDbContext::OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)": {
+          "Lines": {
+            "29": 0,
+            "30": 0,
+            "32": 0,
+            "33": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Persistence.ApplicationDbContext::OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)": {
+          "Lines": {
+            "36": 0,
+            "37": 0,
+            "38": 0,
+            "39": 0
+          },
+          "Branches": []
+        },
+        "Microsoft.EntityFrameworkCore.DbSet`1<PersonalFinances.API.Models.ExpenseTransaction> PersonalFinances.API.Persistence.ApplicationDbContext::get_ExpenseTransactions()": {
+          "Lines": {
+            "73": 0
+          },
+          "Branches": []
+        },
+        "Microsoft.EntityFrameworkCore.DbSet`1<PersonalFinances.API.Models.IncomeTransaction> PersonalFinances.API.Persistence.ApplicationDbContext::get_IncomeTransactions()": {
+          "Lines": {
+            "75": 0
+          },
+          "Branches": []
+        },
+        "Microsoft.EntityFrameworkCore.DbSet`1<PersonalFinances.API.Models.User> PersonalFinances.API.Persistence.ApplicationDbContext::get_Users()": {
+          "Lines": {
+            "77": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Persistence.ApplicationDbContext::.ctor(Microsoft.EntityFrameworkCore.DbContextOptions,PersonalFinances.API.Infrastructure.DomainEvents.IDomainEventDispatcher,PersonalFinances.API.Secrets.ISecretsManager)": {
+          "Lines": {
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Persistence.ApplicationDbContext::.ctor()": {
+          "Lines": {
+            "23": 0,
+            "24": 0,
+            "26": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Persistence.ApplicationDbContext/<>c": {
+        "PersonalFinances.API.Models.Abstractions.Entity PersonalFinances.API.Persistence.ApplicationDbContext/<>c::<PublishDomainEventsAsync>b__7_0(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1<PersonalFinances.API.Models.Abstractions.Entity>)": {
+          "Lines": {
+            "54": 0
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IEnumerable`1<PersonalFinances.API.Models.Abstractions.IDomainEvent> PersonalFinances.API.Persistence.ApplicationDbContext/<>c::<PublishDomainEventsAsync>b__7_1(PersonalFinances.API.Models.Abstractions.Entity)": {
+          "Lines": {
+            "59": 0,
+            "60": 0,
+            "62": 0,
+            "63": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Persistence.ApplicationDbContext/<PublishDomainEventsAsync>d__7": {
+        "System.Void PersonalFinances.API.Persistence.ApplicationDbContext/<PublishDomainEventsAsync>d__7::MoveNext()": {
+          "Lines": {
+            "51": 0,
+            "52": 0,
+            "53": 0,
+            "55": 0,
+            "56": 0,
+            "58": 0,
+            "61": 0,
+            "65": 0,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "70": 0,
+            "71": 0
+          },
+          "Branches": [
+            {
+              "Line": 65,
+              "Offset": 203,
+              "EndOffset": 154,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 65,
+              "Offset": 203,
+              "EndOffset": 205,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "PersonalFinances.API.Persistence.ApplicationDbContext/<SaveChangesAsync>d__6": {
+        "System.Void PersonalFinances.API.Persistence.ApplicationDbContext/<SaveChangesAsync>d__6::MoveNext()": {
+          "Lines": {
+            "42": 0,
+            "43": 0,
+            "45": 0,
+            "47": 0,
+            "48": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Persistence\\Configurations\\ExpenseTransactionConfiguration.cs": {
+      "PersonalFinances.API.Persistence.Configurations.ExpenseTransactionConfiguration": {
+        "System.Void PersonalFinances.API.Persistence.Configurations.ExpenseTransactionConfiguration::Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder`1<PersonalFinances.API.Models.ExpenseTransaction>)": {
+          "Lines": {
+            "11": 0,
+            "12": 0,
+            "14": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Persistence\\Configurations\\IncomeTransactionConfiguration.cs": {
+      "PersonalFinances.API.Persistence.Configurations.IncomeTransactionConfiguration": {
+        "System.Void PersonalFinances.API.Persistence.Configurations.IncomeTransactionConfiguration::Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder`1<PersonalFinances.API.Models.IncomeTransaction>)": {
+          "Lines": {
+            "11": 0,
+            "12": 0,
+            "14": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Persistence\\Configurations\\UserConfiguration.cs": {
+      "PersonalFinances.API.Persistence.Configurations.UserConfiguration": {
+        "System.Void PersonalFinances.API.Persistence.Configurations.UserConfiguration::Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder`1<PersonalFinances.API.Models.User>)": {
+          "Lines": {
+            "11": 0,
+            "12": 0,
+            "14": 0,
+            "16": 0,
+            "17": 0,
+            "19": 0,
+            "20": 0,
+            "22": 0,
+            "23": 0,
+            "25": 0,
+            "26": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "37": 0,
+            "38": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Expenses\\ExpenseTransaction.cs": {
+      "PersonalFinances.API.Models.ExpenseTransaction": {
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Models.ExpenseTransaction::get_Amount()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Models.ExpenseTransaction::get_Date()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Models.ExpenseTransaction::get_Description()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.ExpenseType PersonalFinances.API.Models.ExpenseTransaction::get_ExpenseType()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "System.Guid PersonalFinances.API.Models.ExpenseTransaction::get_UserId()": {
+          "Lines": {
+            "16": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.User PersonalFinances.API.Models.ExpenseTransaction::get_User()": {
+          "Lines": {
+            "18": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Incomes\\IncomeTransaction.cs": {
+      "PersonalFinances.API.Models.IncomeTransaction": {
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Models.IncomeTransaction::get_Amount()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Models.IncomeTransaction::get_Date()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Models.IncomeTransaction::get_Description()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "System.Guid PersonalFinances.API.Models.IncomeTransaction::get_UserId()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.User PersonalFinances.API.Models.IncomeTransaction::get_User()": {
+          "Lines": {
+            "16": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\User.cs": {
+      "PersonalFinances.API.Models.User": {
+        "System.String PersonalFinances.API.Models.User::get_FirstName()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Models.User::get_LastName()": {
+          "Lines": {
+            "9": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Models.User::get_PasswordSalt()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Models.User::get_Balance()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Currency PersonalFinances.API.Models.User::get_CurrencyPreference()": {
+          "Lines": {
+            "15": 0
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.ICollection`1<PersonalFinances.API.Models.IncomeTransaction> PersonalFinances.API.Models.User::get_IncomeTransactions()": {
+          "Lines": {
+            "17": 0
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.ICollection`1<PersonalFinances.API.Models.ExpenseTransaction> PersonalFinances.API.Models.User::get_ExpenseTransactions()": {
+          "Lines": {
+            "19": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Expenses\\Events\\ExpenseTransactionCreatedDomainEvent.cs": {
+      "PersonalFinances.API.Models.Events.ExpenseTransactionCreatedDomainEvent": {
+        "System.Guid PersonalFinances.API.Models.Events.ExpenseTransactionCreatedDomainEvent::get_userId()": {
+          "Lines": {
+            "5": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Incomes\\Events\\IncomeTransactionCreatedDomainEvent.cs": {
+      "PersonalFinances.API.Models.Events.IncomeTransactionCreatedDomainEvent": {
+        "System.Guid PersonalFinances.API.Models.Events.IncomeTransactionCreatedDomainEvent::get_userId()": {
+          "Lines": {
+            "5": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Abstractions\\Entity.cs": {
+      "PersonalFinances.API.Models.Abstractions.Entity": {
+        "System.Guid PersonalFinances.API.Models.Abstractions.Entity::get_Id()": {
+          "Lines": {
+            "17": 0
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IReadOnlyList`1<PersonalFinances.API.Models.Abstractions.IDomainEvent> PersonalFinances.API.Models.Abstractions.Entity::GetDomainEvents()": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "22": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Entity::ClearDomainEvents()": {
+          "Lines": {
+            "25": 0,
+            "26": 0,
+            "27": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Entity::RaiseDomainEvent(PersonalFinances.API.Models.Abstractions.IDomainEvent)": {
+          "Lines": {
+            "30": 0,
+            "31": 0,
+            "32": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Entity::.ctor(System.Guid)": {
+          "Lines": {
+            "5": 0,
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Entity::.ctor()": {
+          "Lines": {
+            "12": 0,
+            "13": 0,
+            "15": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Abstractions\\Error.cs": {
+      "PersonalFinances.API.Models.Abstractions.Error": {
+        "System.String PersonalFinances.API.Models.Abstractions.Error::get_Code()": {
+          "Lines": {
+            "3": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Error::.cctor()": {
+          "Lines": {
+            "5": 0,
+            "7": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Models\\Abstractions\\Result.cs": {
+      "PersonalFinances.API.Models.Abstractions.Result": {
+        "System.Boolean PersonalFinances.API.Models.Abstractions.Result::get_IsSuccess()": {
+          "Lines": {
+            "23": 0
+          },
+          "Branches": []
+        },
+        "System.Boolean PersonalFinances.API.Models.Abstractions.Result::get_IsFailure()": {
+          "Lines": {
+            "25": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.Abstractions.Error PersonalFinances.API.Models.Abstractions.Result::get_Error()": {
+          "Lines": {
+            "27": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.Abstractions.Result PersonalFinances.API.Models.Abstractions.Result::Success()": {
+          "Lines": {
+            "29": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.Abstractions.Result PersonalFinances.API.Models.Abstractions.Result::Failure(PersonalFinances.API.Models.Abstractions.Error)": {
+          "Lines": {
+            "31": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.Abstractions.Result`1<TValue> PersonalFinances.API.Models.Abstractions.Result::Success(TValue)": {
+          "Lines": {
+            "33": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.Abstractions.Result`1<TValue> PersonalFinances.API.Models.Abstractions.Result::Failure(PersonalFinances.API.Models.Abstractions.Error)": {
+          "Lines": {
+            "35": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.Abstractions.Result`1<TValue> PersonalFinances.API.Models.Abstractions.Result::Create(TValue)": {
+          "Lines": {
+            "38": 0
+          },
+          "Branches": [
+            {
+              "Line": 38,
+              "Offset": 6,
+              "EndOffset": 8,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 38,
+              "Offset": 6,
+              "EndOffset": 20,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Result::.ctor(System.Boolean,PersonalFinances.API.Models.Abstractions.Error)": {
+          "Lines": {
+            "7": 0,
+            "8": 0,
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": [
+            {
+              "Line": 9,
+              "Offset": 9,
+              "EndOffset": 11,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 9,
+              "Offset": 9,
+              "EndOffset": 24,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 9,
+              "Offset": 27,
+              "EndOffset": 29,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 9,
+              "Offset": 27,
+              "EndOffset": 36,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 14,
+              "Offset": 37,
+              "EndOffset": 39,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 14,
+              "Offset": 37,
+              "EndOffset": 52,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 14,
+              "Offset": 55,
+              "EndOffset": 57,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 14,
+              "Offset": 55,
+              "EndOffset": 64,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            }
+          ]
+        }
+      },
+      "PersonalFinances.API.Models.Abstractions.Result`1": {
+        "TValue PersonalFinances.API.Models.Abstractions.Result`1::get_Value()": {
+          "Lines": {
+            "52": 0,
+            "53": 0,
+            "54": 0
+          },
+          "Branches": [
+            {
+              "Line": 52,
+              "Offset": 6,
+              "EndOffset": 8,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 52,
+              "Offset": 6,
+              "EndOffset": 19,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        },
+        "PersonalFinances.API.Models.Abstractions.Result`1<TValue> PersonalFinances.API.Models.Abstractions.Result`1::op_Implicit(TValue)": {
+          "Lines": {
+            "56": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Models.Abstractions.Result`1::.ctor(TValue,System.Boolean,PersonalFinances.API.Models.Abstractions.Error)": {
+          "Lines": {
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Migrations\\20241103192048_Initial.cs": {
+      "PersonalFinances.API.Migrations.Initial": {
+        "System.Void PersonalFinances.API.Migrations.Initial::Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)": {
+          "Lines": {
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "37": 0,
+            "38": 0,
+            "39": 0,
+            "40": 0,
+            "41": 0,
+            "42": 0,
+            "43": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "50": 0,
+            "51": 0,
+            "52": 0,
+            "53": 0,
+            "54": 0,
+            "55": 0,
+            "56": 0,
+            "57": 0,
+            "58": 0,
+            "59": 0,
+            "60": 0,
+            "61": 0,
+            "62": 0,
+            "63": 0,
+            "64": 0,
+            "65": 0,
+            "66": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0,
+            "78": 0,
+            "79": 0,
+            "80": 0,
+            "81": 0,
+            "82": 0,
+            "83": 0,
+            "84": 0,
+            "85": 0,
+            "86": 0,
+            "87": 0,
+            "88": 0,
+            "90": 0,
+            "91": 0,
+            "92": 0,
+            "93": 0,
+            "95": 0,
+            "96": 0,
+            "97": 0,
+            "98": 0,
+            "100": 0,
+            "101": 0,
+            "102": 0,
+            "103": 0,
+            "104": 0,
+            "105": 0,
+            "106": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Migrations.Initial::Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)": {
+          "Lines": {
+            "110": 0,
+            "111": 0,
+            "112": 0,
+            "114": 0,
+            "115": 0,
+            "117": 0,
+            "118": 0,
+            "119": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Migrations\\20241103192048_Initial.Designer.cs": {
+      "PersonalFinances.API.Migrations.Initial": {
+        "System.Void PersonalFinances.API.Migrations.Initial::BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)": {
+          "Lines": {
+            "20": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "26": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "37": 0,
+            "38": 0,
+            "39": 0,
+            "40": 0,
+            "41": 0,
+            "42": 0,
+            "43": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "50": 0,
+            "51": 0,
+            "52": 0,
+            "53": 0,
+            "54": 0,
+            "55": 0,
+            "57": 0,
+            "58": 0,
+            "59": 0,
+            "60": 0,
+            "61": 0,
+            "62": 0,
+            "63": 0,
+            "64": 0,
+            "65": 0,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0,
+            "78": 0,
+            "79": 0,
+            "80": 0,
+            "81": 0,
+            "83": 0,
+            "84": 0,
+            "85": 0,
+            "86": 0,
+            "87": 0,
+            "88": 0,
+            "89": 0,
+            "90": 0,
+            "91": 0,
+            "92": 0,
+            "93": 0,
+            "94": 0,
+            "95": 0,
+            "96": 0,
+            "97": 0,
+            "98": 0,
+            "99": 0,
+            "100": 0,
+            "101": 0,
+            "102": 0,
+            "103": 0,
+            "104": 0,
+            "105": 0,
+            "106": 0,
+            "107": 0,
+            "108": 0,
+            "109": 0,
+            "110": 0,
+            "111": 0,
+            "112": 0,
+            "113": 0,
+            "114": 0,
+            "115": 0,
+            "116": 0,
+            "117": 0,
+            "118": 0,
+            "119": 0,
+            "120": 0,
+            "121": 0,
+            "122": 0,
+            "123": 0,
+            "124": 0,
+            "125": 0,
+            "126": 0,
+            "127": 0,
+            "128": 0,
+            "129": 0,
+            "130": 0,
+            "131": 0,
+            "132": 0,
+            "133": 0,
+            "134": 0,
+            "135": 0,
+            "136": 0,
+            "137": 0,
+            "138": 0,
+            "139": 0,
+            "140": 0,
+            "141": 0,
+            "142": 0,
+            "143": 0,
+            "144": 0,
+            "145": 0,
+            "146": 0,
+            "147": 0,
+            "148": 0,
+            "149": 0,
+            "150": 0,
+            "151": 0,
+            "152": 0,
+            "154": 0,
+            "155": 0,
+            "156": 0,
+            "157": 0,
+            "158": 0,
+            "159": 0,
+            "160": 0,
+            "161": 0,
+            "162": 0,
+            "163": 0,
+            "164": 0,
+            "165": 0,
+            "166": 0,
+            "167": 0,
+            "168": 0,
+            "169": 0,
+            "170": 0,
+            "171": 0,
+            "172": 0,
+            "173": 0,
+            "174": 0,
+            "175": 0,
+            "176": 0,
+            "177": 0,
+            "178": 0,
+            "179": 0,
+            "180": 0,
+            "181": 0,
+            "182": 0,
+            "183": 0,
+            "184": 0,
+            "186": 0,
+            "187": 0,
+            "188": 0,
+            "189": 0,
+            "190": 0,
+            "191": 0,
+            "192": 0,
+            "193": 0,
+            "194": 0,
+            "195": 0,
+            "196": 0,
+            "197": 0,
+            "198": 0,
+            "199": 0,
+            "200": 0,
+            "201": 0,
+            "202": 0,
+            "203": 0,
+            "204": 0,
+            "205": 0,
+            "206": 0,
+            "207": 0,
+            "208": 0,
+            "209": 0,
+            "210": 0,
+            "211": 0,
+            "212": 0,
+            "213": 0,
+            "214": 0,
+            "215": 0,
+            "216": 0,
+            "218": 0,
+            "219": 0,
+            "220": 0,
+            "221": 0,
+            "222": 0,
+            "223": 0,
+            "224": 0,
+            "225": 0,
+            "226": 0,
+            "227": 0,
+            "228": 0,
+            "229": 0,
+            "230": 0,
+            "231": 0,
+            "232": 0,
+            "233": 0,
+            "234": 0,
+            "235": 0,
+            "236": 0,
+            "237": 0,
+            "238": 0,
+            "239": 0,
+            "240": 0,
+            "241": 0,
+            "242": 0,
+            "243": 0,
+            "244": 0,
+            "245": 0,
+            "246": 0,
+            "247": 0,
+            "248": 0,
+            "249": 0,
+            "250": 0,
+            "251": 0,
+            "252": 0,
+            "253": 0,
+            "254": 0,
+            "255": 0,
+            "256": 0,
+            "257": 0,
+            "258": 0,
+            "259": 0,
+            "260": 0,
+            "261": 0,
+            "262": 0,
+            "263": 0,
+            "265": 0,
+            "266": 0,
+            "267": 0,
+            "268": 0,
+            "269": 0,
+            "270": 0,
+            "272": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Migrations\\ApplicationDbContextModelSnapshot.cs": {
+      "PersonalFinances.API.Migrations.ApplicationDbContextModelSnapshot": {
+        "System.Void PersonalFinances.API.Migrations.ApplicationDbContextModelSnapshot::BuildModel(Microsoft.EntityFrameworkCore.ModelBuilder)": {
+          "Lines": {
+            "17": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "23": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "37": 0,
+            "38": 0,
+            "39": 0,
+            "40": 0,
+            "41": 0,
+            "42": 0,
+            "43": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "50": 0,
+            "51": 0,
+            "52": 0,
+            "54": 0,
+            "55": 0,
+            "56": 0,
+            "57": 0,
+            "58": 0,
+            "59": 0,
+            "60": 0,
+            "61": 0,
+            "62": 0,
+            "63": 0,
+            "64": 0,
+            "65": 0,
+            "66": 0,
+            "67": 0,
+            "68": 0,
+            "69": 0,
+            "70": 0,
+            "71": 0,
+            "72": 0,
+            "73": 0,
+            "74": 0,
+            "75": 0,
+            "76": 0,
+            "77": 0,
+            "78": 0,
+            "80": 0,
+            "81": 0,
+            "82": 0,
+            "83": 0,
+            "84": 0,
+            "85": 0,
+            "86": 0,
+            "87": 0,
+            "88": 0,
+            "89": 0,
+            "90": 0,
+            "91": 0,
+            "92": 0,
+            "93": 0,
+            "94": 0,
+            "95": 0,
+            "96": 0,
+            "97": 0,
+            "98": 0,
+            "99": 0,
+            "100": 0,
+            "101": 0,
+            "102": 0,
+            "103": 0,
+            "104": 0,
+            "105": 0,
+            "106": 0,
+            "107": 0,
+            "108": 0,
+            "109": 0,
+            "110": 0,
+            "111": 0,
+            "112": 0,
+            "113": 0,
+            "114": 0,
+            "115": 0,
+            "116": 0,
+            "117": 0,
+            "118": 0,
+            "119": 0,
+            "120": 0,
+            "121": 0,
+            "122": 0,
+            "123": 0,
+            "124": 0,
+            "125": 0,
+            "126": 0,
+            "127": 0,
+            "128": 0,
+            "129": 0,
+            "130": 0,
+            "131": 0,
+            "132": 0,
+            "133": 0,
+            "134": 0,
+            "135": 0,
+            "136": 0,
+            "137": 0,
+            "138": 0,
+            "139": 0,
+            "140": 0,
+            "141": 0,
+            "142": 0,
+            "143": 0,
+            "144": 0,
+            "145": 0,
+            "146": 0,
+            "147": 0,
+            "148": 0,
+            "149": 0,
+            "151": 0,
+            "152": 0,
+            "153": 0,
+            "154": 0,
+            "155": 0,
+            "156": 0,
+            "157": 0,
+            "158": 0,
+            "159": 0,
+            "160": 0,
+            "161": 0,
+            "162": 0,
+            "163": 0,
+            "164": 0,
+            "165": 0,
+            "166": 0,
+            "167": 0,
+            "168": 0,
+            "169": 0,
+            "170": 0,
+            "171": 0,
+            "172": 0,
+            "173": 0,
+            "174": 0,
+            "175": 0,
+            "176": 0,
+            "177": 0,
+            "178": 0,
+            "179": 0,
+            "180": 0,
+            "181": 0,
+            "183": 0,
+            "184": 0,
+            "185": 0,
+            "186": 0,
+            "187": 0,
+            "188": 0,
+            "189": 0,
+            "190": 0,
+            "191": 0,
+            "192": 0,
+            "193": 0,
+            "194": 0,
+            "195": 0,
+            "196": 0,
+            "197": 0,
+            "198": 0,
+            "199": 0,
+            "200": 0,
+            "201": 0,
+            "202": 0,
+            "203": 0,
+            "204": 0,
+            "205": 0,
+            "206": 0,
+            "207": 0,
+            "208": 0,
+            "209": 0,
+            "210": 0,
+            "211": 0,
+            "212": 0,
+            "213": 0,
+            "215": 0,
+            "216": 0,
+            "217": 0,
+            "218": 0,
+            "219": 0,
+            "220": 0,
+            "221": 0,
+            "222": 0,
+            "223": 0,
+            "224": 0,
+            "225": 0,
+            "226": 0,
+            "227": 0,
+            "228": 0,
+            "229": 0,
+            "230": 0,
+            "231": 0,
+            "232": 0,
+            "233": 0,
+            "234": 0,
+            "235": 0,
+            "236": 0,
+            "237": 0,
+            "238": 0,
+            "239": 0,
+            "240": 0,
+            "241": 0,
+            "242": 0,
+            "243": 0,
+            "244": 0,
+            "245": 0,
+            "246": 0,
+            "247": 0,
+            "248": 0,
+            "249": 0,
+            "250": 0,
+            "251": 0,
+            "252": 0,
+            "253": 0,
+            "254": 0,
+            "255": 0,
+            "256": 0,
+            "257": 0,
+            "258": 0,
+            "259": 0,
+            "260": 0,
+            "262": 0,
+            "263": 0,
+            "264": 0,
+            "265": 0,
+            "266": 0,
+            "267": 0,
+            "269": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Infrastructure\\DomainEvents\\DomainEventDispatcher.cs": {
+      "PersonalFinances.API.Infrastructure.DomainEvents.DomainEventDispatcher": {
+        "System.Void PersonalFinances.API.Infrastructure.DomainEvents.DomainEventDispatcher::.ctor(System.IServiceProvider)": {
+          "Lines": {
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Infrastructure.DomainEvents.DomainEventDispatcher/<DispatchAsync>d__2": {
+        "System.Void PersonalFinances.API.Infrastructure.DomainEvents.DomainEventDispatcher/<DispatchAsync>d__2::MoveNext()": {
+          "Lines": {
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0
+          },
+          "Branches": [
+            {
+              "Line": 16,
+              "Offset": 531,
+              "EndOffset": 46,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 21,
+              "Offset": 459,
+              "EndOffset": 167,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 23,
+              "Offset": 190,
+              "EndOffset": 194,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 23,
+              "Offset": 190,
+              "EndOffset": 231,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 23,
+              "Offset": 251,
+              "EndOffset": 255,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 23,
+              "Offset": 251,
+              "EndOffset": 313,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 21,
+              "Offset": 459,
+              "EndOffset": 464,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 16,
+              "Offset": 531,
+              "EndOffset": 536,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\IncomeTracking\\IncomeTrackingController.cs": {
+      "PersonalFinances.API.Features.IncomeTracking.IncomeTrackingController": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.IncomeTrackingController::.ctor(PersonalFinances.API.Features.IncomeTracking.Services.IIncomeTrackingService)": {
+          "Lines": {
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.IncomeTracking.IncomeTrackingController/<AddIncome>d__3": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.IncomeTrackingController/<AddIncome>d__3::MoveNext()": {
+          "Lines": {
+            "33": 0,
+            "34": 0,
+            "36": 0,
+            "38": 0,
+            "39": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.IncomeTracking.IncomeTrackingController/<GetIncomeTransactions>d__2": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.IncomeTrackingController/<GetIncomeTransactions>d__2::MoveNext()": {
+          "Lines": {
+            "23": 0,
+            "24": 0,
+            "26": 0,
+            "28": 0,
+            "29": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\IncomeTracking\\Services\\IncomeTrackingService.cs": {
+      "PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService::.ctor(PersonalFinances.API.Persistence.ApplicationDbContext)": {
+          "Lines": {
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService/<>c": {
+        "PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService/<>c::<GetUserIncomesAsync>b__2_0(PersonalFinances.API.Models.IncomeTransaction)": {
+          "Lines": {
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService/<AddIncomeAsync>d__3": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService/<AddIncomeAsync>d__3::MoveNext()": {
+          "Lines": {
+            "40": 0,
+            "41": 0,
+            "42": 0,
+            "43": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "50": 0,
+            "52": 0,
+            "54": 0,
+            "56": 0,
+            "57": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService/<GetUserIncomesAsync>d__2": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.Services.IncomeTrackingService/<GetUserIncomesAsync>d__2::MoveNext()": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "36": 0,
+            "37": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\IncomeTracking\\Models\\AddIncomeDto.cs": {
+      "PersonalFinances.API.Features.IncomeTracking.Models.AddIncomeDto": {
+        "System.Decimal PersonalFinances.API.Features.IncomeTracking.Models.AddIncomeDto::get_Amount()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.IncomeTracking.Models.AddIncomeDto::get_Currency()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Features.IncomeTracking.Models.AddIncomeDto::get_Date()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.IncomeTracking.Models.AddIncomeDto::get_Description()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\IncomeTracking\\Models\\GetIncomeDto.cs": {
+      "PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto": {
+        "System.Guid PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto::get_Id()": {
+          "Lines": {
+            "7": 0
+          },
+          "Branches": []
+        },
+        "System.Decimal PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto::get_Amount()": {
+          "Lines": {
+            "9": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto::get_Currency()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto::get_Date()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.IncomeTracking.Models.GetIncomeDto::get_Description()": {
+          "Lines": {
+            "15": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\IncomeTracking\\EventHandlers\\IncomeTransactionCreatedDomainEventHandler.cs": {
+      "PersonalFinances.API.Features.IncomeTracking.EventHandlers.IncomeTransactionCreatedDomainEventHandler": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.EventHandlers.IncomeTransactionCreatedDomainEventHandler::.ctor(PersonalFinances.API.Persistence.ApplicationDbContext)": {
+          "Lines": {
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.IncomeTracking.EventHandlers.IncomeTransactionCreatedDomainEventHandler/<Handle>d__2": {
+        "System.Void PersonalFinances.API.Features.IncomeTracking.EventHandlers.IncomeTransactionCreatedDomainEventHandler/<Handle>d__2::MoveNext()": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "23": 0,
+            "25": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "32": 0,
+            "33": 0
+          },
+          "Branches": [
+            {
+              "Line": 27,
+              "Offset": 365,
+              "EndOffset": 367,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 27,
+              "Offset": 365,
+              "EndOffset": 403,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\ExpenseTracking\\ExpenseTrackingController.cs": {
+      "PersonalFinances.API.Features.ExpenseTracking.ExpenseTrackingController": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.ExpenseTrackingController::.ctor(PersonalFinances.API.Features.ExpenseTracking.Services.IExpenseTrackingService)": {
+          "Lines": {
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.ExpenseTracking.ExpenseTrackingController/<AddExpense>d__3": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.ExpenseTrackingController/<AddExpense>d__3::MoveNext()": {
+          "Lines": {
+            "33": 0,
+            "34": 0,
+            "36": 0,
+            "38": 0,
+            "39": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.ExpenseTracking.ExpenseTrackingController/<GetExpenseTransactions>d__2": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.ExpenseTrackingController/<GetExpenseTransactions>d__2::MoveNext()": {
+          "Lines": {
+            "23": 0,
+            "24": 0,
+            "26": 0,
+            "28": 0,
+            "29": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\ExpenseTracking\\Services\\ExpenseTrackingService.cs": {
+      "PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService::.ctor(PersonalFinances.API.Persistence.ApplicationDbContext)": {
+          "Lines": {
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService/<>c": {
+        "PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService/<>c::<GetUserExpensesAsync>b__2_0(PersonalFinances.API.Models.ExpenseTransaction)": {
+          "Lines": {
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService/<AddExpenseAsync>d__3": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService/<AddExpenseAsync>d__3::MoveNext()": {
+          "Lines": {
+            "42": 0,
+            "43": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0,
+            "49": 0,
+            "50": 0,
+            "52": 0,
+            "54": 0,
+            "56": 0,
+            "58": 0,
+            "59": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService/<GetUserExpensesAsync>d__2": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.Services.ExpenseTrackingService/<GetUserExpensesAsync>d__2::MoveNext()": {
+          "Lines": {
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "38": 0,
+            "39": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\ExpenseTracking\\Models\\AddExpenseDto.cs": {
+      "PersonalFinances.API.Features.ExpenseTracking.Models.AddExpenseDto": {
+        "System.Decimal PersonalFinances.API.Features.ExpenseTracking.Models.AddExpenseDto::get_Amount()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.ExpenseTracking.Models.AddExpenseDto::get_Currency()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Features.ExpenseTracking.Models.AddExpenseDto::get_Date()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.ExpenseTracking.Models.AddExpenseDto::get_Description()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.ExpenseType PersonalFinances.API.Features.ExpenseTracking.Models.AddExpenseDto::get_ExpenseType()": {
+          "Lines": {
+            "16": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\ExpenseTracking\\Models\\GetExpenseDto.cs": {
+      "PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto": {
+        "System.Guid PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto::get_Id()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.Decimal PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto::get_Amount()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto::get_Currency()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto::get_Date()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto::get_Description()": {
+          "Lines": {
+            "16": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Models.ExpenseType PersonalFinances.API.Features.ExpenseTracking.Models.GetExpenseDto::get_ExpenseType()": {
+          "Lines": {
+            "18": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\ExpenseTracking\\EventHandlers\\ExpenseTransactionCreatedDomainEventHandler.cs": {
+      "PersonalFinances.API.Features.ExpenseTracking.EventHandlers.ExpenseTransactionCreatedDomainEventHandler": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.EventHandlers.ExpenseTransactionCreatedDomainEventHandler::.ctor(PersonalFinances.API.Persistence.ApplicationDbContext)": {
+          "Lines": {
+            "12": 0,
+            "13": 0,
+            "14": 0,
+            "15": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.ExpenseTracking.EventHandlers.ExpenseTransactionCreatedDomainEventHandler/<Handle>d__2": {
+        "System.Void PersonalFinances.API.Features.ExpenseTracking.EventHandlers.ExpenseTransactionCreatedDomainEventHandler/<Handle>d__2::MoveNext()": {
+          "Lines": {
+            "18": 0,
+            "19": 0,
+            "21": 0,
+            "23": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "30": 0,
+            "31": 0
+          },
+          "Branches": [
+            {
+              "Line": 25,
+              "Offset": 365,
+              "EndOffset": 367,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 25,
+              "Offset": 365,
+              "EndOffset": 403,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\Authentication\\AuthController.cs": {
+      "PersonalFinances.API.Features.Authentication.AuthController": {
+        "System.Void PersonalFinances.API.Features.Authentication.AuthController::.ctor(PersonalFinances.API.Features.Authentication.Services.IAuthService)": {
+          "Lines": {
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.Authentication.AuthController/<Login>d__2": {
+        "System.Void PersonalFinances.API.Features.Authentication.AuthController/<Login>d__2::MoveNext()": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "28": 0,
+            "29": 0
+          },
+          "Branches": [
+            {
+              "Line": 23,
+              "Offset": 164,
+              "EndOffset": 166,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 23,
+              "Offset": 164,
+              "EndOffset": 181,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\Authentication\\Services\\AuthService.cs": {
+      "PersonalFinances.API.Features.Authentication.Services.AuthService": {
+        "System.Void PersonalFinances.API.Features.Authentication.Services.AuthService::.ctor(PersonalFinances.API.Features.Authentication.Helpers.JwtTokenGenerator,Microsoft.AspNetCore.Identity.UserManager`1<PersonalFinances.API.Models.User>)": {
+          "Lines": {
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0
+          },
+          "Branches": []
+        }
+      },
+      "PersonalFinances.API.Features.Authentication.Services.AuthService/<LoginAsync>d__3": {
+        "System.Void PersonalFinances.API.Features.Authentication.Services.AuthService/<LoginAsync>d__3::MoveNext()": {
+          "Lines": {
+            "26": 0,
+            "27": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "34": 0,
+            "35": 0
+          },
+          "Branches": [
+            {
+              "Line": 29,
+              "Offset": 200,
+              "EndOffset": 205,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 29,
+              "Offset": 200,
+              "EndOffset": 351,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 29,
+              "Offset": 361,
+              "EndOffset": 363,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 29,
+              "Offset": 361,
+              "EndOffset": 368,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\Authentication\\Models\\RegisterUserModel.cs": {
+      "PersonalFinances.API.Features.Authentication.Models.RegisterUserModel": {
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_UserName()": {
+          "Lines": {
+            "7": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_Email()": {
+          "Lines": {
+            "8": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_Password()": {
+          "Lines": {
+            "9": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_FirstName()": {
+          "Lines": {
+            "10": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_LastName()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_PhoneNumber()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "System.String PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_CurrencyPreferenceCode()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Money PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_Balance()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "PersonalFinances.API.Shared.Currency PersonalFinances.API.Features.Authentication.Models.RegisterUserModel::get_CurrencyPreference()": {
+          "Lines": {
+            "15": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\Authentication\\Models\\TokenResponse.cs": {
+      "PersonalFinances.API.Features.Authentication.Models.TokenResponse": {
+        "System.String PersonalFinances.API.Features.Authentication.Models.TokenResponse::get_Token()": {
+          "Lines": {
+            "5": 0
+          },
+          "Branches": []
+        },
+        "System.DateTime PersonalFinances.API.Features.Authentication.Models.TokenResponse::get_Expiry()": {
+          "Lines": {
+            "6": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "D:\\Projects\\PersonalFinances\\api\\PersonalFinances.API\\Features\\Authentication\\Helpers\\JwtTokenGenerator.cs": {
+      "PersonalFinances.API.Features.Authentication.Helpers.JwtTokenGenerator": {
+        "PersonalFinances.API.Features.Authentication.Models.TokenResponse PersonalFinances.API.Features.Authentication.Helpers.JwtTokenGenerator::GenerateJwtToken(PersonalFinances.API.Models.User)": {
+          "Lines": {
+            "23": 0,
+            "24": 0,
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "31": 0,
+            "32": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "37": 0,
+            "38": 0,
+            "39": 0,
+            "41": 0,
+            "43": 0,
+            "44": 0,
+            "45": 0,
+            "46": 0,
+            "47": 0,
+            "48": 0
+          },
+          "Branches": []
+        },
+        "System.Void PersonalFinances.API.Features.Authentication.Helpers.JwtTokenGenerator::.ctor(PersonalFinances.API.Secrets.JwtSecrets)": {
+          "Lines": {
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0
+          },
+          "Branches": []
+        }
+      }
+    }
+  }
+}

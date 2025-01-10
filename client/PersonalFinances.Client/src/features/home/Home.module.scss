@@ -1,4 +1,16 @@
 .home {
   display: flex;
   gap: 1em;
+
+  &__services-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+
+    margin: 2em 2em 2em 2em;
+  }
+
+  &__service-card {
+    cursor: pointer;
+  }
 }

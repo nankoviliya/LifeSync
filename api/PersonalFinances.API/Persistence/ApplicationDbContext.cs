@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinances.API.Infrastructure.DomainEvents;
 using PersonalFinances.API.Models;
 using PersonalFinances.API.Models.Abstractions;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Secrets;
 
 namespace PersonalFinances.API.Persistence;

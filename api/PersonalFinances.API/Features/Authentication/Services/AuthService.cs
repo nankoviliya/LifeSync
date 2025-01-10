@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalFinances.API.Features.Authentication.Helpers;
 using PersonalFinances.API.Features.Authentication.Models;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Persistence;
 using PersonalFinances.API.Shared;
 

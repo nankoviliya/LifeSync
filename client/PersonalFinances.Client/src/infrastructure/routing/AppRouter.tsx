@@ -1,7 +1,7 @@
 import { App } from '@/App';
-import { ExpenseTracking } from '@/features/expenseTracking/components/ExpenseTracking';
+import { ExpenseTracking } from '@/features/finances/expenseTracking/components/ExpenseTracking';
 import { Home } from '@/features/home/Home';
-import { IncomeTracking } from '@/features/incomeTracking/components/IncomeTracking';
+import { IncomeTracking } from '@/features/finances/incomeTracking/components/IncomeTracking';
 import { Login } from '@/features/login/components/Login';
 import { useAuth } from '@/infrastructure/authentication/hooks/useAuthentication';
 import { routePaths } from '@/infrastructure/routing/routePaths';
@@ -12,13 +12,16 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
+import { Finances } from '@/features/finances/components/Finances';
 
 export const AppRouter = () => {
   const { isAuthenticated } = useAuth();
 
   const protectedPages = (
     <>
+      <Route path={routePaths.app.path} element={<Home />} />
       <Route path={routePaths.home.path} element={<Home />} />
+      <Route path={routePaths.finances.path} element={<Finances />} />
       <Route
         path={routePaths.expenseTracking.path}
         element={<ExpenseTracking />}

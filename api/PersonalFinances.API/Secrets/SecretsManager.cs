@@ -5,29 +5,34 @@ using PersonalFinances.API.Features.Authentication.Models;
 
 namespace PersonalFinances.API.Secrets;
 
-public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration configuration, IHostEnvironment _hostEnvironment)
+/// <summary>
+/// Secrets are currently in local storage.
+/// </summary>
+/// <param name="secretsManager"></param>
+/// <param name="configuration"></param>
+/// <param name="_hostEnvironment"></param>
+public class SecretsManager(IConfiguration configuration, IHostEnvironment _hostEnvironment)
     : ISecretsManager
 {
     public async Task<string> GetConnectionStringAsync()
     {
-        string secretName = configuration["SecretsManager"];
-        
-        var request = new GetSecretValueRequest
-        {
-            SecretId = secretName,
-            VersionStage = "AWSCURRENT",
-        };
+        // string secretName = configuration["SecretsManager"];
+        //
+        // var request = new GetSecretValueRequest
+        // {
+        //     SecretId = secretName,
+        //     VersionStage = "AWSCURRENT",
+        // };
+        //
+        // var response = await secretsManager.GetSecretValueAsync(request);
+        //
 
-        var response = await secretsManager.GetSecretValueAsync(request);
+        var dbSecret = configuration.GetSection("Database").Get<DbConnectionSecrets>();
         
-        if (response.SecretString is not null)
+        if (dbSecret is not null)
         {
-            var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
-
-            var databaseSecret = appSecrets.Database;
-            
             var devConnectionString = $"Server=localhost;" +
-                                   $"Database={databaseSecret.DbInstanceIdentifier};" +
+                                   $"Database={dbSecret.DbInstanceIdentifier};" +
                                    $"Trusted_Connection=True;" +
                                    $"TrustServerCertificate=True;";
     
@@ -39,21 +44,21 @@ public class SecretsManager(IAmazonSecretsManager secretsManager, IConfiguration
 
     public async Task<JwtSecrets> GetJwtSecretAsync()
     {
-        string secretName = configuration["SecretsManager"];
+        // string secretName = configuration["SecretsManager"];
+        //
+        // var request = new GetSecretValueRequest
+        // {
+        //     SecretId = secretName,
+        //     VersionStage = "AWSCURRENT",
+        // };
+        //
+        // var response = await secretsManager.GetSecretValueAsync(request);
         
-        var request = new GetSecretValueRequest
-        {
-            SecretId = secretName,
-            VersionStage = "AWSCURRENT",
-        };
-
-        var response = await secretsManager.GetSecretValueAsync(request);
+        var jwtSecret = configuration.GetSection("JWT").Get<JwtSecrets>();
         
-        if (response.SecretString != null)
+        if (jwtSecret is not null)
         {
-            var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
-
-            return appSecrets.JWT;
+            return jwtSecret;
         }
 
         throw new Exception("Secret not found or is in binary format.");

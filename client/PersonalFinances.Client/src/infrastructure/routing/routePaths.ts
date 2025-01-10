@@ -16,12 +16,16 @@ export const routePaths = {
     path: '/home',
     name: 'Home',
   },
+  finances: {
+    path: '/finances',
+    name: 'Finances',
+  },
   incomeTracking: {
-    path: '/income-tracking',
+    path: '/finances/income-tracking',
     name: 'Income Tracking',
   },
   expenseTracking: {
-    path: '/expense-tracking',
+    path: '/finances/expense-tracking',
     name: 'Expense Tracking',
   },
 };

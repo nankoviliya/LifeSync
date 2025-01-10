@@ -13,13 +13,12 @@ namespace PersonalFinances.UnitTests.Secrets;
 public class SecretsManagerTests
 {
     private readonly SecretsManager _secretsManager;
-    private readonly IAmazonSecretsManager _amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
     private readonly IConfiguration _configuration = Substitute.For<IConfiguration>();
     private readonly IHostEnvironment _hostEnvironment = Substitute.For<IHostEnvironment>();
 
     public SecretsManagerTests()
     {
-        _secretsManager = new SecretsManager(_amazonSecretsManager, _configuration, _hostEnvironment);
+        _secretsManager = new SecretsManager(_configuration, _hostEnvironment);
     }
 
     [Fact]
@@ -39,8 +38,8 @@ public class SecretsManagerTests
         var secretString = JsonSerializer.Serialize(appSecrets);
         var response = new GetSecretValueResponse { SecretString = secretString };
 
-        _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-            .Returns(Task.FromResult(response));
+        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
+        //     .Returns(Task.FromResult(response));
         
         var connectionString = await _secretsManager.GetConnectionStringAsync();
         
@@ -56,8 +55,8 @@ public class SecretsManagerTests
 
         var response = new GetSecretValueResponse { SecretString = null };
 
-        _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-            .Returns(Task.FromResult(response));
+        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
+        //     .Returns(Task.FromResult(response));
         
         Func<Task> act = async () => await _secretsManager.GetConnectionStringAsync();
 
@@ -96,8 +95,8 @@ public class SecretsManagerTests
         var secretString = JsonSerializer.Serialize(appSecrets);
         var response = new GetSecretValueResponse { SecretString = secretString };
 
-        _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-                           .Returns(Task.FromResult(response));
+        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
+        //                    .Returns(Task.FromResult(response));
         
         var result = await _secretsManager.GetJwtSecretAsync();
 
@@ -117,8 +116,8 @@ public class SecretsManagerTests
 
         var response = new GetSecretValueResponse { SecretString = null };
 
-        _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-                           .Returns(Task.FromResult(response));
+        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
+        //                    .Returns(Task.FromResult(response));
         
         Func<Task> act = async () => await _secretsManager.GetJwtSecretAsync();
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Shared;
 
 namespace PersonalFinances.API.Persistence.Configurations;

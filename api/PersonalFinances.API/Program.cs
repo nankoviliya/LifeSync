@@ -14,6 +14,7 @@ using PersonalFinances.API.Features.IncomeTracking.EventHandlers;
 using PersonalFinances.API.Features.IncomeTracking.Services;
 using PersonalFinances.API.Infrastructure.DomainEvents;
 using PersonalFinances.API.Models;
+using PersonalFinances.API.Models.ApplicationUser;
 using PersonalFinances.API.Models.Events;
 using PersonalFinances.API.Persistence;
 using PersonalFinances.API.Secrets;
@@ -30,9 +31,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-
-builder.Services.AddAWSService<IAmazonSecretsManager>();
+// builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+//
+// builder.Services.AddAWSService<IAmazonSecretsManager>();
 
 builder.Services.AddSingleton<ISecretsManager, SecretsManager>();
 
