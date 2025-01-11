@@ -1,0 +1,6 @@
+@LifeSync.API_HostAddress = http://localhost:5263
+
+GET {{LifeSync.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

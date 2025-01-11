@@ -5,24 +5,23 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Restore dependencies
-      run: dotnet restore ./api/PersonalFinances/PersonalFinances.sln
-    - name: Build
-      run: dotnet build --no-restore ./api/PersonalFinances/PersonalFinances.sln
-    - name: Test
-      run: dotnet test --no-build --verbosity normal ./api/PersonalFinances/PersonalFinances.sln
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore dependencies
+        run: dotnet restore ./api/LifeSync/LifeSync.sln
+      - name: Build
+        run: dotnet build --no-restore ./api/LifeSync/LifeSync.sln
+      - name: Test
+        run: dotnet test --no-build --verbosity normal ./api/LifeSync/LifeSync.sln
