@@ -3,7 +3,7 @@ using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models;
 using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.ApplicationUser;
-using LifeSync.API.Secrets;
+using LifeSync.API.Secrets.Contracts;
 
 namespace LifeSync.API.Persistence;
 

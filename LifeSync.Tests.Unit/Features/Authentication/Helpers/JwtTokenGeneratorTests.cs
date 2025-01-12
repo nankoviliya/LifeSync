@@ -1,16 +1,17 @@
-using System.IdentityModel.Tokens.Jwt;
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Helpers;
-using LifeSync.API.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Secrets;
+using LifeSync.API.Secrets.Contracts;
+using NSubstitute;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace LifeSync.UnitTests.Features.Authentication.Helpers;
 
 public class JwtTokenGeneratorTests
-{   
+{
     [Fact]
-    public void GenerateJwtToken_ShouldReturnTokenResponse_WhenUserIsValid()
+    public async Task GenerateJwtTokenAsync_ShouldReturnTokenResponse_WhenUserIsValid()
     {
         var jwtSecrets = new JwtSecrets
         {
@@ -26,16 +27,20 @@ public class JwtTokenGeneratorTests
             Email = "test@example.com"
         };
 
-        var generator = new JwtTokenGenerator(jwtSecrets);
+        var secretsManager = Substitute.For<ISecretsManager>();
 
-        var tokenResponse = generator.GenerateJwtToken(user);
+        secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
+
+        var generator = new JwtTokenGenerator(secretsManager);
+
+        var tokenResponse = await generator.GenerateJwtTokenAsync(user);
 
         tokenResponse.Token.Should().NotBeNullOrEmpty();
         tokenResponse.Expiry.Should().BeAfter(DateTime.UtcNow);
     }
 
     [Fact]
-    public void GenerateJwtToken_ShouldIncludeCorrectClaims_WhenUserIsValid()
+    public async Task GenerateJwtTokenAsync_ShouldIncludeCorrectClaims_WhenUserIsValid()
     {
         var jwtSecrets = new JwtSecrets
         {
@@ -51,9 +56,13 @@ public class JwtTokenGeneratorTests
             Email = "test@example.com"
         };
 
-        var generator = new JwtTokenGenerator(jwtSecrets);
+        var secretsManager = Substitute.For<ISecretsManager>();
 
-        var tokenResponse = generator.GenerateJwtToken(user);
+        secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
+
+        var generator = new JwtTokenGenerator(secretsManager);
+
+        var tokenResponse = await generator.GenerateJwtTokenAsync(user);
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(tokenResponse.Token);
 
@@ -63,7 +72,7 @@ public class JwtTokenGeneratorTests
     }
 
     [Fact]
-    public void GenerateJwtToken_ShouldThrowArgumentException_WhenSecretKeyIsInvalid()
+    public async Task GenerateJwtTokenAsync_ShouldThrowArgumentException_WhenSecretKeyIsInvalid()
     {
         var jwtSecrets = new JwtSecrets
         {
@@ -79,15 +88,19 @@ public class JwtTokenGeneratorTests
             Email = "test@example.com"
         };
 
-        var generator = new JwtTokenGenerator(jwtSecrets);
+        var secretsManager = Substitute.For<ISecretsManager>();
 
-        Action action = () => generator.GenerateJwtToken(user);
+        secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        action.Should().Throw<ArgumentException>().WithMessage("*key*");
+        var generator = new JwtTokenGenerator(secretsManager);
+
+        Func<Task> act = async () => await generator.GenerateJwtTokenAsync(user);
+
+        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*key*");
     }
 
     [Fact]
-    public void GenerateJwtToken_ShouldThrowArgumentNullException_WhenUserIsNull()
+    public async Task GenerateJwtToken_ShouldThrowArgumentNullException_WhenUserIsNull()
     {
         var jwtSecrets = new JwtSecrets
         {
@@ -97,10 +110,14 @@ public class JwtTokenGeneratorTests
             ExpiryMinutes = 30
         };
 
-        var generator = new JwtTokenGenerator(jwtSecrets);
+        var secretsManager = Substitute.For<ISecretsManager>();
 
-        Action action = () => generator.GenerateJwtToken(null);
+        secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        action.Should().Throw<NullReferenceException>();
+        var generator = new JwtTokenGenerator(secretsManager);
+
+        Func<Task> act = async () => await generator.GenerateJwtTokenAsync(null);
+
+        await act.Should().ThrowAsync<NullReferenceException>();
     }
 }

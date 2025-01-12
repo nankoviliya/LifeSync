@@ -1,66 +1,49 @@
-using System.Text.Json;
-using Amazon.SecretsManager;
-using Amazon.SecretsManager.Model;
-using LifeSync.API.Features.Authentication.Models;
+using LifeSync.API.Secrets.Common;
+using LifeSync.API.Secrets.Contracts;
 
 namespace LifeSync.API.Secrets;
 
 /// <summary>
-/// Secrets are currently in local storage.
+/// Loads secrets from local secrets storage or AWS Secrets Manager
+/// based on current application environment
+/// To see more about local secrets storage -
+/// <see cref="https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-9.0&tabs=windows"/>
+/// To see more about AWS Secrets Manager - 
+/// <see cref="https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_cache-net.html"/>
 /// </summary>
-/// <param name="secretsManager"></param>
 /// <param name="configuration"></param>
-/// <param name="_hostEnvironment"></param>
-public class SecretsManager(IConfiguration configuration, IHostEnvironment _hostEnvironment)
+public class SecretsManager(
+    ISecretsProvider secretsProvider)
     : ISecretsManager
 {
     public async Task<string> GetConnectionStringAsync()
     {
-        // string secretName = configuration["SecretsManager"];
-        //
-        // var request = new GetSecretValueRequest
-        // {
-        //     SecretId = secretName,
-        //     VersionStage = "AWSCURRENT",
-        // };
-        //
-        // var response = await secretsManager.GetSecretValueAsync(request);
-        //
+        var appSecrets = await secretsProvider.GetAppSecretsAsync();
 
-        var dbSecret = configuration.GetSection("Database").Get<DbConnectionSecrets>();
-        
-        if (dbSecret is not null)
+        if (appSecrets is null || appSecrets.Database is null)
         {
-            var devConnectionString = $"Server=localhost;" +
-                                   $"Database={dbSecret.DbInstanceIdentifier};" +
-                                   $"Trusted_Connection=True;" +
-                                   $"TrustServerCertificate=True;";
-    
-            return devConnectionString;
+            throw new Exception(SecretsConstants.DatabaseSecretsNotFoundMessage);
         }
 
-        throw new Exception("Secret not found or is in binary format.");
+        var dbSecret = appSecrets.Database;
+
+        var devConnectionString = $"Server=localhost;" +
+                       $"Database={dbSecret.DbInstanceIdentifier};" +
+                       $"Trusted_Connection=True;" +
+                       $"TrustServerCertificate=True;";
+
+        return devConnectionString;
     }
 
-    public async Task<JwtSecrets> GetJwtSecretAsync()
+    public async Task<JwtSecrets> GetJwtSecretsAsync()
     {
-        // string secretName = configuration["SecretsManager"];
-        //
-        // var request = new GetSecretValueRequest
-        // {
-        //     SecretId = secretName,
-        //     VersionStage = "AWSCURRENT",
-        // };
-        //
-        // var response = await secretsManager.GetSecretValueAsync(request);
-        
-        var jwtSecret = configuration.GetSection("JWT").Get<JwtSecrets>();
-        
-        if (jwtSecret is not null)
+        var appSecrets = await secretsProvider.GetAppSecretsAsync();
+
+        if (appSecrets is null || appSecrets.JWT is null)
         {
-            return jwtSecret;
+            throw new Exception(SecretsConstants.JWTSecretsNotFoundMessage);
         }
 
-        throw new Exception("Secret not found or is in binary format.");
+        return appSecrets.JWT;
     }
 }

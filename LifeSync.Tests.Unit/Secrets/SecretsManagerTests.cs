@@ -1,140 +1,113 @@
-using System.Text.Json;
-using Amazon.SecretsManager;
-using Amazon.SecretsManager.Model;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using LifeSync.API.Secrets;
+using LifeSync.API.Secrets.Common;
+using LifeSync.API.Secrets.Contracts;
+using NSubstitute;
 
 namespace LifeSync.UnitTests.Secrets;
 
 public class SecretsManagerTests
 {
-    private readonly SecretsManager _secretsManager;
-    private readonly IConfiguration _configuration = Substitute.For<IConfiguration>();
-    private readonly IHostEnvironment _hostEnvironment = Substitute.For<IHostEnvironment>();
+    private readonly SecretsManager secretsManager;
+    private readonly ISecretsProvider secretsProvider;
+
+    private readonly AppSecrets expectedSecrets = new AppSecrets
+    {
+        Database = new DbConnectionSecrets
+        {
+            DbInstanceIdentifier = "TestDb"
+        },
+        JWT = new JwtSecrets
+        {
+            SecretKey = "TestSigningKey",
+            Issuer = "TestIssuer",
+            Audience = "TestAudience",
+            ExpiryMinutes = 10
+        }
+    };
 
     public SecretsManagerTests()
     {
-        _secretsManager = new SecretsManager(_configuration, _hostEnvironment);
+        secretsProvider = Substitute.For<ISecretsProvider>();
+
+        secretsManager = new SecretsManager(secretsProvider);
     }
 
     [Fact]
     public async Task GetConnectionStringAsync_ShouldReturnConnectionString_WhenResponseIsNotNull()
     {
-        var secretName = "TestSecret";
-        _configuration["SecretsManager"].Returns(secretName);
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult(expectedSecrets));
 
-        var appSecrets = new AppSecrets
-        {
-            Database = new DbConnectionSecrets
-            {
-                DbInstanceIdentifier = "TestDb"
-            }
-        };
+        var connectionString = await secretsManager.GetConnectionStringAsync();
 
-        var secretString = JsonSerializer.Serialize(appSecrets);
-        var response = new GetSecretValueResponse { SecretString = secretString };
-
-        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-        //     .Returns(Task.FromResult(response));
-        
-        var connectionString = await _secretsManager.GetConnectionStringAsync();
-        
         connectionString.Should().Be("Server=localhost;Database=TestDb;Trusted_Connection=True;TrustServerCertificate=True;");
     }
-    
+
     [Fact]
-    public async Task GetConnectionStringAsync_ShouldThrowException_WhenSecretStringIsNull()
+    public async Task GetConnectionStringAsync_ShouldThrowException_WhenAppSecretsIsNull()
     {
-        var secretName = "TestSecret";
-        
-        _configuration["SecretsManager"].Returns(secretName);
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult((AppSecrets)null));
 
-        var response = new GetSecretValueResponse { SecretString = null };
+        Func<Task> act = async () => await secretsManager.GetConnectionStringAsync();
 
-        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-        //     .Returns(Task.FromResult(response));
-        
-        Func<Task> act = async () => await _secretsManager.GetConnectionStringAsync();
-
-        // Assert
         await act.Should().ThrowAsync<Exception>()
-            .WithMessage("Secret not found or is in binary format.");
+            .WithMessage(SecretsConstants.DatabaseSecretsNotFoundMessage);
     }
 
     [Fact]
-    public async Task GetConnectionStringAsync_ShouldThrowException_WhenSecretsManagerKeyIsNotConfigured()
+    public async Task GetConnectionStringAsync_ShouldThrowException_WhenDbSecretsIsNull()
     {
-        _configuration["SecretsManager"].Returns((string)null);
-        
-        Func<Task> act = async () => await _secretsManager.GetConnectionStringAsync();
-        
-        await act.Should().ThrowAsync<NullReferenceException>();
-    }
-    
-    [Fact]
-    public async Task GetJwtSecretAsync_ReturnsJwtSecrets_WhenSecretStringIsValid()
-    {
-        var secretName = "TestSecret";
-        _configuration["SecretsManager"].Returns(secretName);
-
-        var appSecrets = new AppSecrets
-        {
-            JWT = new JwtSecrets
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult(new AppSecrets
             {
-                SecretKey = "TestSigningKey",
-                Issuer = "TestIssuer",
-                Audience = "TestAudience",
-                ExpiryMinutes = 10
-            }
-        };
+                Database = null
+            }));
 
-        var secretString = JsonSerializer.Serialize(appSecrets);
-        var response = new GetSecretValueResponse { SecretString = secretString };
+        Func<Task> act = async () => await secretsManager.GetConnectionStringAsync();
 
-        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-        //                    .Returns(Task.FromResult(response));
-        
-        var result = await _secretsManager.GetJwtSecretAsync();
-
-        // Assert
-        result.Should().NotBeNull();
-        result.SecretKey.Should().Be("TestSigningKey");
-        result.Issuer.Should().Be("TestIssuer");
-        result.Audience.Should().Be("TestAudience");
-        result.ExpiryMinutes.Should().Be(10);
-    }
-
-    [Fact]
-    public async Task GetJwtSecretAsync_ThrowsException_WhenSecretStringIsNull()
-    {
-        var secretName = "TestSecret";
-        _configuration["SecretsManager"].Returns(secretName);
-
-        var response = new GetSecretValueResponse { SecretString = null };
-
-        // _amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>())
-        //                    .Returns(Task.FromResult(response));
-        
-        Func<Task> act = async () => await _secretsManager.GetJwtSecretAsync();
-
-        // Assert
         await act.Should().ThrowAsync<Exception>()
-                .WithMessage("Secret not found or is in binary format.");
+            .WithMessage(SecretsConstants.DatabaseSecretsNotFoundMessage);
     }
 
     [Fact]
-    public async Task GetJwtSecretAsync_ThrowsArgumentNullException_WhenSecretsManagerKeyIsNotConfigured()
+    public async Task GetJwtSecretsAsync_ReturnsJwtSecrets_WhenSecretStringIsValid()
     {
-        _configuration["SecretsManager"].Returns((string)null);
-        
-        Func<Task> act = async () => await _secretsManager.GetJwtSecretAsync();
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult(expectedSecrets));
 
-        // Assert
-        await act.Should().ThrowAsync<NullReferenceException>()
-                .WithMessage("Object reference not set to an instance of an object.");
+        var result = await secretsManager.GetJwtSecretsAsync();
+
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedSecrets.JWT);
     }
+
+    [Fact]
+    public async Task GetJwtSecretsAsync_ShouldThrowException_WhenAppSecretsIsNull()
+    {
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult((AppSecrets)null));
+
+        Func<Task> act = async () => await secretsManager.GetJwtSecretsAsync();
+
+        await act.Should().ThrowAsync<Exception>()
+            .WithMessage(SecretsConstants.JWTSecretsNotFoundMessage);
+    }
+
+    [Fact]
+    public async Task GetJwtSecretsAsync_ShouldThrowException_WhenDbSecretsIsNull()
+    {
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult(new AppSecrets
+            {
+                JWT = null
+            }));
+
+        Func<Task> act = async () => await secretsManager.GetJwtSecretsAsync();
+
+        await act.Should().ThrowAsync<Exception>()
+            .WithMessage(SecretsConstants.JWTSecretsNotFoundMessage);
+    }
+
 }

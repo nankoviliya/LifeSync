@@ -1,27 +1,26 @@
+using LifeSync.API.Features.Authentication.Models;
+using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Secrets.Contracts;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using LifeSync.API.Features.Authentication.Models;
-using LifeSync.API.Models;
-using LifeSync.API.Models.ApplicationUser;
-using LifeSync.API.Secrets;
 
 namespace LifeSync.API.Features.Authentication.Helpers;
 
 public class JwtTokenGenerator
 {
-    private readonly JwtSecrets _jwtSecrets;
+    private readonly ISecretsManager secretsManager;
 
-    public JwtTokenGenerator(JwtSecrets jwtSecrets)
+    public JwtTokenGenerator(ISecretsManager secretsManager)
     {
-        _jwtSecrets = jwtSecrets;
+        this.secretsManager = secretsManager;
     }
-    
-    public TokenResponse GenerateJwtToken(User user)
+
+    public async Task<TokenResponse> GenerateJwtTokenAsync(User user)
     {
+        var jwtSecrets = await secretsManager.GetJwtSecretsAsync();
+
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
@@ -29,18 +28,18 @@ public class JwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecrets.SecretKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _jwtSecrets.Issuer,
-            audience: _jwtSecrets.Audience,
+            issuer: jwtSecrets.Issuer,
+            audience: jwtSecrets.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSecrets.ExpiryMinutes),
+            expires: DateTime.UtcNow.AddMinutes(jwtSecrets.ExpiryMinutes),
             signingCredentials: creds);
 
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-        
+
         return new TokenResponse
         {
             Token = tokenString,

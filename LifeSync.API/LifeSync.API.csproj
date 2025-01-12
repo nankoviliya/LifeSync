@@ -3,8 +3,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>a10f9032-5267-42c1-a1ae-a1c5b1b00fe5</UserSecretsId>
     <RootNamespace>LifeSync.API</RootNamespace>
+    <UserSecretsId>d97a589c-80bf-4505-b882-b57037de713c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

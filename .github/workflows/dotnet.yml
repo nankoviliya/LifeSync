@@ -20,8 +20,8 @@ jobs:
         with:
           dotnet-version: 9.0.x
       - name: Restore dependencies
-        run: dotnet restore ./api/LifeSync/LifeSync.sln
+        run: dotnet restore ./LifeSync.sln
       - name: Build
-        run: dotnet build --no-restore ./api/LifeSync/LifeSync.sln
+        run: dotnet build --no-restore ./LifeSync.sln
       - name: Test
-        run: dotnet test --no-build --verbosity normal ./api/LifeSync/LifeSync.sln
+        run: dotnet test --no-build --verbosity normal ./LifeSync.sln
