@@ -13,6 +13,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { Finances } from '@/features/finances/components/Finances';
+import { UserProfile } from '@/features/userProfile/components/UserProfile';
 
 export const AppRouter = () => {
   const { isAuthenticated } = useAuth();
@@ -21,6 +22,7 @@ export const AppRouter = () => {
     <>
       <Route path={routePaths.app.path} element={<Home />} />
       <Route path={routePaths.home.path} element={<Home />} />
+      <Route path={routePaths.userProfile.path} element={<UserProfile />} />
       <Route path={routePaths.finances.path} element={<Finances />} />
       <Route
         path={routePaths.expenseTracking.path}

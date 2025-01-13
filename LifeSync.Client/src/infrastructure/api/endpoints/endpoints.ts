@@ -5,12 +5,15 @@ export const endpoints = {
   auth: {
     login: 'Auth/Login',
   },
+  users: {
+    getProfileData: 'Users/Profile',
+  },
   income: {
     getUserTransactions: 'Income/Transactions',
     addUserTransaction: 'Income',
   },
   expense: {
-    getUserTransactions: 'Expense/Transactions',
-    addUserTransaction: 'Expense',
+    getUserTransactions: 'Expenses/Transactions',
+    addUserTransaction: 'Expenses',
   },
 };

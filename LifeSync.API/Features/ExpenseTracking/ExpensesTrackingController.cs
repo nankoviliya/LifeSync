@@ -8,7 +8,7 @@ namespace LifeSync.API.Features.ExpenseTracking;
 
 [ApiController]
 [Authorize]
-[Route("api/expense")]
+[Route("api/expenses")]
 public class ExpenseTrackingController : ControllerBase
 {
     private readonly IExpenseTrackingService expenseTrackingService;

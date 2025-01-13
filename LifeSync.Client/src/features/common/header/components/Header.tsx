@@ -2,7 +2,7 @@ import { routePaths } from '@/infrastructure/routing/routePaths';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.scss';
 import { useHeader } from '@/features/common/header/hooks/useHeader';
-import { Avatar } from 'primereact/avatar';
+import { UserAvatar } from '@/features/common/header/components/UserAvatar';
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -20,9 +20,7 @@ export const Header = () => {
         <span>Life Sync</span>
       </div>
       <div>
-        {isUserAuthenticated && (
-          <Avatar icon="pi pi-user" size="normal" shape="circle" />
-        )}
+        {isUserAuthenticated && <UserAvatar />}
         {!isUserAuthenticated && (
           <Link to={routePaths.login.path}>{routePaths.login.name}</Link>
         )}

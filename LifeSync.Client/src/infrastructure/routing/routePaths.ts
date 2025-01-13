@@ -16,6 +16,10 @@ export const routePaths = {
     path: '/home',
     name: 'Home',
   },
+  userProfile: {
+    path: '/profile',
+    name: 'User Profile',
+  },
   finances: {
     path: '/finances',
     name: 'Finances',

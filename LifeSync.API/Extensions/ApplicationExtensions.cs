@@ -4,6 +4,7 @@ using LifeSync.API.Features.ExpenseTracking.EventHandlers;
 using LifeSync.API.Features.ExpenseTracking.Services;
 using LifeSync.API.Features.IncomeTracking.EventHandlers;
 using LifeSync.API.Features.IncomeTracking.Services;
+using LifeSync.API.Features.Users.Services;
 using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Events;
@@ -93,8 +94,8 @@ public static class ApplicationExtensions
         services.AddTransient<IDomainEventHandler<IncomeTransactionCreatedDomainEvent>, IncomeTransactionCreatedDomainEventHandler>();
         services.AddTransient<IDomainEventHandler<ExpenseTransactionCreatedDomainEvent>, ExpenseTransactionCreatedDomainEventHandler>();
 
+        services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<IExpenseTrackingService, ExpenseTrackingService>();
-
         services.AddScoped<IIncomeTrackingService, IncomeTrackingService>();
 
         services.AddTransient<JwtTokenGenerator>();

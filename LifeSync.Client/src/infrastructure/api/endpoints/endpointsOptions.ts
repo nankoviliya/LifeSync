@@ -6,6 +6,10 @@ export const endpointsOptions: IEndpointsOptions = {
     endpoint: endpoints.base.getBaseInfo,
     key: 'base-info',
   },
+  getUserProfileData: {
+    endpoint: endpoints.users.getProfileData,
+    key: 'user-profile-data',
+  },
   getUserIncomeTransactions: {
     endpoint: endpoints.income.getUserTransactions,
     key: 'user-income-transactions',
