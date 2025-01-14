@@ -1,4 +1,4 @@
-import { App } from '@/App';
+import { App } from '@/features/app/App';
 import { ExpenseTracking } from '@/features/finances/expenseTracking/components/ExpenseTracking';
 import { Home } from '@/features/home/Home';
 import { IncomeTracking } from '@/features/finances/incomeTracking/components/IncomeTracking';

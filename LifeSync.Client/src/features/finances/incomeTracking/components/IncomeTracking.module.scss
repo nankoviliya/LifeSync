@@ -1,3 +1,5 @@
+@use '/src/sharedStyles/abstracts/index.scss' as *;
+
 .income-tracking {
   display: inline-flex;
   flex-direction: column;
@@ -5,7 +7,15 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1em;
+
+    @include Tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include Mobile {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 }

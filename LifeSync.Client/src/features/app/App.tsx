@@ -1,5 +1,4 @@
-import { routePaths } from '@/infrastructure/routing/routePaths';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import styles from './App.module.scss';
 import { Header } from '@/features/common/header/components/Header';
 import { Footer } from '@/features/common/footer/components/Footer';
