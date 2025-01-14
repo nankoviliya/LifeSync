@@ -32,4 +32,4 @@ export const routePaths = {
     path: '/finances/expense-tracking',
     name: 'Expense Tracking',
   },
-};
+} as const;
