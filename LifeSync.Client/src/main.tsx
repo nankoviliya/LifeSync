@@ -1,4 +1,5 @@
 import { StrictMode } from 'react';
+import '@/infrastructure/translations/i18n';
 import './index.scss';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './infrastructure/api/queryClient/queryClient';
