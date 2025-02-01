@@ -1,4 +1,4 @@
-using LifeSync.API.Shared;
+using LifeSync.API.Models.Languages;
 
 namespace LifeSync.API.Features.Users.Models;
 public record GetUserProfileDataDto
@@ -16,4 +16,6 @@ public record GetUserProfileDataDto
     public decimal BalanceAmount { get; init; } = default!;
 
     public string BalanceCurrency { get; init; } = default!;
+
+    public Language Language { get; init; } = default!;
 }

@@ -4,7 +4,13 @@ export interface IUserProfileDataModel {
   email?: string;
   firstName: string;
   lastName: string;
-  language: string;
+  language: ILanguage;
   balanceAmount: number;
   balanceCurrency: string;
+}
+
+export interface ILanguage {
+  id: string;
+  name: string;
+  code: string;
 }

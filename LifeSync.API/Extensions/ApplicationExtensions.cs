@@ -1,9 +1,11 @@
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
+using LifeSync.API.Features.Configuration.Services;
 using LifeSync.API.Features.ExpenseTracking.EventHandlers;
 using LifeSync.API.Features.ExpenseTracking.Services;
 using LifeSync.API.Features.IncomeTracking.EventHandlers;
 using LifeSync.API.Features.IncomeTracking.Services;
+using LifeSync.API.Features.Translations.Services;
 using LifeSync.API.Features.Users.Services;
 using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.ApplicationUser;
@@ -94,6 +96,9 @@ public static class ApplicationExtensions
         services.AddTransient<IDomainEventHandler<IncomeTransactionCreatedDomainEvent>, IncomeTransactionCreatedDomainEventHandler>();
         services.AddTransient<IDomainEventHandler<ExpenseTransactionCreatedDomainEvent>, ExpenseTransactionCreatedDomainEventHandler>();
 
+        services.AddScoped<ITranslationsService, TranslationsService>();
+
+        services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
         services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<IExpenseTrackingService, ExpenseTrackingService>();
         services.AddScoped<IIncomeTrackingService, IncomeTrackingService>();

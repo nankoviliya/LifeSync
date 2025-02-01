@@ -1,8 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using LifeSync.API.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Shared;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LifeSync.API.Persistence.Configurations;
 
@@ -23,15 +22,20 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Email)
             .HasMaxLength(320);
 
+        builder.HasOne(e => e.Language)
+            .WithMany()
+            .HasForeignKey(e => e.LanguageId)
+            .IsRequired();
+
         builder.HasIndex(x => x.Email)
             .IsUnique();
-        
+
         builder.OwnsOne(x => x.Balance, balance =>
         {
             balance.Property(price => price.Currency)
                 .HasConversion(currency => currency.Code, code => Currency.FromCode(code));
         });
-        
+
         builder.OwnsOne(e => e.CurrencyPreference, currency =>
         {
             currency.Property(c => c.Code).HasColumnName("CurrencyPreference");

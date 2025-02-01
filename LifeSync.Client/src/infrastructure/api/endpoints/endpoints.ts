@@ -1,12 +1,17 @@
+
 export const endpoints = {
-  base: {
-    getBaseInfo: 'Base/Get',
+  frontendSettings: {
+    getFrontendSettings: 'FrontendSettings',
+  },
+  translations: {
+    getTranslationsByLanguageId: `Translations`,
   },
   auth: {
     login: 'Auth/Login',
   },
   users: {
     getProfileData: 'Users/Profile',
+    modifyProfileData: 'Users/Profile',
   },
   income: {
     getUserTransactions: 'Income/Transactions',

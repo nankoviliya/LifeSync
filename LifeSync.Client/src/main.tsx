@@ -10,6 +10,13 @@ import 'primereact/resources/primereact.min.css'; // Core CSS
 import 'primeicons/primeicons.css'; // Icons
 import { AppRouter } from '@/infrastructure/routing/AppRouter';
 import { AuthProvider } from '@/infrastructure/authentication/context/AuthProvider';
+import { prefetchAll } from '@/infrastructure/api/prefetch/prefetchAll';
+import i18n from '@/infrastructure/translations/i18n';
+import { I18nextProvider } from 'react-i18next';
+
+prefetchAll().catch((err) => {
+  console.error('Error prefetching data:', err);
+});
 
 const appRoot = document.getElementById('root')!;
 
@@ -19,9 +26,11 @@ root.render(
   <StrictMode>
     <PrimeReactProvider>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <AppRouter />
-        </AuthProvider>
+        <I18nextProvider i18n={i18n}>
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
+        </I18nextProvider>
       </QueryClientProvider>
     </PrimeReactProvider>
   </StrictMode>,

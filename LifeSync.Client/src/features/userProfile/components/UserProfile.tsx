@@ -1,6 +1,7 @@
 import { useUserProfile } from '@/features/userProfile/hooks/useUserProfile';
 import styles from './UserProfile.module.scss';
 import { Image } from 'primereact/image';
+import { UserProfileDataContainer } from '@/features/userProfile/components/profileData/UserProfileDataContainer';
 
 export const UserProfile = () => {
   const { isLoading, isSuccess, data } = useUserProfile();
@@ -16,16 +17,7 @@ export const UserProfile = () => {
             src="/default-user-avatar.png"
             alt="user_avatar"
           />
-          <div className={styles['user-profile__info__profile-data']}>
-            <span>User ID: {data.userId}</span>
-            <span>Username: {data.userName}</span>
-            <span>Email: {data.email}</span>
-            <span>First Name: {data.firstName}</span>
-            <span>Last Name: {data.lastName}</span>
-            <span>
-              Balance: {data.balanceAmount} {data.balanceCurrency}
-            </span>
-          </div>
+          <UserProfileDataContainer userData={data} />
         </div>
       )}
     </div>
