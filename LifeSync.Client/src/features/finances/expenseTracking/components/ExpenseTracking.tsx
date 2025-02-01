@@ -4,8 +4,11 @@ import styles from './ExpenseTracking.module.scss';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { NewExpenseTransaction } from '@/features/finances/expenseTracking/addTransaction/components/NewExpenseTransaction';
+import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export const ExpenseTracking = () => {
+  const { translate } = useAppTranslations();
+
   const {
     data,
     control,
@@ -19,7 +22,7 @@ export const ExpenseTracking = () => {
   return (
     <div className={styles['expense-tracking']}>
       <Button
-        label="Add new expense"
+        label={translate('add-new-expense-transaction-button-label')}
         onClick={() => {
           setIsModalVisible(true);
         }}
@@ -47,10 +50,16 @@ export const ExpenseTracking = () => {
                 title={`${i.description} - ${i.date}`}
               >
                 <p className="m-0">
-                  Transaction amount - {i.amount + ' ' + i.currency}
+                  {translate('transaction-amount-label')} -{' '}
+                  {i.amount + ' ' + i.currency}
                 </p>
-                <p className="m-0">Description - {i.description}</p>
-                <p className="m-0">Expense type - {i.expenseType}</p>
+                <p className="m-0">
+                  {translate('transaction-description-label')} - {i.description}
+                </p>
+                <p className="m-0">
+                  {translate('expense-transaction-type-label')} -{' '}
+                  {i.expenseType}
+                </p>
               </Card>
             );
           })}

@@ -1,5 +1,33 @@
 ﻿{
   "finances-service-name": "Финансы",
   "expense-transactions-service-name": "Расходные операции",
-  "income-transactions-service-name": "Доходные операции"
+  "income-transactions-service-name": "Доходные операции",
+
+  "finances-service-description": "Здесь вы можете управлять своими доходами и расходами",
+  "expense-transactions-service-description": "Управляйте своими расходными операциями",
+  "income-transactions-service-description": "Управляйте своими доходными операциями",
+
+  "profile-button-name": "Профиль",
+  "logout-button-name": "Выход",
+
+  "profile-user-id-label": "ID пользователя",
+  "profile-username-label": "Имя пользователя",
+  "profile-email-label": "Электронная почта",
+  "profile-first-name-label": "Имя",
+  "profile-last-name-label": "Фамилия",
+  "profile-balance-label": "Баланс",
+  "profile-language-label": "Язык",
+
+  "add-new-income-transaction-button-label": "Добавить новую доходную операцию",
+  "add-new-expense-transaction-button-label": "Добавить новую расходную операцию",
+
+  "transaction-amount-label": "Сумма",
+  "transaction-description-label": "Описание",
+  "expense-transaction-type-label": "Тип расходов",
+
+  "new-transaction-input-amount-label": "Сумма",
+  "new-transaction-input-currency-label": "Валюта",
+  "new-transaction-input-date-label": "Дата",
+  "new-transaction-input-description-label": "Описание",
+  "new-expense-transaction-input-expense-type-label": "Тип расхода"
 }

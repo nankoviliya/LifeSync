@@ -1,7 +1,6 @@
 import { Card } from 'primereact/card';
 import styles from './ServiceCard.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { routePaths } from '@/infrastructure/routing/routePaths';
 import { IApplicationService } from '@/infrastructure/applicationServices/applicationService';
 import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
@@ -16,12 +15,12 @@ export const ServiceCard = ({ service }: IServiceCardProps) => {
   return (
     <Card
       className={styles['service-card']}
-      title={translate(service.translationCode)}
+      title={translate(service.labelTranslationCode)}
       onClick={() => {
         navigate(service.routePath.path);
       }}
     >
-      <p className="m-0">{service.description}</p>
+      <p className="m-0">{translate(service.descriptionTranslationCode)}</p>
     </Card>
   );
 };

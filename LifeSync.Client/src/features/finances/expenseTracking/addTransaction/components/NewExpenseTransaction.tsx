@@ -9,6 +9,7 @@ import { ExpenseType } from '@/features/finances/expenseTracking/models/expenseT
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import { parseCalendarDate } from '@/infrastructure/common/utilities/utilities';
+import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export interface INewExpenseTransactionProps {
   control: Control<INewExpenseTransactionRequest>;
@@ -19,6 +20,8 @@ export const NewExpenseTransaction = ({
   control,
   handleSubmit,
 }: INewExpenseTransactionProps) => {
+  const { translate } = useAppTranslations();
+
   const expenseTypeOptions = Object.values(ExpenseType).map((type) => ({
     label: type,
     value: type,
@@ -32,7 +35,9 @@ export const NewExpenseTransaction = ({
         rules={{ required: 'Amount is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="amount">Amount</label>
+            <label htmlFor="amount">
+              {translate('new-transaction-input-amount-label')}
+            </label>
             <InputNumber
               id={field.name}
               ref={field.ref}
@@ -50,7 +55,9 @@ export const NewExpenseTransaction = ({
         rules={{ required: 'Currency is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">Currency</label>
+            <label htmlFor="currency">
+              {translate('new-transaction-input-currency-label')}
+            </label>
             <InputText
               id={field.name}
               {...field}
@@ -66,7 +73,9 @@ export const NewExpenseTransaction = ({
         rules={{ required: 'Date is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">Date</label>
+            <label htmlFor="currency">
+              {translate('new-transaction-input-date-label')}
+            </label>
             <Calendar
               id={field.name}
               {...field}
@@ -85,7 +94,9 @@ export const NewExpenseTransaction = ({
         rules={{ required: 'Description is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">Description</label>
+            <label htmlFor="currency">
+              {translate('new-transaction-input-description-label')}
+            </label>
             <InputText
               id={field.name}
               {...field}
@@ -101,7 +112,9 @@ export const NewExpenseTransaction = ({
         rules={{ required: 'Expense type is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="expenseType">Expense Type</label>
+            <label htmlFor="expenseType">
+              {translate('new-expense-transaction-input-expense-type-label')}
+            </label>
             <Dropdown
               id={field.name}
               {...field}

@@ -6,6 +6,7 @@ import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProf
 import { Button } from 'primereact/button';
 import { useFrontendSettings } from '@/infrastructure/frontendSettings/hooks/useFrontendSettings';
 import { Dropdown } from 'primereact/dropdown';
+import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export interface IUserProfileDataEditableProps {
   userData: IUserProfileDataModel;
@@ -16,6 +17,8 @@ export const UserProfileDataEditable = ({
   userData,
   disableEditMode,
 }: IUserProfileDataEditableProps) => {
+  const { translate } = useAppTranslations();
+
   const { frontendSettings, isLoading } = useFrontendSettings();
 
   const { control, handleSubmit, onSubmit } = useUserProfileEditable(
@@ -42,11 +45,17 @@ export const UserProfileDataEditable = ({
       {isLoading && <div>Loading configuration...</div>}
       {frontendSettings && (
         <>
-          <span>User ID: {userId}</span>
-          <span>Username: {userName}</span>
-          <span>Email: {email}</span>
           <span>
-            First Name:{' '}
+            {translate('profile-user-id-label')}: {userId}
+          </span>
+          <span>
+            {translate('profile-username-label')}: {userName}
+          </span>
+          <span>
+            {translate('profile-email-label')}: {email}
+          </span>
+          <span>
+            {translate('profile-first-name-label')}:{' '}
             <Controller
               control={control}
               name="firstName"
@@ -54,7 +63,7 @@ export const UserProfileDataEditable = ({
             />
           </span>
           <span>
-            Last Name:{' '}
+            {translate('profile-last-name-label')}:{' '}
             <Controller
               control={control}
               name="lastName"
@@ -62,9 +71,12 @@ export const UserProfileDataEditable = ({
             />
           </span>
           <span>
-            Balance: {balanceAmount} {balanceCurrency}
+            {translate('profile-balance-label')}: {balanceAmount}{' '}
+            {balanceCurrency}
           </span>
-          <span>Language: {language.name}</span>
+          <span>
+            {translate('profile-language-label')}: {language.name}
+          </span>
           <Controller
             name="languageId"
             control={control}

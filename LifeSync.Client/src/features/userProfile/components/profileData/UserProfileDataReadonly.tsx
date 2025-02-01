@@ -1,5 +1,6 @@
 import { IUserProfileDataModel } from '@/features/userProfile/models/userProfileDataModel';
 import styles from './UserProfileDataReadonly.module.scss';
+import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export interface IUserProfileDataReadonlyProps {
   userData: IUserProfileDataModel;
@@ -8,6 +9,8 @@ export interface IUserProfileDataReadonlyProps {
 export const UserProfileDataReadonly = ({
   userData,
 }: IUserProfileDataReadonlyProps) => {
+  const { translate } = useAppTranslations();
+
   const {
     userId,
     userName,
@@ -21,15 +24,27 @@ export const UserProfileDataReadonly = ({
 
   return (
     <div className={styles['user-profile-data']}>
-      <span>User ID: {userId}</span>
-      <span>Username: {userName}</span>
-      <span>Email: {email}</span>
-      <span>First Name: {firstName}</span>
-      <span>Last Name: {lastName}</span>
       <span>
-        Balance: {balanceAmount} {balanceCurrency}
+        {translate('profile-user-id-label')}: {userId}
       </span>
-      <span>Language: {language.name}</span>
+      <span>
+        {translate('profile-username-label')}: {userName}
+      </span>
+      <span>
+        {translate('profile-email-label')}: {email}
+      </span>
+      <span>
+        {translate('profile-first-name-label')}: {firstName}
+      </span>
+      <span>
+        {translate('profile-last-name-label')}: {lastName}
+      </span>
+      <span>
+        {translate('profile-balance-label')}: {balanceAmount} {balanceCurrency}
+      </span>
+      <span>
+        {translate('profile-language-label')}: {language.name}
+      </span>
     </div>
   );
 };

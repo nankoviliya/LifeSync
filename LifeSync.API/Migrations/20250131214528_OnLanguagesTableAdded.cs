@@ -23,20 +23,23 @@ namespace LifeSync.API.Migrations
                     table.PrimaryKey("PK_Languages", x => x.Id);
                 });
 
-            // Default English language added.
-            var englishIdGuid = new Guid("dc8a7cef-545f-4276-817a-3053b4d8c072");
-
             migrationBuilder.InsertData(
                 table: "Languages",
                 columns: new[] { "Id", "Name", "Code" },
-                values: new object[] { englishIdGuid, "English", "en" });
+                values: new object[,]
+                {
+                    { new Guid("DC8A7CEF-545F-4276-817A-3053B4D8C072"), "English", "en" },
+                    { new Guid("F2EC0887-DE8F-4BB5-BBE3-199A35394D5E"), "Bulgarian", "bg" },
+                    { new Guid("DFE7BAE1-1E2B-45BD-92B7-D4057B454F9A"), "Ukrainian", "uk" },
+                    { new Guid("E3456F2A-66B9-483E-80D8-E107654A71F3"), "Russian", "ru" }
+                });
 
             migrationBuilder.AddColumn<Guid>(
                 name: "LanguageId",
                 table: "Users",
                 type: "uniqueidentifier",
                 nullable: false,
-                defaultValue: englishIdGuid);
+                defaultValue: new Guid("DC8A7CEF-545F-4276-817A-3053B4D8C072"));
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_LanguageId",
