@@ -4,8 +4,11 @@ import styles from './IncomeTracking.module.scss';
 import { Dialog } from 'primereact/dialog';
 import { NewIncomeTransaction } from '@/features/finances/incomeTracking/addTransaction/components/NewIncomeTransaction';
 import { Card } from 'primereact/card';
+import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export const IncomeTracking = () => {
+  const { translate } = useAppTranslations();
+
   const {
     data,
     control,
@@ -19,7 +22,7 @@ export const IncomeTracking = () => {
   return (
     <div className={styles['income-tracking']}>
       <Button
-        label="Add new income transaction"
+        label={translate('add-new-income-transaction-button-label')}
         onClick={() => {
           setIsModalVisible(true);
         }}
@@ -47,9 +50,12 @@ export const IncomeTracking = () => {
                 title={`${i.description} - ${i.date}`}
               >
                 <p className="m-0">
-                  Transaction amount - {i.amount + ' ' + i.currency}
+                  {translate('transaction-amount-label')} -{' '}
+                  {i.amount + ' ' + i.currency}
                 </p>
-                <p className="m-0">Description - {i.description}</p>
+                <p className="m-0">
+                  {translate('transaction-description-label')} - {i.description}
+                </p>
               </Card>
             );
           })}

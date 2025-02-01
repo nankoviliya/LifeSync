@@ -1,9 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models;
 using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Models.Languages;
 using LifeSync.API.Secrets.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Persistence;
 
@@ -13,8 +14,8 @@ public class ApplicationDbContext : DbContext
     private readonly IDomainEventDispatcher eventDispatcher;
 
     public ApplicationDbContext(
-        DbContextOptions options, 
-        IDomainEventDispatcher eventDispatcher, 
+        DbContextOptions options,
+        IDomainEventDispatcher eventDispatcher,
         ISecretsManager secretsManager) : base(options)
     {
         this.secretsManager = secretsManager;
@@ -23,29 +24,29 @@ public class ApplicationDbContext : DbContext
 
     public ApplicationDbContext()
     {
-        
+
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);
     }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString = secretsManager.GetConnectionStringAsync().Result;
         optionsBuilder.UseSqlServer(connectionString);
     }
-    
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var result = await base.SaveChangesAsync(cancellationToken);
 
         await PublishDomainEventsAsync();
-            
-        return result;        
+
+        return result;
     }
 
     private async Task PublishDomainEventsAsync()
@@ -62,18 +63,20 @@ public class ApplicationDbContext : DbContext
 
             return domainEvents;
         }).ToList();
-        
+
         foreach (var entity in entities)
         {
             entity.ClearDomainEvents();
         }
-        
+
         await eventDispatcher.DispatchAsync(domainEvents);
     }
 
+    public DbSet<Language> Languages { get; set; }
+
     public DbSet<ExpenseTransaction> ExpenseTransactions { get; set; }
-    
+
     public DbSet<IncomeTransaction> IncomeTransactions { get; set; }
-    
+
     public DbSet<User> Users { get; set; }
 }

@@ -2,9 +2,13 @@ import { IEndpointsOptions } from '@/infrastructure/api/models/endpointsOptions'
 import { endpoints } from './endpoints';
 
 export const endpointsOptions: IEndpointsOptions = {
-  getBaseInfo: {
-    endpoint: endpoints.base.getBaseInfo,
-    key: 'base-info',
+  getFrontendSettings: {
+    endpoint: endpoints.frontendSettings.getFrontendSettings,
+    key: 'frontend-settings',
+  },
+  getTranslations: {
+    endpoint: endpoints.translations.getTranslationsByLanguageId,
+    key: 'translations',
   },
   getUserProfileData: {
     endpoint: endpoints.users.getProfileData,

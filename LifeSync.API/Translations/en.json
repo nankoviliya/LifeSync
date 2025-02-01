@@ -1,0 +1,33 @@
+﻿{
+  "finances-service-name": "Finances",
+  "expense-transactions-service-name": "Expense Transactions",
+  "income-transactions-service-name": "Income Transactions",
+
+  "finances-service-description": "Here you can manage your income and expense transactions",
+  "expense-transactions-service-description": "Manage your expense transactions",
+  "income-transactions-service-description": "Manage your income transactions",
+
+  "profile-button-name": "Profile",
+  "logout-button-name": "Logout",
+
+  "profile-user-id-label": "User ID",
+  "profile-username-label": "Username",
+  "profile-email-label": "Email",
+  "profile-first-name-label": "First Name",
+  "profile-last-name-label": "Last Name",
+  "profile-balance-label": "Balance",
+  "profile-language-label": "Language",
+
+  "add-new-income-transaction-button-label": "Add new income transaction",
+  "add-new-expense-transaction-button-label": "Add new expense transaction",
+
+  "transaction-amount-label": "Amount",
+  "transaction-description-label": "Description",
+  "expense-transaction-type-label": "Expense type",
+
+  "new-transaction-input-amount-label": "Amount",
+  "new-transaction-input-currency-label": "Currency",
+  "new-transaction-input-date-label": "Date",
+  "new-transaction-input-description-label": "Description",
+  "new-expense-transaction-input-expense-type-label": "Expense Type"
+}

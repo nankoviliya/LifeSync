@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using LifeSync.API.Features.IncomeTracking.Models;
 using LifeSync.API.Models;
 using LifeSync.API.Models.Events;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.IncomeTracking.Services;
 
@@ -29,10 +29,10 @@ public class IncomeTrackingService : IIncomeTrackingService
             Id = x.Id,
             Amount = x.Amount.Amount,
             Currency = x.Amount.Currency.Code,
-            Date = x.Date,
+            Date = x.Date.ToString("yyyy-MM-dd"),
             Description = x.Description
         });
-        
+
         return userIncomeTransactionsDto;
     }
 
@@ -46,11 +46,11 @@ public class IncomeTrackingService : IIncomeTrackingService
             Description = request.Description,
             UserId = userId
         };
-        
+
         await databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
-        
+
         incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userId, incomeTransaction));
-        
+
         await databaseContext.SaveChangesAsync();
 
         return incomeTransaction.Id;
