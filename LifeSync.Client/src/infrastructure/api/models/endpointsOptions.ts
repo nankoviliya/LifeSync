@@ -1,7 +1,8 @@
 import { IReadQueryBaseOptions } from './readQueryBaseOptions';
 
 export interface IEndpointsOptions {
-  getBaseInfo: IReadQueryBaseOptions;
+  getFrontendSettings: IReadQueryBaseOptions;
+  getTranslations: IReadQueryBaseOptions;
   getUserProfileData: IReadQueryBaseOptions;
   getUserIncomeTransactions: IReadQueryBaseOptions;
   getUserExpenseTransactions: IReadQueryBaseOptions;

@@ -1,0 +1,33 @@
+﻿{
+  "finances-service-name": "Финанси",
+  "expense-transactions-service-name": "Расходни операции",
+  "income-transactions-service-name": "Доходни операции",
+
+  "finances-service-description": "Тук можете да управлявате своите доходи и разходи",
+  "expense-transactions-service-description": "Управлявайте своите разходни операции",
+  "income-transactions-service-description": "Управлявайте своите доходни операции",
+
+  "profile-button-name": "Профил",
+  "logout-button-name": "Изход",
+
+  "profile-user-id-label": "Потребителски ID",
+  "profile-username-label": "Потребителско име",
+  "profile-email-label": "Имейл",
+  "profile-first-name-label": "Първо име",
+  "profile-last-name-label": "Фамилия",
+  "profile-balance-label": "Баланс",
+  "profile-language-label": "Език",
+
+  "add-new-income-transaction-button-label": "Добави нова доходна операция",
+  "add-new-expense-transaction-button-label": "Добави нова разходна операция",
+
+  "transaction-amount-label": "Сума",
+  "transaction-description-label": "Описание",
+  "expense-transaction-type-label": "Вид на разхода",
+
+  "new-transaction-input-amount-label": "Сума",
+  "new-transaction-input-currency-label": "Валута",
+  "new-transaction-input-date-label": "Дата",
+  "new-transaction-input-description-label": "Описание",
+  "new-expense-transaction-input-expense-type-label": "Тип разход"
+}

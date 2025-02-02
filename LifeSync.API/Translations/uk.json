@@ -1,0 +1,33 @@
+{
+  "finances-service-name": "Фінанси",
+  "expense-transactions-service-name": "Транзакції витрат",
+  "income-transactions-service-name": "Транзакції доходів",
+
+  "finances-service-description": "Тут ви можете управляти своїми транзакціями доходів та витрат",
+  "expense-transactions-service-description": "Управляйте своїми транзакціями витрат",
+  "income-transactions-service-description": "Управляйте своїми транзакціями доходів",
+
+  "profile-button-name": "Профіль",
+  "logout-button-name": "Вийти",
+
+  "profile-user-id-label": "ID користувача",
+  "profile-username-label": "Ім’я користувача",
+  "profile-email-label": "Електронна пошта",
+  "profile-first-name-label": "Ім’я",
+  "profile-last-name-label": "Прізвище",
+  "profile-balance-label": "Баланс",
+  "profile-language-label": "Мова",
+
+  "add-new-income-transaction-button-label": "Додати нову транзакцію доходів",
+  "add-new-expense-transaction-button-label": "Додати нову транзакцію витрат",
+
+  "transaction-amount-label": "Сума",
+  "transaction-description-label": "Опис",
+  "expense-transaction-type-label": "Тип витрат",
+
+  "new-transaction-input-amount-label": "Сума",
+  "new-transaction-input-currency-label": "Валюта",
+  "new-transaction-input-date-label": "Дата",
+  "new-transaction-input-description-label": "Опис",
+  "new-expense-transaction-input-expense-type-label": "Тип витрат"
+}

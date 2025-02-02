@@ -7,6 +7,7 @@ import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 import { parseCalendarDate } from '@/infrastructure/common/utilities/utilities';
 import { INewIncomeTransactionRequest } from '@/features/finances/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
+import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export interface INewExpenseTransactionProps {
   control: Control<INewIncomeTransactionRequest>;
@@ -17,6 +18,8 @@ export const NewIncomeTransaction = ({
   control,
   handleSubmit,
 }: INewExpenseTransactionProps) => {
+  const { translate } = useAppTranslations();
+
   return (
     <form className={styles['form']} onSubmit={handleSubmit}>
       <Controller
@@ -25,7 +28,9 @@ export const NewIncomeTransaction = ({
         rules={{ required: 'Amount is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="amount">Amount</label>
+            <label htmlFor="amount">
+              {translate('new-transaction-input-amount-label')}
+            </label>
             <InputNumber
               id={field.name}
               ref={field.ref}
@@ -43,7 +48,9 @@ export const NewIncomeTransaction = ({
         rules={{ required: 'Currency is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">Currency</label>
+            <label htmlFor="currency">
+              {translate('new-transaction-input-currency-label')}
+            </label>
             <InputText
               id={field.name}
               {...field}
@@ -59,7 +66,9 @@ export const NewIncomeTransaction = ({
         rules={{ required: 'Date is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">Date</label>
+            <label htmlFor="currency">
+              {translate('new-transaction-input-date-label')}
+            </label>
             <Calendar
               id={field.name}
               {...field}
@@ -78,7 +87,9 @@ export const NewIncomeTransaction = ({
         rules={{ required: 'Description is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">Description</label>
+            <label htmlFor="currency">
+              {translate('new-transaction-input-description-label')}
+            </label>
             <InputText
               id={field.name}
               {...field}

@@ -1,14 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using LifeSync.API.Features.ExpenseTracking.Models;
-using LifeSync.API.Features.IncomeTracking.Models;
 using LifeSync.API.Models;
 using LifeSync.API.Models.Events;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.ExpenseTracking.Services;
 
-public class ExpenseTrackingService: IExpenseTrackingService
+public class ExpenseTrackingService : IExpenseTrackingService
 {
     private readonly ApplicationDbContext databaseContext;
 
@@ -30,11 +29,11 @@ public class ExpenseTrackingService: IExpenseTrackingService
             Id = x.Id,
             Amount = x.Amount.Amount,
             Currency = x.Amount.Currency.Code,
-            Date = x.Date,
+            Date = x.Date.ToString("yyyy-MM-dd"),
             ExpenseType = x.ExpenseType,
             Description = x.Description
         });
-        
+
         return userExpenseTransactionsDto;
     }
 
@@ -48,11 +47,11 @@ public class ExpenseTrackingService: IExpenseTrackingService
             ExpenseType = request.ExpenseType,
             UserId = userId
         };
-        
+
         await databaseContext.ExpenseTransactions.AddAsync(expenseTransaction);
-        
+
         expenseTransaction.RaiseDomainEvent(new ExpenseTransactionCreatedDomainEvent(userId, expenseTransaction));
-        
+
         await databaseContext.SaveChangesAsync();
 
         return expenseTransaction.Id;

@@ -1,3 +1,5 @@
+@use '/src/sharedStyles/abstracts/index.scss' as *;
+
 .user-profile {
   display: flex;
   width: 100%;
@@ -13,12 +15,6 @@
         width: 100px;
         height: 100px;
       }
-    }
-
-    &__profile-data {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 1em;
     }
   }
 }

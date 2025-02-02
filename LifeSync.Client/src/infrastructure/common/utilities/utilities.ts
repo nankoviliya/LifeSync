@@ -1,3 +1,4 @@
+import { appConstants } from '@/infrastructure/common/models/appConstants';
 import { Nullable } from 'primereact/ts-helpers';
 
 export function parseCalendarDate(localDate: Nullable<Date>): Date | null {
@@ -24,3 +25,7 @@ export function parseCalendarDate(localDate: Nullable<Date>): Date | null {
     return null;
   }
 }
+
+export const replaceIdPlaceholderWithId = (id: string, textToEdit: string) => {
+  return textToEdit.replace(appConstants.idPlaceholder, id);
+};
