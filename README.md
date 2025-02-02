@@ -156,5 +156,3 @@ To securely store sensitive information (e.g., JWT secret, database credentials)
 ## Quick Start with LifeSync StartupScripts
 
 Instead of running the backend API and React frontend manually, you can simply use the provided LifeSync shortcut located in the `LifeSync.StartupScripts` folder. This shortcut automates the process of launching both the backend and frontend with one click.
-
-Happy coding!
