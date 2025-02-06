@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using LifeSync.API.Models;
 using LifeSync.API.Shared;
+using LifeSync.API.Models.Expenses;
 
 namespace LifeSync.API.Persistence.Configurations;
 

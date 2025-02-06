@@ -3,6 +3,7 @@ using Amazon.SecretsManager.Model;
 using FluentAssertions;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Common;
+using LifeSync.API.Secrets.Models;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using System.Text;

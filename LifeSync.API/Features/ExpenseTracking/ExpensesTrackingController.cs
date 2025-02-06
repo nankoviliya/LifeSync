@@ -1,8 +1,8 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using LifeSync.API.Features.ExpenseTracking.Models;
 using LifeSync.API.Features.ExpenseTracking.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LifeSync.API.Features.ExpenseTracking;
 
@@ -17,24 +17,44 @@ public class ExpenseTrackingController : ControllerBase
     {
         this.expenseTrackingService = expenseTrackingService;
     }
-    
+
     [HttpGet("transactions", Name = nameof(GetExpenseTransactions))]
     public async Task<IActionResult> GetExpenseTransactions()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        
-        var result = await expenseTrackingService.GetUserExpensesAsync(Guid.Parse(userId));
 
-        return Ok(result);  
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await expenseTrackingService.GetUserExpensesAsync(userId);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result.Data);
     }
 
     [HttpPost(Name = nameof(AddExpense))]
     public async Task<IActionResult> AddExpense(AddExpenseDto request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        
-        var result = await expenseTrackingService.AddExpenseAsync(Guid.Parse(userId), request);
-        
-        return Ok(result);  
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await expenseTrackingService.AddExpenseAsync(userId, request);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result.Data);
     }
 }

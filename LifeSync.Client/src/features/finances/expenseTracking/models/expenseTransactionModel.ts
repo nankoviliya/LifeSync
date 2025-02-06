@@ -1,3 +1,6 @@
+export interface IExpenseTransactionsGetModel {
+  expenseTransactions: IExpenseTransactionGetModel[];
+}
 export interface IExpenseTransactionGetModel {
   id: string;
   amount: number;

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace LifeSync.API.Secrets;
+namespace LifeSync.API.Secrets.Models;
 
 public class DbConnectionSecrets
 {

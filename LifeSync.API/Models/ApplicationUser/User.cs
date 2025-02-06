@@ -1,3 +1,5 @@
+using LifeSync.API.Models.Expenses;
+using LifeSync.API.Models.Incomes;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Shared;
 using Microsoft.AspNetCore.Identity;

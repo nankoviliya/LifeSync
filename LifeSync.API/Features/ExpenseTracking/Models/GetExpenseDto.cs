@@ -1,6 +1,11 @@
-using LifeSync.API.Models;
+using LifeSync.API.Models.Expenses;
 
 namespace LifeSync.API.Features.ExpenseTracking.Models;
+
+public class GetExpenseTransactionsResponse
+{
+    public List<GetExpenseDto> ExpenseTransactions { get; init; } = [];
+}
 
 public class GetExpenseDto
 {

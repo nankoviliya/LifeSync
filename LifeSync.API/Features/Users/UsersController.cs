@@ -1,4 +1,5 @@
 using LifeSync.API.Features.Users.Models;
+using LifeSync.API.Features.Users.ResultMessages;
 using LifeSync.API.Features.Users.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,17 @@ public class UsersController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return BadRequest("User is not authenticated.");
+            return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
         }
 
         var result = await usersService.GetUserProfileData(userId);
 
-        return Ok(result);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(result.Data);
     }
 
     [HttpPut("profile", Name = nameof(GetUserProfileData))]
@@ -40,10 +46,15 @@ public class UsersController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return BadRequest("User is not authenticated.");
+            return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
         }
 
-        await usersService.ModifyUserProfileData(userId, request);
+        var result = await usersService.ModifyUserProfileData(userId, request);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Message);
+        }
 
         return Ok();
     }

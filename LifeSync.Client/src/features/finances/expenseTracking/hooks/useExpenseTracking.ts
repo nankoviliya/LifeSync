@@ -1,5 +1,5 @@
 import { useNewExpenseTransaction } from '@/features/finances/expenseTracking/addTransaction/hooks/useNewExpenseTransaction';
-import { IExpenseTransactionGetModel } from '@/features/finances/expenseTracking/models/expenseTransactionModel';
+import { IExpenseTransactionsGetModel } from '@/features/finances/expenseTracking/models/expenseTransactionModel';
 import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
 import { useReadQuery } from '@/infrastructure/api/hooks/useReadQuery';
 
@@ -7,13 +7,12 @@ export const useExpenseTracking = () => {
   const { control, isModalVisible, setIsModalVisible, handleSubmit } =
     useNewExpenseTransaction();
 
-  const { data, isLoading, isSuccess } = useReadQuery<
-    IExpenseTransactionGetModel[]
-  >({
-    endpoint: endpointsOptions.getUserExpenseTransactions.endpoint,
-    queryKey: [endpointsOptions.getUserExpenseTransactions.key],
-    staleTime: 86_400_000,
-  });
+  const { data, isLoading, isSuccess } =
+    useReadQuery<IExpenseTransactionsGetModel>({
+      endpoint: endpointsOptions.getUserExpenseTransactions.endpoint,
+      queryKey: [endpointsOptions.getUserExpenseTransactions.key],
+      staleTime: 86_400_000,
+    });
 
   return {
     data,

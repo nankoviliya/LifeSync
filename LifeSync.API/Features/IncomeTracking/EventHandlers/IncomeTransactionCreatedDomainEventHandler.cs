@@ -2,8 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using LifeSync.API.Infrastructure.DomainEvents;
-using LifeSync.API.Models.Events;
 using LifeSync.API.Persistence;
+using LifeSync.API.Models.Incomes.Events;
 
 namespace LifeSync.API.Features.IncomeTracking.EventHandlers;
 

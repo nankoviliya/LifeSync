@@ -1,6 +1,6 @@
+using LifeSync.API.Features.Authentication.Services;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using LifeSync.API.Features.Authentication.Services;
 
 namespace LifeSync.API.Features.Authentication;
 
@@ -18,13 +18,13 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var token = await _authService.LoginAsync(request);
-        
-        if (token is null)
+        var loginResult = await _authService.LoginAsync(request);
+
+        if (!loginResult.IsSuccess)
         {
             return Unauthorized();
         }
-        
-        return Ok(token);
+
+        return Ok(loginResult.Data);
     }
 }

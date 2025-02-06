@@ -1,10 +1,12 @@
-﻿using LifeSync.API.Features.Configuration.Models;
+﻿using LifeSync.API.Features.FrontendSettings.Models;
 using LifeSync.API.Persistence;
+using LifeSync.API.Shared.Results;
+using LifeSync.API.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeSync.API.Features.Configuration.Services
+namespace LifeSync.API.Features.FrontendSettings.Services
 {
-    public class FrontendSettingsService : IFrontendSettingsService
+    public class FrontendSettingsService : BaseService, IFrontendSettingsService
     {
         private readonly ApplicationDbContext databaseContext;
 
@@ -13,16 +15,16 @@ namespace LifeSync.API.Features.Configuration.Services
             this.databaseContext = databaseContext;
         }
 
-        public async Task<FrontendSettings> GetFrontendSettingsAsync()
+        public async Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync()
         {
             var languageOptions = await GetLanguageOptionsAsync();
 
-            var frontendSettings = new FrontendSettings
+            var frontendSettings = new FrontendSettingsResponse
             {
                 LanguageOptions = languageOptions
             };
 
-            return frontendSettings;
+            return Success(frontendSettings);
         }
 
         private async Task<List<LanguageOption>> GetLanguageOptionsAsync()

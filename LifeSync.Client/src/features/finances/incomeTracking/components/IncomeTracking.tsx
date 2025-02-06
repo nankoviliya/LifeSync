@@ -43,7 +43,7 @@ export const IncomeTracking = () => {
         {!isLoading && !data && <p>No records</p>}
         {isSuccess &&
           data &&
-          data.map((i) => {
+          data.incomeTransactions.map((i) => {
             return (
               <Card
                 key={`income-transaction-${i.id}`}

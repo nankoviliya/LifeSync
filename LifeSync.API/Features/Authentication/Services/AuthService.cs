@@ -1,12 +1,14 @@
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Shared.Results;
+using LifeSync.API.Shared.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 
 namespace LifeSync.API.Features.Authentication.Services;
 
-public class AuthService : IAuthService
+public class AuthService : BaseService, IAuthService
 {
     private readonly JwtTokenGenerator _jwtTokenGenerator;
     private readonly UserManager<User> _userManager;
@@ -19,15 +21,22 @@ public class AuthService : IAuthService
         _userManager = userManager;
     }
 
-    public async Task<TokenResponse> LoginAsync(LoginRequest request)
+    public async Task<DataResult<TokenResponse>> LoginAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
 
-        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
+        if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            return null; // Invalid credentials
+            return Failure<TokenResponse>("Invalid email or password.");
         }
 
-        return await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
+        var token = await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
+
+        if (token is null)
+        {
+            return Failure<TokenResponse>("Failed to generate token.");
+        }
+
+        return Success(token);
     }
 }

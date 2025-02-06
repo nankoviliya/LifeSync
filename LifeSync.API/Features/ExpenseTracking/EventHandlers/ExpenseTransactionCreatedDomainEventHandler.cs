@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using LifeSync.API.Infrastructure.DomainEvents;
-using LifeSync.API.Models.Events;
+using LifeSync.API.Models.Expenses.Events;
 using LifeSync.API.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.ExpenseTracking.EventHandlers;
 
@@ -13,7 +13,7 @@ public class ExpenseTransactionCreatedDomainEventHandler : IDomainEventHandler<E
     {
         this.databaseContext = databaseContext;
     }
-    
+
     public async Task Handle(ExpenseTransactionCreatedDomainEvent domainEvent)
     {
         var userId = domainEvent.userId;
@@ -26,7 +26,7 @@ public class ExpenseTransactionCreatedDomainEventHandler : IDomainEventHandler<E
         {
             userAccount.Balance -= transaction.Amount;
         }
-        
+
         await databaseContext.SaveChangesAsync();
     }
 }

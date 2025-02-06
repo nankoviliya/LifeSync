@@ -1,7 +1,7 @@
-﻿using LifeSync.API.Features.Configuration.Services;
+﻿using LifeSync.API.Features.FrontendSettings.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LifeSync.API.Features.Configuration
+namespace LifeSync.API.Features.FrontendSettings
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,9 +17,14 @@ namespace LifeSync.API.Features.Configuration
         [HttpGet]
         public async Task<IActionResult> GetFrontendSettings()
         {
-            var frontendSettings = await frontendSettingsService.GetFrontendSettingsAsync();
+            var result = await frontendSettingsService.GetFrontendSettingsAsync();
 
-            return Ok(frontendSettings);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(result.Data);
         }
     }
 }

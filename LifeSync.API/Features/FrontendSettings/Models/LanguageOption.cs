@@ -1,4 +1,4 @@
-﻿namespace LifeSync.API.Features.Configuration.Models
+﻿namespace LifeSync.API.Features.FrontendSettings.Models
 {
     public class LanguageOption
     {

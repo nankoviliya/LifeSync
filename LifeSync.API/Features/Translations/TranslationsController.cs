@@ -17,14 +17,14 @@ namespace LifeSync.API.Features.Translations
         [HttpGet]
         public async Task<IActionResult> GetTranslations([FromQuery] string languageCode)
         {
-            if (string.IsNullOrWhiteSpace(languageCode))
+            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
+
+            if (!result.IsSuccess)
             {
-                return BadRequest("Language code is required.");
+                return BadRequest(result.Errors);
             }
 
-            var translations = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
-
-            return Ok(translations);
+            return Ok(result.Data);
         }
     }
 }

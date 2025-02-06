@@ -1,5 +1,6 @@
 using LifeSync.API.Secrets.Common;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Models;
 
 namespace LifeSync.API.Secrets;
 

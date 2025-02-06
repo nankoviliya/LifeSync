@@ -2,6 +2,7 @@ using FluentAssertions;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Common;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Models;
 using NSubstitute;
 
 namespace LifeSync.UnitTests.Secrets;

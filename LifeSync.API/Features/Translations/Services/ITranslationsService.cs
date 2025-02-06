@@ -1,7 +1,9 @@
-﻿namespace LifeSync.API.Features.Translations.Services
+﻿using LifeSync.API.Shared.Results;
+
+namespace LifeSync.API.Features.Translations.Services
 {
     public interface ITranslationsService
     {
-        Task<IReadOnlyDictionary<string, string>> GetTranslationsByLanguageCodeAsync(string languageCode);
+        Task<DataResult<IReadOnlyDictionary<string, string>>> GetTranslationsByLanguageCodeAsync(string languageCode);
     }
 }

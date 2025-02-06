@@ -1,4 +1,4 @@
-using LifeSync.API.Models;
+using LifeSync.API.Models.Expenses;
 using LifeSync.API.Shared;
 
 namespace LifeSync.API.Features.ExpenseTracking.Models;

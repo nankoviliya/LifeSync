@@ -1,13 +1,16 @@
 using LifeSync.API.Features.IncomeTracking.Models;
-using LifeSync.API.Models;
-using LifeSync.API.Models.Events;
+using LifeSync.API.Features.IncomeTracking.ResultMessages;
+using LifeSync.API.Models.Incomes;
+using LifeSync.API.Models.Incomes.Events;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
+using LifeSync.API.Shared.Results;
+using LifeSync.API.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.IncomeTracking.Services;
 
-public class IncomeTrackingService : IIncomeTrackingService
+public class IncomeTrackingService : BaseService, IIncomeTrackingService
 {
     private readonly ApplicationDbContext databaseContext;
 
@@ -16,10 +19,17 @@ public class IncomeTrackingService : IIncomeTrackingService
         this.databaseContext = databaseContext;
     }
 
-    public async Task<IEnumerable<GetIncomeDto>> GetUserIncomesAsync(Guid userId)
+    public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(string userId)
     {
+        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
+
+        if (!userIdIsParsed)
+        {
+            return Failure<GetIncomeTransactionsResponse>(IncomeTrackingResultMessages.InvalidUserId);
+        }
+
         var userIncomeTransactions = await databaseContext.IncomeTransactions
-            .Where(x => x.UserId == userId)
+            .Where(x => x.UserId == userIdGuid)
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
             .ToListAsync();
@@ -31,28 +41,40 @@ public class IncomeTrackingService : IIncomeTrackingService
             Currency = x.Amount.Currency.Code,
             Date = x.Date.ToString("yyyy-MM-dd"),
             Description = x.Description
-        });
+        }).ToList();
 
-        return userIncomeTransactionsDto;
+        var response = new GetIncomeTransactionsResponse
+        {
+            IncomeTransactions = userIncomeTransactionsDto
+        };
+
+        return Success(response);
     }
 
-    public async Task<Guid> AddIncomeAsync(Guid userId, AddIncomeDto request)
+    public async Task<DataResult<Guid>> AddIncomeAsync(string userId, AddIncomeDto request)
     {
+        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
+
+        if (!userIdIsParsed)
+        {
+            return Failure<Guid>(IncomeTrackingResultMessages.InvalidUserId);
+        }
+
         var incomeTransaction = new IncomeTransaction
         {
             Id = Guid.NewGuid(),
             Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
             Date = request.Date,
             Description = request.Description,
-            UserId = userId
+            UserId = userIdGuid
         };
 
         await databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
 
-        incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userId, incomeTransaction));
+        incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userIdGuid, incomeTransaction));
 
         await databaseContext.SaveChangesAsync();
 
-        return incomeTransaction.Id;
+        return Success(incomeTransaction.Id);
     }
 }

@@ -2,6 +2,7 @@
 using Amazon.SecretsManager.Model;
 using LifeSync.API.Secrets.Common;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Models;
 using LifeSync.API.Shared;
 using System.Text.Json;
 

@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Identity.Data;
 using LifeSync.API.Features.Authentication.Models;
+using LifeSync.API.Shared.Results;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace LifeSync.API.Features.Authentication.Services;
 
 public interface IAuthService
 {
-    Task<TokenResponse> LoginAsync(LoginRequest request);
+    Task<DataResult<TokenResponse>> LoginAsync(LoginRequest request);
 }

@@ -1,4 +1,7 @@
-import { IMoney } from '@/infrastructure/common/models/money';
+
+export interface IIncomeTransactionsGetModel {
+  incomeTransactions: IIncomeTransactionGetModel[];
+}
 
 export interface IIncomeTransactionGetModel {
   id: string;
