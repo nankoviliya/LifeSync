@@ -1,7 +1,6 @@
 import { axiosInstance } from '@/infrastructure/api/axios';
 import { AxiosRequestConfig } from 'axios';
 
-
 export const post = async <TResponse, TData>(
   path: string,
   data: any,

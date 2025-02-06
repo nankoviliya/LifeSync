@@ -4,17 +4,17 @@ public record Money
 {
     public decimal Amount { get; init; }
     public Currency Currency { get; init; }
-    
+
     // Parameterless constructor for EF Core
     private Money() { }
-    
+
     // Constructor for application use
     public Money(decimal amount, Currency currency)
     {
         Amount = amount;
         Currency = currency;
     }
-    
+
     public static Money operator +(Money first, Money second)
     {
         if (first.Currency != second.Currency)
@@ -24,7 +24,7 @@ public record Money
 
         return new Money(first.Amount + second.Amount, first.Currency);
     }
-    
+
     public static Money operator -(Money first, Money second)
     {
         if (first.Currency != second.Currency)

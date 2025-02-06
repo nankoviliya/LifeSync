@@ -6,58 +6,57 @@ using LifeSync.API.Secrets.Models;
 using LifeSync.API.Shared;
 using System.Text.Json;
 
-namespace LifeSync.API.Secrets
-{
-    public class CloudSecretsProvider : ISecretsProvider
-    {
-        private readonly IConfiguration configuration;
-        private readonly IAmazonSecretsManager secretsManager;
+namespace LifeSync.API.Secrets;
 
-        public CloudSecretsProvider(
-            IConfiguration configuration,
-            IAmazonSecretsManager secretsManager)
+public class CloudSecretsProvider : ISecretsProvider
+{
+    private readonly IConfiguration configuration;
+    private readonly IAmazonSecretsManager secretsManager;
+
+    public CloudSecretsProvider(
+        IConfiguration configuration,
+        IAmazonSecretsManager secretsManager)
+    {
+        this.configuration = configuration;
+        this.secretsManager = secretsManager;
+    }
+
+    public async Task<AppSecrets> GetAppSecretsAsync()
+    {
+        var secretName = configuration.GetValue<string>(AppConstants.SecretName);
+
+        if (string.IsNullOrEmpty(secretName))
         {
-            this.configuration = configuration;
-            this.secretsManager = secretsManager;
+            throw new ArgumentException(SecretsConstants.SecretNameIsNotConfiguredMessage);
         }
 
-        public async Task<AppSecrets> GetAppSecretsAsync()
+        var request = new GetSecretValueRequest
         {
-            var secretName = configuration.GetValue<string>(AppConstants.SecretName);
+            SecretId = secretName,
+            VersionStage = "AWSCURRENT",
+        };
 
-            if (string.IsNullOrEmpty(secretName))
+        try
+        {
+            var response = await secretsManager.GetSecretValueAsync(request);
+
+            if (string.IsNullOrEmpty(response.SecretString))
             {
-                throw new ArgumentException(SecretsConstants.SecretNameIsNotConfiguredMessage);
+                throw new InvalidOperationException(SecretsConstants.ApplicationSecretsNotFoundMessage);
             }
 
-            var request = new GetSecretValueRequest
+            var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
+
+            if (appSecrets is null)
             {
-                SecretId = secretName,
-                VersionStage = "AWSCURRENT",
-            };
-
-            try
-            {
-                var response = await secretsManager.GetSecretValueAsync(request);
-
-                if (string.IsNullOrEmpty(response.SecretString))
-                {
-                    throw new InvalidOperationException(SecretsConstants.ApplicationSecretsNotFoundMessage);
-                }
-
-                var appSecrets = JsonSerializer.Deserialize<AppSecrets>(response.SecretString);
-
-                if (appSecrets is null)
-                {
-                    throw new InvalidOperationException("Deserialized app secrets are null.");
-                }
-
-                return appSecrets;
+                throw new InvalidOperationException("Deserialized app secrets are null.");
             }
-            catch (Exception ex)
-            {
-                throw new ApplicationException(SecretsConstants.ApplicationSecretsRetrievalErrorMessage, ex);
-            }
+
+            return appSecrets;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException(SecretsConstants.ApplicationSecretsRetrievalErrorMessage, ex);
         }
     }
 }

@@ -1,9 +1,9 @@
 
 
-using Microsoft.EntityFrameworkCore;
 using LifeSync.API.Infrastructure.DomainEvents;
-using LifeSync.API.Persistence;
 using LifeSync.API.Models.Incomes.Events;
+using LifeSync.API.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.IncomeTracking.EventHandlers;
 
@@ -15,7 +15,7 @@ public class IncomeTransactionCreatedDomainEventHandler : IDomainEventHandler<In
     {
         this.databaseContext = databaseContext;
     }
-    
+
     public async Task Handle(IncomeTransactionCreatedDomainEvent domainEvent)
     {
         var userId = domainEvent.userId;
@@ -28,7 +28,7 @@ public class IncomeTransactionCreatedDomainEventHandler : IDomainEventHandler<In
         {
             userAccount.Balance += transaction.Amount;
         }
-        
+
         await databaseContext.SaveChangesAsync();
     }
 }

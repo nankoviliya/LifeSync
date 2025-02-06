@@ -1,7 +1,6 @@
-﻿namespace LifeSync.API.Secrets.Contracts
+﻿namespace LifeSync.API.Secrets.Contracts;
+
+public interface ISecretsProviderFactory
 {
-    public interface ISecretsProviderFactory
-    {
-        ISecretsProvider CreateSecretsProvider();
-    }
+    ISecretsProvider CreateSecretsProvider();
 }

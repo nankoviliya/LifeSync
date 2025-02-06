@@ -1,4 +1,4 @@
-export interface ILoginResponseModel{
-    token: string;
-    expiry: string;
+export interface ILoginResponseModel {
+  token: string;
+  expiry: string;
 }

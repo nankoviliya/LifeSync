@@ -8,16 +8,16 @@ using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using System.Text;
 
-namespace LifeSync.UnitTests.Secrets
+namespace LifeSync.UnitTests.Secrets;
+
+public class CloudSecretsProviderTests
 {
-    public class CloudSecretsProviderTests
-    {
-        private CloudSecretsProvider cloudSecretsProvider;
+    private CloudSecretsProvider cloudSecretsProvider;
 
-        private IConfiguration configuration;
-        private IAmazonSecretsManager amazonSecretsManager;
+    private IConfiguration configuration;
+    private IAmazonSecretsManager amazonSecretsManager;
 
-        private string MockCloudSecretsConfigurationJson = @"
+    private string MockCloudSecretsConfigurationJson = @"
         {
             ""Database"": {
                 ""DbInstanceIdentifier"": ""TestDb""
@@ -30,116 +30,115 @@ namespace LifeSync.UnitTests.Secrets
             }
         }";
 
-        private readonly AppSecrets expectedSecrets = new AppSecrets
+    private readonly AppSecrets expectedSecrets = new AppSecrets
+    {
+        Database = new DbConnectionSecrets
         {
-            Database = new DbConnectionSecrets
-            {
-                DbInstanceIdentifier = "TestDb"
-            },
-            JWT = new JwtSecrets
-            {
-                SecretKey = "TestSigningKey",
-                Issuer = "TestIssuer",
-                Audience = "TestAudience",
-                ExpiryMinutes = 10
-            }
-        };
+            DbInstanceIdentifier = "TestDb"
+        },
+        JWT = new JwtSecrets
+        {
+            SecretKey = "TestSigningKey",
+            Issuer = "TestIssuer",
+            Audience = "TestAudience",
+            ExpiryMinutes = 10
+        }
+    };
 
-        private IConfiguration CreateValidMockConfiguration()
-        {
-            var configurationJson = @"{
+    private IConfiguration CreateValidMockConfiguration()
+    {
+        var configurationJson = @"{
                 ""SecretName"": ""LifeSync"",
             }";
 
-            var builder = new ConfigurationBuilder()
-                .AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(configurationJson)));
+        var builder = new ConfigurationBuilder()
+            .AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(configurationJson)));
 
-            return builder.Build();
-        }
+        return builder.Build();
+    }
 
-        private IConfiguration CreateInvalidMockConfiguration()
-        {
-            var configurationJson = @"{
+    private IConfiguration CreateInvalidMockConfiguration()
+    {
+        var configurationJson = @"{
                 ""SecretName"": """",
             }";
 
-            var builder = new ConfigurationBuilder()
-                .AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(configurationJson)));
+        var builder = new ConfigurationBuilder()
+            .AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(configurationJson)));
 
-            return builder.Build();
-        }
+        return builder.Build();
+    }
 
-        [Fact]
-        public async Task GetAppSecretsAsync_ShouldReturnAppSecrets_WhenResponseIsNotNull()
+    [Fact]
+    public async Task GetAppSecretsAsync_ShouldReturnAppSecrets_WhenResponseIsNotNull()
+    {
+        configuration = CreateValidMockConfiguration();
+        amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
+        cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
+
+        var secretResponse = new GetSecretValueResponse
         {
-            configuration = CreateValidMockConfiguration();
-            amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
-            cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
+            SecretString = MockCloudSecretsConfigurationJson,
+        };
 
-            var secretResponse = new GetSecretValueResponse
-            {
-                SecretString = MockCloudSecretsConfigurationJson,
-            };
+        amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>()).Returns(Task.FromResult(secretResponse));
 
-            amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>()).Returns(Task.FromResult(secretResponse));
+        var result = await cloudSecretsProvider.GetAppSecretsAsync();
 
-            var result = await cloudSecretsProvider.GetAppSecretsAsync();
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedSecrets);
+    }
 
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedSecrets);
-        }
+    [Fact]
+    public async Task GetAppSecretsAsync_ShouldThrowArgumentException_WhenSecretNameIsNullOrEmpty()
+    {
+        configuration = CreateInvalidMockConfiguration();
+        amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
+        cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
 
-        [Fact]
-        public async Task GetAppSecretsAsync_ShouldThrowArgumentException_WhenSecretNameIsNullOrEmpty()
+        Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
+
+        await act.Should().ThrowAsync<ArgumentException>()
+            .WithMessage(SecretsConstants.SecretNameIsNotConfiguredMessage);
+    }
+
+    [Fact]
+    public async Task GetAppSecretsAsync_ShouldThrowApplicationException_WhenSecretStringIsNullOrEmpty()
+    {
+        configuration = CreateValidMockConfiguration();
+        amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
+        cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
+
+        var secretResponse = new GetSecretValueResponse
         {
-            configuration = CreateInvalidMockConfiguration();
-            amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
-            cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
+            SecretString = "",
+        };
 
-            Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
+        amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>()).Returns(Task.FromResult(secretResponse));
 
-            await act.Should().ThrowAsync<ArgumentException>()
-                .WithMessage(SecretsConstants.SecretNameIsNotConfiguredMessage);
-        }
+        Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
 
-        [Fact]
-        public async Task GetAppSecretsAsync_ShouldThrowApplicationException_WhenSecretStringIsNullOrEmpty()
+        await act.Should().ThrowAsync<ApplicationException>()
+            .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
+    }
+
+    [Fact]
+    public async Task GetAppSecretsAsync_ShouldThrowApplicationException_WhenSecretStringDeserializationFailed()
+    {
+        configuration = CreateValidMockConfiguration();
+        amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
+        cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
+
+        var secretResponse = new GetSecretValueResponse
         {
-            configuration = CreateValidMockConfiguration();
-            amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
-            cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
+            SecretString = "INVALID_SECRET",
+        };
 
-            var secretResponse = new GetSecretValueResponse
-            {
-                SecretString = "",
-            };
+        amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>()).Returns(Task.FromResult(secretResponse));
 
-            amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>()).Returns(Task.FromResult(secretResponse));
+        Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
 
-            Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
-
-            await act.Should().ThrowAsync<ApplicationException>()
-                .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
-        }
-
-        [Fact]
-        public async Task GetAppSecretsAsync_ShouldThrowApplicationException_WhenSecretStringDeserializationFailed()
-        {
-            configuration = CreateValidMockConfiguration();
-            amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
-            cloudSecretsProvider = new CloudSecretsProvider(this.configuration, this.amazonSecretsManager);
-
-            var secretResponse = new GetSecretValueResponse
-            {
-                SecretString = "INVALID_SECRET",
-            };
-
-            amazonSecretsManager.GetSecretValueAsync(Arg.Any<GetSecretValueRequest>()).Returns(Task.FromResult(secretResponse));
-
-            Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
-
-            await act.Should().ThrowAsync<ApplicationException>()
-                .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
-        }
+        await act.Should().ThrowAsync<ApplicationException>()
+            .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
     }
 }

@@ -1,7 +1,7 @@
+using LifeSync.API.Models.Incomes;
+using LifeSync.API.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using LifeSync.API.Shared;
-using LifeSync.API.Models.Incomes;
 
 namespace LifeSync.API.Persistence.Configurations;
 
@@ -12,7 +12,7 @@ internal sealed class IncomeTransactionConfiguration : IEntityTypeConfiguration<
         builder.ToTable("IncomeTransactions");
 
         builder.HasKey(x => x.Id);
-        
+
         builder.OwnsOne(x => x.Amount, balance =>
         {
             balance.Property(price => price.Currency)

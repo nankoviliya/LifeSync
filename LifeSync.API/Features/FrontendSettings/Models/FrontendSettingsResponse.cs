@@ -1,7 +1,6 @@
-﻿namespace LifeSync.API.Features.FrontendSettings.Models
+﻿namespace LifeSync.API.Features.FrontendSettings.Models;
+
+public class FrontendSettingsResponse
 {
-    public class FrontendSettingsResponse
-    {
-        public List<LanguageOption> LanguageOptions { get; set; } = [];
-    }
+    public List<LanguageOption> LanguageOptions { get; set; } = [];
 }

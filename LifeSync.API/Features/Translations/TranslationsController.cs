@@ -1,30 +1,29 @@
 ﻿using LifeSync.API.Features.Translations.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LifeSync.API.Features.Translations
+namespace LifeSync.API.Features.Translations;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TranslationsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TranslationsController : ControllerBase
+    private readonly ITranslationsService translationsService;
+
+    public TranslationsController(ITranslationsService translationsService)
     {
-        private readonly ITranslationsService translationsService;
+        this.translationsService = translationsService;
+    }
 
-        public TranslationsController(ITranslationsService translationsService)
+    [HttpGet]
+    public async Task<IActionResult> GetTranslations([FromQuery] string languageCode)
+    {
+        var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
+
+        if (!result.IsSuccess)
         {
-            this.translationsService = translationsService;
+            return BadRequest(result.Errors);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTranslations([FromQuery] string languageCode)
-        {
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok(result.Data);
-        }
+        return Ok(result.Data);
     }
 }

@@ -4,41 +4,40 @@ using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeSync.API.Features.FrontendSettings.Services
+namespace LifeSync.API.Features.FrontendSettings.Services;
+
+public class FrontendSettingsService : BaseService, IFrontendSettingsService
 {
-    public class FrontendSettingsService : BaseService, IFrontendSettingsService
+    private readonly ApplicationDbContext databaseContext;
+
+    public FrontendSettingsService(ApplicationDbContext databaseContext)
     {
-        private readonly ApplicationDbContext databaseContext;
+        this.databaseContext = databaseContext;
+    }
 
-        public FrontendSettingsService(ApplicationDbContext databaseContext)
+    public async Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync()
+    {
+        var languageOptions = await GetLanguageOptionsAsync();
+
+        var frontendSettings = new FrontendSettingsResponse
         {
-            this.databaseContext = databaseContext;
-        }
+            LanguageOptions = languageOptions
+        };
 
-        public async Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync()
-        {
-            var languageOptions = await GetLanguageOptionsAsync();
+        return Success(frontendSettings);
+    }
 
-            var frontendSettings = new FrontendSettingsResponse
+    private async Task<List<LanguageOption>> GetLanguageOptionsAsync()
+    {
+        var languageOptions = await databaseContext.Languages
+            .AsNoTracking()
+            .Select(l => new LanguageOption
             {
-                LanguageOptions = languageOptions
-            };
+                Id = l.Id,
+                Name = l.Name
+            })
+            .ToListAsync();
 
-            return Success(frontendSettings);
-        }
-
-        private async Task<List<LanguageOption>> GetLanguageOptionsAsync()
-        {
-            var languageOptions = await databaseContext.Languages
-                .AsNoTracking()
-                .Select(l => new LanguageOption
-                {
-                    Id = l.Id,
-                    Name = l.Name
-                })
-                .ToListAsync();
-
-            return languageOptions;
-        }
+        return languageOptions;
     }
 }

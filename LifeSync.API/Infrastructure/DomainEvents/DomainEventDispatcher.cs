@@ -10,7 +10,7 @@ public class DomainEventDispatcher : IDomainEventDispatcher
     {
         _serviceProvider = serviceProvider;
     }
-    
+
     public async Task DispatchAsync(IEnumerable<IDomainEvent> domainEvents)
     {
         foreach (var domainEvent in domainEvents)

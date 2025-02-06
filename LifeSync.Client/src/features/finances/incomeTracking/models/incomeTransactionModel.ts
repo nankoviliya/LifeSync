@@ -1,4 +1,3 @@
-
 export interface IIncomeTransactionsGetModel {
   incomeTransactions: IIncomeTransactionGetModel[];
 }

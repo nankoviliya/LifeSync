@@ -1,5 +1,4 @@
 using LifeSync.API.Models.Abstractions;
-using LifeSync.API.Models.Expenses;
 
 namespace LifeSync.API.Models.Expenses.Events;
 

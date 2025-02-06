@@ -1,7 +1,6 @@
-﻿namespace LifeSync.API.Shared
+﻿namespace LifeSync.API.Shared;
+
+public class AppConstants
 {
-    public class AppConstants
-    {
-        public const string SecretName = "SecretName";
-    }
+    public const string SecretName = "SecretName";
 }

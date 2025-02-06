@@ -8,7 +8,7 @@ export const UserAvatar = () => {
   return (
     <div>
       <Avatar
-        className=''
+        className=""
         icon="pi pi-user"
         size="normal"
         shape="circle"

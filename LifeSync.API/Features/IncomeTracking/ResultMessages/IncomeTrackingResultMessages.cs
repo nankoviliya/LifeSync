@@ -1,7 +1,6 @@
-﻿namespace LifeSync.API.Features.IncomeTracking.ResultMessages
+﻿namespace LifeSync.API.Features.IncomeTracking.ResultMessages;
+
+public class IncomeTrackingResultMessages
 {
-    public class IncomeTrackingResultMessages
-    {
-        public const string InvalidUserId = "Unable to parse user id";
-    }
+    public const string InvalidUserId = "Unable to parse user id";
 }

@@ -1,10 +1,9 @@
 ﻿using LifeSync.API.Features.FrontendSettings.Models;
 using LifeSync.API.Shared.Results;
 
-namespace LifeSync.API.Features.FrontendSettings.Services
+namespace LifeSync.API.Features.FrontendSettings.Services;
+
+public interface IFrontendSettingsService
 {
-    public interface IFrontendSettingsService
-    {
-        Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync();
-    }
+    Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync();
 }

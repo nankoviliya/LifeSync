@@ -1,4 +1,3 @@
-
 export const endpoints = {
   frontendSettings: {
     getFrontendSettings: 'FrontendSettings',

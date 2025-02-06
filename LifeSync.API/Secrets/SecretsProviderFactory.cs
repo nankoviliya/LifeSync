@@ -1,30 +1,29 @@
 ﻿using LifeSync.API.Secrets.Contracts;
 
-namespace LifeSync.API.Secrets
+namespace LifeSync.API.Secrets;
+
+public class SecretsProviderFactory : ISecretsProviderFactory
 {
-    public class SecretsProviderFactory : ISecretsProviderFactory
+    private readonly IHostEnvironment environment;
+    private readonly IServiceProvider serviceProvider;
+
+    public SecretsProviderFactory(
+        IHostEnvironment environment,
+        IServiceProvider serviceProvider)
     {
-        private readonly IHostEnvironment environment;
-        private readonly IServiceProvider serviceProvider;
+        this.environment = environment;
+        this.serviceProvider = serviceProvider;
+    }
 
-        public SecretsProviderFactory(
-            IHostEnvironment environment,
-            IServiceProvider serviceProvider)
+    public ISecretsProvider CreateSecretsProvider()
+    {
+        if (environment.IsDevelopment())
         {
-            this.environment = environment;
-            this.serviceProvider = serviceProvider;
+            return serviceProvider.GetRequiredService<LocalSecretsProvider>();
         }
-
-        public ISecretsProvider CreateSecretsProvider()
+        else
         {
-            if (environment.IsDevelopment())
-            {
-                return serviceProvider.GetRequiredService<LocalSecretsProvider>();
-            }
-            else
-            {
-                return serviceProvider.GetRequiredService<CloudSecretsProvider>();
-            }
+            return serviceProvider.GetRequiredService<CloudSecretsProvider>();
         }
     }
 }

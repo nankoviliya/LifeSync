@@ -1,8 +1,8 @@
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Models.ApplicationUser;
-using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Models;
 using NSubstitute;
 using System.IdentityModel.Tokens.Jwt;
 
