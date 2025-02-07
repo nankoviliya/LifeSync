@@ -1,6 +1,7 @@
 using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Models.Currencies;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Models.Languages;
@@ -74,6 +75,8 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Language> Languages { get; set; }
+
+    public DbSet<Currency> Currencies { get; set; }
 
     public DbSet<ExpenseTransaction> ExpenseTransactions { get; set; }
 
