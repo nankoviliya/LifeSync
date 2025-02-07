@@ -3,4 +3,6 @@
 public class FrontendSettingsResponse
 {
     public List<LanguageOption> LanguageOptions { get; set; } = [];
+
+    public List<CurrencyOption> CurrencyOptions { get; set; } = [];
 }

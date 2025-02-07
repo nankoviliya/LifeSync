@@ -19,9 +19,12 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
     {
         var languageOptions = await GetLanguageOptionsAsync();
 
+        var curencyOptions = await GetCurrencyOptionsAsync();
+
         var frontendSettings = new FrontendSettingsResponse
         {
-            LanguageOptions = languageOptions
+            LanguageOptions = languageOptions,
+            CurrencyOptions = curencyOptions
         };
 
         return Success(frontendSettings);
@@ -39,5 +42,22 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
             .ToListAsync();
 
         return languageOptions;
+    }
+
+    private async Task<List<CurrencyOption>> GetCurrencyOptionsAsync()
+    {
+        var currencyOptions = await databaseContext.Currencies
+            .AsNoTracking()
+            .Select(c => new CurrencyOption
+            {
+                Id = c.Id,
+                Code = c.Code,
+                Name = c.Name,
+                NativeName = c.NativeName,
+                Symbol = c.Symbol
+            })
+            .ToListAsync();
+
+        return currencyOptions;
     }
 }
