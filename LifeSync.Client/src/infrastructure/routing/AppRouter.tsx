@@ -15,6 +15,8 @@ import {
 import { Finances } from '@/features/finances/components/Finances';
 import { UserProfile } from '@/features/userProfile/components/UserProfile';
 import { Register } from '@/features/register/components/Register';
+import { ErrorBoundary } from 'react-error-boundary';
+import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 
 export const AppRouter = () => {
   const { isAuthenticated } = useAuth();
@@ -39,7 +41,15 @@ export const AppRouter = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route key="app" element={<App />}>
+        <Route
+          key="app"
+          element={
+            <ErrorBoundary FallbackComponent={MainErrorFallback}>
+              <App />
+            </ErrorBoundary>
+          }
+          errorElement={<MainErrorFallback />}
+        >
           {isAuthenticated && protectedPages}
           <Route path={routePaths.login.path} element={<Login />} />
           <Route path={routePaths.register.path} element={<Register />} />

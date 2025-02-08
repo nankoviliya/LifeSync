@@ -1,0 +1,21 @@
+@use '/src/sharedStyles/abstracts/index.scss' as *;
+
+.main-error-fallback {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $softRed;
+  gap: 2rem;
+
+  &__header {
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  &__button {
+    margin-top: 1rem;
+  }
+}

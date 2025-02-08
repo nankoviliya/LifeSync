@@ -1,5 +1,5 @@
 import styles from './Home.module.scss';
-import { ServiceCard } from '@/features/common/serviceCard/components/ServiceCard';
+import { ServiceCard } from '@/components/serviceCard/components/ServiceCard';
 import { useCurrentLanguage } from '@/features/home/hooks/useCurrentLanguage';
 import { applicationServices } from '@/infrastructure/applicationServices/applicationService';
 

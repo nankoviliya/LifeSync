@@ -1,4 +1,4 @@
-import { useUserAvatar } from '@/features/common/header/hooks/useUserAvatar';
+import { useUserAvatar } from '@/components/header/hooks/useUserAvatar';
 import { Avatar } from 'primereact/avatar';
 import { Menu } from 'primereact/menu';
 

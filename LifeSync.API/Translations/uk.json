@@ -32,5 +32,8 @@
   "new-expense-transaction-input-expense-type-label": "Тип витрат",
 
   "login-button-label": "Увійти",
-  "register-button-label": "Зареєструватися"
+  "register-button-label": "Зареєструватися",
+
+  "main-error-fallback-label": "Ой, щось пішло не так :(",
+  "main-error-fallback-refresh-button-label": "Оновити"
 }

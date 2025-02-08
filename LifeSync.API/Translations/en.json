@@ -32,5 +32,8 @@
   "new-expense-transaction-input-expense-type-label": "Expense Type",
 
   "login-button-label": "Login",
-  "register-button-label": "Register"
+  "register-button-label": "Register",
+
+  "main-error-fallback-label": "Ooops, something went wrong :(",
+  "main-error-fallback-refresh-button-label": "Refresh"
 }

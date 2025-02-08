@@ -13,6 +13,8 @@ import { AuthProvider } from '@/infrastructure/authentication/context/AuthProvid
 import { prefetchAll } from '@/infrastructure/api/prefetch/prefetchAll';
 import i18n from '@/infrastructure/translations/i18n';
 import { I18nextProvider } from 'react-i18next';
+import { ErrorBoundary } from 'react-error-boundary';
+import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 
 prefetchAll().catch((err) => {
   console.error('Error prefetching data:', err);
@@ -24,14 +26,16 @@ const root = createRoot(appRoot);
 
 root.render(
   <StrictMode>
-    <PrimeReactProvider>
-      <QueryClientProvider client={queryClient}>
-        <I18nextProvider i18n={i18n}>
-          <AuthProvider>
-            <AppRouter />
-          </AuthProvider>
-        </I18nextProvider>
-      </QueryClientProvider>
-    </PrimeReactProvider>
+    <ErrorBoundary FallbackComponent={MainErrorFallback}>
+      <PrimeReactProvider>
+        <QueryClientProvider client={queryClient}>
+          <I18nextProvider i18n={i18n}>
+            <AuthProvider>
+              <AppRouter />
+            </AuthProvider>
+          </I18nextProvider>
+        </QueryClientProvider>
+      </PrimeReactProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );

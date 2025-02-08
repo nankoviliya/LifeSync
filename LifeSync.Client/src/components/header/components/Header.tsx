@@ -1,9 +1,9 @@
 import { routePaths } from '@/infrastructure/routing/routePaths';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.scss';
-import { useHeader } from '@/features/common/header/hooks/useHeader';
-import { UserAvatar } from '@/features/common/header/components/UserAvatar';
-import { HeaderUnauthenticatedButtons } from '@/features/common/header/components/HeaderUnauthenticatedButtons';
+import { useHeader } from '@/components/header/hooks/useHeader';
+import { UserAvatar } from '@/components/header/components/UserAvatar';
+import { HeaderUnauthenticatedButtons } from '@/components/header/components/HeaderUnauthenticatedButtons';
 
 export const Header = () => {
   const navigate = useNavigate();
