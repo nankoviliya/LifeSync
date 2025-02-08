@@ -1,6 +1,7 @@
-import { IUserProfileDataModel } from '@/features/userProfile/models/userProfileDataModel';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { IUserProfileDataModel } from '@/types/userProfileDataModel';
+
 import styles from './UserProfileDataReadonly.module.scss';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export interface IUserProfileDataReadonlyProps {
   userData: IUserProfileDataModel;

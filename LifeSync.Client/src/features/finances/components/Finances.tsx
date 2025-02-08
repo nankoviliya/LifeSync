@@ -1,8 +1,7 @@
-import { routePaths } from '@/infrastructure/routing/routePaths';
-import { Link } from 'react-router-dom';
-import styles from './Finances.module.scss';
 import { ServiceCard } from '@/components/serviceCard/components/ServiceCard';
-import { applicationServices } from '@/infrastructure/applicationServices/applicationService';
+import { applicationServices } from '@/config/applicationServices/applicationService';
+
+import styles from './Finances.module.scss';
 
 export const Finances = () => {
   return (

@@ -1,7 +1,8 @@
-import { useNewExpenseTransactionMutation } from '@/features/finances/expenseTracking/addTransaction/hooks/useNewExpenseTransactionMutation';
-import { INewExpenseTransactionRequest } from '@/features/finances/expenseTracking/addTransaction/models/newExpenseTransactionRequest';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import { useNewExpenseTransactionMutation } from '@/features/finances/expenseTracking/addTransaction/hooks/useNewExpenseTransactionMutation';
+import { INewExpenseTransactionRequest } from '@/features/finances/expenseTracking/addTransaction/models/newExpenseTransactionRequest';
 
 export const useNewExpenseTransaction = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);

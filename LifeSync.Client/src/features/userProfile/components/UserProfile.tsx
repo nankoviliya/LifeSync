@@ -1,7 +1,9 @@
-import { useUserProfile } from '@/features/userProfile/hooks/useUserProfile';
-import styles from './UserProfile.module.scss';
 import { Image } from 'primereact/image';
+
 import { UserProfileDataContainer } from '@/features/userProfile/components/profileData/UserProfileDataContainer';
+import { useUserProfile } from '@/hooks/useUserProfile';
+
+import styles from './UserProfile.module.scss';
 
 export const UserProfile = () => {
   const { isLoading, isSuccess, data } = useUserProfile();

@@ -1,8 +1,10 @@
 import { Card } from 'primereact/card';
-import styles from './ServiceCard.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { IApplicationService } from '@/infrastructure/applicationServices/applicationService';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
+
+import { IApplicationService } from '@/config/applicationServices/applicationService';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+
+import styles from './ServiceCard.module.scss';
 
 export interface IServiceCardProps {
   service: IApplicationService;

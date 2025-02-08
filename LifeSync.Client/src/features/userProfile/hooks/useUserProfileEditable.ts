@@ -1,11 +1,12 @@
-import { IModifyUserProfileDataModel } from '@/features/userProfile/models/modifyUserProfileDataModel';
-import { IUserProfileDataModel } from '@/features/userProfile/models/userProfileDataModel';
-import { api } from '@/infrastructure/api';
-import { endpoints } from '@/infrastructure/api/endpoints/endpoints';
-import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
-import { useQueryInvalidation } from '@/infrastructure/api/hooks/useQueryInvalidation';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+
+import { endpoints } from '@/config/endpoints/endpoints';
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
+import { IModifyUserProfileDataModel } from '@/features/userProfile/models/modifyUserProfileDataModel';
+import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
+import { put } from '@/lib/apiClient';
+import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
 export const useUserProfileEditable = (
   userData: IUserProfileDataModel,
@@ -23,12 +24,12 @@ export const useUserProfileEditable = (
 
   const updateMutation = useMutation({
     mutationFn: async (data: IModifyUserProfileDataModel) => {
-      return api.PUT<{}, IModifyUserProfileDataModel>(
+      return put<unknown, IModifyUserProfileDataModel>(
         endpoints.users.modifyProfileData,
         data,
       );
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       invalidateQuery({
         queryKey: [endpointsOptions.getUserProfileData.key],
       });

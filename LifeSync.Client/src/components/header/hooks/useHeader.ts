@@ -1,4 +1,4 @@
-import { useAuth } from '@/infrastructure/authentication/hooks/useAuthentication';
+import { useAuth } from '@/hooks/useAuthentication';
 
 export const useHeader = () => {
   const login = useAuth();

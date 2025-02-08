@@ -1,6 +1,7 @@
-import { useUserAvatar } from '@/components/header/hooks/useUserAvatar';
 import { Avatar } from 'primereact/avatar';
 import { Menu } from 'primereact/menu';
+
+import { useUserAvatar } from '@/components/header/hooks/useUserAvatar';
 
 export const UserAvatar = () => {
   const { avatarMenuRef, avatarMenuItems, toggleAvatarMenu } = useUserAvatar();

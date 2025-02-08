@@ -1,10 +1,11 @@
-import { INewIncomeTransactionRequest } from '@/features/finances/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
-import { endpoints } from '@/infrastructure/api/endpoints/endpoints';
-import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
-import { useQueryInvalidation } from '@/infrastructure/api/hooks/useQueryInvalidation';
-import { post } from '@/infrastructure/api/methods/post';
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler } from 'react-hook-form';
+
+import { endpoints } from '@/config/endpoints/endpoints';
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
+import { INewIncomeTransactionRequest } from '@/features/finances/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
+import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
+import { post } from '@/lib/apiClient';
 
 export const useNewIncomeTransactionMutation = (closeModal: () => void) => {
   const invalidateQuery = useQueryInvalidation();

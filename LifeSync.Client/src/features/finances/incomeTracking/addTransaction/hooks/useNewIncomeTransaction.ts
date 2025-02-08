@@ -1,7 +1,8 @@
-import { useNewIncomeTransactionMutation } from '@/features/finances/incomeTracking/addTransaction/hooks/useNewIncomeTransactionMutation';
-import { INewIncomeTransactionRequest } from '@/features/finances/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import { useNewIncomeTransactionMutation } from '@/features/finances/incomeTracking/addTransaction/hooks/useNewIncomeTransactionMutation';
+import { INewIncomeTransactionRequest } from '@/features/finances/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
 
 export const useNewIncomeTransaction = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);

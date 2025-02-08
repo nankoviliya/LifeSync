@@ -1,12 +1,13 @@
-import { ILoginRequestModel } from '@/features/login/models/loginRequestModel';
-import { ILoginResponseModel } from '@/features/login/models/loginResponseModel';
-import { endpoints } from '@/infrastructure/api/endpoints/endpoints';
-import { post } from '@/infrastructure/api/methods/post';
-import { useAuth } from '@/infrastructure/authentication/hooks/useAuthentication';
-import { routePaths } from '@/infrastructure/routing/routePaths';
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+import { endpoints } from '@/config/endpoints/endpoints';
+import { routePaths } from '@/config/routing/routePaths';
+import { ILoginRequestModel } from '@/features/login/models/loginRequestModel';
+import { ILoginResponseModel } from '@/features/login/models/loginResponseModel';
+import { useAuth } from '@/hooks/useAuthentication';
+import { post } from '@/lib/apiClient';
 
 export const useLogin = () => {
   const { control, handleSubmit } = useForm<ILoginRequestModel>();
@@ -30,7 +31,7 @@ export const useLogin = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<ILoginRequestModel> = (data, event) => {
+  const onSubmit: SubmitHandler<ILoginRequestModel> = (data) => {
     mutation.mutate(data);
   };
 

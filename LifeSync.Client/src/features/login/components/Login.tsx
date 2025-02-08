@@ -1,17 +1,21 @@
-import { useLogin } from '@/features/login/hooks/useLogin';
-import styles from './Login.module.scss';
-import { Controller } from 'react-hook-form';
-import { InputText } from 'primereact/inputtext';
-import { classNames } from 'primereact/utils';
-import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
-import { Link, useNavigate } from 'react-router-dom';
-import { routePaths } from '@/infrastructure/routing/routePaths';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
+import { classNames } from 'primereact/utils';
+import { Controller } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+
+import { routePaths } from '@/config/routing/routePaths';
+import { useLogin } from '@/features/login/hooks/useLogin';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+
+import styles from './Login.module.scss';
 
 export const Login = () => {
   const { translate } = useAppTranslations();
   const { control, onSubmit, isLoginPending } = useLogin();
+
+  const noAccountMessage = "Don't have an account?";
 
   return (
     <form className={styles['login-page']} onSubmit={onSubmit}>
@@ -58,7 +62,7 @@ export const Login = () => {
 
       <div className={styles['login-page__signup-container']}>
         <span>
-          Don't have an account?{' '}
+          {noAccountMessage + ' '}
           <Link to={routePaths.register.path}>{routePaths.register.name}</Link>
         </span>
       </div>

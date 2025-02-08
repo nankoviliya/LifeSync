@@ -1,10 +1,11 @@
-import { useAuth } from '@/infrastructure/authentication/hooks/useAuthentication';
-import { routePaths } from '@/infrastructure/routing/routePaths';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { routePaths } from '@/config/routing/routePaths';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { useAuth } from '@/hooks/useAuthentication';
 
 export const useUserAvatar = () => {
   const navigate = useNavigate();

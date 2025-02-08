@@ -1,10 +1,13 @@
 import { Button } from 'primereact/button';
-import { useIncomeTracking } from '../hooks/useIncomeTracking';
-import styles from './IncomeTracking.module.scss';
-import { Dialog } from 'primereact/dialog';
-import { NewIncomeTransaction } from '@/features/finances/incomeTracking/addTransaction/components/NewIncomeTransaction';
 import { Card } from 'primereact/card';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
+import { Dialog } from 'primereact/dialog';
+
+import { NewIncomeTransaction } from '@/features/finances/incomeTracking/addTransaction/components/NewIncomeTransaction';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+
+import { useIncomeTracking } from '../hooks/useIncomeTracking';
+
+import styles from './IncomeTracking.module.scss';
 
 export const IncomeTracking = () => {
   const { translate } = useAppTranslations();

@@ -1,6 +1,8 @@
 import { Button } from 'primereact/button';
+
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+
 import styles from './MainErrorFallback.module.scss';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
 
 export const MainErrorFallback = () => {
   const { translate } = useAppTranslations();

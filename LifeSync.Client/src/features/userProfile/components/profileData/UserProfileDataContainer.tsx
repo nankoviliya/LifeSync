@@ -1,9 +1,10 @@
+import { useState } from 'react';
+
 import { UserProfileDataEditable } from '@/features/userProfile/components/profileData/UserProfileDataEditable';
 import { UserProfileDataReadonly } from '@/features/userProfile/components/profileData/UserProfileDataReadonly';
-import { Button } from 'primereact/button';
+import { IUserProfileDataModel } from '@/types/userProfileDataModel';
+
 import styles from './UserProfileDataContainer.module.scss';
-import { useState } from 'react';
-import { IUserProfileDataModel } from '@/features/userProfile/models/userProfileDataModel';
 
 export interface IUserProfileDataContainerProps {
   userData: IUserProfileDataModel;

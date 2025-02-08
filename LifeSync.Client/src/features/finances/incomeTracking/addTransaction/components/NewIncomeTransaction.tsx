@@ -1,13 +1,15 @@
-import { Control, Controller } from 'react-hook-form';
-import styles from './NewIncomeTransaction.module.scss';
-import { InputNumber } from 'primereact/inputnumber';
-import { classNames } from 'primereact/utils';
-import { InputText } from 'primereact/inputtext';
-import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
-import { parseCalendarDate } from '@/infrastructure/common/utilities/utilities';
+import { Calendar } from 'primereact/calendar';
+import { InputNumber } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
+import { classNames } from 'primereact/utils';
+import { Control, Controller } from 'react-hook-form';
+
 import { INewIncomeTransactionRequest } from '@/features/finances/incomeTracking/addTransaction/models/newIncomeTransactionRequest';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { parseCalendarDate } from '@/utils/utilities';
+
+import styles from './NewIncomeTransaction.module.scss';
 
 export interface INewExpenseTransactionProps {
   control: Control<INewIncomeTransactionRequest>;

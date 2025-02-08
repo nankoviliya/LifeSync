@@ -1,7 +1,7 @@
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
 import { useNewExpenseTransaction } from '@/features/finances/expenseTracking/addTransaction/hooks/useNewExpenseTransaction';
 import { IExpenseTransactionsGetModel } from '@/features/finances/expenseTracking/models/expenseTransactionModel';
-import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
-import { useReadQuery } from '@/infrastructure/api/hooks/useReadQuery';
+import { useReadQuery } from '@/hooks/api/useReadQuery';
 
 export const useExpenseTracking = () => {
   const { control, isModalVisible, setIsModalVisible, handleSubmit } =

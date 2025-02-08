@@ -1,10 +1,11 @@
-import { IRegisterRequestModel } from '@/features/register/models/registerRequestModel';
-import { endpoints } from '@/infrastructure/api/endpoints/endpoints';
-import { post } from '@/infrastructure/api/methods/post';
-import { routePaths } from '@/infrastructure/routing/routePaths';
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+import { endpoints } from '@/config/endpoints/endpoints';
+import { routePaths } from '@/config/routing/routePaths';
+import { IRegisterRequestModel } from '@/features/register/models/registerRequestModel';
+import { post } from '@/lib/apiClient';
 
 export const useRegistration = () => {
   const { control, handleSubmit } = useForm<IRegisterRequestModel>({
@@ -23,7 +24,10 @@ export const useRegistration = () => {
 
   const mutation = useMutation({
     mutationFn: async (data: IRegisterRequestModel) => {
-      return post<{}, IRegisterRequestModel>(endpoints.auth.register, data);
+      return post<unknown, IRegisterRequestModel>(
+        endpoints.auth.register,
+        data,
+      );
     },
     onSuccess: () => {
       navigate(routePaths.login.path);
@@ -35,7 +39,7 @@ export const useRegistration = () => {
 
   const { isPending } = mutation;
 
-  const onSubmit: SubmitHandler<IRegisterRequestModel> = (data, event) => {
+  const onSubmit: SubmitHandler<IRegisterRequestModel> = (data) => {
     mutation.mutate(data);
   };
 

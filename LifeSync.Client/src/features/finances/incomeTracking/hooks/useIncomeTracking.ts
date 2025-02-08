@@ -1,7 +1,7 @@
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
 import { useNewIncomeTransaction } from '@/features/finances/incomeTracking/addTransaction/hooks/useNewIncomeTransaction';
 import { IIncomeTransactionsGetModel } from '@/features/finances/incomeTracking/models/incomeTransactionModel';
-import { endpointsOptions } from '@/infrastructure/api/endpoints/endpointsOptions';
-import { useReadQuery } from '@/infrastructure/api/hooks/useReadQuery';
+import { useReadQuery } from '@/hooks/api/useReadQuery';
 
 export const useIncomeTracking = () => {
   const { control, isModalVisible, setIsModalVisible, handleSubmit } =

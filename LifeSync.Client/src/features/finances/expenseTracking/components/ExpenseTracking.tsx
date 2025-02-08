@@ -1,10 +1,12 @@
-import { Card } from 'primereact/card';
-import { useExpenseTracking } from '../hooks/useExpenseTracking';
-import styles from './ExpenseTracking.module.scss';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
+
 import { NewExpenseTransaction } from '@/features/finances/expenseTracking/addTransaction/components/NewExpenseTransaction';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
+import { useExpenseTracking } from '@/features/finances/expenseTracking/hooks/useExpenseTracking';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+
+import styles from './ExpenseTracking.module.scss';
 
 export const ExpenseTracking = () => {
   const { translate } = useAppTranslations();

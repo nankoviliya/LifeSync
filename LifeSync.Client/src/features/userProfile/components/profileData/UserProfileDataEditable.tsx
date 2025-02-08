@@ -1,12 +1,14 @@
-import { IUserProfileDataModel } from '@/features/userProfile/models/userProfileDataModel';
-import styles from './UserProfileDataEditable.module.scss';
-import { Controller } from 'react-hook-form';
-import { InputText } from 'primereact/inputtext';
-import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProfileEditable';
 import { Button } from 'primereact/button';
-import { useFrontendSettings } from '@/infrastructure/frontendSettings/hooks/useFrontendSettings';
 import { Dropdown } from 'primereact/dropdown';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
+import { InputText } from 'primereact/inputtext';
+import { Controller } from 'react-hook-form';
+
+import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProfileEditable';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { useFrontendSettings } from '@/hooks/useFrontendSettings';
+import { IUserProfileDataModel } from '@/types/userProfileDataModel';
+
+import styles from './UserProfileDataEditable.module.scss';
 
 export interface IUserProfileDataEditableProps {
   userData: IUserProfileDataModel;
@@ -26,16 +28,8 @@ export const UserProfileDataEditable = ({
     disableEditMode,
   );
 
-  const {
-    userId,
-    userName,
-    email,
-    firstName,
-    lastName,
-    balanceAmount,
-    balanceCurrency,
-    language,
-  } = userData;
+  const { userId, userName, email, balanceAmount, balanceCurrency, language } =
+    userData;
 
   return (
     <form

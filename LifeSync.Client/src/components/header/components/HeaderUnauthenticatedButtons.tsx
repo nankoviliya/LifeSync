@@ -1,7 +1,9 @@
-import { routePaths } from '@/infrastructure/routing/routePaths';
-import { Link } from 'react-router-dom';
-import styles from './HeaderUnauthenticatedButtons.module.scss';
 import { classNames } from 'primereact/utils';
+import { Link } from 'react-router-dom';
+
+import { routePaths } from '@/config/routing/routePaths';
+
+import styles from './HeaderUnauthenticatedButtons.module.scss';
 
 export const HeaderUnauthenticatedButtons = () => {
   return (

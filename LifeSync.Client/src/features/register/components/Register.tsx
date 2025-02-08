@@ -1,15 +1,17 @@
-import { useRegistration } from '@/features/register/hooks/useRegistration';
-import styles from './Register.module.scss';
 import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
 import { Controller } from 'react-hook-form';
-import { useAppTranslations } from '@/infrastructure/translations/hooks/useAppTranslations';
-import { InputNumber } from 'primereact/inputnumber';
-import { useFrontendSettings } from '@/infrastructure/frontendSettings/hooks/useFrontendSettings';
-import { Dropdown } from 'primereact/dropdown';
-import { routePaths } from '@/infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
+
+import { routePaths } from '@/config/routing/routePaths';
+import { useRegistration } from '@/features/register/hooks/useRegistration';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { useFrontendSettings } from '@/hooks/useFrontendSettings';
+
+import styles from './Register.module.scss';
 
 export const Register = () => {
   const { translate } = useAppTranslations();

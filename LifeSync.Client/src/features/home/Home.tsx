@@ -1,10 +1,11 @@
-import styles from './Home.module.scss';
 import { ServiceCard } from '@/components/serviceCard/components/ServiceCard';
-import { useCurrentLanguage } from '@/features/home/hooks/useCurrentLanguage';
-import { applicationServices } from '@/infrastructure/applicationServices/applicationService';
+import { applicationServices } from '@/config/applicationServices/applicationService';
+import { useCurrentLanguage } from '@/hooks/useCurrentLanguage';
+
+import styles from './Home.module.scss';
 
 export const Home = () => {
-  const { currentLanguage } = useCurrentLanguage();
+  useCurrentLanguage();
 
   return (
     <div className={styles['home']}>
