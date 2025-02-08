@@ -4,13 +4,13 @@ namespace LifeSync.API.Features.ExpenseTracking.Models;
 
 public class AddExpenseDto
 {
-    public decimal Amount { get; init; } = default!;
+    public required decimal Amount { get; init; }
 
-    public string Currency { get; init; } = default!;
+    public required string Currency { get; init; }
 
-    public DateTime Date { get; init; }
+    public required DateTime Date { get; init; }
 
-    public string Description { get; init; } = default!;
+    public required string Description { get; init; }
 
-    public ExpenseType ExpenseType { get; init; }
+    public required ExpenseType ExpenseType { get; init; }
 }

@@ -29,7 +29,10 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);
+    return Promise.reject(
+      //Expected the Promise rejection reason to be an Error.
+      error instanceof Error ? error : new Error(String(error)),
+    );
   },
 );
 
@@ -41,7 +44,10 @@ apiClient.interceptors.response.use(
       localStorage.removeItem('token');
     }
 
-    return Promise.reject(error);
+    return Promise.reject(
+      // Expected the Promise rejection reason to be an Error.
+      error instanceof Error ? error : new Error(String(error)),
+    );
   },
 );
 

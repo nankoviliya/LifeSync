@@ -1,5 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
-import { createContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 interface AuthContextType {
   token: string | null;
@@ -21,15 +27,15 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     localStorage.getItem('token'),
   );
 
-  const login = (token: string) => {
+  const login = useCallback((token: string) => {
     setToken(token);
     localStorage.setItem('token', token);
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null);
     localStorage.removeItem('token');
-  };
+  }, []);
 
   const isAuthenticated = Boolean(token);
 
@@ -41,11 +47,20 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         logout();
       }
     }
-  }, [token]);
+  }, [token, logout]);
+
+  // React Context Provider values should have stable identities typescript:S6481
+  const contextValue = useMemo(
+    () => ({
+      token,
+      login,
+      logout,
+      isAuthenticated,
+    }),
+    [token, login, logout, isAuthenticated],
+  );
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, isAuthenticated }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

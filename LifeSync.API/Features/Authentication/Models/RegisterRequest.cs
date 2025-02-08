@@ -2,17 +2,17 @@ namespace LifeSync.API.Features.Authentication.Models;
 
 public class RegisterRequest
 {
-    public string FirstName { get; set; } = default!;
+    public required string FirstName { get; set; }
 
-    public string LastName { get; set; } = default!;
+    public required string LastName { get; set; }
 
-    public string Email { get; set; } = default!;
+    public required string Email { get; set; }
 
-    public string Password { get; set; } = default!;
+    public required string Password { get; set; }
 
-    public decimal Balance { get; set; }
+    public required decimal Balance { get; set; }
 
-    public string Currency { get; set; } = default!;
+    public required string Currency { get; set; }
 
-    public Guid LanguageId { get; set; }
+    public required Guid LanguageId { get; set; }
 }

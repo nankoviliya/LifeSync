@@ -2,11 +2,11 @@ namespace LifeSync.API.Features.IncomeTracking.Models;
 
 public record AddIncomeDto
 {
-    public decimal Amount { get; init; } = default!;
+    public required decimal Amount { get; init; }
 
-    public string Currency { get; init; } = default!;
+    public required string Currency { get; init; }
 
-    public DateTime Date { get; init; }
+    public required DateTime Date { get; init; }
 
-    public string Description { get; init; } = default!;
+    public required string Description { get; init; }
 }

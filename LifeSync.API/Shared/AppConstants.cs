@@ -1,6 +1,6 @@
 ﻿namespace LifeSync.API.Shared;
 
-public class AppConstants
+public static class AppConstants
 {
     public const string SecretName = "SecretName";
 }

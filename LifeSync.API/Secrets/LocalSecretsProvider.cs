@@ -1,5 +1,6 @@
 ﻿using LifeSync.API.Secrets.Common;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Exceptions;
 using LifeSync.API.Secrets.Models;
 
 namespace LifeSync.API.Secrets;
@@ -19,7 +20,7 @@ public class LocalSecretsProvider : ISecretsProvider
 
         if (appSecrets is null)
         {
-            throw new Exception(SecretsConstants.ApplicationSecretsNotFoundMessage);
+            throw new SecretsRetrievalException(SecretsConstants.ApplicationSecretsNotFoundMessage);
         }
 
         return Task.FromResult(appSecrets);

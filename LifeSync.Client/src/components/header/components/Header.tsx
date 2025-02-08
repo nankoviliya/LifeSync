@@ -11,6 +11,13 @@ export const Header = () => {
   const navigate = useNavigate();
   const { isUserAuthenticated } = useHeader();
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      navigate(routePaths.home.path);
+    }
+  };
+
   return (
     <header className={styles['header']}>
       <div
@@ -18,6 +25,9 @@ export const Header = () => {
         onClick={() => {
           navigate(routePaths.home.path);
         }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
       >
         <img src="app.ico" />
         <span>Life Sync</span>

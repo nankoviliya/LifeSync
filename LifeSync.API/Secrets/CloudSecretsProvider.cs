@@ -2,6 +2,7 @@
 using Amazon.SecretsManager.Model;
 using LifeSync.API.Secrets.Common;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Exceptions;
 using LifeSync.API.Secrets.Models;
 using LifeSync.API.Shared;
 using System.Text.Json;
@@ -56,7 +57,7 @@ public class CloudSecretsProvider : ISecretsProvider
         }
         catch (Exception ex)
         {
-            throw new ApplicationException(SecretsConstants.ApplicationSecretsRetrievalErrorMessage, ex);
+            throw new SecretsRetrievalException(SecretsConstants.ApplicationSecretsRetrievalErrorMessage, ex);
         }
     }
 }

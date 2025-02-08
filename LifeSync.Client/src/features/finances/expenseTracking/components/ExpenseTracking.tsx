@@ -21,22 +21,20 @@ export const ExpenseTracking = () => {
     handleSubmit,
   } = useExpenseTracking();
 
+  const handleOpenModal = () => setIsModalVisible(true);
+  const handleCloseModal = () => setIsModalVisible(false);
+
   return (
     <div className={styles['expense-tracking']}>
       <Button
         label={translate('add-new-expense-transaction-button-label')}
-        onClick={() => {
-          setIsModalVisible(true);
-        }}
+        onClick={handleOpenModal}
       />
       <Dialog
         header="New transaction"
         visible={isModalVisible}
         style={{ width: '50vw' }}
-        onHide={() => {
-          if (!isModalVisible) return;
-          setIsModalVisible(false);
-        }}
+        onHide={handleCloseModal}
       >
         <NewExpenseTransaction control={control} handleSubmit={handleSubmit} />
       </Dialog>
@@ -44,8 +42,7 @@ export const ExpenseTracking = () => {
         {isLoading && <p>Loading...</p>}
         {!isLoading && !data && <p>No records</p>}
         {isSuccess &&
-          data &&
-          data.expenseTransactions.map((i) => {
+          data?.expenseTransactions?.map((i) => {
             return (
               <Card
                 key={`expense-transaction-${i.id}`}

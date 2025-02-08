@@ -22,22 +22,20 @@ export const IncomeTracking = () => {
     handleSubmit,
   } = useIncomeTracking();
 
+  const handleOpenModal = () => setIsModalVisible(true);
+  const handleCloseModal = () => setIsModalVisible(false);
+
   return (
     <div className={styles['income-tracking']}>
       <Button
         label={translate('add-new-income-transaction-button-label')}
-        onClick={() => {
-          setIsModalVisible(true);
-        }}
+        onClick={handleOpenModal}
       />
       <Dialog
         header="New income transaction"
         visible={isModalVisible}
         style={{ width: '50vw' }}
-        onHide={() => {
-          if (!isModalVisible) return;
-          setIsModalVisible(false);
-        }}
+        onHide={handleCloseModal}
       >
         <NewIncomeTransaction control={control} handleSubmit={handleSubmit} />
       </Dialog>
@@ -45,8 +43,7 @@ export const IncomeTracking = () => {
         {isLoading && <p>Loading...</p>}
         {!isLoading && !data && <p>No records</p>}
         {isSuccess &&
-          data &&
-          data.incomeTransactions.map((i) => {
+          data?.incomeTransactions?.map((i) => {
             return (
               <Card
                 key={`income-transaction-${i.id}`}

@@ -23,10 +23,20 @@ export const UserProfileDataContainer = ({
     setIsEditing(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      enableEditMode();
+    }
+  };
+
   return (
     <div
       className={styles['user-profile-data-container']}
       onClick={enableEditMode}
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
     >
       {isEditing ? (
         <UserProfileDataEditable

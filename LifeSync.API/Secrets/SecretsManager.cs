@@ -1,5 +1,6 @@
 using LifeSync.API.Secrets.Common;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Exceptions;
 using LifeSync.API.Secrets.Models;
 
 namespace LifeSync.API.Secrets;
@@ -23,7 +24,7 @@ public class SecretsManager(
 
         if (appSecrets is null || appSecrets.Database is null)
         {
-            throw new Exception(SecretsConstants.DatabaseSecretsNotFoundMessage);
+            throw new SecretsRetrievalException(SecretsConstants.DatabaseSecretsNotFoundMessage);
         }
 
         var dbSecret = appSecrets.Database;
@@ -42,7 +43,7 @@ public class SecretsManager(
 
         if (appSecrets is null || appSecrets.JWT is null)
         {
-            throw new Exception(SecretsConstants.JWTSecretsNotFoundMessage);
+            throw new SecretsRetrievalException(SecretsConstants.JWTSecretsNotFoundMessage);
         }
 
         return appSecrets.JWT;

@@ -3,6 +3,7 @@ using Amazon.SecretsManager.Model;
 using FluentAssertions;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Common;
+using LifeSync.API.Secrets.Exceptions;
 using LifeSync.API.Secrets.Models;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
@@ -103,7 +104,7 @@ public class CloudSecretsProviderTests
     }
 
     [Fact]
-    public async Task GetAppSecretsAsync_ShouldThrowApplicationException_WhenSecretStringIsNullOrEmpty()
+    public async Task GetAppSecretsAsync_ShouldThrowSecretsRetrievalException_WhenSecretStringIsNullOrEmpty()
     {
         configuration = CreateValidMockConfiguration();
         amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
@@ -118,12 +119,12 @@ public class CloudSecretsProviderTests
 
         Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
 
-        await act.Should().ThrowAsync<ApplicationException>()
+        await act.Should().ThrowAsync<SecretsRetrievalException>()
             .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
     }
 
     [Fact]
-    public async Task GetAppSecretsAsync_ShouldThrowApplicationException_WhenSecretStringDeserializationFailed()
+    public async Task GetAppSecretsAsync_ShouldThrowSecretsRetrievalException_WhenSecretStringDeserializationFailed()
     {
         configuration = CreateValidMockConfiguration();
         amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
@@ -138,7 +139,7 @@ public class CloudSecretsProviderTests
 
         Func<Task> act = async () => await cloudSecretsProvider.GetAppSecretsAsync();
 
-        await act.Should().ThrowAsync<ApplicationException>()
+        await act.Should().ThrowAsync<SecretsRetrievalException>()
             .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
     }
 }

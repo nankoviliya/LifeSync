@@ -21,7 +21,7 @@ builder.Services.AddApplicationSecrets(builder.Environment);
 builder.Services.AddIdentityServices();
 
 // Add authentication service
-builder.Services.AddJwtAuthentication();
+await builder.Services.AddJwtAuthentication();
 
 builder.Services.AddAuthorization();
 
@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", builder =>
     {
-        builder.WithOrigins("http://localhost:4200") // Update with your React app's URL
+        builder.WithOrigins("http://localhost:4200")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -69,4 +69,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

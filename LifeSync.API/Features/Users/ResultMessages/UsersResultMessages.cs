@@ -1,6 +1,6 @@
 ﻿namespace LifeSync.API.Features.Users.ResultMessages;
 
-public class UsersResultMessages
+public static class UsersResultMessages
 {
     public const string UserNotFound = "Unable to find user";
 
