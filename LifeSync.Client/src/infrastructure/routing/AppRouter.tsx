@@ -14,6 +14,7 @@ import {
 } from 'react-router-dom';
 import { Finances } from '@/features/finances/components/Finances';
 import { UserProfile } from '@/features/userProfile/components/UserProfile';
+import { Register } from '@/features/register/components/Register';
 
 export const AppRouter = () => {
   const { isAuthenticated } = useAuth();
@@ -41,6 +42,7 @@ export const AppRouter = () => {
         <Route key="app" element={<App />}>
           {isAuthenticated && protectedPages}
           <Route path={routePaths.login.path} element={<Login />} />
+          <Route path={routePaths.register.path} element={<Register />} />
           {!isAuthenticated && (
             <Route
               path="*"

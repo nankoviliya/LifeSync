@@ -50,11 +50,8 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
             .AsNoTracking()
             .Select(c => new CurrencyOption
             {
-                Id = c.Id,
                 Code = c.Code,
-                Name = c.Name,
-                NativeName = c.NativeName,
-                Symbol = c.Symbol
+                Name = $"{c.Name} ({c.NativeName})",
             })
             .ToListAsync();
 

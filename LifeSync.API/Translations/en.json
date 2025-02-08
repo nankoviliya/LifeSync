@@ -29,5 +29,8 @@
   "new-transaction-input-currency-label": "Currency",
   "new-transaction-input-date-label": "Date",
   "new-transaction-input-description-label": "Description",
-  "new-expense-transaction-input-expense-type-label": "Expense Type"
+  "new-expense-transaction-input-expense-type-label": "Expense Type",
+
+  "login-button-label": "Login",
+  "register-button-label": "Register"
 }

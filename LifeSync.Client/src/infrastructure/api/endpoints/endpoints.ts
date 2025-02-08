@@ -7,6 +7,7 @@ export const endpoints = {
   },
   auth: {
     login: 'Auth/Login',
+    register: 'Auth/Register',
   },
   users: {
     getProfileData: 'Users/Profile',

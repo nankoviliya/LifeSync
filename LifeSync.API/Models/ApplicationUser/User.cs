@@ -12,8 +12,6 @@ public class User : IdentityUser
 
     public string LastName { get; set; } = default!;
 
-    public string PasswordSalt { get; init; } = default!;
-
     public Money Balance { get; set; } = default!;
 
     public Currency CurrencyPreference { get; set; } = default!;
@@ -25,6 +23,4 @@ public class User : IdentityUser
     public ICollection<IncomeTransaction> IncomeTransactions { get; init; } = [];
 
     public ICollection<ExpenseTransaction> ExpenseTransactions { get; init; } = [];
-
-    // public ICollection<UserWallet> UserWallets { get; init; } = new List<UserWallet>();
 }

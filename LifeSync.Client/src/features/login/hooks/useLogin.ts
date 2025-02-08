@@ -34,8 +34,11 @@ export const useLogin = () => {
     mutation.mutate(data);
   };
 
+  const { isPending } = mutation;
+
   return {
     control,
     onSubmit: handleSubmit(onSubmit),
+    isLoginPending: isPending,
   };
 };

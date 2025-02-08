@@ -1,0 +1,44 @@
+@use '/src/sharedStyles/abstracts/index.scss' as *;
+
+.header-unauthenticated-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &__button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+    }
+
+    &--login {
+      background-color: $royalBlue;
+      color: $white;
+
+      &:hover {
+        background-color: $royalBlueHover;
+      }
+    }
+
+    &--signup {
+      background-color: $darkEmerald;
+      color: $white;
+
+      &:hover {
+        background-color: $darkEmeraldHover;
+      }
+    }
+  }
+}

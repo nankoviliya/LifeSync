@@ -1,6 +1,7 @@
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Shared;
 using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
 using Microsoft.AspNetCore.Identity;
@@ -38,5 +39,30 @@ public class AuthService : BaseService, IAuthService
         }
 
         return Success(token);
+    }
+
+    public async Task<MessageResult> RegisterAsync(Models.RegisterRequest request)
+    {
+        var user = new User
+        {
+            UserName = request.Email,
+            Email = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Balance = new Money(request.Balance, Currency.FromCode(request.Currency)),
+            CurrencyPreference = Currency.FromCode(request.Currency),
+            LanguageId = request.LanguageId,
+        };
+
+        var createResult = await _userManager.CreateAsync(user, request.Password);
+
+        if (!createResult.Succeeded)
+        {
+            var errors = createResult.Errors.Select(e => e.Description).ToArray();
+
+            return FailureMessage(errors);
+        }
+
+        return SuccessMessage("Successfully registered");
     }
 }

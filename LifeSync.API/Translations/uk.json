@@ -29,5 +29,8 @@
   "new-transaction-input-currency-label": "Валюта",
   "new-transaction-input-date-label": "Дата",
   "new-transaction-input-description-label": "Опис",
-  "new-expense-transaction-input-expense-type-label": "Тип витрат"
+  "new-expense-transaction-input-expense-type-label": "Тип витрат",
+
+  "login-button-label": "Увійти",
+  "register-button-label": "Зареєструватися"
 }

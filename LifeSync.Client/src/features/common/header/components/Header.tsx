@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.scss';
 import { useHeader } from '@/features/common/header/hooks/useHeader';
 import { UserAvatar } from '@/features/common/header/components/UserAvatar';
+import { HeaderUnauthenticatedButtons } from '@/features/common/header/components/HeaderUnauthenticatedButtons';
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -21,9 +22,7 @@ export const Header = () => {
       </div>
       <div>
         {isUserAuthenticated && <UserAvatar />}
-        {!isUserAuthenticated && (
-          <Link to={routePaths.login.path}>{routePaths.login.name}</Link>
-        )}
+        {!isUserAuthenticated && <HeaderUnauthenticatedButtons />}
       </div>
     </header>
   );

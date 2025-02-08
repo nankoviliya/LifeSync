@@ -12,6 +12,10 @@ export const routePaths = {
     path: '/login',
     name: 'Login',
   },
+  register: {
+    path: '/register',
+    name: 'Sign Up',
+  },
   home: {
     path: '/home',
     name: 'Home',

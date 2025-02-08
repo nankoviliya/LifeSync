@@ -8,17 +8,17 @@ namespace LifeSync.API.Features.Authentication;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IAuthService authService;
 
     public AuthController(IAuthService authService)
     {
-        _authService = authService;
+        this.authService = authService;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var loginResult = await _authService.LoginAsync(request);
+        var loginResult = await authService.LoginAsync(request);
 
         if (!loginResult.IsSuccess)
         {
@@ -26,5 +26,18 @@ public class AuthController : ControllerBase
         }
 
         return Ok(loginResult.Data);
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] Models.RegisterRequest request)
+    {
+        var result = await authService.RegisterAsync(request);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(result.Message);
     }
 }
