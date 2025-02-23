@@ -1,9 +1,16 @@
 using Amazon.SecretsManager;
 using LifeSync.API.Extensions;
 using LifeSync.API.Persistence;
+using Serilog;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddJsonOptions();
@@ -69,4 +76,17 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.RunAsync();
+try
+{
+    Log.Information("Starting up the web host");
+
+    await app.RunAsync();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

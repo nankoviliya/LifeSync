@@ -13,13 +13,16 @@ public class AuthService : BaseService, IAuthService
 {
     private readonly JwtTokenGenerator _jwtTokenGenerator;
     private readonly UserManager<User> _userManager;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(
         JwtTokenGenerator jwtTokenGenerator,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        ILogger<AuthService> logger)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userManager = userManager;
+        _logger = logger;
     }
 
     public async Task<DataResult<TokenResponse>> LoginAsync(LoginRequest request)
@@ -58,9 +61,11 @@ public class AuthService : BaseService, IAuthService
 
         if (!createResult.Succeeded)
         {
-            var errors = createResult.Errors.Select(e => e.Description).ToArray();
+            var errorDescriptions = string.Join("; ", createResult.Errors.Select(e => e.Description));
 
-            return FailureMessage(errors);
+            _logger.LogWarning("Registration failed. Errors: {Errors}", errorDescriptions);
+
+            return FailureMessage(createResult.Errors.Select(e => e.Description).ToArray());
         }
 
         return SuccessMessage("Successfully registered");

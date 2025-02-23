@@ -38,38 +38,38 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var connectionString = secretsManager.GetConnectionStringAsync().Result;
-        optionsBuilder.UseSqlServer(connectionString);
+        if (!optionsBuilder.IsConfigured && secretsManager is not null)
+        {
+            var connectionString = secretsManager.GetConnectionStringAsync().GetAwaiter().GetResult();
+            optionsBuilder.UseSqlServer(connectionString);
+        }
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var result = await base.SaveChangesAsync(cancellationToken);
+        int result = await base.SaveChangesAsync(cancellationToken);
 
-        await PublishDomainEventsAsync();
+        if (eventDispatcher is not null)
+        {
+            await PublishDomainEventsAsync();
+        }
 
         return result;
     }
 
     private async Task PublishDomainEventsAsync()
     {
-        var entities = ChangeTracker
+        var entitiesWithEvents = ChangeTracker
             .Entries<Entity>()
             .Select(entry => entry.Entity)
-
+            .Where(entity => entity.GetDomainEvents().Any())
             .ToList();
 
-        var domainEvents = entities.SelectMany(entity =>
-        {
-            var domainEvents = entity.GetDomainEvents();
+        var domainEvents = entitiesWithEvents
+                .SelectMany(entity => entity.GetDomainEvents())
+                .ToList();
 
-            return domainEvents;
-        }).ToList();
-
-        foreach (var entity in entities)
-        {
-            entity.ClearDomainEvents();
-        }
+        entitiesWithEvents.ForEach(entity => entity.ClearDomainEvents());
 
         await eventDispatcher.DispatchAsync(domainEvents);
     }

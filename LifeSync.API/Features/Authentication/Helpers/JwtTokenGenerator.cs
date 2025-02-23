@@ -10,16 +10,30 @@ namespace LifeSync.API.Features.Authentication.Helpers;
 
 public class JwtTokenGenerator
 {
-    private readonly ISecretsManager secretsManager;
+    private readonly ISecretsManager _secretsManager;
+    private readonly JwtSecurityTokenHandler _tokenHandler;
 
-    public JwtTokenGenerator(ISecretsManager secretsManager)
+    public JwtTokenGenerator(
+        ISecretsManager secretsManager,
+        JwtSecurityTokenHandler tokenHandler)
     {
-        this.secretsManager = secretsManager;
+        _secretsManager = secretsManager;
+        _tokenHandler = tokenHandler;
     }
 
     public async Task<TokenResponse> GenerateJwtTokenAsync(User user)
     {
-        var jwtSecrets = await secretsManager.GetJwtSecretsAsync();
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
+        var jwtSecrets = await _secretsManager.GetJwtSecretsAsync();
+
+        if (jwtSecrets is null)
+        {
+            throw new InvalidOperationException("JWT secrets are not available.");
+        }
 
         var claims = new[]
         {
@@ -28,17 +42,21 @@ public class JwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var keyBytes = Encoding.UTF8.GetBytes(jwtSecrets.SecretKey);
+        var key = new SymmetricSecurityKey(keyBytes);
+        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var token = new JwtSecurityToken(
-            issuer: jwtSecrets.Issuer,
-            audience: jwtSecrets.Audience,
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(jwtSecrets.ExpiryMinutes),
-            signingCredentials: creds);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddMinutes(jwtSecrets.ExpiryMinutes),
+            Issuer = jwtSecrets.Issuer,
+            Audience = jwtSecrets.Audience,
+            SigningCredentials = signingCredentials
+        };
 
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+        var token = _tokenHandler.CreateToken(tokenDescriptor);
+        var tokenString = _tokenHandler.WriteToken(token);
 
         return new TokenResponse
         {

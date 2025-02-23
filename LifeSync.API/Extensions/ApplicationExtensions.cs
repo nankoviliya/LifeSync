@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace LifeSync.API.Extensions;
@@ -63,6 +64,8 @@ public static class ApplicationExtensions
 
     public static async Task<IServiceCollection> AddJwtAuthentication(this IServiceCollection services)
     {
+        services.AddSingleton<JwtSecurityTokenHandler>();
+
         var serviceProvider = services.BuildServiceProvider();
         var secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
 

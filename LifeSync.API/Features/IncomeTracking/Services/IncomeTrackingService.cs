@@ -12,11 +12,15 @@ namespace LifeSync.API.Features.IncomeTracking.Services;
 
 public class IncomeTrackingService : BaseService, IIncomeTrackingService
 {
-    private readonly ApplicationDbContext databaseContext;
+    private readonly ApplicationDbContext _databaseContext;
+    private readonly ILogger<IncomeTrackingService> _logger;
 
-    public IncomeTrackingService(ApplicationDbContext databaseContext)
+    public IncomeTrackingService(
+        ApplicationDbContext databaseContext,
+        ILogger<IncomeTrackingService> logger)
     {
-        this.databaseContext = databaseContext;
+        _databaseContext = databaseContext;
+        _logger = logger;
     }
 
     public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(string userId)
@@ -25,10 +29,12 @@ public class IncomeTrackingService : BaseService, IIncomeTrackingService
 
         if (!userIdIsParsed)
         {
+            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+
             return Failure<GetIncomeTransactionsResponse>(IncomeTrackingResultMessages.InvalidUserId);
         }
 
-        var userIncomeTransactions = await databaseContext.IncomeTransactions
+        var userIncomeTransactions = await _databaseContext.IncomeTransactions
             .Where(x => x.UserId == userIdGuid)
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
@@ -57,6 +63,8 @@ public class IncomeTrackingService : BaseService, IIncomeTrackingService
 
         if (!userIdIsParsed)
         {
+            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+
             return Failure<Guid>(IncomeTrackingResultMessages.InvalidUserId);
         }
 
@@ -69,11 +77,11 @@ public class IncomeTrackingService : BaseService, IIncomeTrackingService
             UserId = userIdGuid
         };
 
-        await databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
+        await _databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
 
         incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userIdGuid, incomeTransaction));
 
-        await databaseContext.SaveChangesAsync();
+        await _databaseContext.SaveChangesAsync();
 
         return Success(incomeTransaction.Id);
     }

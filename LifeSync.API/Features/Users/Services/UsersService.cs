@@ -9,16 +9,20 @@ namespace LifeSync.API.Features.Users.Services;
 
 public class UsersService : BaseService, IUsersService
 {
-    private readonly ApplicationDbContext databaseContext;
+    private readonly ApplicationDbContext _databaseContext;
+    private readonly ILogger<UsersService> _logger;
 
-    public UsersService(ApplicationDbContext databaseContext)
+    public UsersService(
+        ApplicationDbContext databaseContext,
+        ILogger<UsersService> logger)
     {
-        this.databaseContext = databaseContext;
+        _databaseContext = databaseContext;
+        _logger = logger;
     }
 
     public async Task<DataResult<GetUserProfileDataDto>> GetUserProfileData(string userId)
     {
-        var userData = await databaseContext.Users
+        var userData = await _databaseContext.Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
             .Select(u => new GetUserProfileDataDto
@@ -36,6 +40,8 @@ public class UsersService : BaseService, IUsersService
 
         if (userData is null)
         {
+            _logger.LogWarning("User not found for userId: {UserId}", userId);
+
             return Failure<GetUserProfileDataDto>(UsersResultMessages.UserNotFound);
         }
 
@@ -44,17 +50,21 @@ public class UsersService : BaseService, IUsersService
 
     public async Task<MessageResult> ModifyUserProfileData(string userId, ModifyUserProfileDataDto data)
     {
-        var userToUpdate = await databaseContext.Users
+        var userToUpdate = await _databaseContext.Users
             .Where(u => u.Id == userId)
             .FirstOrDefaultAsync();
 
         if (userToUpdate is null)
         {
+            _logger.LogWarning("User not found for userId: {UserId}", userId);
+
             return FailureMessage(UsersResultMessages.UserNotFound);
         }
 
         if (!Guid.TryParse(data.LanguageId, out Guid parsedLanguageId))
         {
+            _logger.LogWarning("Unable to parse LanguageId: {LanguageId} for userId: {UserId}", data.LanguageId, userId);
+
             return FailureMessage(UsersResultMessages.UnableToParseLanguageId);
         }
 
@@ -62,7 +72,16 @@ public class UsersService : BaseService, IUsersService
         userToUpdate.LastName = data.LastName;
         userToUpdate.LanguageId = parsedLanguageId;
 
-        await databaseContext.SaveChangesAsync();
+        try
+        {
+            await _databaseContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating user profile for userId: {UserId}", userId);
+
+            return FailureMessage("An error occurred while updating the user profile.");
+        }
 
         return SuccessMessage(UsersResultMessages.UserProfileUpdated);
     }

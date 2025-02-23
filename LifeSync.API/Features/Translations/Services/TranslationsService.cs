@@ -10,39 +10,49 @@ namespace LifeSync.API.Features.Translations.Services;
 
 public class TranslationsService : BaseService, ITranslationsService
 {
-    private readonly string translationsPath;
-    private readonly ConcurrentDictionary<string, Dictionary<string, string>> translationsCache;
-    private readonly ApplicationDbContext databaseContext;
+    private readonly string _translationsPath;
+    private readonly ConcurrentDictionary<string, Dictionary<string, string>> _translationsCache;
+    private readonly ApplicationDbContext _databaseContext;
+    private readonly ILogger<TranslationsService> _logger;
 
-    public TranslationsService(ApplicationDbContext databaseContext)
+    public TranslationsService(
+        ApplicationDbContext databaseContext,
+        ILogger<TranslationsService> logger)
     {
-        this.databaseContext = databaseContext;
-        translationsPath = Path.Combine(Directory.GetCurrentDirectory(), "Translations");
-        translationsCache = new ConcurrentDictionary<string, Dictionary<string, string>>();
+        _databaseContext = databaseContext;
+        _logger = logger;
+        _translationsPath = Path.Combine(Directory.GetCurrentDirectory(), "Translations");
+        _translationsCache = new ConcurrentDictionary<string, Dictionary<string, string>>();
     }
 
     public async Task<DataResult<IReadOnlyDictionary<string, string>>> GetTranslationsByLanguageCodeAsync(string languageCode)
     {
         if (string.IsNullOrWhiteSpace(languageCode))
         {
-            return Failure<IReadOnlyDictionary<string, string>>("Language code must be provided.");
+            _logger.LogWarning(TranslationsResultMessages.LanguageCodeNotProvided);
+
+            return Failure<IReadOnlyDictionary<string, string>>(TranslationsResultMessages.LanguageCodeNotProvided);
         }
 
-        var language = await databaseContext.Languages
+        var language = await _databaseContext.Languages
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Code.ToLower().Equals(languageCode.ToLower()));
 
         if (language is null)
         {
+            _logger.LogError("Language not found, Language Code: {LanguageCode}", languageCode);
+
             return Failure<IReadOnlyDictionary<string, string>>(TranslationsResultMessages.LanguageNotFound);
         }
 
-        if (!translationsCache.TryGetValue(languageCode, out var translations))
+        if (!_translationsCache.TryGetValue(languageCode, out var translations))
         {
-            var filePath = Path.Combine(translationsPath, $"{languageCode}.json");
+            var filePath = Path.Combine(_translationsPath, $"{languageCode}.json");
 
             if (!File.Exists(filePath))
             {
+                _logger.LogError("File with translations not found, Language Code: {LanguageCode}", languageCode);
+
                 return Failure<IReadOnlyDictionary<string, string>>(TranslationsResultMessages.TranslationsFileNotFound);
             }
 
@@ -55,10 +65,12 @@ public class TranslationsService : BaseService, ITranslationsService
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, TranslationsResultMessages.ErrorReadingTranslations);
+
                 return Failure<IReadOnlyDictionary<string, string>>($"{TranslationsResultMessages.ErrorReadingTranslations}: {ex.Message}");
             }
 
-            translationsCache.TryAdd(languageCode, translations);
+            _translationsCache.TryAdd(languageCode, translations);
         }
 
         return Success((IReadOnlyDictionary<string, string>)translations);

@@ -12,11 +12,15 @@ namespace LifeSync.API.Features.ExpenseTracking.Services;
 
 public class ExpenseTrackingService : BaseService, IExpenseTrackingService
 {
-    private readonly ApplicationDbContext databaseContext;
+    private readonly ApplicationDbContext _databaseContext;
+    private readonly ILogger<ExpenseTrackingService> _logger;
 
-    public ExpenseTrackingService(ApplicationDbContext databaseContext)
+    public ExpenseTrackingService(
+        ApplicationDbContext databaseContext,
+        ILogger<ExpenseTrackingService> logger)
     {
-        this.databaseContext = databaseContext;
+        this._databaseContext = databaseContext;
+        _logger = logger;
     }
 
     public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpensesAsync(string userId)
@@ -25,10 +29,12 @@ public class ExpenseTrackingService : BaseService, IExpenseTrackingService
 
         if (!userIdIsParsed)
         {
+            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+
             return Failure<GetExpenseTransactionsResponse>(ExpenseTrackingResultMessages.InvalidUserId);
         }
 
-        var userExpenseTransactions = await databaseContext.ExpenseTransactions
+        var userExpenseTransactions = await _databaseContext.ExpenseTransactions
             .Where(x => x.UserId == userIdGuid)
             .AsNoTracking()
             .OrderByDescending(x => x.Date)
@@ -58,6 +64,8 @@ public class ExpenseTrackingService : BaseService, IExpenseTrackingService
 
         if (!userIdIsParsed)
         {
+            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+
             return Failure<Guid>(ExpenseTrackingResultMessages.InvalidUserId);
         }
 
@@ -70,11 +78,11 @@ public class ExpenseTrackingService : BaseService, IExpenseTrackingService
             UserId = userIdGuid
         };
 
-        await databaseContext.ExpenseTransactions.AddAsync(expenseTransaction);
+        await _databaseContext.ExpenseTransactions.AddAsync(expenseTransaction);
 
         expenseTransaction.RaiseDomainEvent(new ExpenseTransactionCreatedDomainEvent(userIdGuid, expenseTransaction));
 
-        await databaseContext.SaveChangesAsync();
+        await _databaseContext.SaveChangesAsync();
 
         return Success(expenseTransaction.Id);
     }

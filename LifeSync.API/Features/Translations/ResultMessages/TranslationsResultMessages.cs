@@ -2,9 +2,11 @@
 
 public static class TranslationsResultMessages
 {
-    public const string LanguageNotFound = "Language not found.";
+    public const string LanguageNotFound = "Language not found";
 
-    public const string TranslationsFileNotFound = "File with translations not found.";
+    public const string LanguageCodeNotProvided = "Language code must be provided";
+
+    public const string TranslationsFileNotFound = "File with translations not found";
 
     public const string ErrorReadingTranslations = "Error reading translations";
 }
