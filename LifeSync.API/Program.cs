@@ -1,4 +1,6 @@
 using Amazon.SecretsManager;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using LifeSync.API.Extensions;
 using LifeSync.API.Persistence;
 using Serilog;
@@ -47,6 +49,9 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
