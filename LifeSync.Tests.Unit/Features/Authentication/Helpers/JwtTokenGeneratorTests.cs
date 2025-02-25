@@ -28,10 +28,11 @@ public class JwtTokenGeneratorTests
         };
 
         var secretsManager = Substitute.For<ISecretsManager>();
+        var securityTokenHandler = new JwtSecurityTokenHandler();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager);
+        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
 
         var tokenResponse = await generator.GenerateJwtTokenAsync(user);
 
@@ -57,10 +58,11 @@ public class JwtTokenGeneratorTests
         };
 
         var secretsManager = Substitute.For<ISecretsManager>();
+        var securityTokenHandler = new JwtSecurityTokenHandler();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager);
+        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
 
         var tokenResponse = await generator.GenerateJwtTokenAsync(user);
         var handler = new JwtSecurityTokenHandler();
@@ -89,10 +91,11 @@ public class JwtTokenGeneratorTests
         };
 
         var secretsManager = Substitute.For<ISecretsManager>();
+        var securityTokenHandler = new JwtSecurityTokenHandler();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager);
+        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
 
         Func<Task> act = async () => await generator.GenerateJwtTokenAsync(user);
 
@@ -111,13 +114,14 @@ public class JwtTokenGeneratorTests
         };
 
         var secretsManager = Substitute.For<ISecretsManager>();
+        var securityTokenHandler = new JwtSecurityTokenHandler();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager);
+        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
 
         Func<Task> act = async () => await generator.GenerateJwtTokenAsync(null);
 
-        await act.Should().ThrowAsync<NullReferenceException>();
+        await act.Should().ThrowAsync<ArgumentNullException>();
     }
 }
