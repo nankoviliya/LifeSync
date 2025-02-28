@@ -25,6 +25,12 @@
   "transaction-description-label": "Описание",
   "expense-transaction-type-label": "Вид на разхода",
 
+  "expense-summary-transactions-count-label": "Транзакциите",
+  "expense-summary-total-spent-label": "Общо",
+  "expense-summary-total-spent-needs-label": "Нужди",
+  "expense-summary-total-spent-wants-label": "Желания",
+  "expense-summary-total-spent-savings-label": "Спестявания",
+
   "new-transaction-input-amount-label": "Сума",
   "new-transaction-input-currency-label": "Валута",
   "new-transaction-input-date-label": "Дата",

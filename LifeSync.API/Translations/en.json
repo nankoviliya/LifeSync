@@ -25,6 +25,12 @@
   "transaction-description-label": "Description",
   "expense-transaction-type-label": "Expense type",
 
+  "expense-summary-transactions-count-label": "Transactions",
+  "expense-summary-total-spent-label": "Total",
+  "expense-summary-total-spent-needs-label": "Needs",
+  "expense-summary-total-spent-wants-label": "Wants",
+  "expense-summary-total-spent-savings-label": "Savings",
+
   "new-transaction-input-amount-label": "Amount",
   "new-transaction-input-currency-label": "Currency",
   "new-transaction-input-date-label": "Date",

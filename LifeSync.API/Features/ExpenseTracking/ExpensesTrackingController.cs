@@ -19,7 +19,7 @@ public class ExpenseTrackingController : ControllerBase
     }
 
     [HttpGet("transactions", Name = nameof(GetExpenseTransactions))]
-    public async Task<IActionResult> GetExpenseTransactions()
+    public async Task<IActionResult> GetExpenseTransactions([FromQuery] GetUserExpenseTransactionsRequest request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -28,7 +28,7 @@ public class ExpenseTrackingController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await expenseTrackingService.GetUserExpensesAsync(userId);
+        var result = await expenseTrackingService.GetUserExpenseTransactionsAsync(userId, request);
 
         if (!result.IsSuccess)
         {

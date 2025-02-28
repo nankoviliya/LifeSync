@@ -25,6 +25,12 @@
   "transaction-description-label": "Опис",
   "expense-transaction-type-label": "Тип витрат",
 
+  "expense-summary-transactions-count-label": "Транзакції",
+  "expense-summary-total-spent-label": "Загалом",
+  "expense-summary-total-spent-needs-label": "Потреби",
+  "expense-summary-total-spent-wants-label": "Бажання",
+  "expense-summary-total-spent-savings-label": "Заощадження",
+
   "new-transaction-input-amount-label": "Сума",
   "new-transaction-input-currency-label": "Валюта",
   "new-transaction-input-date-label": "Дата",

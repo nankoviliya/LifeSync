@@ -5,7 +5,7 @@ namespace LifeSync.API.Features.ExpenseTracking.Services;
 
 public interface IExpenseTrackingService
 {
-    Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpensesAsync(string userId);
+    Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(string userId, GetUserExpenseTransactionsRequest request);
 
     Task<DataResult<Guid>> AddExpenseAsync(string userId, AddExpenseDto request);
 }

@@ -19,11 +19,11 @@ public class ExpenseTrackingService : BaseService, IExpenseTrackingService
         ApplicationDbContext databaseContext,
         ILogger<ExpenseTrackingService> logger)
     {
-        this._databaseContext = databaseContext;
+        _databaseContext = databaseContext;
         _logger = logger;
     }
 
-    public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpensesAsync(string userId)
+    public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(string userId, GetUserExpenseTransactionsRequest request)
     {
         var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
@@ -34,12 +34,17 @@ public class ExpenseTrackingService : BaseService, IExpenseTrackingService
             return Failure<GetExpenseTransactionsResponse>(ExpenseTrackingResultMessages.InvalidUserId);
         }
 
-        var userExpenseTransactions = await _databaseContext.ExpenseTransactions
-            .Where(x => x.UserId == userIdGuid)
-            .AsNoTracking()
-            .OrderByDescending(x => x.Date)
-            .ToListAsync();
+        var query = GetExpenseTransactionsQuery(userIdGuid, request);
 
+        var userExpenseTransactions = await query.ToListAsync();
+
+        var response = CalculateGetExpenseTransactionsResponse(userExpenseTransactions);
+
+        return Success(response);
+    }
+
+    private GetExpenseTransactionsResponse CalculateGetExpenseTransactionsResponse(List<ExpenseTransaction> userExpenseTransactions)
+    {
         var userExpenseTransactionsDto = userExpenseTransactions.Select(x => new GetExpenseDto
         {
             Id = x.Id,
@@ -50,12 +55,56 @@ public class ExpenseTrackingService : BaseService, IExpenseTrackingService
             Description = x.Description
         }).ToList();
 
-        var result = new GetExpenseTransactionsResponse
+        decimal totalSpentThisMonth = userExpenseTransactions.Sum(x => x.Amount.Amount);
+
+        decimal totalSpentThisMonthOnNeeds = userExpenseTransactions.Where(x => x.ExpenseType == ExpenseType.Needs).Sum(x => x.Amount.Amount);
+
+        decimal totalSpentThisMonthOnWants = userExpenseTransactions.Where(x => x.ExpenseType == ExpenseType.Wants).Sum(x => x.Amount.Amount);
+
+        decimal totalSpentThisMonthOnSavings = userExpenseTransactions.Where(x => x.ExpenseType == ExpenseType.Savings).Sum(x => x.Amount.Amount);
+
+        var response = new GetExpenseTransactionsResponse
         {
             ExpenseTransactions = userExpenseTransactionsDto,
+            ExpenseSummary = new ExpenseSummaryDto
+            {
+                TotalSpent = totalSpentThisMonth,
+                TotalSpentOnNeeds = totalSpentThisMonthOnNeeds,
+                TotalSpentOnWants = totalSpentThisMonthOnWants,
+                TotalSpentOnSavings = totalSpentThisMonthOnSavings,
+                // TODO: Make currency convertable and common across the request
+                Currency = userExpenseTransactions.FirstOrDefault()?.Amount.Currency.Code ?? string.Empty
+            },
+            TransactionsCount = userExpenseTransactions.Count
         };
 
-        return Success(result);
+        return response;
+    }
+
+    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(Guid userId, GetUserExpenseTransactionsRequest request)
+    {
+        var query = _databaseContext.ExpenseTransactions.AsQueryable();
+
+        query = query.Where(x => x.UserId == userId);
+
+        if (request.Year.HasValue)
+        {
+            query = query.Where(x => x.Date.Year == request.Year.Value);
+        }
+
+        if (request.Month.HasValue)
+        {
+            query = query.Where(x => x.Date.Month == request.Month.Value);
+        }
+
+        if (request.ExpenseType.HasValue)
+        {
+            query = query.Where(x => x.ExpenseType == request.ExpenseType);
+        }
+
+        query = query.AsNoTracking().OrderByDescending(x => x.Date);
+
+        return query;
     }
 
     public async Task<DataResult<Guid>> AddExpenseAsync(string userId, AddExpenseDto request)

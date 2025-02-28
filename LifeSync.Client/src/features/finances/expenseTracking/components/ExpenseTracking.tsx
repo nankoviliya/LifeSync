@@ -3,6 +3,7 @@ import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
 
 import { NewExpenseTransaction } from '@/features/finances/expenseTracking/addTransaction/components/NewExpenseTransaction';
+import { ExpenseSummary } from '@/features/finances/expenseTracking/components/summary/ExpenseSummary';
 import { useExpenseTracking } from '@/features/finances/expenseTracking/hooks/useExpenseTracking';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
@@ -30,6 +31,12 @@ export const ExpenseTracking = () => {
         label={translate('add-new-expense-transaction-button-label')}
         onClick={handleOpenModal}
       />
+      {data && (
+        <ExpenseSummary
+          expenseSummaryData={data.expenseSummary}
+          transactionsCount={data.transactionsCount}
+        />
+      )}
       <Dialog
         header="New transaction"
         visible={isModalVisible}
