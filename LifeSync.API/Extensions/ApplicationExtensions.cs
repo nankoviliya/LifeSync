@@ -1,10 +1,9 @@
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
-using LifeSync.API.Features.ExpenseTracking.EventHandlers;
-using LifeSync.API.Features.ExpenseTracking.Services;
+using LifeSync.API.Features.Finances.EventHandlers;
+using LifeSync.API.Features.Finances.Services;
+using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Features.FrontendSettings.Services;
-using LifeSync.API.Features.IncomeTracking.EventHandlers;
-using LifeSync.API.Features.IncomeTracking.Services;
 using LifeSync.API.Features.Translations.Services;
 using LifeSync.API.Features.Users.Services;
 using LifeSync.API.Infrastructure.DomainEvents;
@@ -104,8 +103,10 @@ public static class ApplicationExtensions
 
         services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
         services.AddScoped<IUsersService, UsersService>();
-        services.AddScoped<IExpenseTrackingService, ExpenseTrackingService>();
-        services.AddScoped<IIncomeTrackingService, IncomeTrackingService>();
+
+        services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
+        services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();
+        services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
 
         services.AddTransient<JwtTokenGenerator>();
 

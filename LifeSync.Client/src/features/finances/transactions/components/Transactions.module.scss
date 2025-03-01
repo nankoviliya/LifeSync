@@ -1,0 +1,13 @@
+@use '/src/sharedStyles/abstracts/index.scss' as *;
+
+.transactions {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 1em;
+
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+  }
+}

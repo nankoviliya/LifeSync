@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { jwtDecode } from 'jwt-decode';
 import {
   createContext,
@@ -23,6 +24,8 @@ export interface IAuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
+  const queryClient = useQueryClient();
+
   const [token, setToken] = useState<string | null>(
     localStorage.getItem('token'),
   );
@@ -30,6 +33,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const login = useCallback((token: string) => {
     setToken(token);
     localStorage.setItem('token', token);
+    queryClient.clear();
   }, []);
 
   const logout = useCallback(() => {

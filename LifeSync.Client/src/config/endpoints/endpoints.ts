@@ -13,12 +13,11 @@ export const endpoints = {
     getProfileData: 'Users/Profile',
     modifyProfileData: 'Users/Profile',
   },
-  income: {
-    getUserTransactions: 'Income/Transactions',
-    addUserTransaction: 'Income',
-  },
-  expense: {
-    getUserTransactions: 'Expenses/Transactions',
-    addUserTransaction: 'Expenses',
+  finances: {
+    getUserTransactions: 'Finances/Transactions',
+    getUserIncomeTransactions: 'Finances/Transactions/Income',
+    addUserIncomeTransaction: 'Finances/Transactions/Income',
+    getUserExpenseTransactions: 'Finances/Transactions/Expense',
+    addUserExpenseTransaction: 'Finances/Transactions/Expense',
   },
 };

@@ -15,12 +15,16 @@ export const endpointsOptions: IEndpointsOptions = {
     endpoint: endpoints.users.getProfileData,
     key: 'user-profile-data',
   },
+  getUserTransactions: {
+    endpoint: endpoints.finances.getUserTransactions,
+    key: 'user-transactions',
+  },
   getUserIncomeTransactions: {
-    endpoint: endpoints.income.getUserTransactions,
+    endpoint: endpoints.finances.getUserIncomeTransactions,
     key: 'user-income-transactions',
   },
   getUserExpenseTransactions: {
-    endpoint: endpoints.expense.getUserTransactions,
+    endpoint: endpoints.finances.getUserExpenseTransactions,
     key: 'user-expense-transactions',
   },
 };

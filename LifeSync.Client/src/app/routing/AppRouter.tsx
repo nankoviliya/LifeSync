@@ -10,9 +10,8 @@ import {
 import { AppRoot } from '@/app/AppRoot';
 import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 import { routePaths } from '@/config/routing/routePaths';
-import { Finances } from '@/features/finances/components/Finances';
-import { ExpenseTracking } from '@/features/finances/expenseTracking/components/ExpenseTracking';
-import { IncomeTracking } from '@/features/finances/incomeTracking/components/IncomeTracking';
+import { Finances } from '@/features/finances/Finances';
+import { Transactions } from '@/features/finances/transactions/components/Transactions';
 import { Home } from '@/features/home/Home';
 import { Login } from '@/features/login/components/Login';
 import { Register } from '@/features/register/components/Register';
@@ -29,12 +28,8 @@ export const AppRouter = () => {
       <Route path={routePaths.userProfile.path} element={<UserProfile />} />
       <Route path={routePaths.finances.path} element={<Finances />} />
       <Route
-        path={routePaths.expenseTracking.path}
-        element={<ExpenseTracking />}
-      />
-      <Route
-        path={routePaths.incomeTracking.path}
-        element={<IncomeTracking />}
+        path={routePaths.financeTransactions.path}
+        element={<Transactions />}
       />
     </>
   );

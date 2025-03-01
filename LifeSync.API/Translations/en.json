@@ -1,11 +1,9 @@
 ﻿{
   "finances-service-name": "Finances",
-  "expense-transactions-service-name": "Expense Transactions",
-  "income-transactions-service-name": "Income Transactions",
+  "finances-transactions-service-name": "Transactions",
 
   "finances-service-description": "Here you can manage your income and expense transactions",
-  "expense-transactions-service-description": "Manage your expense transactions",
-  "income-transactions-service-description": "Manage your income transactions",
+  "finances-transactions-service-description": "Here you can manage your income and expense transactions",
 
   "profile-button-name": "Profile",
   "logout-button-name": "Logout",
@@ -26,10 +24,11 @@
   "expense-transaction-type-label": "Expense type",
 
   "expense-summary-transactions-count-label": "Transactions",
-  "expense-summary-total-spent-label": "Total",
+  "expense-summary-total-spent-label": "Total spent",
   "expense-summary-total-spent-needs-label": "Needs",
   "expense-summary-total-spent-wants-label": "Wants",
   "expense-summary-total-spent-savings-label": "Savings",
+  "expense-summary-total-income-label": "Total income",
 
   "new-transaction-input-amount-label": "Amount",
   "new-transaction-input-currency-label": "Currency",

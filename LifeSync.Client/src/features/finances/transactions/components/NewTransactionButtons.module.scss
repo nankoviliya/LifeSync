@@ -1,0 +1,8 @@
+.new-transaction-buttons {
+  display: inline-flex;
+
+  &__container {
+    display: inline-flex;
+    gap: 1rem;
+  }
+}

@@ -1,11 +1,9 @@
 ﻿{
   "finances-service-name": "Финанси",
-  "expense-transactions-service-name": "Расходни операции",
-  "income-transactions-service-name": "Доходни операции",
+  "finances-transactions-service-name": "Операции",
 
   "finances-service-description": "Тук можете да управлявате своите доходи и разходи",
-  "expense-transactions-service-description": "Управлявайте своите разходни операции",
-  "income-transactions-service-description": "Управлявайте своите доходни операции",
+  "finances-transactions-service-description": "Управлявайте своите доходни и разходни операции",
 
   "profile-button-name": "Профил",
   "logout-button-name": "Изход",
@@ -26,10 +24,11 @@
   "expense-transaction-type-label": "Вид на разхода",
 
   "expense-summary-transactions-count-label": "Транзакциите",
-  "expense-summary-total-spent-label": "Общо",
+  "expense-summary-total-spent-label": "Общо разходи",
   "expense-summary-total-spent-needs-label": "Нужди",
   "expense-summary-total-spent-wants-label": "Желания",
   "expense-summary-total-spent-savings-label": "Спестявания",
+  "expense-summary-total-income-label": "Общо приходи",
 
   "new-transaction-input-amount-label": "Сума",
   "new-transaction-input-currency-label": "Валута",

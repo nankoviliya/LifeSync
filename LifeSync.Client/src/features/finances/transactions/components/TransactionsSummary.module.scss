@@ -1,0 +1,31 @@
+@use '/src/sharedStyles/abstracts/index.scss' as *;
+
+.transaction-summary {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+  box-shadow:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  font-size: 15px;
+
+  &__section {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    &--total-needs {
+      color: $darkEmerald;
+    }
+
+    &--total-wants {
+      color: $brightRed;
+    }
+
+    &--total-savings {
+      color: $royalBlue;
+    }
+  }
+}

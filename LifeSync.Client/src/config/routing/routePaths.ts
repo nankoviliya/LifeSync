@@ -28,12 +28,8 @@ export const routePaths = {
     path: '/finances',
     name: 'Finances',
   },
-  incomeTracking: {
-    path: '/finances/income-tracking',
-    name: 'Income Tracking',
-  },
-  expenseTracking: {
-    path: '/finances/expense-tracking',
-    name: 'Expense Tracking',
+  financeTransactions: {
+    path: '/finances/transactions',
+    name: 'Transactions',
   },
 } as const;
