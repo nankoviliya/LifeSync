@@ -28,7 +28,7 @@
   "expense-summary-total-spent-needs-label": "Потреби",
   "expense-summary-total-spent-wants-label": "Бажання",
   "expense-summary-total-spent-savings-label": "Заощадження",
-  "expense-summary-total-income-label": "Загалом отримано",
+  "income-summary-total-income-label": "Загалом отримано",
 
   "new-transaction-input-amount-label": "Сума",
   "new-transaction-input-currency-label": "Валюта",
@@ -36,9 +36,19 @@
   "new-transaction-input-description-label": "Опис",
   "new-expense-transaction-input-expense-type-label": "Тип витрат",
 
+  "finances-filters-description-label": "Опис",
+  "finances-filters-start-date-label": "Дата початку",
+  "finances-filters-end-date-label": "Кінцева дата",
+  "finances-filters-transaction-types-label": "Тип транзакції",
+  "finances-filters-expense-types-label": "Тип витрат",
+
   "login-button-label": "Увійти",
   "register-button-label": "Зареєструватися",
 
   "main-error-fallback-label": "Ой, щось пішло не так :(",
-  "main-error-fallback-refresh-button-label": "Оновити"
+  "main-error-fallback-refresh-button-label": "Оновити",
+
+  "filters-label": "Фільтри",
+  "filters-apply-button-label": "Застосувати",
+  "filters-reset-button-label": "Скинути"
 }

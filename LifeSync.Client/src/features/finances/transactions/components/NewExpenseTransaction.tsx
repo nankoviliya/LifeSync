@@ -6,10 +6,8 @@ import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
 import { Control, Controller } from 'react-hook-form';
 
-import {
-  ExpenseType,
-  INewExpenseTransactionRequest,
-} from '@/features/finances/transactions/models/newExpenseTransactionRequest';
+import { INewExpenseTransactionRequest } from '@/features/finances/transactions/models/newExpenseTransactionRequest';
+import { ExpenseType } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { parseCalendarDate } from '@/utils/utilities';
 

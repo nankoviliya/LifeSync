@@ -2,12 +2,24 @@
 
 .transactions {
   display: inline-flex;
-  flex-direction: column;
+  width: 100%;
+  flex-direction: row;
   gap: 1em;
 
-  &__list {
-    display: grid;
-    grid-template-columns: 1fr;
+  &__filters {
+    display: inline-flex;
+  }
+
+  &__main-content {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
     gap: 1em;
+
+    &__list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1em;
+    }
   }
 }

@@ -28,7 +28,7 @@
   "expense-summary-total-spent-needs-label": "Needs",
   "expense-summary-total-spent-wants-label": "Wants",
   "expense-summary-total-spent-savings-label": "Savings",
-  "expense-summary-total-income-label": "Total income",
+  "income-summary-total-income-label": "Total income",
 
   "new-transaction-input-amount-label": "Amount",
   "new-transaction-input-currency-label": "Currency",
@@ -36,9 +36,19 @@
   "new-transaction-input-description-label": "Description",
   "new-expense-transaction-input-expense-type-label": "Expense Type",
 
+  "finances-filters-description-label": "Description",
+  "finances-filters-start-date-label": "Start date",
+  "finances-filters-end-date-label": "End date",
+  "finances-filters-transaction-types-label": "Transaction type",
+  "finances-filters-expense-types-label": "Expense type",
+
   "login-button-label": "Login",
   "register-button-label": "Register",
 
   "main-error-fallback-label": "Ooops, something went wrong :(",
-  "main-error-fallback-refresh-button-label": "Refresh"
+  "main-error-fallback-refresh-button-label": "Refresh",
+
+  "filters-label": "Filters",
+  "filters-apply-button-label": "Apply",
+  "filters-reset-button-label": "Reset"
 }

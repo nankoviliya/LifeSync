@@ -1,0 +1,18 @@
+.transactions-filters {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+  box-shadow:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  gap: 0.5em;
+  overflow-y: scroll;
+  max-height: 400px;
+
+  &__control-buttons {
+    display: inline-flex;
+    gap: 1rem;
+  }
+}

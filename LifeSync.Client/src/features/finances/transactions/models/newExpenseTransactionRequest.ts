@@ -1,8 +1,4 @@
-export enum ExpenseType {
-  Needs = 'Needs',
-  Wants = 'Wants',
-  Savings = 'Savings',
-}
+import { ExpenseType } from '@/features/finances/transactions/models/transactionsGetModel';
 
 export interface INewExpenseTransactionRequest {
   amount: number;

@@ -1,4 +1,5 @@
 ﻿using LifeSync.API.Models.Expenses;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Features.Finances.Models
@@ -11,9 +12,11 @@ namespace LifeSync.API.Features.Finances.Models
 
         public DateTime? EndDate { get; init; }
 
-        public ExpenseType? ExpenseType { get; init; }
+        [FromQuery(Name = "expenseTypes[]")]
+        public List<ExpenseType>? ExpenseTypes { get; init; } = [];
 
-        public IReadOnlyCollection<TransactionType> TransactionTypes { get; init; } = [TransactionType.Expense, TransactionType.Income];
+        [FromQuery(Name = "transactionTypes[]")]
+        public List<TransactionType> TransactionTypes { get; init; } = [];
     }
 
     public class GetUserFinancialTransactionsResponse

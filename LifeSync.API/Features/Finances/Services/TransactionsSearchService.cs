@@ -34,7 +34,13 @@ namespace LifeSync.API.Features.Finances.Services
                 return Failure<GetUserFinancialTransactionsResponse>(TransactionsSearchResultMessages.InvalidUserId);
             }
 
-            var response = new GetUserFinancialTransactionsResponse();
+            var response = new GetUserFinancialTransactionsResponse()
+            {
+                Transactions = new List<GetFinancialTransactionDto>(),
+                ExpenseSummary = new ExpenseSummaryDto(),
+                IncomeSummary = new IncomeSummaryDto(),
+                TransactionsCount = 0
+            };
 
             if (request.TransactionTypes.Contains(TransactionType.Expense))
             {
@@ -120,9 +126,9 @@ namespace LifeSync.API.Features.Finances.Services
                 query = query.Where(x => x.Date <= request.EndDate.Value);
             }
 
-            if (request.ExpenseType.HasValue)
+            if (request.ExpenseTypes is not null && request.ExpenseTypes.Count > 0)
             {
-                query = query.Where(x => x.ExpenseType == request.ExpenseType);
+                query = query.Where(x => request.ExpenseTypes.Contains(x.ExpenseType));
             }
 
             query = query.AsNoTracking().OrderByDescending(x => x.Date);

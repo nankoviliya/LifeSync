@@ -53,7 +53,7 @@ export const TransactionsSummary = ({
 
   const incomeSummaryItems = [
     {
-      label: 'expense-summary-total-income-label',
+      label: 'income-summary-total-income-label',
       value: totalIncome,
       className: '',
     },

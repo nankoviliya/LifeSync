@@ -28,7 +28,7 @@
   "expense-summary-total-spent-needs-label": "Нужди",
   "expense-summary-total-spent-wants-label": "Желания",
   "expense-summary-total-spent-savings-label": "Спестявания",
-  "expense-summary-total-income-label": "Общо приходи",
+  "income-summary-total-income-label": "Общо приходи",
 
   "new-transaction-input-amount-label": "Сума",
   "new-transaction-input-currency-label": "Валута",
@@ -36,9 +36,19 @@
   "new-transaction-input-description-label": "Описание",
   "new-expense-transaction-input-expense-type-label": "Тип разход",
 
+  "finances-filters-description-label": "Описание",
+  "finances-filters-start-date-label": "Начална дата",
+  "finances-filters-end-date-label": "Крайна дата",
+  "finances-filters-transaction-types-label": "Тип на операция",
+  "finances-filters-expense-types-label": "Вид на разхода",
+
   "login-button-label": "Влез",
   "register-button-label": "Регистрация",
 
   "main-error-fallback-label": "Опа, нещо се обърка :(",
-  "main-error-fallback-refresh-button-label": "Обнови"
+  "main-error-fallback-refresh-button-label": "Обнови",
+
+  "filters-label": "Филтрите",
+  "filters-apply-button-label": "Приложи",
+  "filters-reset-button-label": "Нулирай"
 }
