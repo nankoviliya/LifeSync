@@ -20,6 +20,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("profile", Name = nameof(GetUserProfileData))]
+    [EndpointSummary("Retrieves user profile data")]
+    [EndpointDescription("Gets the profile information of the currently authenticated user. Returns user details if found.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserProfileDataDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetUserProfileData()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -40,6 +45,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("profile", Name = nameof(GetUserProfileData))]
+    [EndpointSummary("Modifies user profile data")]
+    [EndpointDescription("Updates the profile information of the authenticated user using the provided details.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ModifyUserProfileData([FromBody] ModifyUserProfileDataDto request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

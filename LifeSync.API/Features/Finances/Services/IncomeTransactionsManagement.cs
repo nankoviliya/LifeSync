@@ -9,82 +9,81 @@ using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeSync.API.Features.Finances.Services
+namespace LifeSync.API.Features.Finances.Services;
+
+public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsManagement
 {
-    public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsManagement
+    private readonly ApplicationDbContext _databaseContext;
+    private readonly ILogger<IncomeTransactionsManagement> _logger;
+
+    public IncomeTransactionsManagement(
+        ApplicationDbContext databaseContext,
+        ILogger<IncomeTransactionsManagement> logger)
     {
-        private readonly ApplicationDbContext _databaseContext;
-        private readonly ILogger<IncomeTransactionsManagement> _logger;
+        _databaseContext = databaseContext;
+        _logger = logger;
+    }
 
-        public IncomeTransactionsManagement(
-            ApplicationDbContext databaseContext,
-            ILogger<IncomeTransactionsManagement> logger)
+    public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(string userId)
+    {
+        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
+
+        if (!userIdIsParsed)
         {
-            _databaseContext = databaseContext;
-            _logger = logger;
+            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+
+            return Failure<GetIncomeTransactionsResponse>(IncomeTrackingResultMessages.InvalidUserId);
         }
 
-        public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(string userId)
+        var userIncomeTransactions = await _databaseContext.IncomeTransactions
+            .Where(x => x.UserId == userIdGuid)
+            .OrderByDescending(x => x.Date)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var userIncomeTransactionsDto = userIncomeTransactions.Select(x => new GetIncomeDto
         {
-            var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
+            Id = x.Id,
+            Amount = x.Amount.Amount,
+            Currency = x.Amount.Currency.Code,
+            Date = x.Date.ToString("yyyy-MM-dd"),
+            Description = x.Description
+        }).ToList();
 
-            if (!userIdIsParsed)
-            {
-                _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+        var response = new GetIncomeTransactionsResponse
+        {
+            IncomeTransactions = userIncomeTransactionsDto
+        };
 
-                return Failure<GetIncomeTransactionsResponse>(IncomeTrackingResultMessages.InvalidUserId);
-            }
+        return Success(response);
+    }
 
-            var userIncomeTransactions = await _databaseContext.IncomeTransactions
-                .Where(x => x.UserId == userIdGuid)
-                .OrderByDescending(x => x.Date)
-                .AsNoTracking()
-                .ToListAsync();
+    public async Task<DataResult<Guid>> AddIncomeAsync(string userId, AddIncomeDto request)
+    {
+        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
-            var userIncomeTransactionsDto = userIncomeTransactions.Select(x => new GetIncomeDto
-            {
-                Id = x.Id,
-                Amount = x.Amount.Amount,
-                Currency = x.Amount.Currency.Code,
-                Date = x.Date.ToString("yyyy-MM-dd"),
-                Description = x.Description
-            }).ToList();
+        if (!userIdIsParsed)
+        {
+            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
 
-            var response = new GetIncomeTransactionsResponse
-            {
-                IncomeTransactions = userIncomeTransactionsDto
-            };
-
-            return Success(response);
+            return Failure<Guid>(IncomeTrackingResultMessages.InvalidUserId);
         }
 
-        public async Task<DataResult<Guid>> AddIncomeAsync(string userId, AddIncomeDto request)
+        var incomeTransaction = new IncomeTransaction
         {
-            var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
+            Id = Guid.NewGuid(),
+            Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
+            Date = request.Date,
+            Description = request.Description,
+            UserId = userIdGuid
+        };
 
-            if (!userIdIsParsed)
-            {
-                _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+        await _databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
 
-                return Failure<Guid>(IncomeTrackingResultMessages.InvalidUserId);
-            }
+        incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userIdGuid, incomeTransaction));
 
-            var incomeTransaction = new IncomeTransaction
-            {
-                Id = Guid.NewGuid(),
-                Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
-                Date = request.Date,
-                Description = request.Description,
-                UserId = userIdGuid
-            };
+        await _databaseContext.SaveChangesAsync();
 
-            await _databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
-
-            incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userIdGuid, incomeTransaction));
-
-            await _databaseContext.SaveChangesAsync();
-
-            return Success(incomeTransaction.Id);
-        }
+        return Success(incomeTransaction.Id);
     }
 }

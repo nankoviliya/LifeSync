@@ -4,126 +4,149 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace LifeSync.API.Features.FinanceTransactions
+namespace LifeSync.API.Features.Finances;
+
+[ApiController]
+[Authorize]
+[Route("api/finances")]
+public class FinancesController : ControllerBase
 {
-    [ApiController]
-    [Authorize]
-    [Route("api/finances")]
-    public class FinancesController : ControllerBase
+    private readonly ITransactionsSearchService _transactionsSearchService;
+    private readonly IExpenseTransactionsManagement _expenseTransactionsManagement;
+    private readonly IIncomeTransactionsManagement _incomeTransactionsManagement;
+
+    public FinancesController(
+        ITransactionsSearchService transactionsSearchService,
+        IExpenseTransactionsManagement expenseTransactionsManagement,
+        IIncomeTransactionsManagement incomeTransactionsManagement)
     {
-        private readonly ITransactionsSearchService _transactionsSearchService;
-        private readonly IExpenseTransactionsManagement _expenseTransactionsManagement;
-        private readonly IIncomeTransactionsManagement _incomeTransactionsManagement;
+        _transactionsSearchService = transactionsSearchService;
+        _expenseTransactionsManagement = expenseTransactionsManagement;
+        _incomeTransactionsManagement = incomeTransactionsManagement;
+    }
 
-        public FinancesController(
-            ITransactionsSearchService transactionsSearchService,
-            IExpenseTransactionsManagement expenseTransactionsManagement,
-            IIncomeTransactionsManagement incomeTransactionsManagement)
+    [HttpGet("transactions", Name = nameof(GetTransactions))]
+    [EndpointSummary("Retrieves financial transactions.")]
+    [EndpointDescription("Returns object that contains a list of financial transactions for the authenticated user, filtered by query parameters.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserFinancialTransactionsResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetTransactions([FromQuery] GetUserFinancialTransactionsRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
         {
-            _transactionsSearchService = transactionsSearchService;
-            _expenseTransactionsManagement = expenseTransactionsManagement;
-            _incomeTransactionsManagement = incomeTransactionsManagement;
+            return Unauthorized();
         }
 
-        [HttpGet("transactions", Name = nameof(GetTransactions))]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetTransactions([FromQuery] GetUserFinancialTransactionsRequest request)
+        var result = await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request);
+
+        if (!result.IsSuccess)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
-
-            var result = await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result.Data);
+            return BadRequest(result.Errors);
         }
 
-        [HttpGet("transactions/expense", Name = nameof(GetExpenseTransactions))]
-        public async Task<IActionResult> GetExpenseTransactions([FromQuery] GetUserExpenseTransactionsRequest request)
+        return Ok(result.Data);
+    }
+
+    [HttpGet("transactions/expense", Name = nameof(GetExpenseTransactions))]
+    [EndpointSummary("Retrieves expense transactions")]
+    [EndpointDescription("Gets object that contains expense transactions for the authenticated user based on the provided filters.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetExpenseTransactionsResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetExpenseTransactions([FromQuery] GetUserExpenseTransactionsRequest request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
-
-            var result = await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result.Data);
+            return Unauthorized();
         }
 
-        [HttpPost("transactions/expense", Name = nameof(AddExpense))]
-        public async Task<IActionResult> AddExpense(AddExpenseDto request)
+        var result = await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request);
+
+        if (!result.IsSuccess)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
-
-            var result = await _expenseTransactionsManagement.AddExpenseAsync(userId, request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result.Data);
+            return BadRequest(result.Errors);
         }
 
-        [HttpGet("transactions/income", Name = nameof(GetIncomeTransactions))]
-        public async Task<IActionResult> GetIncomeTransactions()
+        return Ok(result.Data);
+    }
+
+    [HttpPost("transactions/expense", Name = nameof(AddExpense))]
+    [EndpointSummary("Adds an expense transaction")]
+    [EndpointDescription("Creates a new expense transaction for the authenticated user using the provided details.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> AddExpense(AddExpenseDto request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
-
-            var result = await _incomeTransactionsManagement.GetUserIncomesAsync(userId);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok(result.Data);
+            return Unauthorized();
         }
 
-        [HttpPost("transactions/income", Name = nameof(AddIncome))]
-        public async Task<IActionResult> AddIncome(AddIncomeDto request)
+        var result = await _expenseTransactionsManagement.AddExpenseAsync(userId, request);
+
+        if (!result.IsSuccess)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
-
-            var result = await _incomeTransactionsManagement.AddIncomeAsync(userId, request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok(result.Data);
+            return BadRequest(result.Errors);
         }
+
+        return Ok(result.Data);
+    }
+
+    [HttpGet("transactions/income", Name = nameof(GetIncomeTransactions))]
+    [EndpointSummary("Retrieves income transactions")]
+    [EndpointDescription("Gets an object that contains income transactions for the authenticated user.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetIncomeTransactionsResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetIncomeTransactions()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await _incomeTransactionsManagement.GetUserIncomesAsync(userId);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(result.Data);
+    }
+
+    [HttpPost("transactions/income", Name = nameof(AddIncome))]
+    [EndpointSummary("Adds an income transaction")]
+    [EndpointDescription("Creates a new income transaction for the authenticated user using the provided details.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> AddIncome(AddIncomeDto request)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await _incomeTransactionsManagement.AddIncomeAsync(userId, request);
+
+        if (!result.IsSuccess)
+        {
+            return BadRequest(result.Errors);
+        }
+
+        return Ok(result.Data);
     }
 }

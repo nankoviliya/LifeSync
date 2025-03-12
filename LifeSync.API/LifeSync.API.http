@@ -1,6 +1,89 @@
-@LifeSync.API_HostAddress = http://localhost:5263
+@LifeSync.API_HostAddress = https://localhost:7200/api
 
-GET {{LifeSync.API_HostAddress}}/weatherforecast/
+### Auth - Register
+POST {{LifeSync.API_HostAddress}}/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "TestName",
+  "lastName": "TestLastName",
+  "email": "testemail@gmail.com",
+  "password": "Test@123",
+  "balance": 100,
+  "currency": "BGN",
+  "languageId": "DC8A7CEF-545F-4276-817A-3053B4D8C072"
+}
+
+### Auth - Login
+# @name login
+POST {{LifeSync.API_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "testemail@gmail.com",
+  "password": "Test@123"
+}
+
+### Finances - Get Transactions
+GET {{LifeSync.API_HostAddress}}/finances/transactions?Description=s&StartDate=2025-01-01T00:00:00&EndDate=2025-03-31T23:59:59&expenseTypes[]=Needs&expenseTypes[]=Wants&expenseTypes[]=Savings&transactionTypes[]=Expense&transactionTypes[]=Income
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Finances - Get Expense Transactions
+GET {{LifeSync.API_HostAddress}}/finances/transactions/expense
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Finances - Add Expense Transaction
+POST {{LifeSync.API_HostAddress}}/finances/transactions/expense/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+{
+  "amount": 5.0,
+  "currency": "BGN",
+  "date": "2025-02-15",
+  "description": "Dinner expense",
+  "expenseType": "Needs"
+}
+
+### Finances - Get Income Transactions
+GET {{LifeSync.API_HostAddress}}/finances/transactions/income
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Finances - Add Income Transaction
+POST {{LifeSync.API_HostAddress}}/finances/transactions/income
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+{
+  "amount": 500.0,
+  "currency": "BGN",
+  "date": "2025-03-01",
+  "description": "Monthly salary"
+}
+
+### Frontend Settings - Get Settings
+GET {{LifeSync.API_HostAddress}}/frontendSettings
 Accept: application/json
 
-###
+### Translations - Get Translations by Language Code
+GET {{LifeSync.API_HostAddress}}/translations?languageCode=en
+Accept: application/json
+
+### Users - Get User Profile
+GET {{LifeSync.API_HostAddress}}/users/profile
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+### Users - Modify User Profile
+PUT {{LifeSync.API_HostAddress}}/users/profile
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.token}}
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "languageId": "f2ec0887-de8f-4bb5-bbe3-199a35394d5e"
+}
