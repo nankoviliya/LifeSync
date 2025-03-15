@@ -1,27 +1,27 @@
-import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
-import { Control, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
-import { INewIncomeTransactionRequest } from '@/features/finances/transactions/models/newIncomeTransactionRequest';
+import { Button } from '@/components/buttons/Button';
+import { useNewIncomeTransaction } from '@/features/finances/transactions/hooks/useNewIncomeTransaction';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { parseCalendarDate } from '@/utils/dateUtilities';
 
 import styles from './NewIncomeTransaction.module.scss';
 
 export interface INewExpenseTransactionProps {
-  control: Control<INewIncomeTransactionRequest>;
-  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  closeForm: () => void;
 }
 
 export const NewIncomeTransaction = ({
-  control,
-  handleSubmit,
+  closeForm,
 }: INewExpenseTransactionProps) => {
   const { translate } = useAppTranslations();
 
+  const { control, isSubmitting, handleSubmit } =
+    useNewIncomeTransaction(closeForm);
   return (
     <form className={styles['form']} onSubmit={handleSubmit}>
       <Controller
@@ -102,7 +102,7 @@ export const NewIncomeTransaction = ({
         )}
       />
 
-      <Button label="Submit" type="submit" />
+      <Button label="Submit" type="submit" loading={isSubmitting} />
     </form>
   );
 };

@@ -1,4 +1,3 @@
-import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
@@ -6,6 +5,7 @@ import { classNames } from 'primereact/utils';
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
+import { Button } from '@/components/buttons/Button';
 import { routePaths } from '@/config/routing/routePaths';
 import { useRegistration } from '@/features/register/hooks/useRegistration';
 import { useAppTranslations } from '@/hooks/useAppTranslations';

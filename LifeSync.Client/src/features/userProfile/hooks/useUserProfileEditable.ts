@@ -40,6 +40,8 @@ export const useUserProfileEditable = (
     },
   });
 
+  const { isPending } = updateMutation;
+
   const onSubmit = (data: IModifyUserProfileDataModel) => {
     updateMutation.mutate(data);
   };
@@ -48,5 +50,6 @@ export const useUserProfileEditable = (
     control,
     handleSubmit,
     onSubmit,
+    isSubmitting: isPending,
   };
 };

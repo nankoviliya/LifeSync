@@ -1,9 +1,9 @@
-import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
 import { Control, Controller } from 'react-hook-form';
 
+import { Button } from '@/components/buttons/Button';
 import { ITransactionsFiltersModel } from '@/features/finances/transactions/models/transactionsFiltersModel';
 import {
   ExpenseType,

@@ -1,4 +1,4 @@
-import { Button } from 'primereact/button';
+import { Button } from '@/components/buttons/Button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';

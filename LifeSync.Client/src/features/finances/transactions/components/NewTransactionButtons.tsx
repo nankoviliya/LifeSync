@@ -1,10 +1,9 @@
-import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 
+import { Button } from '@/components/buttons/Button';
 import { NewExpenseTransaction } from '@/features/finances/transactions/components/NewExpenseTransaction';
 import { NewIncomeTransaction } from '@/features/finances/transactions/components/NewIncomeTransaction';
-import { useNewExpenseTransaction } from '@/features/finances/transactions/hooks/useNewExpenseTransaction';
-import { useNewIncomeTransaction } from '@/features/finances/transactions/hooks/useNewIncomeTransaction';
+import { useNewTransactionButtons } from '@/features/finances/transactions/hooks/useNewTransactionButtons';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
 import styles from './NewTransactionButtons.module.scss';
@@ -13,28 +12,21 @@ export const NewTransactionButtons = () => {
   const { translate } = useAppTranslations();
 
   const {
-    control: newExpenseTransactionControl,
-    handleSubmit: newExpenseTransactionHandleSubmit,
-    isModalVisible: newExpenseTransactionIsModalVisible,
-    setIsModalVisible: newExpenseTransactionSetIsModalVisible,
-  } = useNewExpenseTransaction();
-
-  const {
-    control: newIncomeTransactionControl,
-    handleSubmit: newIncomeTransactionHandleSubmit,
-    isModalVisible: newIncomeTransactionIsModalVisible,
-    setIsModalVisible: newIncomeTransactionSetIsModalVisible,
-  } = useNewIncomeTransaction();
+    isExpenseFormVisible,
+    setIsExpenseFormVisible,
+    isIncomeFormVisible,
+    setIsIncomeFormVisible,
+  } = useNewTransactionButtons();
 
   const handleOpenNewExpenseTransactionModal = () =>
-    newExpenseTransactionSetIsModalVisible(true);
+    setIsExpenseFormVisible(true);
   const handleCloseNewExpenseTransactionModal = () =>
-    newExpenseTransactionSetIsModalVisible(false);
+    setIsExpenseFormVisible(false);
 
   const handleOpenNewIncomeTransactionModal = () =>
-    newIncomeTransactionSetIsModalVisible(true);
+    setIsIncomeFormVisible(true);
   const handleCloseNewIncomeTransactionModal = () =>
-    newIncomeTransactionSetIsModalVisible(false);
+    setIsIncomeFormVisible(false);
 
   return (
     <div className={styles['new-transaction-buttons']}>
@@ -55,25 +47,23 @@ export const NewTransactionButtons = () => {
 
       <Dialog
         header="New expense transaction"
-        visible={newExpenseTransactionIsModalVisible}
+        visible={isExpenseFormVisible}
         style={{ width: '50vw' }}
         onHide={handleCloseNewExpenseTransactionModal}
       >
         <NewExpenseTransaction
-          control={newExpenseTransactionControl}
-          handleSubmit={newExpenseTransactionHandleSubmit}
+          closeForm={handleCloseNewExpenseTransactionModal}
         />
       </Dialog>
 
       <Dialog
         header="New income transaction"
-        visible={newIncomeTransactionIsModalVisible}
+        visible={isIncomeFormVisible}
         style={{ width: '50vw' }}
         onHide={handleCloseNewIncomeTransactionModal}
       >
         <NewIncomeTransaction
-          control={newIncomeTransactionControl}
-          handleSubmit={newIncomeTransactionHandleSubmit}
+          closeForm={handleCloseNewIncomeTransactionModal}
         />
       </Dialog>
     </div>

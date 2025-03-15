@@ -1,12 +1,12 @@
-import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import { classNames } from 'primereact/utils';
-import { Control, Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
-import { INewExpenseTransactionRequest } from '@/features/finances/transactions/models/newExpenseTransactionRequest';
+import { Button } from '@/components/buttons/Button';
+import { useNewExpenseTransaction } from '@/features/finances/transactions/hooks/useNewExpenseTransaction';
 import { ExpenseType } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { parseCalendarDate } from '@/utils/dateUtilities';
@@ -14,15 +14,16 @@ import { parseCalendarDate } from '@/utils/dateUtilities';
 import styles from './NewExpenseTransaction.module.scss';
 
 export interface INewExpenseTransactionProps {
-  control: Control<INewExpenseTransactionRequest>;
-  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  closeForm: () => void;
 }
 
 export const NewExpenseTransaction = ({
-  control,
-  handleSubmit,
+  closeForm,
 }: INewExpenseTransactionProps) => {
   const { translate } = useAppTranslations();
+
+  const { control, isSubmitting, handleSubmit } =
+    useNewExpenseTransaction(closeForm);
 
   const expenseTypeOptions = Object.values(ExpenseType).map((type) => ({
     label: type,
@@ -127,7 +128,7 @@ export const NewExpenseTransaction = ({
         )}
       />
 
-      <Button label="Submit" type="submit" />
+      <Button label="Submit" type="submit" loading={isSubmitting} />
     </form>
   );
 };

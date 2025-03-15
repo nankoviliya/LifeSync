@@ -1,5 +1,4 @@
-import { Button } from 'primereact/button';
-
+import { Button } from '@/components/buttons/Button';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
 import styles from './MainErrorFallback.module.scss';

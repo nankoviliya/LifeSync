@@ -1,8 +1,8 @@
-import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { Controller } from 'react-hook-form';
 
+import { Button } from '@/components/buttons/Button';
 import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProfileEditable';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
@@ -23,10 +23,8 @@ export const UserProfileDataEditable = ({
 
   const { frontendSettings, isLoading } = useFrontendSettings();
 
-  const { control, handleSubmit, onSubmit } = useUserProfileEditable(
-    userData,
-    disableEditMode,
-  );
+  const { control, handleSubmit, onSubmit, isSubmitting } =
+    useUserProfileEditable(userData, disableEditMode);
 
   const { userId, userName, email, balanceAmount, balanceCurrency, language } =
     userData;
@@ -87,11 +85,16 @@ export const UserProfileDataEditable = ({
           />
           <br />
           <div className={styles['user-profile-data__navigation-buttons']}>
-            <Button type="submit" label="Save" icon="pi pi-check" />
+            <Button
+              type="submit"
+              label="Save"
+              loading={isSubmitting}
+              icon="pi pi-check"
+            />
             <Button
               label="Cancel"
               icon="pi pi-times"
-              onClick={(e) => {
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => {
                 e.stopPropagation();
                 disableEditMode();
               }}
