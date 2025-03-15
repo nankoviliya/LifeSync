@@ -1,21 +1,4 @@
-﻿{
-  "finances-service-name": "Финансы",
-  "finances-transactions-service-name": "Транзакции",
-
-  "finances-service-description": "Здесь вы можете управлять своими доходами и расходами",
-  "finances-transactions-service-description": "Здесь вы можете управлять своими доходными и расходными операциями",
-
-  "profile-button-name": "Профиль",
-  "logout-button-name": "Выход",
-
-  "profile-user-id-label": "ID пользователя",
-  "profile-username-label": "Имя пользователя",
-  "profile-email-label": "Электронная почта",
-  "profile-first-name-label": "Имя",
-  "profile-last-name-label": "Фамилия",
-  "profile-balance-label": "Баланс",
-  "profile-language-label": "Язык",
-
+{
   "add-new-income-transaction-button-label": "Добавить новую доходную операцию",
   "add-new-expense-transaction-button-label": "Добавить новую расходную операцию",
 
@@ -40,15 +23,5 @@
   "finances-filters-start-date-label": "Начальная дата",
   "finances-filters-end-date-label": "Конечная дата",
   "finances-filters-transaction-types-label": "Тип транзакции",
-  "finances-filters-expense-types-label": "Тип расходов",
-
-  "login-button-label": "Войти",
-  "register-button-label": "Зарегистрироваться",
-
-  "main-error-fallback-label": "Ой, что-то пошло не так :(",
-  "main-error-fallback-refresh-button-label": "Обновить",
-
-  "filters-label": "Фильтры",
-  "filters-apply-button-label": "Применить",
-  "filters-reset-button-label": "Сбросить"
+  "finances-filters-expense-types-label": "Тип расходов"
 }

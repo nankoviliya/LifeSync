@@ -1,0 +1,8 @@
+{
+  "login-button-label": "Войти",
+  "register-button-label": "Зарегистрироваться",
+
+  "filters-label": "Фильтры",
+  "filters-apply-button-label": "Применить",
+  "filters-reset-button-label": "Сбросить"
+}

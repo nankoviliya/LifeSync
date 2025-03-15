@@ -1,21 +1,4 @@
-﻿{
-  "finances-service-name": "Finances",
-  "finances-transactions-service-name": "Transactions",
-
-  "finances-service-description": "Here you can manage your income and expense transactions",
-  "finances-transactions-service-description": "Here you can manage your income and expense transactions",
-
-  "profile-button-name": "Profile",
-  "logout-button-name": "Logout",
-
-  "profile-user-id-label": "User ID",
-  "profile-username-label": "Username",
-  "profile-email-label": "Email",
-  "profile-first-name-label": "First Name",
-  "profile-last-name-label": "Last Name",
-  "profile-balance-label": "Balance",
-  "profile-language-label": "Language",
-
+{
   "add-new-income-transaction-button-label": "Add new income transaction",
   "add-new-expense-transaction-button-label": "Add new expense transaction",
 
@@ -40,15 +23,5 @@
   "finances-filters-start-date-label": "Start date",
   "finances-filters-end-date-label": "End date",
   "finances-filters-transaction-types-label": "Transaction type",
-  "finances-filters-expense-types-label": "Expense type",
-
-  "login-button-label": "Login",
-  "register-button-label": "Register",
-
-  "main-error-fallback-label": "Ooops, something went wrong :(",
-  "main-error-fallback-refresh-button-label": "Refresh",
-
-  "filters-label": "Filters",
-  "filters-apply-button-label": "Apply",
-  "filters-reset-button-label": "Reset"
+  "finances-filters-expense-types-label": "Expense type"
 }

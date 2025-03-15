@@ -7,9 +7,9 @@ namespace LifeSync.API.Features.Translations;
 [ApiController]
 public class TranslationsController : ControllerBase
 {
-    private readonly ITranslationsService translationsService;
+    private readonly ITranslationsLoader translationsService;
 
-    public TranslationsController(ITranslationsService translationsService)
+    public TranslationsController(ITranslationsLoader translationsService)
     {
         this.translationsService = translationsService;
     }

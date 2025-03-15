@@ -1,0 +1,10 @@
+{
+  "finances-service-name": "Фінанси",
+  "finances-transactions-service-name": "Транзакції",
+
+  "finances-service-description": "Тут ви можете управляти своїми транзакціями доходів та витрат",
+  "finances-transactions-service-description": "Тут ви можете управляти своїми транзакціями доходів та витрат",
+
+  "profile-button-name": "Профіль",
+  "logout-button-name": "Вийти"
+}

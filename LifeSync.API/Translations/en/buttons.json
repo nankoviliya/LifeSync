@@ -1,0 +1,8 @@
+{
+  "login-button-label": "Login",
+  "register-button-label": "Register",
+
+  "filters-label": "Filters",
+  "filters-apply-button-label": "Apply",
+  "filters-reset-button-label": "Reset"
+}

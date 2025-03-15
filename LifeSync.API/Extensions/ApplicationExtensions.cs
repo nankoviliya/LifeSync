@@ -99,7 +99,7 @@ public static class ApplicationExtensions
         services.AddTransient<IDomainEventHandler<IncomeTransactionCreatedDomainEvent>, IncomeTransactionCreatedDomainEventHandler>();
         services.AddTransient<IDomainEventHandler<ExpenseTransactionCreatedDomainEvent>, ExpenseTransactionCreatedDomainEventHandler>();
 
-        services.AddScoped<ITranslationsService, TranslationsService>();
+        services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
 
         services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
         services.AddScoped<IUsersService, UsersService>();

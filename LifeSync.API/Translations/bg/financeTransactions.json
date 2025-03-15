@@ -1,21 +1,4 @@
-﻿{
-  "finances-service-name": "Финанси",
-  "finances-transactions-service-name": "Операции",
-
-  "finances-service-description": "Тук можете да управлявате своите доходи и разходи",
-  "finances-transactions-service-description": "Управлявайте своите доходни и разходни операции",
-
-  "profile-button-name": "Профил",
-  "logout-button-name": "Изход",
-
-  "profile-user-id-label": "Потребителски ID",
-  "profile-username-label": "Потребителско име",
-  "profile-email-label": "Имейл",
-  "profile-first-name-label": "Първо име",
-  "profile-last-name-label": "Фамилия",
-  "profile-balance-label": "Баланс",
-  "profile-language-label": "Език",
-
+{
   "add-new-income-transaction-button-label": "Добави нова доходна операция",
   "add-new-expense-transaction-button-label": "Добави нова разходна операция",
 
@@ -40,15 +23,5 @@
   "finances-filters-start-date-label": "Начална дата",
   "finances-filters-end-date-label": "Крайна дата",
   "finances-filters-transaction-types-label": "Тип на операция",
-  "finances-filters-expense-types-label": "Вид на разхода",
-
-  "login-button-label": "Влез",
-  "register-button-label": "Регистрация",
-
-  "main-error-fallback-label": "Опа, нещо се обърка :(",
-  "main-error-fallback-refresh-button-label": "Обнови",
-
-  "filters-label": "Филтрите",
-  "filters-apply-button-label": "Приложи",
-  "filters-reset-button-label": "Нулирай"
+  "finances-filters-expense-types-label": "Вид на разхода"
 }

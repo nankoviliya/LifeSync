@@ -1,0 +1,10 @@
+{
+  "finances-service-name": "Finances",
+  "finances-transactions-service-name": "Transactions",
+
+  "finances-service-description": "Here you can manage your income and expense transactions",
+  "finances-transactions-service-description": "Here you can manage your income and expense transactions",
+
+  "profile-button-name": "Profile",
+  "logout-button-name": "Logout"
+}
