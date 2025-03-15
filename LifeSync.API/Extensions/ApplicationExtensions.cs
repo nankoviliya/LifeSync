@@ -5,6 +5,7 @@ using LifeSync.API.Features.Finances.Services;
 using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Features.FrontendSettings.Services;
 using LifeSync.API.Features.Translations.Services;
+using LifeSync.API.Features.Translations.Services.Contracts;
 using LifeSync.API.Features.Users.Services;
 using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.ApplicationUser;
@@ -100,6 +101,7 @@ public static class ApplicationExtensions
         services.AddTransient<IDomainEventHandler<ExpenseTransactionCreatedDomainEvent>, ExpenseTransactionCreatedDomainEventHandler>();
 
         services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
+        services.AddScoped<ITranslationsService, TranslationsService>();
 
         services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
         services.AddScoped<IUsersService, UsersService>();

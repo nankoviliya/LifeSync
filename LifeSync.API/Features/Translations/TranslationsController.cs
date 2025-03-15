@@ -1,4 +1,4 @@
-﻿using LifeSync.API.Features.Translations.Services;
+﻿using LifeSync.API.Features.Translations.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LifeSync.API.Features.Translations;
@@ -7,9 +7,9 @@ namespace LifeSync.API.Features.Translations;
 [ApiController]
 public class TranslationsController : ControllerBase
 {
-    private readonly ITranslationsLoader translationsService;
+    private readonly ITranslationsService translationsService;
 
-    public TranslationsController(ITranslationsLoader translationsService)
+    public TranslationsController(ITranslationsService translationsService)
     {
         this.translationsService = translationsService;
     }
