@@ -5,12 +5,16 @@ import {
   ExpenseType,
   TransactionType,
 } from '@/features/finances/transactions/models/transactionsGetModel';
+import {
+  getCurrentMonthFirstDayDate,
+  getCurrentMonthLastDayDate,
+} from '@/utils/dateUtilities';
 
 export const useTransactionsFilters = () => {
   const formDefaultValues = {
     description: '',
-    startDate: null,
-    endDate: null,
+    startDate: getCurrentMonthFirstDayDate(),
+    endDate: getCurrentMonthLastDayDate(),
     expenseTypes: [ExpenseType.Needs, ExpenseType.Wants, ExpenseType.Savings],
     transactionTypes: [TransactionType.Expense, TransactionType.Income],
   };

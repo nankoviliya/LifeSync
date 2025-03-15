@@ -10,7 +10,7 @@ import {
   TransactionType,
 } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { parseCalendarDate } from '@/utils/utilities';
+import { parseCalendarDate } from '@/utils/dateUtilities';
 
 import styles from './TransactionsFilters.module.scss';
 

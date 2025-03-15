@@ -24,3 +24,15 @@ export function parseCalendarDate(localDate: Nullable<Date>): Date | null {
     return null;
   }
 }
+
+export function getCurrentMonthFirstDayDate(): Date {
+  const todayDate = new Date();
+
+  return new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
+}
+
+export function getCurrentMonthLastDayDate(): Date {
+  const todayDate = new Date();
+
+  return new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
+}

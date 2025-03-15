@@ -9,7 +9,7 @@ import { Control, Controller } from 'react-hook-form';
 import { INewExpenseTransactionRequest } from '@/features/finances/transactions/models/newExpenseTransactionRequest';
 import { ExpenseType } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { parseCalendarDate } from '@/utils/utilities';
+import { parseCalendarDate } from '@/utils/dateUtilities';
 
 import styles from './NewExpenseTransaction.module.scss';
 

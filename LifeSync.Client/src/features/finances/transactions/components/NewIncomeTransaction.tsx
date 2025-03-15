@@ -7,7 +7,7 @@ import { Control, Controller } from 'react-hook-form';
 
 import { INewIncomeTransactionRequest } from '@/features/finances/transactions/models/newIncomeTransactionRequest';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { parseCalendarDate } from '@/utils/utilities';
+import { parseCalendarDate } from '@/utils/dateUtilities';
 
 import styles from './NewIncomeTransaction.module.scss';
 
