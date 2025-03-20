@@ -1,7 +1,7 @@
 using LifeSync.API.Models.Languages;
 
-namespace LifeSync.API.Features.Users.Models;
-public record GetUserProfileDataDto
+namespace LifeSync.API.Features.Account.Models;
+public record GetUserAccountDataDto
 {
     public string UserId { get; init; } = default!;
 

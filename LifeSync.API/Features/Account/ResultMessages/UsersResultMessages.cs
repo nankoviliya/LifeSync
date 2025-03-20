@@ -1,4 +1,4 @@
-﻿namespace LifeSync.API.Features.Users.ResultMessages;
+﻿namespace LifeSync.API.Features.Account.ResultMessages;
 
 public static class UsersResultMessages
 {

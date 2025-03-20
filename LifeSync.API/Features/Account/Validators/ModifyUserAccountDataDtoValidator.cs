@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using LifeSync.API.Features.Users.Models;
+using LifeSync.API.Features.Account.Models;
 
-namespace LifeSync.API.Features.Users.Validators;
+namespace LifeSync.API.Features.Account.Validators;
 
-public class ModifyUserProfileDataDtoValidator : AbstractValidator<ModifyUserProfileDataDto>
+public class ModifyUserAccountDataDtoValidator : AbstractValidator<ModifyUserAccountDataDto>
 {
-    public ModifyUserProfileDataDtoValidator()
+    public ModifyUserAccountDataDtoValidator()
     {
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("First name is required.")

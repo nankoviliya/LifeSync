@@ -25,13 +25,13 @@ export const useUserProfileEditable = (
   const updateMutation = useMutation({
     mutationFn: async (data: IModifyUserProfileDataModel) => {
       return put<unknown, IModifyUserProfileDataModel>(
-        endpoints.users.modifyProfileData,
+        endpoints.account.modifyAccountData,
         data,
       );
     },
     onSuccess: () => {
       invalidateQuery({
-        queryKey: [endpointsOptions.getUserProfileData.key],
+        queryKey: [endpointsOptions.getUserAccountData.key],
       });
       disableEditMode();
     },

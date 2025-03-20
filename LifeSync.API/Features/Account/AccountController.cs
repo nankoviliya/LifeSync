@@ -1,31 +1,31 @@
-using LifeSync.API.Features.Users.Models;
-using LifeSync.API.Features.Users.ResultMessages;
-using LifeSync.API.Features.Users.Services;
+using LifeSync.API.Features.Account.Models;
+using LifeSync.API.Features.Account.ResultMessages;
+using LifeSync.API.Features.Account.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace LifeSync.API.Features.Users;
+namespace LifeSync.API.Features.Account;
 
 [ApiController]
 [Authorize]
-[Route("api/users")]
-public class UsersController : ControllerBase
+[Route("api/account")]
+public class AccountController : ControllerBase
 {
-    private readonly IUsersService usersService;
+    private readonly IAccountService _accountService;
 
-    public UsersController(IUsersService usersService)
+    public AccountController(IAccountService accountService)
     {
-        this.usersService = usersService;
+        _accountService = accountService;
     }
 
-    [HttpGet("profile", Name = nameof(GetUserProfileData))]
+    [HttpGet]
     [EndpointSummary("Retrieves user profile data")]
     [EndpointDescription("Gets the profile information of the currently authenticated user. Returns user details if found.")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserProfileDataDto))]
+    [ProducesResponseType<GetUserAccountDataDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetUserProfileData()
+    public async Task<IActionResult> GetUserAccountData()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
             return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
         }
 
-        var result = await usersService.GetUserProfileData(userId);
+        var result = await _accountService.GetUserAccountData(userId);
 
         if (!result.IsSuccess)
         {
@@ -44,13 +44,13 @@ public class UsersController : ControllerBase
         return Ok(result.Data);
     }
 
-    [HttpPut("profile", Name = nameof(GetUserProfileData))]
+    [HttpPut]
     [EndpointSummary("Modifies user profile data")]
     [EndpointDescription("Updates the profile information of the authenticated user using the provided details.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> ModifyUserProfileData([FromBody] ModifyUserProfileDataDto request)
+    public async Task<IActionResult> ModifyUserAccountData([FromBody] ModifyUserAccountDataDto request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -59,13 +59,13 @@ public class UsersController : ControllerBase
             return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
         }
 
-        var result = await usersService.ModifyUserProfileData(userId, request);
+        var result = await _accountService.ModifyUserAccountData(userId, request);
 
         if (!result.IsSuccess)
         {
             return BadRequest(result.Message);
         }
 
-        return Ok();
+        return Ok(result.Message);
     }
 }
