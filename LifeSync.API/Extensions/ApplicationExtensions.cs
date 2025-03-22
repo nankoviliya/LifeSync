@@ -1,5 +1,9 @@
 using LifeSync.API.Features.Account.Services;
 using LifeSync.API.Features.Account.Services.Contracts;
+using LifeSync.API.Features.AccountDataExchange.Services;
+using LifeSync.API.Features.AccountDataExchange.Services.ExportData;
+using LifeSync.API.Features.AccountDataExchange.Services.ExportData.ConcreteExporterFactory.ConcreteExporters;
+using LifeSync.API.Features.AccountDataExchange.Services.ExportData.Factory;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
 using LifeSync.API.Features.Finances.EventHandlers;
@@ -106,6 +110,11 @@ public static class ApplicationExtensions
 
         services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
         services.AddScoped<IAccountService, AccountService>();
+
+        services.AddTransient<IAccountDataFileConcreteExporter, JsonAccountDataFileExporter>();
+        services.AddSingleton<IAccountDataFileExporterFactory, AccountDataFileExporterFactory>();
+        services.AddScoped<IAccountDataFileExporter, AccountDataFileExporter>();
+        services.AddScoped<IAccountDataExchangeService, AccountDataExchangeService>();
 
         services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
         services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();

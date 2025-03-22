@@ -31,7 +31,7 @@ public class AccountController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
+            return BadRequest(AccountResultMessages.UserIsNotAuthenticated);
         }
 
         var result = await _accountService.GetUserAccountData(userId);
@@ -56,7 +56,7 @@ public class AccountController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
+            return BadRequest(AccountResultMessages.UserIsNotAuthenticated);
         }
 
         var result = await _accountService.ModifyUserAccountData(userId, request);
