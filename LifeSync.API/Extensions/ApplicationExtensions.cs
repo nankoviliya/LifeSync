@@ -1,5 +1,7 @@
 using LifeSync.API.Features.Account.Services;
 using LifeSync.API.Features.Account.Services.Contracts;
+using LifeSync.API.Features.AccountExport;
+using LifeSync.API.Features.AccountExport.Exporters;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
 using LifeSync.API.Features.Finances.EventHandlers;
@@ -106,6 +108,9 @@ public static class ApplicationExtensions
 
         services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
         services.AddScoped<IAccountService, AccountService>();
+
+        services.AddScoped<IAccountExporter, JsonAccountExporter>();
+        services.AddScoped<IAccountExportService, AccountExportService>();
 
         services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
         services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();

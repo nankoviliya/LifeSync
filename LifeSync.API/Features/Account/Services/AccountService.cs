@@ -20,7 +20,6 @@ public class AccountService : BaseService, IAccountService
         _databaseContext = databaseContext;
         _logger = logger;
     }
-
     public async Task<DataResult<GetUserAccountDataDto>> GetUserAccountData(string userId)
     {
         var userData = await _databaseContext.Users
@@ -43,12 +42,11 @@ public class AccountService : BaseService, IAccountService
         {
             _logger.LogWarning("User not found for userId: {UserId}", userId);
 
-            return Failure<GetUserAccountDataDto>(UsersResultMessages.UserNotFound);
+            return Failure<GetUserAccountDataDto>(AccountResultMessages.UserNotFound);
         }
 
         return Success(userData);
     }
-
     public async Task<MessageResult> ModifyUserAccountData(string userId, ModifyUserAccountDataDto data)
     {
         var userToUpdate = await _databaseContext.Users
@@ -59,14 +57,14 @@ public class AccountService : BaseService, IAccountService
         {
             _logger.LogWarning("User not found for userId: {UserId}", userId);
 
-            return FailureMessage(UsersResultMessages.UserNotFound);
+            return FailureMessage(AccountResultMessages.UserNotFound);
         }
 
         if (!Guid.TryParse(data.LanguageId, out Guid parsedLanguageId))
         {
             _logger.LogWarning("Unable to parse LanguageId: {LanguageId} for userId: {UserId}", data.LanguageId, userId);
 
-            return FailureMessage(UsersResultMessages.UnableToParseLanguageId);
+            return FailureMessage(AccountResultMessages.UnableToParseLanguageId);
         }
 
         userToUpdate.FirstName = data.FirstName;
@@ -84,6 +82,6 @@ public class AccountService : BaseService, IAccountService
             return FailureMessage("An error occurred while updating the user profile.");
         }
 
-        return SuccessMessage(UsersResultMessages.UserProfileUpdated);
+        return SuccessMessage(AccountResultMessages.UserProfileUpdated);
     }
 }
