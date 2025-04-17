@@ -34,6 +34,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<ApplicationDbContext>();
 
+builder.Services.AddGlobalErrorHandling();
+
 builder.Services.AddApplicationServices();
 
 // Add CORS policy to allow the frontend to communicate with the backend
@@ -77,6 +79,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseGlobalErrorHandling();
 
 app.MapControllers();
 
