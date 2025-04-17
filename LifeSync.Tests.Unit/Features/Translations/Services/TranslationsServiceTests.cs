@@ -55,7 +55,7 @@ namespace LifeSync.UnitTests.Features.Translations.Services
 
             var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(emptyLanguageCode);
+            var result = await translationsService.GetTranslationsByLanguageCodeAsync(emptyLanguageCode, CancellationToken.None);
 
             result.IsSuccess.Should().BeFalse();
             result.Errors.Should().Contain(TranslationsResultMessages.LanguageCodeNotProvided);
@@ -68,7 +68,7 @@ namespace LifeSync.UnitTests.Features.Translations.Services
 
             var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(nonExistingLanguage);
+            var result = await translationsService.GetTranslationsByLanguageCodeAsync(nonExistingLanguage, CancellationToken.None);
 
             result.IsSuccess.Should().BeFalse();
             result.Errors.Should().Contain(TranslationsResultMessages.LanguageNotFound);
@@ -81,13 +81,13 @@ namespace LifeSync.UnitTests.Features.Translations.Services
 
             var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            _translationsLoader.LoadTranslationsAsync(languageCode).Returns(new Dictionary<string, string>
+            _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(new Dictionary<string, string>
             {
                 { "button", "Click" },
                 { "input-label", "Insert value" }
             });
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
+            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
 
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
@@ -103,15 +103,15 @@ namespace LifeSync.UnitTests.Features.Translations.Services
 
             var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            _translationsLoader.LoadTranslationsAsync(languageCode).Returns(new Dictionary<string, string>
+            _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(new Dictionary<string, string>
             {
                 { "button", "Click" },
             });
 
-            var result1 = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
-            var result2 = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
+            var result1 = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
+            var result2 = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
 
-            await _translationsLoader.Received(1).LoadTranslationsAsync(languageCode);
+            await _translationsLoader.Received(1).LoadTranslationsAsync(languageCode, CancellationToken.None);
             result1.Data.Should().BeEquivalentTo(result2.Data);
         }
 
@@ -122,12 +122,12 @@ namespace LifeSync.UnitTests.Features.Translations.Services
 
             var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            _translationsLoader.LoadTranslationsAsync(languageCode).Returns(new Dictionary<string, string>
+            _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(new Dictionary<string, string>
             {
                 { "button", "Click" },
             });
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode);
+            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
 
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();

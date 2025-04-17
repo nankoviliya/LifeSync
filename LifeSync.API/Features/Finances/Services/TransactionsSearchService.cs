@@ -23,7 +23,10 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         _logger = logger;
     }
 
-    public async Task<DataResult<GetUserFinancialTransactionsResponse>> GetUserFinancialTransactionsAsync(string userId, GetUserFinancialTransactionsRequest request)
+    public async Task<DataResult<GetUserFinancialTransactionsResponse>> GetUserFinancialTransactionsAsync(
+        string userId,
+        GetUserFinancialTransactionsRequest request,
+        CancellationToken cancellationToken)
     {
         var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
@@ -46,7 +49,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         {
             var getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userIdGuid, request);
 
-            var userExpenseTransactions = await getExpenseTransactionsQuery.ToListAsync();
+            var userExpenseTransactions = await getExpenseTransactionsQuery.ToListAsync(cancellationToken);
 
             response.Transactions.AddRange(userExpenseTransactions.Select(MapExpenseTransaction));
 
@@ -57,7 +60,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         {
             var getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userIdGuid, request);
 
-            var userIncomeTransactions = await getIncomeTransactionsQuery.ToListAsync();
+            var userIncomeTransactions = await getIncomeTransactionsQuery.ToListAsync(cancellationToken);
 
             response.Transactions.AddRange(userIncomeTransactions.Select(MapIncomeTransaction));
 

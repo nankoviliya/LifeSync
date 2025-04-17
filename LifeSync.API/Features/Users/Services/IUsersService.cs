@@ -5,7 +5,7 @@ namespace LifeSync.API.Features.Users.Services;
 
 public interface IUsersService
 {
-    Task<DataResult<GetUserProfileDataDto>> GetUserProfileData(string userId);
+    Task<DataResult<GetUserProfileDataDto>> GetUserProfileData(string userId, CancellationToken cancellationToken);
 
-    Task<MessageResult> ModifyUserProfileData(string userId, ModifyUserProfileDataDto data);
+    Task<MessageResult> ModifyUserProfileData(string userId, ModifyUserProfileDataDto data, CancellationToken cancellationToken);
 }

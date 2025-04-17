@@ -2,5 +2,7 @@
 
 public interface ITranslationsLoader
 {
-    Task<Dictionary<string, string>> LoadTranslationsAsync(string languageCode);
+    Task<Dictionary<string, string>> LoadTranslationsAsync(
+        string languageCode,
+        CancellationToken cancellationToken);
 }

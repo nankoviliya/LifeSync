@@ -24,7 +24,9 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
         _logger = logger;
     }
 
-    public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(string userId)
+    public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(
+        string userId,
+        CancellationToken cancellationToken)
     {
         var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
@@ -39,7 +41,7 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
             .Where(x => x.UserId == userIdGuid)
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         var userIncomeTransactionsDto = userIncomeTransactions.Select(x => new GetIncomeDto
         {
@@ -58,7 +60,10 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
         return Success(response);
     }
 
-    public async Task<DataResult<Guid>> AddIncomeAsync(string userId, AddIncomeDto request)
+    public async Task<DataResult<Guid>> AddIncomeAsync(
+        string userId,
+        AddIncomeDto request,
+        CancellationToken cancellationToken)
     {
         var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
@@ -78,11 +83,11 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
             UserId = userIdGuid
         };
 
-        await _databaseContext.IncomeTransactions.AddAsync(incomeTransaction);
+        await _databaseContext.IncomeTransactions.AddAsync(incomeTransaction, cancellationToken);
 
         incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userIdGuid, incomeTransaction));
 
-        await _databaseContext.SaveChangesAsync();
+        await _databaseContext.SaveChangesAsync(cancellationToken);
 
         return Success(incomeTransaction.Id);
     }

@@ -31,7 +31,9 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserFinancialTransactionsResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetTransactions([FromQuery] GetUserFinancialTransactionsRequest request)
+    public async Task<IActionResult> GetTransactions(
+        [FromQuery] GetUserFinancialTransactionsRequest request,
+        CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -40,7 +42,7 @@ public class FinancesController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request);
+        var result = await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -56,7 +58,9 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetExpenseTransactionsResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetExpenseTransactions([FromQuery] GetUserExpenseTransactionsRequest request)
+    public async Task<IActionResult> GetExpenseTransactions(
+        [FromQuery] GetUserExpenseTransactionsRequest request,
+        CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -65,7 +69,7 @@ public class FinancesController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request);
+        var result = await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -81,7 +85,9 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> AddExpense(AddExpenseDto request)
+    public async Task<IActionResult> AddExpense(
+        AddExpenseDto request,
+        CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -90,7 +96,7 @@ public class FinancesController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await _expenseTransactionsManagement.AddExpenseAsync(userId, request);
+        var result = await _expenseTransactionsManagement.AddExpenseAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -106,7 +112,7 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetIncomeTransactionsResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetIncomeTransactions()
+    public async Task<IActionResult> GetIncomeTransactions(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -115,7 +121,7 @@ public class FinancesController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await _incomeTransactionsManagement.GetUserIncomesAsync(userId);
+        var result = await _incomeTransactionsManagement.GetUserIncomesAsync(userId, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -131,7 +137,9 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> AddIncome(AddIncomeDto request)
+    public async Task<IActionResult> AddIncome(
+        AddIncomeDto request,
+        CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -140,7 +148,7 @@ public class FinancesController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await _incomeTransactionsManagement.AddIncomeAsync(userId, request);
+        var result = await _incomeTransactionsManagement.AddIncomeAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {

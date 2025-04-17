@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserProfileDataDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetUserProfileData()
+    public async Task<IActionResult> GetUserProfileData(CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
             return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
         }
 
-        var result = await usersService.GetUserProfileData(userId);
+        var result = await usersService.GetUserProfileData(userId, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -50,7 +50,9 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> ModifyUserProfileData([FromBody] ModifyUserProfileDataDto request)
+    public async Task<IActionResult> ModifyUserProfileData(
+        [FromBody] ModifyUserProfileDataDto request,
+        CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -59,7 +61,7 @@ public class UsersController : ControllerBase
             return BadRequest(UsersResultMessages.UserIsNotAuthenticated);
         }
 
-        var result = await usersService.ModifyUserProfileData(userId, request);
+        var result = await usersService.ModifyUserProfileData(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {

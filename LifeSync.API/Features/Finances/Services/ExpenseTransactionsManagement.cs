@@ -25,7 +25,10 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
         _logger = logger;
     }
 
-    public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(string userId, GetUserExpenseTransactionsRequest request)
+    public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(
+        string userId,
+        GetUserExpenseTransactionsRequest request,
+        CancellationToken cancellationToken)
     {
         var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
@@ -38,7 +41,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
 
         var query = GetExpenseTransactionsQuery(userIdGuid, request);
 
-        var userExpenseTransactions = await query.ToListAsync();
+        var userExpenseTransactions = await query.ToListAsync(cancellationToken);
 
         var response = CalculateGetExpenseTransactionsResponse(userExpenseTransactions);
 
@@ -59,11 +62,17 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
 
         decimal totalSpent = userExpenseTransactions.Sum(x => x.Amount.Amount);
 
-        decimal totalSpentOnNeeds = userExpenseTransactions.Where(x => x.ExpenseType == ExpenseType.Needs).Sum(x => x.Amount.Amount);
+        decimal totalSpentOnNeeds = userExpenseTransactions
+            .Where(x => x.ExpenseType == ExpenseType.Needs)
+            .Sum(x => x.Amount.Amount);
 
-        decimal totalSpentOnWants = userExpenseTransactions.Where(x => x.ExpenseType == ExpenseType.Wants).Sum(x => x.Amount.Amount);
+        decimal totalSpentOnWants = userExpenseTransactions
+            .Where(x => x.ExpenseType == ExpenseType.Wants)
+            .Sum(x => x.Amount.Amount);
 
-        decimal totalSpentOnSavings = userExpenseTransactions.Where(x => x.ExpenseType == ExpenseType.Savings).Sum(x => x.Amount.Amount);
+        decimal totalSpentOnSavings = userExpenseTransactions
+            .Where(x => x.ExpenseType == ExpenseType.Savings)
+            .Sum(x => x.Amount.Amount);
 
         var response = new GetExpenseTransactionsResponse
         {
@@ -83,7 +92,9 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
         return response;
     }
 
-    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(Guid userId, GetUserExpenseTransactionsRequest request)
+    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(
+        Guid userId,
+        GetUserExpenseTransactionsRequest request)
     {
         var query = _databaseContext.ExpenseTransactions.AsQueryable();
 
@@ -114,7 +125,10 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
         return query;
     }
 
-    public async Task<DataResult<Guid>> AddExpenseAsync(string userId, AddExpenseDto request)
+    public async Task<DataResult<Guid>> AddExpenseAsync(
+        string userId,
+        AddExpenseDto request,
+        CancellationToken cancellationToken)
     {
         var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
 
@@ -134,11 +148,11 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
             UserId = userIdGuid
         };
 
-        await _databaseContext.ExpenseTransactions.AddAsync(expenseTransaction);
+        await _databaseContext.ExpenseTransactions.AddAsync(expenseTransaction, cancellationToken);
 
         expenseTransaction.RaiseDomainEvent(new ExpenseTransactionCreatedDomainEvent(userIdGuid, expenseTransaction));
 
-        await _databaseContext.SaveChangesAsync();
+        await _databaseContext.SaveChangesAsync(cancellationToken);
 
         return Success(expenseTransaction.Id);
     }

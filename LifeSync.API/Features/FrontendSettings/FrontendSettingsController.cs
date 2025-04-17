@@ -20,9 +20,9 @@ public class FrontendSettingsController : ControllerBase
     [EndpointDescription("Gets the current frontend settings configuration, like: language options, currency options etc.")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FrontendSettingsResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetFrontendSettings()
+    public async Task<IActionResult> GetFrontendSettings(CancellationToken cancellationToken)
     {
-        var result = await frontendSettingsService.GetFrontendSettingsAsync();
+        var result = await frontendSettingsService.GetFrontendSettingsAsync(cancellationToken);
 
         if (!result.IsSuccess)
         {
