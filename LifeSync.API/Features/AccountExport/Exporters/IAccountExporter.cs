@@ -1,10 +1,8 @@
-﻿using LifeSync.API.Features.AccountExport.Models;
-
-namespace LifeSync.API.Features.AccountExport.Exporters;
+﻿namespace LifeSync.API.Features.AccountExport.Exporters;
 
 public interface IAccountExporter
 {
     ExportAccountFileFormat Format { get; }
 
-    Task<ExportAccountResult> Export(ExportAccountDto accountData);
+    Task<ExportAccountResponse> Export(ExportAccountData accountData, CancellationToken cancellationToken);
 }

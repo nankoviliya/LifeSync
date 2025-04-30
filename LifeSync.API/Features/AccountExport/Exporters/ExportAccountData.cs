@@ -1,36 +1,17 @@
 ﻿using LifeSync.API.Models.Expenses;
 
-namespace LifeSync.API.Features.AccountExport.Models;
+namespace LifeSync.API.Features.AccountExport.Exporters;
 
-public enum ExportAccountFileFormat
+public record ExportAccountData
 {
-    Json = 1,
+    public ExportAccountProfile ProfileData { get; init; } = default!;
+
+    public List<ExportAccountExpenseTransaction> ExpenseTransactions { get; init; } = default!;
+
+    public List<ExportAccountIncomeTransaction> IncomeTransactions { get; init; } = default!;
 }
 
-public record ExportAccountRequest
-{
-    public ExportAccountFileFormat Format { get; init; } = default!;
-}
-
-public record ExportAccountResult
-{
-    public byte[] Data { get; set; } = [];
-
-    public string ContentType { get; set; } = default!;
-
-    public string FileName { get; set; } = default!;
-}
-
-public record ExportAccountDto
-{
-    public ExportAccountProfileDto ProfileData { get; init; } = default!;
-
-    public List<ExportAccountExpenseTransactionDto> ExpenseTransactions { get; init; } = default!;
-
-    public List<ExportAccountIncomeTransactionDto> IncomeTransactions { get; init; } = default!;
-}
-
-public record ExportAccountProfileDto
+public record ExportAccountProfile
 {
     public string UserId { get; init; } = default!;
 
@@ -51,7 +32,7 @@ public record ExportAccountProfileDto
     public string LanguageCode { get; init; } = default!;
 }
 
-public record ExportAccountExpenseTransactionDto
+public record ExportAccountExpenseTransaction
 {
     public Guid Id { get; init; }
 
@@ -66,7 +47,7 @@ public record ExportAccountExpenseTransactionDto
     public DateTime Date { get; init; }
 }
 
-public record ExportAccountIncomeTransactionDto
+public record ExportAccountIncomeTransaction
 {
     public Guid Id { get; init; }
 
@@ -78,3 +59,4 @@ public record ExportAccountIncomeTransactionDto
 
     public DateTime Date { get; init; }
 }
+

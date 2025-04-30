@@ -1,5 +1,4 @@
-﻿using LifeSync.API.Features.AccountExport.Models;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace LifeSync.API.Features.AccountExport.Exporters;
 
@@ -12,16 +11,16 @@ public class JsonAccountExporter : IAccountExporter
 
     public ExportAccountFileFormat Format => ExportAccountFileFormat.Json;
 
-    public async Task<ExportAccountResult> Export(ExportAccountDto accountData)
+    public async Task<ExportAccountResponse> Export(ExportAccountData accountData, CancellationToken cancellationToken)
     {
         await using var memoryStream = new MemoryStream();
 
-        await JsonSerializer.SerializeAsync(memoryStream, accountData, CachedJsonSerializerOptions);
+        await JsonSerializer.SerializeAsync(memoryStream, accountData, CachedJsonSerializerOptions, cancellationToken);
 
         memoryStream.Position = 0;
         byte[] fileBytes = memoryStream.ToArray();
 
-        var exportResult = new ExportAccountResult
+        var exportResult = new ExportAccountResponse
         {
             Data = fileBytes,
             ContentType = "application/json",

@@ -12,8 +12,7 @@ namespace LifeSync.API.Features.AccountImport
     {
         Task<MessageResult> ImportAccountDataAsync(
             string userId,
-            IFormFile file,
-            AccountImportFileFormat format,
+            AccountImportRequest request,
             CancellationToken ct);
     }
 
@@ -35,20 +34,19 @@ namespace LifeSync.API.Features.AccountImport
 
         public async Task<MessageResult> ImportAccountDataAsync(
             string userId,
-            IFormFile file,
-            AccountImportFileFormat format,
+            AccountImportRequest request,
             CancellationToken ct)
         {
-            using var logScope = _logger.BeginScope("UserId:{UserId}, Format:{Format}", userId, format);
+            using var logScope = _logger.BeginScope("UserId:{UserId}, Format:{Format}", userId, request.Format);
 
-            var importer = _importers.SingleOrDefault(i => i.Format == format);
+            var importer = _importers.SingleOrDefault(i => i.Format == request.Format);
             if (importer is null)
             {
                 _logger.LogWarning("Unsupported format");
                 return FailureMessage("Unsupported file format.");
             }
 
-            var data = await importer.ImportAsync(file, ct);
+            var data = await importer.ImportAsync(request.File, ct);
             if (data is null)
             {
                 _logger.LogWarning("Import returned null");
