@@ -5,5 +5,5 @@ namespace LifeSync.API.Features.FrontendSettings.Services;
 
 public interface IFrontendSettingsService
 {
-    Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync();
+    Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync(CancellationToken cancellationToken);
 }

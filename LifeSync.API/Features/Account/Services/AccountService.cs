@@ -20,7 +20,10 @@ public class AccountService : BaseService, IAccountService
         _databaseContext = databaseContext;
         _logger = logger;
     }
-    public async Task<DataResult<GetUserAccountDataDto>> GetUserAccountData(string userId)
+
+    public async Task<DataResult<GetUserProfileDataDto>> GetUserProfileData(
+        string userId,
+        CancellationToken cancellationToken)
     {
         var userData = await _databaseContext.Users
             .AsNoTracking()
@@ -36,7 +39,7 @@ public class AccountService : BaseService, IAccountService
                 BalanceAmount = u.Balance.Amount,
                 BalanceCurrency = u.Balance.Currency.Code,
             })
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (userData is null)
         {
@@ -47,11 +50,14 @@ public class AccountService : BaseService, IAccountService
 
         return Success(userData);
     }
-    public async Task<MessageResult> ModifyUserAccountData(string userId, ModifyUserAccountDataDto data)
+    public async Task<MessageResult> ModifyUserAccountData(
+        string userId,
+        ModifyUserAccountDataDto data,
+        CancellationToken cancellationToken)
     {
         var userToUpdate = await _databaseContext.Users
             .Where(u => u.Id == userId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (userToUpdate is null)
         {
@@ -73,7 +79,7 @@ public class AccountService : BaseService, IAccountService
 
         try
         {
-            await _databaseContext.SaveChangesAsync();
+            await _databaseContext.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
         {

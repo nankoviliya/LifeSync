@@ -16,7 +16,9 @@ public class TranslationsFileLoader : BaseService, ITranslationsLoader
         _translationsPath = Path.Combine(Directory.GetCurrentDirectory(), "Translations");
     }
 
-    public async Task<Dictionary<string, string>> LoadTranslationsAsync(string languageCode)
+    public async Task<Dictionary<string, string>> LoadTranslationsAsync(
+        string languageCode,
+        CancellationToken cancellationToken)
     {
         var translations = new Dictionary<string, string>();
         var languageDir = Path.Combine(_translationsPath, languageCode);
@@ -33,7 +35,7 @@ public class TranslationsFileLoader : BaseService, ITranslationsLoader
         {
             try
             {
-                var json = await File.ReadAllTextAsync(file);
+                var json = await File.ReadAllTextAsync(file, cancellationToken);
 
                 var fileTranslations = JsonSerializer.Deserialize<Dictionary<string, string>>(json)
                                        ?? new Dictionary<string, string>();

@@ -26,7 +26,9 @@ namespace LifeSync.API.Features.Translations.Services
             _translationsCache = new ConcurrentDictionary<string, Dictionary<string, string>>();
         }
 
-        public async Task<DataResult<IReadOnlyDictionary<string, string>>> GetTranslationsByLanguageCodeAsync(string languageCode)
+        public async Task<DataResult<IReadOnlyDictionary<string, string>>> GetTranslationsByLanguageCodeAsync(
+            string languageCode,
+            CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(languageCode))
             {
@@ -37,7 +39,9 @@ namespace LifeSync.API.Features.Translations.Services
 
             var language = await _databaseContext.Languages
                 .AsNoTracking()
-                .FirstOrDefaultAsync(l => l.Code.ToLower().Equals(languageCode.ToLower()));
+                .FirstOrDefaultAsync(
+                    l => l.Code.ToLower().Equals(languageCode.ToLower()),
+                    cancellationToken);
 
             if (language is null)
             {
@@ -48,7 +52,7 @@ namespace LifeSync.API.Features.Translations.Services
 
             if (!_translationsCache.TryGetValue(languageCode, out var translations))
             {
-                translations = await _translationsLoader.LoadTranslationsAsync(languageCode);
+                translations = await _translationsLoader.LoadTranslationsAsync(languageCode, cancellationToken);
                 _translationsCache.TryAdd(languageCode, translations);
             }
 

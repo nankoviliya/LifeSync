@@ -15,11 +15,12 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
         this.databaseContext = databaseContext;
     }
 
-    public async Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync()
+    public async Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync(
+        CancellationToken cancellationToken)
     {
-        var languageOptions = await GetLanguageOptionsAsync();
+        var languageOptions = await GetLanguageOptionsAsync(cancellationToken);
 
-        var curencyOptions = await GetCurrencyOptionsAsync();
+        var curencyOptions = await GetCurrencyOptionsAsync(cancellationToken);
 
         var frontendSettings = new FrontendSettingsResponse
         {
@@ -30,7 +31,8 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
         return Success(frontendSettings);
     }
 
-    private async Task<List<LanguageOption>> GetLanguageOptionsAsync()
+    private async Task<List<LanguageOption>> GetLanguageOptionsAsync(
+        CancellationToken cancellationToken)
     {
         var languageOptions = await databaseContext.Languages
             .AsNoTracking()
@@ -39,12 +41,13 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
                 Id = l.Id,
                 Name = l.Name
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return languageOptions;
     }
 
-    private async Task<List<CurrencyOption>> GetCurrencyOptionsAsync()
+    private async Task<List<CurrencyOption>> GetCurrencyOptionsAsync(
+        CancellationToken cancellationToken)
     {
         var currencyOptions = await databaseContext.Currencies
             .AsNoTracking()
@@ -53,7 +56,7 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
                 Code = c.Code,
                 Name = $"{c.Name} ({c.NativeName})",
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return currencyOptions;
     }
