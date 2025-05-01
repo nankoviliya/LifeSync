@@ -10,10 +10,15 @@ public class TranslationsFileLoader : BaseService, ITranslationsLoader
     private readonly ILogger<TranslationsFileLoader> _logger;
 
     public TranslationsFileLoader(
+        IWebHostEnvironment env,
         ILogger<TranslationsFileLoader> logger)
     {
         _logger = logger;
-        _translationsPath = Path.Combine(Directory.GetCurrentDirectory(), "Translations");
+        _translationsPath = Path.Combine(
+            env.ContentRootPath,
+            "Features",
+            "Translations",
+            "Locales");
     }
 
     public async Task<Dictionary<string, string>> LoadTranslationsAsync(
