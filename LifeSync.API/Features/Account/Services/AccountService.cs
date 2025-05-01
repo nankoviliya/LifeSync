@@ -21,7 +21,7 @@ public class AccountService : BaseService, IAccountService
         _logger = logger;
     }
 
-    public async Task<DataResult<GetUserProfileDataDto>> GetUserProfileData(
+    public async Task<DataResult<GetUserAccountDataDto>> GetUserAccountData(
         string userId,
         CancellationToken cancellationToken)
     {

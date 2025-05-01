@@ -5,7 +5,10 @@ namespace LifeSync.API.Features.Account.Services.Contracts;
 
 public interface IAccountService
 {
-    Task<DataResult<GetUserAccountDataDto>> GetUserAccountData(string userId);
+    Task<DataResult<GetUserAccountDataDto>> GetUserAccountData(string userId, CancellationToken cancellationToken);
 
-    Task<MessageResult> ModifyUserAccountData(string userId, ModifyUserAccountDataDto data);
+    Task<MessageResult> ModifyUserAccountData(
+        string userId,
+        ModifyUserAccountDataDto data,
+        CancellationToken cancellationToken);
 }
