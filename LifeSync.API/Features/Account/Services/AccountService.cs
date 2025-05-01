@@ -1,33 +1,34 @@
-using LifeSync.API.Features.Users.Models;
-using LifeSync.API.Features.Users.ResultMessages;
+using LifeSync.API.Features.Account.Models;
+using LifeSync.API.Features.Account.ResultMessages;
+using LifeSync.API.Features.Account.Services.Contracts;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeSync.API.Features.Users.Services;
+namespace LifeSync.API.Features.Account.Services;
 
-public class UsersService : BaseService, IUsersService
+public class AccountService : BaseService, IAccountService
 {
     private readonly ApplicationDbContext _databaseContext;
-    private readonly ILogger<UsersService> _logger;
+    private readonly ILogger<AccountService> _logger;
 
-    public UsersService(
+    public AccountService(
         ApplicationDbContext databaseContext,
-        ILogger<UsersService> logger)
+        ILogger<AccountService> logger)
     {
         _databaseContext = databaseContext;
         _logger = logger;
     }
 
-    public async Task<DataResult<GetUserProfileDataDto>> GetUserProfileData(
+    public async Task<DataResult<GetUserAccountDataDto>> GetUserAccountData(
         string userId,
         CancellationToken cancellationToken)
     {
         var userData = await _databaseContext.Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
-            .Select(u => new GetUserProfileDataDto
+            .Select(u => new GetUserAccountDataDto
             {
                 UserId = u.Id,
                 UserName = u.UserName,
@@ -44,15 +45,14 @@ public class UsersService : BaseService, IUsersService
         {
             _logger.LogWarning("User not found for userId: {UserId}", userId);
 
-            return Failure<GetUserProfileDataDto>(UsersResultMessages.UserNotFound);
+            return Failure<GetUserAccountDataDto>(AccountResultMessages.UserNotFound);
         }
 
         return Success(userData);
     }
-
-    public async Task<MessageResult> ModifyUserProfileData(
+    public async Task<MessageResult> ModifyUserAccountData(
         string userId,
-        ModifyUserProfileDataDto data,
+        ModifyUserAccountDataDto data,
         CancellationToken cancellationToken)
     {
         var userToUpdate = await _databaseContext.Users
@@ -63,14 +63,14 @@ public class UsersService : BaseService, IUsersService
         {
             _logger.LogWarning("User not found for userId: {UserId}", userId);
 
-            return FailureMessage(UsersResultMessages.UserNotFound);
+            return FailureMessage(AccountResultMessages.UserNotFound);
         }
 
         if (!Guid.TryParse(data.LanguageId, out Guid parsedLanguageId))
         {
             _logger.LogWarning("Unable to parse LanguageId: {LanguageId} for userId: {UserId}", data.LanguageId, userId);
 
-            return FailureMessage(UsersResultMessages.UnableToParseLanguageId);
+            return FailureMessage(AccountResultMessages.UnableToParseLanguageId);
         }
 
         userToUpdate.FirstName = data.FirstName;
@@ -88,6 +88,6 @@ public class UsersService : BaseService, IUsersService
             return FailureMessage("An error occurred while updating the user profile.");
         }
 
-        return SuccessMessage(UsersResultMessages.UserProfileUpdated);
+        return SuccessMessage(AccountResultMessages.UserProfileUpdated);
     }
 }

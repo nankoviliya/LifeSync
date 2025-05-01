@@ -9,9 +9,9 @@ export const endpoints = {
     login: 'Auth/Login',
     register: 'Auth/Register',
   },
-  users: {
-    getProfileData: 'Users/Profile',
-    modifyProfileData: 'Users/Profile',
+  account: {
+    getAccountData: 'Account',
+    modifyAccountData: 'Account',
   },
   finances: {
     getUserTransactions: 'Finances/Transactions',

@@ -1,4 +1,5 @@
 using Amazon.SecretsManager;
+using FastEndpoints;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using LifeSync.API.Extensions;
@@ -53,6 +54,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+builder.Services.AddFastEndpoints();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -82,6 +85,7 @@ app.UseAuthorization();
 
 app.UseGlobalErrorHandling();
 
+app.UseFastEndpoints();
 app.MapControllers();
 
 try

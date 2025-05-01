@@ -11,9 +11,9 @@ export const endpointsOptions: IEndpointsOptions = {
     endpoint: endpoints.translations.getTranslationsByLanguageId,
     key: 'translations',
   },
-  getUserProfileData: {
-    endpoint: endpoints.users.getProfileData,
-    key: 'user-profile-data',
+  getUserAccountData: {
+    endpoint: endpoints.account.getAccountData,
+    key: 'user-account-data',
   },
   getUserTransactions: {
     endpoint: endpoints.finances.getUserTransactions,

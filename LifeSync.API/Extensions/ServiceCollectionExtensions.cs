@@ -1,4 +1,10 @@
-﻿using LifeSync.API.Features.Authentication.Helpers;
+﻿using LifeSync.API.Features.Account.Services;
+using LifeSync.API.Features.Account.Services.Contracts;
+using LifeSync.API.Features.AccountExport;
+using LifeSync.API.Features.AccountExport.Exporters;
+using LifeSync.API.Features.AccountImport;
+using LifeSync.API.Features.AccountImport.Importers;
+using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
 using LifeSync.API.Features.Finances.EventHandlers;
 using LifeSync.API.Features.Finances.Services;
@@ -6,7 +12,6 @@ using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Features.FrontendSettings.Services;
 using LifeSync.API.Features.Translations.Services;
 using LifeSync.API.Features.Translations.Services.Contracts;
-using LifeSync.API.Features.Users.Services;
 using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses.Events;
@@ -104,7 +109,13 @@ namespace LifeSync.API.Extensions
             services.AddScoped<ITranslationsService, TranslationsService>();
 
             services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
-            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<IAccountExporter, JsonAccountExporter>();
+            services.AddScoped<IAccountExportService, AccountExportService>();
+
+            services.AddScoped<IAccountImporter, JsonAccountImporter>();
+            services.AddScoped<IAccountImportService, AccountImportService>();
 
             services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
             services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();
