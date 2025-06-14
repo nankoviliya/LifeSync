@@ -1,0 +1,21 @@
+<div class="app-root">
+  <header>
+    <nav>
+      <p-button
+        [link]="true"
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Home</p-button
+      >
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Life Sync</p>
+  </footer>
+</div>

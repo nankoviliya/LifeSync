@@ -1,0 +1,33 @@
+.app-root {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr auto;
+  // Prevents from horizontal scrolling
+  // if content is larger that the screen
+  grid-template-columns: minmax(0, 1fr);
+
+  header {
+    background-color: #3f51b5;
+    padding: 1rem;
+    color: #fff;
+
+    nav {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  main {
+    display: flex;
+    margin: 1em 1em;
+    justify-content: center;
+  }
+
+  footer {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+  }
+}
