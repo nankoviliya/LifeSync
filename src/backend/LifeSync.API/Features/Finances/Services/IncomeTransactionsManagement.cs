@@ -2,7 +2,6 @@
 using LifeSync.API.Features.Finances.ResultMessages;
 using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Models.Incomes;
-using LifeSync.API.Models.Incomes.Events;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Results;
@@ -25,20 +24,11 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
     }
 
     public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(
-        string userId,
+        Guid userId,
         CancellationToken cancellationToken)
     {
-        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
-
-        if (!userIdIsParsed)
-        {
-            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
-
-            return Failure<GetIncomeTransactionsResponse>(IncomeTrackingResultMessages.InvalidUserId);
-        }
-
         var userIncomeTransactions = await _databaseContext.IncomeTransactions
-            .Where(x => x.UserId == userIdGuid)
+            .Where(x => x.UserId == userId)
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
@@ -61,34 +51,51 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
     }
 
     public async Task<DataResult<Guid>> AddIncomeAsync(
-        string userId,
+        Guid userId,
         AddIncomeDto request,
         CancellationToken cancellationToken)
     {
-        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
-
-        if (!userIdIsParsed)
+        await using var dbTransaction = await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
+   
+        try
         {
-            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+            var user = await _databaseContext.Users
+                .FirstOrDefaultAsync(x => x.Id == userId.ToString(), cancellationToken);
 
-            return Failure<Guid>(IncomeTrackingResultMessages.InvalidUserId);
+            if (user is null)
+                return Failure<Guid>(IncomeTrackingResultMessages.UserNotFound);
+
+            var incomeAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
+       
+            if (user.Balance.Currency != incomeAmount.Currency)
+                return Failure<Guid>(IncomeTrackingResultMessages.CurrencyMismatch);
+       
+            var transactionData = new IncomeTransaction
+            {
+                Id = Guid.NewGuid(),
+                Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
+                Date = request.Date,
+                Description = request.Description,
+                UserId = userId
+            };
+       
+            await _databaseContext.IncomeTransactions.AddAsync(transactionData, cancellationToken);
+            user.Balance += incomeAmount;
+       
+            await _databaseContext.SaveChangesAsync(cancellationToken);
+            await dbTransaction.CommitAsync(cancellationToken);
+       
+            return Success(transactionData.Id);
         }
-
-        var incomeTransaction = new IncomeTransaction
+        catch (DbUpdateConcurrencyException ex)
         {
-            Id = Guid.NewGuid(),
-            Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
-            Date = request.Date,
-            Description = request.Description,
-            UserId = userIdGuid
-        };
-
-        await _databaseContext.IncomeTransactions.AddAsync(incomeTransaction, cancellationToken);
-
-        incomeTransaction.RaiseDomainEvent(new IncomeTransactionCreatedDomainEvent(userIdGuid, incomeTransaction));
-
-        await _databaseContext.SaveChangesAsync(cancellationToken);
-
-        return Success(incomeTransaction.Id);
+            _logger.LogWarning(ex, "Concurrency conflict when adding expense for user {UserId}", userId);
+            return Failure<Guid>(IncomeTrackingResultMessages.ConcurrencyConflict);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to add expense for user {UserId}: {Error}", userId, ex.Message);
+            return Failure<Guid>(IncomeTrackingResultMessages.RequestFailed);
+        }
     }
 }

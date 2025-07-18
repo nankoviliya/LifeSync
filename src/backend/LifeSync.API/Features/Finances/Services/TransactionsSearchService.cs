@@ -24,19 +24,10 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     }
 
     public async Task<DataResult<GetUserFinancialTransactionsResponse>> GetUserFinancialTransactionsAsync(
-        string userId,
+        Guid userId,
         GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
-
-        if (!userIdIsParsed)
-        {
-            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
-
-            return Failure<GetUserFinancialTransactionsResponse>(TransactionsSearchResultMessages.InvalidUserId);
-        }
-
         var response = new GetUserFinancialTransactionsResponse()
         {
             Transactions = new List<GetFinancialTransactionDto>(),
@@ -47,7 +38,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
 
         if (request.TransactionTypes.Contains(TransactionType.Expense))
         {
-            var getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userIdGuid, request);
+            var getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userId, request);
 
             var userExpenseTransactions = await getExpenseTransactionsQuery.ToListAsync(cancellationToken);
 
@@ -58,7 +49,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
 
         if (request.TransactionTypes.Contains(TransactionType.Income))
         {
-            var getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userIdGuid, request);
+            var getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userId, request);
 
             var userIncomeTransactions = await getIncomeTransactionsQuery.ToListAsync(cancellationToken);
 

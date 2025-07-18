@@ -3,7 +3,6 @@ using LifeSync.API.Features.Finances.Models;
 using LifeSync.API.Features.Finances.ResultMessages;
 using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Models.Expenses;
-using LifeSync.API.Models.Expenses.Events;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Results;
@@ -26,20 +25,11 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
     }
 
     public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(
-        string userId,
+        Guid userId,
         GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
-
-        if (!userIdIsParsed)
-        {
-            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
-
-            return Failure<GetExpenseTransactionsResponse>(ExpenseTrackingResultMessages.InvalidUserId);
-        }
-
-        var query = GetExpenseTransactionsQuery(userIdGuid, request);
+        var query = GetExpenseTransactionsQuery(userId, request);
 
         var userExpenseTransactions = await query.ToListAsync(cancellationToken);
 
@@ -126,34 +116,51 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
     }
 
     public async Task<DataResult<Guid>> AddExpenseAsync(
-        string userId,
+        Guid userId,
         AddExpenseDto request,
         CancellationToken cancellationToken)
     {
-        var userIdIsParsed = Guid.TryParse(userId, out Guid userIdGuid);
-
-        if (!userIdIsParsed)
+        await using var dbTransaction = await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
+   
+        try
         {
-            _logger.LogWarning("Invalid user id was provided: {UserId}, unable to parse", userId);
+            var user = await _databaseContext.Users
+                .FirstOrDefaultAsync(x => x.Id == userId.ToString(), cancellationToken);
 
-            return Failure<Guid>(ExpenseTrackingResultMessages.InvalidUserId);
+            if (user is null)
+                return Failure<Guid>(ExpenseTrackingResultMessages.UserNotFound);
+
+            var expenseAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
+       
+            if (user.Balance.Currency != expenseAmount.Currency)
+                return Failure<Guid>(ExpenseTrackingResultMessages.CurrencyMismatch);
+       
+            var transactionData = new ExpenseTransaction
+            {
+                Amount = expenseAmount,
+                Date = request.Date,
+                Description = request.Description,
+                ExpenseType = request.ExpenseType,
+                UserId = userId
+            };
+       
+            await _databaseContext.ExpenseTransactions.AddAsync(transactionData, cancellationToken);
+            user.Balance -= expenseAmount;
+       
+            await _databaseContext.SaveChangesAsync(cancellationToken);
+            await dbTransaction.CommitAsync(cancellationToken);
+       
+            return Success(transactionData.Id);
         }
-
-        var expenseTransaction = new ExpenseTransaction
+        catch (DbUpdateConcurrencyException ex)
         {
-            Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
-            Date = request.Date,
-            Description = request.Description,
-            ExpenseType = request.ExpenseType,
-            UserId = userIdGuid
-        };
-
-        await _databaseContext.ExpenseTransactions.AddAsync(expenseTransaction, cancellationToken);
-
-        expenseTransaction.RaiseDomainEvent(new ExpenseTransactionCreatedDomainEvent(userIdGuid, expenseTransaction));
-
-        await _databaseContext.SaveChangesAsync(cancellationToken);
-
-        return Success(expenseTransaction.Id);
+            _logger.LogWarning(ex, "Concurrency conflict when adding expense for user {UserId}", userId);
+            return Failure<Guid>(ExpenseTrackingResultMessages.ConcurrencyConflict);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to add expense for user {UserId}: {Error}", userId, ex.Message);
+            return Failure<Guid>(ExpenseTrackingResultMessages.RequestFailed);
+        }
     }
 }

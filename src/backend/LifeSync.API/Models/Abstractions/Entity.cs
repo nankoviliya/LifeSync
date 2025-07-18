@@ -2,8 +2,6 @@ namespace LifeSync.API.Models.Abstractions;
 
 public abstract class Entity
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
-
     protected Entity(Guid id)
     {
         Id = id;
@@ -19,19 +17,4 @@ public abstract class Entity
     // public DateTime CreatedAt { get; set; }
     //
     // public DateTime UpdatedAt { get; set; }
-
-    public IReadOnlyList<IDomainEvent> GetDomainEvents()
-    {
-        return _domainEvents;
-    }
-
-    public void ClearDomainEvents()
-    {
-        _domainEvents.Clear();
-    }
-
-    public void RaiseDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
-    }
 }

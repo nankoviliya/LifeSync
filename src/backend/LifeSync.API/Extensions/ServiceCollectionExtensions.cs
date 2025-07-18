@@ -6,16 +6,12 @@ using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.Importers;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
-using LifeSync.API.Features.Finances.EventHandlers;
 using LifeSync.API.Features.Finances.Services;
 using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Features.FrontendSettings.Services;
 using LifeSync.API.Features.Translations.Services;
 using LifeSync.API.Features.Translations.Services.Contracts;
-using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.ApplicationUser;
-using LifeSync.API.Models.Expenses.Events;
-using LifeSync.API.Models.Incomes.Events;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Contracts;
@@ -100,11 +96,6 @@ namespace LifeSync.API.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddTransient<IDomainEventDispatcher, DomainEventDispatcher>();
-
-            services.AddTransient<IDomainEventHandler<IncomeTransactionCreatedDomainEvent>, IncomeTransactionCreatedDomainEventHandler>();
-            services.AddTransient<IDomainEventHandler<ExpenseTransactionCreatedDomainEvent>, ExpenseTransactionCreatedDomainEventHandler>();
-
             services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
             services.AddScoped<ITranslationsService, TranslationsService>();
 

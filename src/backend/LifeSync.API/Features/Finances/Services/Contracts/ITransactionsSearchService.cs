@@ -6,7 +6,7 @@ namespace LifeSync.API.Features.Finances.Services.Contracts;
 public interface ITransactionsSearchService
 {
     Task<DataResult<GetUserFinancialTransactionsResponse>> GetUserFinancialTransactionsAsync(
-        string userId,
+        Guid userId,
         GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken);
 }

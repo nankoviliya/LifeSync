@@ -7,12 +7,12 @@ namespace LifeSync.API.Features.Finances.Services.Contracts;
 public interface IExpenseTransactionsManagement
 {
     Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(
-        string userId,
+        Guid userId,
         GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken);
 
     Task<DataResult<Guid>> AddExpenseAsync(
-        string userId,
+        Guid userId,
         AddExpenseDto request,
         CancellationToken cancellationToken);
 }

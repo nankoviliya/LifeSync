@@ -2,7 +2,6 @@
 using LifeSync.API.Features.Translations.ResultMessages;
 using LifeSync.API.Features.Translations.Services;
 using LifeSync.API.Features.Translations.Services.Contracts;
-using LifeSync.API.Infrastructure.DomainEvents;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets.Contracts;
@@ -19,7 +18,6 @@ namespace LifeSync.UnitTests.Features.Translations.Services
         private readonly DbConnection _connection;
         private readonly DbContextOptions<ApplicationDbContext> _contextOptions;
 
-        private readonly IDomainEventDispatcher _domainEventsDispatcher = Substitute.For<IDomainEventDispatcher>();
         private readonly ISecretsManager _secretsManager = Substitute.For<ISecretsManager>();
 
         private readonly ITranslationsLoader _translationsLoader = Substitute.For<ITranslationsLoader>();
@@ -33,7 +31,7 @@ namespace LifeSync.UnitTests.Features.Translations.Services
                 .UseSqlite(_connection)
                 .Options;
 
-            var context = new ApplicationDbContext(_contextOptions, _domainEventsDispatcher, _secretsManager);
+            var context = new ApplicationDbContext(_contextOptions, _secretsManager);
 
             if (context.Database.EnsureCreated())
             {
@@ -46,7 +44,7 @@ namespace LifeSync.UnitTests.Features.Translations.Services
             context.SaveChanges();
         }
 
-        ApplicationDbContext CreateContext() => new ApplicationDbContext(_contextOptions, _domainEventsDispatcher, _secretsManager);
+        ApplicationDbContext CreateContext() => new ApplicationDbContext(_contextOptions, _secretsManager);
 
         [Fact]
         public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnFailure_WhenLanguageCodeIsNullOrEmpty()

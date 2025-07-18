@@ -1,5 +1,3 @@
-using LifeSync.API.Infrastructure.DomainEvents;
-using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Currencies;
 using LifeSync.API.Models.Expenses;
@@ -13,15 +11,12 @@ namespace LifeSync.API.Persistence;
 public class ApplicationDbContext : DbContext
 {
     private readonly ISecretsManager secretsManager;
-    private readonly IDomainEventDispatcher eventDispatcher;
 
     public ApplicationDbContext(
         DbContextOptions options,
-        IDomainEventDispatcher eventDispatcher,
         ISecretsManager secretsManager) : base(options)
     {
         this.secretsManager = secretsManager;
-        this.eventDispatcher = eventDispatcher;
     }
 
     public ApplicationDbContext()
@@ -43,35 +38,6 @@ public class ApplicationDbContext : DbContext
             var connectionString = secretsManager.GetConnectionStringAsync().GetAwaiter().GetResult();
             optionsBuilder.UseSqlServer(connectionString);
         }
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        int result = await base.SaveChangesAsync(cancellationToken);
-
-        if (eventDispatcher is not null)
-        {
-            await PublishDomainEventsAsync();
-        }
-
-        return result;
-    }
-
-    private async Task PublishDomainEventsAsync()
-    {
-        var entitiesWithEvents = ChangeTracker
-            .Entries<Entity>()
-            .Select(entry => entry.Entity)
-            .Where(entity => entity.GetDomainEvents().Any())
-            .ToList();
-
-        var domainEvents = entitiesWithEvents
-                .SelectMany(entity => entity.GetDomainEvents())
-                .ToList();
-
-        entitiesWithEvents.ForEach(entity => entity.ClearDomainEvents());
-
-        await eventDispatcher.DispatchAsync(domainEvents);
     }
 
     public DbSet<Language> Languages { get; set; }
