@@ -41,36 +41,7 @@ public class AccountExportService : BaseService, IAccountExportService
         {
             return Failure<ExportAccountResponse>(AccountExportResultMessages.InvalidUserId);
         }
-
-        // TODO: fix relations and make it single query with joins
-        var expenseTransactions = await _databaseContext.ExpenseTransactions
-            .AsNoTracking()
-            .Where(et => et.UserId.Equals(userId))
-            .Select(et => new ExportAccountExpenseTransaction
-            {
-                Id = et.Id,
-                Amount = et.Amount.Amount,
-                Currency = et.Amount.Currency.Code,
-                Description = et.Description,
-                ExpenseType = et.ExpenseType,
-                Date = et.Date,
-            })
-            .OrderBy(e => e.Date)
-            .ToListAsync(cancellationToken);
-
-        var incomeTransactions = await _databaseContext.IncomeTransactions.AsNoTracking()
-            .Where(it => it.UserId.Equals(userId))
-            .Select(it => new ExportAccountIncomeTransaction
-            {
-                Id = it.Id,
-                Amount = it.Amount.Amount,
-                Currency = it.Amount.Currency.Code,
-                Description = it.Description,
-                Date = it.Date,
-            })
-            .OrderBy(e => e.Date)
-            .ToListAsync(cancellationToken);
-
+        
         var accountData = await _databaseContext.Users
            .AsNoTracking()
            .Where(u => u.Id == userId)
@@ -88,8 +59,29 @@ public class AccountExportService : BaseService, IAccountExportService
                    LanguageId = u.Language.Id,
                    LanguageCode = u.Language.Code,
                },
-               IncomeTransactions = incomeTransactions,
-               ExpenseTransactions = expenseTransactions,
+               IncomeTransactions = u.IncomeTransactions
+                   .Select(it => new ExportAccountIncomeTransaction
+                   {
+                       Id = it.Id,
+                       Amount = it.Amount.Amount,
+                       Currency = it.Amount.Currency.Code,
+                       Description = it.Description,
+                       Date = it.Date,
+                   })
+                   .OrderBy(it => it.Date)
+                   .ToList(),
+               ExpenseTransactions = u.ExpenseTransactions
+                   .Select(et => new ExportAccountExpenseTransaction
+                   {
+                       Id = et.Id,
+                       Amount = et.Amount.Amount,
+                       Currency = et.Amount.Currency.Code,
+                       Description = et.Description,
+                       ExpenseType = et.ExpenseType,
+                       Date = et.Date,
+                   })
+                   .OrderBy(et => et.Date)
+                   .ToList()
            })
            .FirstOrDefaultAsync(cancellationToken);
 
