@@ -45,7 +45,7 @@ public class AccountExportService : BaseService, IAccountExportService
         // TODO: fix relations and make it single query with joins
         var expenseTransactions = await _databaseContext.ExpenseTransactions
             .AsNoTracking()
-            .Where(et => et.UserId == Guid.Parse(userId))
+            .Where(et => et.UserId.Equals(userId))
             .Select(et => new ExportAccountExpenseTransaction
             {
                 Id = et.Id,
@@ -59,7 +59,7 @@ public class AccountExportService : BaseService, IAccountExportService
             .ToListAsync(cancellationToken);
 
         var incomeTransactions = await _databaseContext.IncomeTransactions.AsNoTracking()
-            .Where(it => it.UserId == Guid.Parse(userId))
+            .Where(it => it.UserId.Equals(userId))
             .Select(it => new ExportAccountIncomeTransaction
             {
                 Id = it.Id,

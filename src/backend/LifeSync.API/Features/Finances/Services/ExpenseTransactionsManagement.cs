@@ -25,7 +25,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
     }
 
     public async Task<DataResult<GetExpenseTransactionsResponse>> GetUserExpenseTransactionsAsync(
-        Guid userId,
+        string userId,
         GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken)
     {
@@ -83,12 +83,12 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
     }
 
     private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(
-        Guid userId,
+        string userId,
         GetUserExpenseTransactionsRequest request)
     {
         var query = _databaseContext.ExpenseTransactions.AsQueryable();
 
-        query = query.Where(x => x.UserId == userId);
+        query = query.Where(x => x.UserId.Equals(userId));
 
         if (!string.IsNullOrEmpty(request.Description))
         {
@@ -116,7 +116,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
     }
 
     public async Task<DataResult<Guid>> AddExpenseAsync(
-        Guid userId,
+        string userId,
         AddExpenseDto request,
         CancellationToken cancellationToken)
     {
@@ -141,7 +141,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
                 Date = request.Date,
                 Description = request.Description,
                 ExpenseType = request.ExpenseType,
-                UserId = userId
+                UserId = userId.ToString()
             };
        
             await _databaseContext.ExpenseTransactions.AddAsync(transactionData, cancellationToken);

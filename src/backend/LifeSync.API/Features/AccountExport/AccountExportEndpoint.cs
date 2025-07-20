@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using LifeSync.API.Extensions;
 using LifeSync.API.Shared.Results;
 using System.Security.Claims;
 
@@ -49,13 +50,7 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
 
     public override async Task HandleAsync(ExportAccountRequest request, CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-        {
-            await SendUnauthorizedAsync(ct);
-            return;
-        }
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
         var result = await _accountExportService.ExportAccountData(userId, request, ct);
 

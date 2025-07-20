@@ -7,10 +7,10 @@ namespace LifeSync.API.Features.Finances.Services.Contracts;
 public interface IIncomeTransactionsManagement
 {
     Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(
-        Guid userId,
+        string userId,
         CancellationToken cancellationToken);
     Task<DataResult<Guid>> AddIncomeAsync(
-        Guid userId,
+        string userId,
         AddIncomeDto request,
         CancellationToken cancellationToken);
 }

@@ -69,15 +69,14 @@ namespace LifeSync.API.Features.AccountImport
                                               Currency.FromCode(data.ProfileData.BalanceCurrency));
                 }
                 user.LanguageId = data.ProfileData.LanguageId ?? user.LanguageId;
-
-                var uid = Guid.Parse(userId);
+                
                 _databaseContext.ExpenseTransactions.AddRange(data.ExpenseTransactions.Select(e => new ExpenseTransaction
                 {
                     Amount = new Money(e.Amount, Currency.FromCode(e.Currency)),
                     Description = e.Description,
                     ExpenseType = e.ExpenseType,
                     Date = e.Date,
-                    UserId = uid
+                    UserId = userId
                 }));
 
                 _databaseContext.IncomeTransactions.AddRange(data.IncomeTransactions.Select(i => new IncomeTransaction
@@ -85,7 +84,7 @@ namespace LifeSync.API.Features.AccountImport
                     Amount = new Money(i.Amount, Currency.FromCode(i.Currency)),
                     Description = i.Description,
                     Date = i.Date,
-                    UserId = uid
+                    UserId = userId
                 }));
 
                 await _databaseContext.SaveChangesAsync(ct);

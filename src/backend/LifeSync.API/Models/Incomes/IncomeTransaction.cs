@@ -6,13 +6,13 @@ namespace LifeSync.API.Models.Incomes;
 
 public class IncomeTransaction : Entity
 {
-    public Money Amount { get; init; } = default!;// Income amount
+    public Money Amount { get; init; } = default!;
 
-    public DateTime Date { get; init; } // Date of income
+    public DateTime Date { get; init; } 
 
-    public string Description { get; init; } = default!; // Optional details
+    public string Description { get; init; } = default!; 
 
-    public Guid UserId { get; init; } // Foreign Key to User
+    public string UserId { get; init; } 
 
-    public User User { get; init; } = default!; // Owner of the transaction
+    public User User { get; init; } = default!; 
 }

@@ -36,7 +36,7 @@ public class FinancesController : ControllerBase
         [FromQuery] GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredGuid();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
         var result = await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request, cancellationToken);
 
@@ -58,7 +58,7 @@ public class FinancesController : ControllerBase
         [FromQuery] GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredGuid();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
         var result = await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request, cancellationToken);
 
@@ -80,7 +80,7 @@ public class FinancesController : ControllerBase
         AddExpenseDto request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredGuid();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
         var result = await _expenseTransactionsManagement.AddExpenseAsync(userId, request, cancellationToken);
 
@@ -100,7 +100,7 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetIncomeTransactions(CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredGuid();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
         var result = await _incomeTransactionsManagement.GetUserIncomesAsync(userId, cancellationToken);
 
@@ -122,7 +122,7 @@ public class FinancesController : ControllerBase
         AddIncomeDto request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredGuid();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
         
         var result = await _incomeTransactionsManagement.AddIncomeAsync(userId, request, cancellationToken);
 

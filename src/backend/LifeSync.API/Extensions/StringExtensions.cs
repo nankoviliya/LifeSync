@@ -2,6 +2,14 @@ namespace LifeSync.API.Extensions;
 
 public static class StringExtensions
 {
+    public static string ToRequiredString(this string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            throw new ArgumentException("Input cannot be null or whitespace.", nameof(input));
+
+        return input;
+    }
+    
     public static Guid ToRequiredGuid(this string? input)
     {
         if (string.IsNullOrWhiteSpace(input))

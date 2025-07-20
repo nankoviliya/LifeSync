@@ -24,7 +24,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     }
 
     public async Task<DataResult<GetUserFinancialTransactionsResponse>> GetUserFinancialTransactionsAsync(
-        Guid userId,
+        string userId,
         GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
@@ -99,11 +99,11 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         return summary;
     }
 
-    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(Guid userId, GetUserFinancialTransactionsRequest request)
+    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(string userId, GetUserFinancialTransactionsRequest request)
     {
         var query = _databaseContext.ExpenseTransactions.AsQueryable();
 
-        query = query.Where(x => x.UserId == userId);
+        query = query.Where(x => x.UserId.Equals(userId));
 
         if (!string.IsNullOrEmpty(request.Description))
         {
@@ -130,11 +130,11 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         return query;
     }
 
-    private IQueryable<IncomeTransaction> GetIncomeTransactionsQuery(Guid userId, GetUserFinancialTransactionsRequest request)
+    private IQueryable<IncomeTransaction> GetIncomeTransactionsQuery(string userId, GetUserFinancialTransactionsRequest request)
     {
         var query = _databaseContext.IncomeTransactions.AsQueryable();
 
-        query = query.Where(x => x.UserId == userId);
+        query = query.Where(x => x.UserId.Equals(userId));
 
         if (!string.IsNullOrEmpty(request.Description))
         {

@@ -24,11 +24,11 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
     }
 
     public async Task<DataResult<GetIncomeTransactionsResponse>> GetUserIncomesAsync(
-        Guid userId,
+        string userId,
         CancellationToken cancellationToken)
     {
         var userIncomeTransactions = await _databaseContext.IncomeTransactions
-            .Where(x => x.UserId == userId)
+            .Where(x => x.UserId.Equals(userId))
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
@@ -51,7 +51,7 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
     }
 
     public async Task<DataResult<Guid>> AddIncomeAsync(
-        Guid userId,
+        string userId,
         AddIncomeDto request,
         CancellationToken cancellationToken)
     {
@@ -76,7 +76,7 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
                 Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
                 Date = request.Date,
                 Description = request.Description,
-                UserId = userId
+                UserId = userId.ToString()
             };
        
             await _databaseContext.IncomeTransactions.AddAsync(transactionData, cancellationToken);

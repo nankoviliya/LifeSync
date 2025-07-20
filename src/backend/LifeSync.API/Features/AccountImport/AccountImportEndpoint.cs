@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using LifeSync.API.Extensions;
 using LifeSync.API.Shared.Results;
 using System.Security.Claims;
 
@@ -42,14 +43,8 @@ public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, Messa
 
     public override async Task HandleAsync(AccountImportRequest request, CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-        {
-            await SendUnauthorizedAsync(ct);
-            return;
-        }
-
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        
         var result = await _accountImportService.ImportAccountDataAsync(userId, request, ct);
 
         if (!result.IsSuccess)
