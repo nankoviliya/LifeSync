@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeSync.API", "LifeSync.API\LifeSync.API.csproj", "{0C2E17C4-1315-43E5-AC4D-F04A62FA5397}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeSync.API", "src\LifeSync.API\LifeSync.API.csproj", "{0C2E17C4-1315-43E5-AC4D-F04A62FA5397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeSync.Tests.Unit", "LifeSync.Tests.Unit\LifeSync.Tests.Unit.csproj", "{318F1472-F447-4D4C-BEEE-A3594892AD96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeSync.Tests.Unit", "tests\LifeSync.Tests.Unit\LifeSync.Tests.Unit.csproj", "{318F1472-F447-4D4C-BEEE-A3594892AD96}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF43449F-27EB-4B5C-B9C6-05323B4C24C3}"
 	ProjectSection(SolutionItems) = preProject

@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LifeSync.API\LifeSync.API.csproj" />
+      <ProjectReference Include="..\..\src\LifeSync.API\LifeSync.API.csproj" />
     </ItemGroup>
 
     <ItemGroup>
