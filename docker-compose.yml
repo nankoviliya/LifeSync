@@ -1,0 +1,46 @@
+services:
+  api:
+    build: ./src/backend
+    ports:
+      - "7200:80"
+    depends_on:
+      - database
+    networks:
+      - life-sync-network
+
+  react-frontend:
+    build: ./src/frontend/life-sync-react-client
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - life-sync-network
+
+  angular-frontend:
+    build: ./src/frontend/life-sync-angular-client
+    ports:
+      - "4300:80"
+    depends_on:
+      - api
+    networks:
+      - life-sync-network
+
+  database:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=lifesyncdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - lifesyncdb-data:/var/lib/postgresql/data
+    networks:
+      - life-sync-network
+
+networks:
+  life-sync-network:
+
+volumes:
+  lifesyncdb-data:

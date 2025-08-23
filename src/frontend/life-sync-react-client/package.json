@@ -1,5 +1,5 @@
 {
-  "name": "personal-finances-client",
+  "name": "life-sync-react-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -51,5 +51,8 @@
     "typescript-eslint": "^8.2.0",
     "vite": "^5.4.1",
     "vitest": "^3.0.5"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-arm64-gnu": "^4.0.0"
   }
 }
