@@ -27,17 +27,19 @@ services:
       - life-sync-network
 
   database:
-    image: postgres:16
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      - POSTGRES_DB=lifesyncdb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "StrongPassword123!"
+      MSSQL_PID: "Express"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - lifesyncdb-data:/var/lib/postgresql/data
+      - lifesyncdb-data:/var/opt/mssql
+    user: "10001:0"
     networks:
       - life-sync-network
+    restart: unless-stopped
 
 networks:
   life-sync-network:
