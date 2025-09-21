@@ -1,48 +1,64 @@
 services:
   api:
     build: ./src/backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+    env_file:
+      - ./.env
     ports:
-      - "7200:80"
+      - "7200:8080"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
-      - life-sync-network
+      - ${NETWORK_NAME}
 
   react-frontend:
     build: ./src/frontend/life-sync-react-client
     ports:
-      - "4200:80"
+      - "4200:8080"
     depends_on:
       - api
     networks:
-      - life-sync-network
+      - ${NETWORK_NAME}
 
   angular-frontend:
     build: ./src/frontend/life-sync-angular-client
     ports:
-      - "4300:80"
+      - "4300:8080"
     depends_on:
       - api
     networks:
-      - life-sync-network
+      - ${NETWORK_NAME}
 
   database:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "StrongPassword123!"
-      MSSQL_PID: "Express"
+    image: "mcr.microsoft.com/mssql/server"
+    # TODO: Configure non-root user
+    user: "0:0"
     ports:
       - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${DB_PASSWD}
+      MSSQL_PID: "Express"
     volumes:
       - lifesyncdb-data:/var/opt/mssql
-    user: "10001:0"
     networks:
-      - life-sync-network
-    restart: unless-stopped
+      - ${NETWORK_NAME}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P ${DB_PASSWD} -Q 'SELECT 1' -C || exit 1",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
 
 networks:
   life-sync-network:
+    driver: bridge
 
 volumes:
   lifesyncdb-data:

@@ -26,15 +26,23 @@ public class SecretsManager(
         {
             throw new SecretsRetrievalException(SecretsConstants.DatabaseSecretsNotFoundMessage);
         }
-
+        
         var dbSecret = appSecrets.Database;
 
-        var devConnectionString = $"Server=localhost;" +
-                       $"Database={dbSecret.DbInstanceIdentifier};" +
-                       $"Trusted_Connection=True;" +
-                       $"TrustServerCertificate=True;";
-
-        return devConnectionString;
+        if (appSecrets.IsDocker)
+        {
+            return $"Data Source={dbSecret.Host},{dbSecret.Port};" +
+                   $"Initial Catalog={dbSecret.DbInstanceIdentifier};" +
+                   $"User Id={dbSecret.Username};" +
+                   $"Password={dbSecret.Password};" +
+                   $"TrustServerCertificate=True;" +
+                   $"Integrated Security=False;";
+        } 
+        
+        return $"Server=localhost;" +
+               $"Database={dbSecret.DbInstanceIdentifier};" +
+               $"Trusted_Connection=True;" +
+               $"TrustServerCertificate=True;";
     }
 
     public async Task<JwtSecrets> GetJwtSecretsAsync()

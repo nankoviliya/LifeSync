@@ -4,6 +4,9 @@ namespace LifeSync.API.Secrets.Models;
 
 public class AppSecrets
 {
+    [JsonPropertyName("DOCKER")]
+    public bool IsDocker { get; set; }
+    
     [JsonPropertyName("DB_USER")]
     public string DbUser { get; set; }
 

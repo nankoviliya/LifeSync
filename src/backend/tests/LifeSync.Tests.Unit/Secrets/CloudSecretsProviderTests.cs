@@ -20,6 +20,7 @@ public class CloudSecretsProviderTests
 
     private string MockCloudSecretsConfigurationJson = @"
         {
+            ""DOCKER"": true,
             ""JWT_SECRET_KEY"": ""TestSigningKey"",
             ""JWT_ISSUER"": ""TestIssuer"",
             ""JWT_AUDIENCE"": ""TestAudience"",
@@ -33,6 +34,7 @@ public class CloudSecretsProviderTests
 
     private readonly AppSecrets expectedSecrets = new AppSecrets
     {
+        IsDocker = true,
         DbName = "TestDb",
         DbUser = "admin",
         DbPasswd = "YourStrongPassword123!",

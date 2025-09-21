@@ -14,5 +14,5 @@ FROM nginx:alpine
 VOLUME /var/cache/nginx
 COPY --from=build /app/dist/life-sync-angular-client/browser /usr/share/nginx/html
 COPY ./docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

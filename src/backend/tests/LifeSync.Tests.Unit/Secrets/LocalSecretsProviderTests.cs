@@ -18,6 +18,7 @@ public class LocalSecretsProviderTests
 
     private readonly AppSecrets expectedSecrets = new AppSecrets
     {
+        IsDocker = true,
         DbName = "TestDb",
         DbUser = "admin",
         DbPasswd = "YourStrongPassword123!",
@@ -33,6 +34,7 @@ public class LocalSecretsProviderTests
     {
         var configurationJson = @"
             {
+                ""DOCKER"": true,
                 ""JWT_SECRET_KEY"": ""TestSigningKey"",
                 ""JWT_ISSUER"": ""TestIssuer"",
                 ""JWT_AUDIENCE"": ""TestAudience"",

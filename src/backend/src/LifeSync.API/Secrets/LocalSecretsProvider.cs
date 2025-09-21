@@ -20,6 +20,8 @@ public class LocalSecretsProvider : ISecretsProvider
         {
             var appSecrets = new AppSecrets
             {
+                // TODO: Find a way to fetch all once
+                IsDocker = _configuration.GetValue<bool?>("DOCKER") ?? throw new InvalidOperationException("DOCKER configuration is required"),
                 DbUser = _configuration["DB_USER"] ?? throw new InvalidOperationException("DB_USER configuration is required"),
                 DbPasswd = _configuration["DB_PASSWD"] ?? throw new InvalidOperationException("DB_PASSWD configuration is required"),
                 DbHost = _configuration["DB_HOST"] ?? throw new InvalidOperationException("DB_HOST configuration is required"),

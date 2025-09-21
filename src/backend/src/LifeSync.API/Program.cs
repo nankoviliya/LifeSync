@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using LifeSync.API.Extensions;
 using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Text.Json.Serialization;
 
@@ -45,7 +46,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", builder =>
     {
-        builder.WithOrigins("http://localhost:4200")
+        builder.WithOrigins(
+                "http://localhost:4200",
+                "http://localhost:4300",
+                "https://localhost:4200",
+                "https://localhost:4300")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -69,6 +74,13 @@ builder.Services.AddOpenApi(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    
+    await context.Database.MigrateAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
