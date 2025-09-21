@@ -20,30 +20,28 @@ public class CloudSecretsProviderTests
 
     private string MockCloudSecretsConfigurationJson = @"
         {
-            ""Database"": {
-                ""DbInstanceIdentifier"": ""TestDb""
-            },
-            ""JWT"": {
-                ""SecretKey"": ""TestSigningKey"",
-                ""Issuer"": ""TestIssuer"",
-                ""Audience"": ""TestAudience"",
-                ""ExpiryMinutes"": 10
-            }
+            ""JWT_SECRET_KEY"": ""TestSigningKey"",
+            ""JWT_ISSUER"": ""TestIssuer"",
+            ""JWT_AUDIENCE"": ""TestAudience"",
+            ""JWT_EXPIRY_MINUTES"": 10,
+            ""DB_USER"": ""admin"",
+            ""DB_PASSWD"": ""YourStrongPassword123!"",
+            ""DB_HOST"": ""localhost"",
+            ""DB_PORT"": 1433,
+            ""DB_NAME"": ""TestDb""
         }";
 
     private readonly AppSecrets expectedSecrets = new AppSecrets
     {
-        Database = new DbConnectionSecrets
-        {
-            DbInstanceIdentifier = "TestDb"
-        },
-        JWT = new JwtSecrets
-        {
-            SecretKey = "TestSigningKey",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 10
-        }
+        DbName = "TestDb",
+        DbUser = "admin",
+        DbPasswd = "YourStrongPassword123!",
+        DbHost = "localhost",
+        DbPort = 1433,
+        JwtSecretKey = "TestSigningKey",
+        JwtIssuer = "TestIssuer",
+        JwtAudience = "TestAudience",
+        JwtExpiryMinutes = 10
     };
 
     private IConfiguration CreateValidMockConfiguration()

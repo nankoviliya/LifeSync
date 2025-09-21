@@ -13,13 +13,11 @@ public class JwtTokenGeneratorTests
     [Fact]
     public async Task GenerateJwtTokenAsync_ShouldReturnTokenResponse_WhenUserIsValid()
     {
-        var jwtSecrets = new JwtSecrets
-        {
-            SecretKey = "super_secret_key_1234567890123456",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 30
-        };
+        var jwtSecrets = JwtSecrets.Create(
+            "super_secret_key_1234567890123456", 
+            "TestIssuer", 
+            "TestAudience", 
+            30);
 
         var user = new User
         {
@@ -43,13 +41,11 @@ public class JwtTokenGeneratorTests
     [Fact]
     public async Task GenerateJwtTokenAsync_ShouldIncludeCorrectClaims_WhenUserIsValid()
     {
-        var jwtSecrets = new JwtSecrets
-        {
-            SecretKey = "super_secret_key_1234567890123456",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 30
-        };
+        var jwtSecrets = JwtSecrets.Create(
+            "super_secret_key_1234567890123456", 
+            "TestIssuer", 
+            "TestAudience", 
+            30);
 
         var user = new User
         {
@@ -74,16 +70,8 @@ public class JwtTokenGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateJwtTokenAsync_ShouldThrowArgumentException_WhenSecretKeyIsInvalid()
+    public async Task GenerateJwtTokenAsync_ShouldThrowArgumentException_WhenSecretsAreNull()
     {
-        var jwtSecrets = new JwtSecrets
-        {
-            SecretKey = "",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 30
-        };
-
         var user = new User
         {
             Id = "user123",
@@ -93,25 +81,23 @@ public class JwtTokenGeneratorTests
         var secretsManager = Substitute.For<ISecretsManager>();
         var securityTokenHandler = new JwtSecurityTokenHandler();
 
-        secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
+        secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult<JwtSecrets>(null));
 
         var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
 
         Func<Task> act = async () => await generator.GenerateJwtTokenAsync(user);
 
-        await act.Should().ThrowAsync<ArgumentException>().WithMessage("*key*");
+        await act.Should().ThrowAsync<ArgumentException>();
     }
 
     [Fact]
     public async Task GenerateJwtToken_ShouldThrowArgumentNullException_WhenUserIsNull()
     {
-        var jwtSecrets = new JwtSecrets
-        {
-            SecretKey = "super_secret_key_1234567890123456",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 30
-        };
+        var jwtSecrets = JwtSecrets.Create(
+            "super_secret_key_1234567890123456", 
+            "TestIssuer", 
+            "TestAudience", 
+            30);
 
         var secretsManager = Substitute.For<ISecretsManager>();
         var securityTokenHandler = new JwtSecurityTokenHandler();

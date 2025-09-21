@@ -14,17 +14,15 @@ public class SecretsManagerTests
 
     private readonly AppSecrets expectedSecrets = new AppSecrets
     {
-        Database = new DbConnectionSecrets
-        {
-            DbInstanceIdentifier = "TestDb"
-        },
-        JWT = new JwtSecrets
-        {
-            SecretKey = "TestSigningKey",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 10
-        }
+        DbName = "TestDb",
+        DbHost = "TestDbHost",
+        DbPasswd = "TestDbPasswd",
+        DbPort = 1433,
+        DbUser = "TestDbUser",
+        JwtSecretKey = "TestSigningKey",
+        JwtIssuer = "TestIssuer",
+        JwtAudience = "TestAudience",
+        JwtExpiryMinutes = 10
     };
 
     public SecretsManagerTests()
@@ -61,10 +59,7 @@ public class SecretsManagerTests
     public async Task GetConnectionStringAsync_ShouldThrowException_WhenDbSecretsIsNull()
     {
         secretsProvider.GetAppSecretsAsync()
-            .Returns(Task.FromResult(new AppSecrets
-            {
-                Database = null
-            }));
+            .Returns(Task.FromResult<AppSecrets>(null));
 
         Func<Task> act = async () => await secretsManager.GetConnectionStringAsync();
 
@@ -100,10 +95,7 @@ public class SecretsManagerTests
     public async Task GetJwtSecretsAsync_ShouldThrowException_WhenDbSecretsIsNull()
     {
         secretsProvider.GetAppSecretsAsync()
-            .Returns(Task.FromResult(new AppSecrets
-            {
-                JWT = null
-            }));
+            .Returns(Task.FromResult<AppSecrets>(null));
 
         Func<Task> act = async () => await secretsManager.GetJwtSecretsAsync();
 

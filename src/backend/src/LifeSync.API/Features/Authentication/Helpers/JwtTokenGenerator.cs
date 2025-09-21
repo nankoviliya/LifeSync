@@ -32,7 +32,7 @@ public class JwtTokenGenerator
 
         if (jwtSecrets is null)
         {
-            throw new InvalidOperationException("JWT secrets are not available.");
+            throw new ArgumentNullException(nameof(jwtSecrets));
         }
 
         var claims = new[]

@@ -1,8 +1,11 @@
 ﻿using FluentAssertions;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Common;
+using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
 using System.Text;
 
 namespace LifeSync.UnitTests.Secrets;
@@ -15,34 +18,30 @@ public class LocalSecretsProviderTests
 
     private readonly AppSecrets expectedSecrets = new AppSecrets
     {
-        Database = new DbConnectionSecrets
-        {
-            DbInstanceIdentifier = "TestDb"
-        },
-        JWT = new JwtSecrets
-        {
-            SecretKey = "TestSigningKey",
-            Issuer = "TestIssuer",
-            Audience = "TestAudience",
-            ExpiryMinutes = 10
-        }
+        DbName = "TestDb",
+        DbUser = "admin",
+        DbPasswd = "YourStrongPassword123!",
+        DbHost = "localhost",
+        DbPort = 1433,
+        JwtSecretKey = "TestSigningKey",
+        JwtIssuer = "TestIssuer",
+        JwtAudience = "TestAudience",
+        JwtExpiryMinutes = 10
     };
 
     private IConfiguration CreateValidMockConfiguration()
     {
         var configurationJson = @"
             {
-                ""AppSecrets"": {
-                    ""Database"": {
-                        ""DbInstanceIdentifier"": ""TestDb""
-                    },
-                    ""JWT"": {
-                        ""SecretKey"": ""TestSigningKey"",
-                        ""Issuer"": ""TestIssuer"",
-                        ""Audience"": ""TestAudience"",
-                        ""ExpiryMinutes"": 10
-                    }
-                }
+                ""JWT_SECRET_KEY"": ""TestSigningKey"",
+                ""JWT_ISSUER"": ""TestIssuer"",
+                ""JWT_AUDIENCE"": ""TestAudience"",
+                ""JWT_EXPIRY_MINUTES"": 10,
+                ""DB_USER"": ""admin"",
+                ""DB_PASSWD"": ""YourStrongPassword123!"",
+                ""DB_HOST"": ""localhost"",
+                ""DB_PORT"": 1433,
+                ""DB_NAME"": ""TestDb""
             }";
 
         var builder = new ConfigurationBuilder()
@@ -65,7 +64,7 @@ public class LocalSecretsProviderTests
     public async Task GetAppSecretsAsync_ShouldReturnAppSecrets_WhenResponseIsNotNull()
     {
         configuration = CreateValidMockConfiguration();
-        localSecretsProvider = new LocalSecretsProvider(this.configuration);
+        localSecretsProvider = new LocalSecretsProvider(configuration);
 
         var result = await localSecretsProvider.GetAppSecretsAsync();
 
@@ -77,11 +76,11 @@ public class LocalSecretsProviderTests
     public async Task GetAppSecretsAsync_ShouldThrowException_WhenAppSecretsAreNull()
     {
         configuration = CreateInvalidMockConfiguration();
-        localSecretsProvider = new LocalSecretsProvider(this.configuration);
+        localSecretsProvider = new LocalSecretsProvider(configuration);
 
         Func<Task> act = async () => await localSecretsProvider.GetAppSecretsAsync();
 
         await act.Should().ThrowAsync<Exception>()
-            .WithMessage(SecretsConstants.ApplicationSecretsNotFoundMessage);
+            .WithMessage(SecretsConstants.ApplicationSecretsRetrievalErrorMessage);
     }
 }
