@@ -3,6 +3,7 @@ using FastEndpoints;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using LifeSync.API.Extensions;
+using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
 using Serilog;
 using System.Text.Json.Serialization;
@@ -62,7 +63,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
 
 var app = builder.Build();
 
