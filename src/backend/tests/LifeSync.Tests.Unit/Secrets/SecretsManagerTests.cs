@@ -12,7 +12,21 @@ public class SecretsManagerTests
     private readonly SecretsManager secretsManager;
     private readonly ISecretsProvider secretsProvider;
 
-    private readonly AppSecrets expectedSecrets = new AppSecrets
+    private readonly AppSecrets expectedBaseSecrets = new AppSecrets
+    {
+        IsDocker = false,
+        DbName = "TestDb",
+        DbHost = "TestDbHost",
+        DbPasswd = "TestDbPasswd",
+        DbPort = 1433,
+        DbUser = "TestDbUser",
+        JwtSecretKey = "TestSigningKey",
+        JwtIssuer = "TestIssuer",
+        JwtAudience = "TestAudience",
+        JwtExpiryMinutes = 10
+    };
+    
+    private readonly AppSecrets expectedDockerSecrets = new AppSecrets
     {
         IsDocker = true,
         DbName = "TestDb",
@@ -37,11 +51,22 @@ public class SecretsManagerTests
     public async Task GetConnectionStringAsync_ShouldReturnConnectionString_WhenResponseIsNotNull()
     {
         secretsProvider.GetAppSecretsAsync()
-            .Returns(Task.FromResult(expectedSecrets));
+            .Returns(Task.FromResult(expectedBaseSecrets));
 
         var connectionString = await secretsManager.GetConnectionStringAsync();
 
         connectionString.Should().Be("Server=localhost;Database=TestDb;Trusted_Connection=True;TrustServerCertificate=True;");
+    }
+    
+    [Fact]
+    public async Task GetConnectionStringAsync_ShouldReturnDockerConnectionString_WhenDockerEnvSelected()
+    {
+        secretsProvider.GetAppSecretsAsync()
+            .Returns(Task.FromResult(expectedDockerSecrets));
+
+        var connectionString = await secretsManager.GetConnectionStringAsync();
+
+        connectionString.Should().Be("Data Source=TestDbHost,1433;Initial Catalog=TestDb;User Id=TestDbUser;Password=TestDbPasswd;TrustServerCertificate=True;Integrated Security=False;");
     }
 
     [Fact]
@@ -72,12 +97,12 @@ public class SecretsManagerTests
     public async Task GetJwtSecretsAsync_ReturnsJwtSecrets_WhenSecretStringIsValid()
     {
         secretsProvider.GetAppSecretsAsync()
-            .Returns(Task.FromResult(expectedSecrets));
+            .Returns(Task.FromResult(expectedBaseSecrets));
 
         var result = await secretsManager.GetJwtSecretsAsync();
 
         result.Should().NotBeNull();
-        result.Should().BeEquivalentTo(expectedSecrets.JWT);
+        result.Should().BeEquivalentTo(expectedBaseSecrets.JWT);
     }
 
     [Fact]
