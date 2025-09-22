@@ -2,13 +2,13 @@ using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Secrets.Models;
 
-public class DbConnectionSecrets
+public sealed record DbConnectionSecrets
 {
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Host { get; set; }
-    public int Port { get; set; }
-    public string DbInstanceIdentifier { get; set; }
+    public string Username { get; }
+    public string Password { get; }
+    public string Host { get; }
+    public int Port { get; }
+    public string DbInstanceIdentifier { get; }
     
     private DbConnectionSecrets(
         string username, 

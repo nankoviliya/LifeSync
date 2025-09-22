@@ -14,7 +14,7 @@ public class ExpenseTransaction : Entity
 
     public ExpenseType ExpenseType { get; init; }
 
-    public string UserId { get; init; } 
+    public string UserId { get; init; } = default!;
 
     public User User { get; init; } = default!; 
 }

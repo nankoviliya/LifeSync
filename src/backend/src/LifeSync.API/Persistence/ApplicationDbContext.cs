@@ -19,10 +19,9 @@ public class ApplicationDbContext : DbContext
         this.secretsManager = secretsManager;
     }
 
-    public ApplicationDbContext()
-    {
-
-    }
+#pragma warning disable CS8618 
+    public ApplicationDbContext() { }
+#pragma warning restore CS8618
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

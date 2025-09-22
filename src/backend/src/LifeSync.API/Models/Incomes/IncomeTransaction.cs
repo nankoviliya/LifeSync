@@ -10,9 +10,9 @@ public class IncomeTransaction : Entity
 
     public DateTime Date { get; init; } 
 
-    public string Description { get; init; } = default!; 
+    public string Description { get; init; } = default!;
 
-    public string UserId { get; init; } 
+    public string UserId { get; init; } = default!;
 
     public User User { get; init; } = default!; 
 }
