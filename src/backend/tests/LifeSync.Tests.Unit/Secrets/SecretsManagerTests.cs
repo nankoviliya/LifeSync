@@ -14,6 +14,7 @@ public class SecretsManagerTests
 
     private readonly AppSecrets expectedSecrets = new AppSecrets
     {
+        IsDocker = true,
         DbName = "TestDb",
         DbHost = "TestDbHost",
         DbPasswd = "TestDbPasswd",

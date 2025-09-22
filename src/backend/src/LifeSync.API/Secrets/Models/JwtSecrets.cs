@@ -2,12 +2,12 @@ using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Secrets.Models;
 
-public class JwtSecrets
+public sealed record JwtSecrets
 {
-    public string SecretKey { get; set; }
-    public string Issuer { get; set; }
-    public string Audience { get; set; }
-    public int ExpiryMinutes { get; set; }
+    public string SecretKey { get; }
+    public string Issuer { get; }
+    public string Audience { get; }
+    public int ExpiryMinutes { get; }
     
     private JwtSecrets(
         string secretKey, 

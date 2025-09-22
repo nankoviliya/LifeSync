@@ -5,10 +5,12 @@ public record Money
     public decimal Amount { get; init; }
     public Currency Currency { get; init; }
 
-    // Parameterless constructor for EF Core
-    private Money() { }
+    private Money()
+    {
+        Amount = 0;
+        Currency = Currency.None; 
+    }
 
-    // Constructor for application use
     public Money(decimal amount, Currency currency)
     {
         Amount = amount;

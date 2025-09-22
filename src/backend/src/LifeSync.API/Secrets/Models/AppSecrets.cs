@@ -2,37 +2,40 @@ using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Secrets.Models;
 
-public class AppSecrets
+/// <summary>
+/// Application secrets configuration loaded from environment variables or configuration files.
+/// </summary>
+public sealed class AppSecrets
 {
     [JsonPropertyName("DOCKER")]
-    public bool IsDocker { get; set; }
+    public required bool IsDocker { get; init; }
     
     [JsonPropertyName("DB_USER")]
-    public string DbUser { get; set; }
+    public required string DbUser { get; init; }
 
     [JsonPropertyName("DB_PASSWD")]
-    public string DbPasswd { get; set; }
+    public required string DbPasswd { get; init; }
 
     [JsonPropertyName("DB_HOST")]
-    public string DbHost { get; set; }
+    public required string DbHost { get; init; }
 
     [JsonPropertyName("DB_PORT")]
-    public int DbPort { get; set; }
+    public required int DbPort { get; init; }
 
     [JsonPropertyName("DB_NAME")]
-    public string DbName { get; set; }
+    public required string DbName { get; init; }
     
     [JsonPropertyName("JWT_SECRET_KEY")]
-    public string JwtSecretKey { get; set; }
+    public required string JwtSecretKey { get; init; }
 
     [JsonPropertyName("JWT_ISSUER")]
-    public string JwtIssuer { get; set; }
+    public required string JwtIssuer { get; init; }
 
     [JsonPropertyName("JWT_AUDIENCE")]
-    public string JwtAudience { get; set; }
+    public required string JwtAudience { get; init; }
 
     [JsonPropertyName("JWT_EXPIRY_MINUTES")]
-    public int JwtExpiryMinutes { get; set; }
+    public required int JwtExpiryMinutes { get; init; }
 
     [JsonIgnore]
     public DbConnectionSecrets Database =>

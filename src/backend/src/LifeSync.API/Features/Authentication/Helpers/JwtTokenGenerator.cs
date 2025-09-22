@@ -1,3 +1,4 @@
+using LifeSync.API.Extensions;
 using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Secrets.Contracts;
@@ -38,7 +39,7 @@ public class JwtTokenGenerator
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email.ToRequiredString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
