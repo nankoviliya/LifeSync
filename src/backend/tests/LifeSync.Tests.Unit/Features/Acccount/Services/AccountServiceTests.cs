@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace LifeSync.UnitTests.Features.Acccount.Services;
 
-namespace LifeSync.UnitTests.Features.Acccount.Services
+internal class AccountServiceTests
 {
-    class AccountServiceTests
-    {
-    }
 }

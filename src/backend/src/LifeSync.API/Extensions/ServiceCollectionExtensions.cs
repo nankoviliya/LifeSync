@@ -15,6 +15,7 @@ using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.API.Secrets.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
@@ -22,57 +23,58 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-namespace LifeSync.API.Extensions
+namespace LifeSync.API.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddJsonOptions(this IServiceCollection services)
     {
-        public static IServiceCollection AddJsonOptions(this IServiceCollection services)
+        services.Configure<JsonOptions>(options =>
         {
-            services.Configure<JsonOptions>(options =>
-            {
-                options.SerializerOptions.PropertyNameCaseInsensitive = true;
-            });
+            options.SerializerOptions.PropertyNameCaseInsensitive = true;
+        });
 
-            return services;
+        return services;
+    }
+
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationSecrets(this IServiceCollection services,
+        IWebHostEnvironment environment)
+    {
+        if (environment.IsDevelopment())
+        {
+            services.AddScoped<ISecretsProvider, LocalSecretsProvider>();
+        }
+        else
+        {
+            services.AddScoped<ISecretsProvider, CloudSecretsProvider>();
         }
 
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
-        {
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+        services.AddScoped<ISecretsProviderFactory, SecretsProviderFactory>();
 
-            return services;
-        }
+        services.AddScoped<ISecretsManager, SecretsManager>();
 
-        public static IServiceCollection AddApplicationSecrets(this IServiceCollection services, IWebHostEnvironment environment)
-        {
-            if (environment.IsDevelopment())
-            {
-                services.AddScoped<ISecretsProvider, LocalSecretsProvider>();
-            }
-            else
-            {
-                services.AddScoped<ISecretsProvider, CloudSecretsProvider>();
-            }
+        return services;
+    }
 
-            services.AddScoped<ISecretsProviderFactory, SecretsProviderFactory>();
+    public static async Task<IServiceCollection> AddJwtAuthentication(this IServiceCollection services)
+    {
+        services.AddSingleton<JwtSecurityTokenHandler>();
 
-            services.AddScoped<ISecretsManager, SecretsManager>();
+        ServiceProvider serviceProvider = services.BuildServiceProvider();
+        ISecretsManager secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
 
-            return services;
-        }
+        JwtSecrets jwtSecrets = await secretsManager.GetJwtSecretsAsync();
 
-        public static async Task<IServiceCollection> AddJwtAuthentication(this IServiceCollection services)
-        {
-            services.AddSingleton<JwtSecurityTokenHandler>();
-
-            var serviceProvider = services.BuildServiceProvider();
-            var secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
-
-            var jwtSecrets = await secretsManager.GetJwtSecretsAsync();
-
-            services.AddAuthentication(options =>
+        services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -91,48 +93,47 @@ namespace LifeSync.API.Extensions
                 };
             });
 
-            return services;
-        }
+        return services;
+    }
 
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
+        services.AddScoped<ITranslationsService, TranslationsService>();
+
+        services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
+        services.AddScoped<IAccountService, AccountService>();
+
+        services.AddScoped<IAccountExporter, JsonAccountExporter>();
+        services.AddScoped<IAccountExportService, AccountExportService>();
+
+        services.AddScoped<IAccountImporter, JsonAccountImporter>();
+        services.AddScoped<IAccountImportService, AccountImportService>();
+
+        services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
+        services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();
+        services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
+
+        services.AddTransient<JwtTokenGenerator>();
+
+        services.AddScoped<IAuthService, AuthService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddGlobalErrorHandling(this IServiceCollection services)
+    {
+        services.AddProblemDetails(options =>
         {
-            services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
-            services.AddScoped<ITranslationsService, TranslationsService>();
-
-            services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
-            services.AddScoped<IAccountService, AccountService>();
-
-            services.AddScoped<IAccountExporter, JsonAccountExporter>();
-            services.AddScoped<IAccountExportService, AccountExportService>();
-
-            services.AddScoped<IAccountImporter, JsonAccountImporter>();
-            services.AddScoped<IAccountImportService, AccountImportService>();
-
-            services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
-            services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();
-            services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
-
-            services.AddTransient<JwtTokenGenerator>();
-
-            services.AddScoped<IAuthService, AuthService>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddGlobalErrorHandling(this IServiceCollection services)
-        {
-            services.AddProblemDetails(options =>
+            options.CustomizeProblemDetails = context =>
             {
-                options.CustomizeProblemDetails = context =>
-                {
-                    context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
-                    context.ProblemDetails.Status = StatusCodes.Status500InternalServerError;
-                    context.ProblemDetails.Title = "Internal Server Error";
-                    context.ProblemDetails.Detail = "An unexpected error occurred.";
-                };
-            });
+                context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+                context.ProblemDetails.Status = StatusCodes.Status500InternalServerError;
+                context.ProblemDetails.Title = "Internal Server Error";
+                context.ProblemDetails.Detail = "An unexpected error occurred.";
+            };
+        });
 
-            return services;
-        }
+        return services;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace LifeSync.API.Shared.Results;
+﻿namespace LifeSync.Common.Results;
 
 public class DataResult<T>
 {
@@ -28,13 +28,7 @@ public class DataResult<T>
         Errors = errors?.ToList().AsReadOnly() ?? Array.Empty<string>().AsReadOnly();
     }
 
-    public static DataResult<T> Success(T data)
-    {
-        return new DataResult<T>(true, data, null);
-    }
+    public static DataResult<T> Success(T data) => new(true, data, null);
 
-    public static DataResult<T> Failure(params string[] errors)
-    {
-        return new DataResult<T>(false, default, errors);
-    }
+    public static DataResult<T> Failure(params string[] errors) => new(false, default, errors);
 }

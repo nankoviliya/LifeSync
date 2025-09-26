@@ -1,13 +1,14 @@
-﻿
-using LifeSync.API.Features.Finances.Models;
+﻿using LifeSync.API.Features.Finances.Models;
 using LifeSync.API.Features.Finances.ResultMessages;
 using LifeSync.API.Features.Finances.Services.Contracts;
+using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
-using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LifeSync.API.Features.Finances.Services;
 
@@ -29,18 +30,19 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
         GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var query = GetExpenseTransactionsQuery(userId, request);
+        IQueryable<ExpenseTransaction> query = GetExpenseTransactionsQuery(userId, request);
 
-        var userExpenseTransactions = await query.ToListAsync(cancellationToken);
+        List<ExpenseTransaction> userExpenseTransactions = await query.ToListAsync(cancellationToken);
 
-        var response = CalculateGetExpenseTransactionsResponse(userExpenseTransactions);
+        GetExpenseTransactionsResponse response = CalculateGetExpenseTransactionsResponse(userExpenseTransactions);
 
         return Success(response);
     }
 
-    private GetExpenseTransactionsResponse CalculateGetExpenseTransactionsResponse(List<ExpenseTransaction> userExpenseTransactions)
+    private GetExpenseTransactionsResponse CalculateGetExpenseTransactionsResponse(
+        List<ExpenseTransaction> userExpenseTransactions)
     {
-        var userExpenseTransactionsDto = userExpenseTransactions.Select(x => new GetExpenseDto
+        List<GetExpenseDto> userExpenseTransactionsDto = userExpenseTransactions.Select(x => new GetExpenseDto
         {
             Id = x.Id,
             Amount = x.Amount.Amount,
@@ -64,7 +66,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
             .Where(x => x.ExpenseType == ExpenseType.Savings)
             .Sum(x => x.Amount.Amount);
 
-        var response = new GetExpenseTransactionsResponse
+        GetExpenseTransactionsResponse response = new GetExpenseTransactionsResponse
         {
             ExpenseTransactions = userExpenseTransactionsDto,
             ExpenseSummary = new ExpenseSummaryDto
@@ -86,7 +88,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
         string userId,
         GetUserExpenseTransactionsRequest request)
     {
-        var query = _databaseContext.ExpenseTransactions.AsQueryable();
+        IQueryable<ExpenseTransaction> query = _databaseContext.ExpenseTransactions.AsQueryable();
 
         query = query.Where(x => x.UserId.Equals(userId));
 
@@ -120,22 +122,27 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
         AddExpenseDto request,
         CancellationToken cancellationToken)
     {
-        await using var dbTransaction = await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
-   
+        await using IDbContextTransaction dbTransaction =
+            await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
+
         try
         {
-            var user = await _databaseContext.Users
+            User? user = await _databaseContext.Users
                 .FirstOrDefaultAsync(x => x.Id == userId.ToString(), cancellationToken);
 
             if (user is null)
+            {
                 return Failure<Guid>(ExpenseTrackingResultMessages.UserNotFound);
+            }
 
-            var expenseAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
-       
+            Money expenseAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
+
             if (user.Balance.Currency != expenseAmount.Currency)
+            {
                 return Failure<Guid>(ExpenseTrackingResultMessages.CurrencyMismatch);
-       
-            var transactionData = new ExpenseTransaction
+            }
+
+            ExpenseTransaction transactionData = new ExpenseTransaction
             {
                 Amount = expenseAmount,
                 Date = request.Date,
@@ -143,13 +150,13 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
                 ExpenseType = request.ExpenseType,
                 UserId = userId.ToString()
             };
-       
+
             await _databaseContext.ExpenseTransactions.AddAsync(transactionData, cancellationToken);
             user.Balance -= expenseAmount;
-       
+
             await _databaseContext.SaveChangesAsync(cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
-       
+
             return Success(transactionData.Id);
         }
         catch (DbUpdateConcurrencyException ex)

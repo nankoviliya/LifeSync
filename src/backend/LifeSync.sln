@@ -10,7 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF43449F-27EB-4B5C-B9C6-05323B4C24C3}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Dockerfile = Dockerfile
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifeSync.Common", "src\LifeSync.Common\LifeSync.Common.csproj", "{1063803D-4903-4246-9BC0-CB8302055004}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +29,10 @@ Global
 		{318F1472-F447-4D4C-BEEE-A3594892AD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{318F1472-F447-4D4C-BEEE-A3594892AD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{318F1472-F447-4D4C-BEEE-A3594892AD96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1063803D-4903-4246-9BC0-CB8302055004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1063803D-4903-4246-9BC0-CB8302055004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1063803D-4903-4246-9BC0-CB8302055004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1063803D-4903-4246-9BC0-CB8302055004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

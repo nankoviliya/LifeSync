@@ -1,13 +1,13 @@
 ﻿using FastEndpoints;
-using LifeSync.API.Extensions;
-using LifeSync.API.Shared.Results;
+using LifeSync.Common.Extensions;
+using LifeSync.Common.Results;
 using System.Security.Claims;
 
 namespace LifeSync.API.Features.AccountExport;
 
 public enum ExportAccountFileFormat
 {
-    Json = 1,
+    Json = 1
 }
 
 public record ExportAccountRequest
@@ -28,10 +28,8 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
 {
     private readonly IAccountExportService _accountExportService;
 
-    public AccountExportEndpoint(IAccountExportService accountExportService)
-    {
+    public AccountExportEndpoint(IAccountExportService accountExportService) =>
         _accountExportService = accountExportService;
-    }
 
     public override void Configure()
     {
@@ -41,7 +39,8 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
         Summary(s =>
         {
             s.Summary = "Exports account data into a desired file format";
-            s.Description = "Gets the profile information of the currently authenticated user. Returns data in specified file format.";
+            s.Description =
+                "Gets the profile information of the currently authenticated user. Returns data in specified file format.";
             s.Responses[200] = "Success";
             s.Responses[400] = "Bad Request";
             s.Responses[401] = "Unauthorized";
@@ -50,13 +49,17 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
 
     public override async Task HandleAsync(ExportAccountRequest request, CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        var result = await _accountExportService.ExportAccountData(userId, request, ct);
+        DataResult<ExportAccountResponse> result = await _accountExportService.ExportAccountData(userId, request, ct);
 
         if (!result.IsSuccess)
-            await SendAsync(result, 400, cancellation: ct);
+        {
+            await SendAsync(result, 400, ct);
+        }
         else
-            await SendOkAsync(result, cancellation: ct);
+        {
+            await SendOkAsync(result, ct);
+        }
     }
 }

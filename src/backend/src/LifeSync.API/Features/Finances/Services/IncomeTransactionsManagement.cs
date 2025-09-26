@@ -1,12 +1,14 @@
 ﻿using LifeSync.API.Features.Finances.Models;
 using LifeSync.API.Features.Finances.ResultMessages;
 using LifeSync.API.Features.Finances.Services.Contracts;
+using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
-using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LifeSync.API.Features.Finances.Services;
 
@@ -27,13 +29,13 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
         string userId,
         CancellationToken cancellationToken)
     {
-        var userIncomeTransactions = await _databaseContext.IncomeTransactions
+        List<IncomeTransaction>? userIncomeTransactions = await _databaseContext.IncomeTransactions
             .Where(x => x.UserId.Equals(userId))
             .OrderByDescending(x => x.Date)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-        var userIncomeTransactionsDto = userIncomeTransactions.Select(x => new GetIncomeDto
+        List<GetIncomeDto>? userIncomeTransactionsDto = userIncomeTransactions.Select(x => new GetIncomeDto
         {
             Id = x.Id,
             Amount = x.Amount.Amount,
@@ -42,7 +44,7 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
             Description = x.Description
         }).ToList();
 
-        var response = new GetIncomeTransactionsResponse
+        GetIncomeTransactionsResponse? response = new GetIncomeTransactionsResponse
         {
             IncomeTransactions = userIncomeTransactionsDto
         };
@@ -55,22 +57,27 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
         AddIncomeDto request,
         CancellationToken cancellationToken)
     {
-        await using var dbTransaction = await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
-   
+        await using IDbContextTransaction? dbTransaction =
+            await _databaseContext.Database.BeginTransactionAsync(cancellationToken);
+
         try
         {
-            var user = await _databaseContext.Users
+            User? user = await _databaseContext.Users
                 .FirstOrDefaultAsync(x => x.Id == userId.ToString(), cancellationToken);
 
             if (user is null)
+            {
                 return Failure<Guid>(IncomeTrackingResultMessages.UserNotFound);
+            }
 
-            var incomeAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
-       
+            Money? incomeAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
+
             if (user.Balance.Currency != incomeAmount.Currency)
+            {
                 return Failure<Guid>(IncomeTrackingResultMessages.CurrencyMismatch);
-       
-            var transactionData = new IncomeTransaction
+            }
+
+            IncomeTransaction? transactionData = new IncomeTransaction
             {
                 Id = Guid.NewGuid(),
                 Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
@@ -78,13 +85,13 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
                 Description = request.Description,
                 UserId = userId.ToString()
             };
-       
+
             await _databaseContext.IncomeTransactions.AddAsync(transactionData, cancellationToken);
             user.Balance += incomeAmount;
-       
+
             await _databaseContext.SaveChangesAsync(cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
-       
+
             return Success(transactionData.Id);
         }
         catch (DbUpdateConcurrencyException ex)

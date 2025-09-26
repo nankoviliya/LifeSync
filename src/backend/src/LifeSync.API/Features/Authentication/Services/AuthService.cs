@@ -2,10 +2,11 @@ using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Shared;
-using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
+using RegisterRequest = LifeSync.API.Features.Authentication.Models.RegisterRequest;
 
 namespace LifeSync.API.Features.Authentication.Services;
 
@@ -27,14 +28,14 @@ public class AuthService : BaseService, IAuthService
 
     public async Task<DataResult<TokenResponse>> LoginAsync(LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        User? user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
             return Failure<TokenResponse>("Invalid email or password.");
         }
 
-        var token = await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
+        TokenResponse? token = await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
 
         if (token is null)
         {
@@ -44,9 +45,9 @@ public class AuthService : BaseService, IAuthService
         return Success(token);
     }
 
-    public async Task<MessageResult> RegisterAsync(Models.RegisterRequest request)
+    public async Task<MessageResult> RegisterAsync(RegisterRequest request)
     {
-        var user = new User
+        User? user = new User
         {
             UserName = request.Email,
             Email = request.Email,
@@ -54,14 +55,14 @@ public class AuthService : BaseService, IAuthService
             LastName = request.LastName,
             Balance = new Money(request.Balance, Currency.FromCode(request.Currency)),
             CurrencyPreference = Currency.FromCode(request.Currency),
-            LanguageId = request.LanguageId,
+            LanguageId = request.LanguageId
         };
 
-        var createResult = await _userManager.CreateAsync(user, request.Password);
+        IdentityResult? createResult = await _userManager.CreateAsync(user, request.Password);
 
         if (!createResult.Succeeded)
         {
-            var errorDescriptions = string.Join("; ", createResult.Errors.Select(e => e.Description));
+            string? errorDescriptions = string.Join("; ", createResult.Errors.Select(e => e.Description));
 
             _logger.LogWarning("Registration failed. Errors: {Errors}", errorDescriptions);
 

@@ -1,5 +1,5 @@
 using LifeSync.API.Features.Account.Models;
-using LifeSync.API.Shared.Results;
+using LifeSync.Common.Results;
 
 namespace LifeSync.API.Features.Account.Services.Contracts;
 

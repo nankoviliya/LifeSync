@@ -1,9 +1,10 @@
 using LifeSync.API.Features.Account.Models;
 using LifeSync.API.Features.Account.ResultMessages;
 using LifeSync.API.Features.Account.Services.Contracts;
+using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Persistence;
-using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.Account.Services;
@@ -25,7 +26,7 @@ public class AccountService : BaseService, IAccountService
         string userId,
         CancellationToken cancellationToken)
     {
-        var userData = await _databaseContext.Users
+        GetUserAccountDataDto? userData = await _databaseContext.Users
             .AsNoTracking()
             .Where(u => u.Id == userId)
             .Select(u => new GetUserAccountDataDto
@@ -37,7 +38,7 @@ public class AccountService : BaseService, IAccountService
                 LastName = u.LastName,
                 Language = u.Language,
                 BalanceAmount = u.Balance.Amount,
-                BalanceCurrency = u.Balance.Currency.Code,
+                BalanceCurrency = u.Balance.Currency.Code
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -50,12 +51,13 @@ public class AccountService : BaseService, IAccountService
 
         return Success(userData);
     }
+
     public async Task<MessageResult> ModifyUserAccountData(
         string userId,
         ModifyUserAccountDataDto data,
         CancellationToken cancellationToken)
     {
-        var userToUpdate = await _databaseContext.Users
+        User? userToUpdate = await _databaseContext.Users
             .Where(u => u.Id == userId)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -68,7 +70,8 @@ public class AccountService : BaseService, IAccountService
 
         if (!Guid.TryParse(data.LanguageId, out Guid parsedLanguageId))
         {
-            _logger.LogWarning("Unable to parse LanguageId: {LanguageId} for userId: {UserId}", data.LanguageId, userId);
+            _logger.LogWarning("Unable to parse LanguageId: {LanguageId} for userId: {UserId}", data.LanguageId,
+                userId);
 
             return FailureMessage(AccountResultMessages.UnableToParseLanguageId);
         }

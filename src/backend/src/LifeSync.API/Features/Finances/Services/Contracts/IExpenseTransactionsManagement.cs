@@ -1,6 +1,5 @@
-﻿
-using LifeSync.API.Features.Finances.Models;
-using LifeSync.API.Shared.Results;
+﻿using LifeSync.API.Features.Finances.Models;
+using LifeSync.Common.Results;
 
 namespace LifeSync.API.Features.Finances.Services.Contracts;
 

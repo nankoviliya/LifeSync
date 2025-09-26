@@ -1,11 +1,10 @@
-﻿using LifeSync.API.Shared.Results;
+﻿using LifeSync.Common.Results;
 
-namespace LifeSync.API.Features.Translations.Services.Contracts
+namespace LifeSync.API.Features.Translations.Services.Contracts;
+
+public interface ITranslationsService
 {
-    public interface ITranslationsService
-    {
-        Task<DataResult<IReadOnlyDictionary<string, string>>> GetTranslationsByLanguageCodeAsync(
-            string languageCode,
-            CancellationToken cancellationToken);
-    }
+    Task<DataResult<IReadOnlyDictionary<string, string>>> GetTranslationsByLanguageCodeAsync(
+        string languageCode,
+        CancellationToken cancellationToken);
 }

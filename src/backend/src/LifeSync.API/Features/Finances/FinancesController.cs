@@ -1,6 +1,7 @@
-﻿using LifeSync.API.Extensions;
-using LifeSync.API.Features.Finances.Models;
+﻿using LifeSync.API.Features.Finances.Models;
 using LifeSync.API.Features.Finances.Services.Contracts;
+using LifeSync.Common.Extensions;
+using LifeSync.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -28,7 +29,8 @@ public class FinancesController : ControllerBase
 
     [HttpGet("transactions", Name = nameof(GetTransactions))]
     [EndpointSummary("Retrieves financial transactions.")]
-    [EndpointDescription("Returns object that contains a list of financial transactions for the authenticated user, filtered by query parameters.")]
+    [EndpointDescription(
+        "Returns object that contains a list of financial transactions for the authenticated user, filtered by query parameters.")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserFinancialTransactionsResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -36,9 +38,10 @@ public class FinancesController : ControllerBase
         [FromQuery] GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        var result = await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request, cancellationToken);
+        DataResult<GetUserFinancialTransactionsResponse>? result =
+            await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -50,7 +53,8 @@ public class FinancesController : ControllerBase
 
     [HttpGet("transactions/expense", Name = nameof(GetExpenseTransactions))]
     [EndpointSummary("Retrieves expense transactions")]
-    [EndpointDescription("Gets object that contains expense transactions for the authenticated user based on the provided filters.")]
+    [EndpointDescription(
+        "Gets object that contains expense transactions for the authenticated user based on the provided filters.")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetExpenseTransactionsResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -58,9 +62,10 @@ public class FinancesController : ControllerBase
         [FromQuery] GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        var result = await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request, cancellationToken);
+        DataResult<GetExpenseTransactionsResponse>? result =
+            await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -80,9 +85,10 @@ public class FinancesController : ControllerBase
         AddExpenseDto request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        var result = await _expenseTransactionsManagement.AddExpenseAsync(userId, request, cancellationToken);
+        DataResult<Guid>? result =
+            await _expenseTransactionsManagement.AddExpenseAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -100,9 +106,10 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetIncomeTransactions(CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        var result = await _incomeTransactionsManagement.GetUserIncomesAsync(userId, cancellationToken);
+        DataResult<GetIncomeTransactionsResponse>? result =
+            await _incomeTransactionsManagement.GetUserIncomesAsync(userId, cancellationToken);
 
         if (!result.IsSuccess)
         {
@@ -122,9 +129,10 @@ public class FinancesController : ControllerBase
         AddIncomeDto request,
         CancellationToken cancellationToken)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
-        
-        var result = await _incomeTransactionsManagement.AddIncomeAsync(userId, request, cancellationToken);
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+
+        DataResult<Guid>? result =
+            await _incomeTransactionsManagement.AddIncomeAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
         {

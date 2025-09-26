@@ -1,5 +1,5 @@
 using LifeSync.API.Features.Authentication.Models;
-using LifeSync.API.Shared.Results;
+using LifeSync.Common.Results;
 using Microsoft.AspNetCore.Identity.Data;
 using RegisterRequest = LifeSync.API.Features.Authentication.Models.RegisterRequest;
 

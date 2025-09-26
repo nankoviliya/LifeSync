@@ -1,11 +1,10 @@
 ﻿using LifeSync.API.Features.Finances.Models;
-using LifeSync.API.Features.Finances.ResultMessages;
 using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Persistence;
-using LifeSync.API.Shared.Results;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.Finances.Services;
@@ -28,7 +27,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        var response = new GetUserFinancialTransactionsResponse()
+        GetUserFinancialTransactionsResponse? response = new GetUserFinancialTransactionsResponse()
         {
             Transactions = new List<GetFinancialTransactionDto>(),
             ExpenseSummary = new ExpenseSummaryDto(),
@@ -38,9 +37,10 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
 
         if (request.TransactionTypes.Contains(TransactionType.Expense))
         {
-            var getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userId, request);
+            IQueryable<ExpenseTransaction>? getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userId, request);
 
-            var userExpenseTransactions = await getExpenseTransactionsQuery.ToListAsync(cancellationToken);
+            List<ExpenseTransaction>? userExpenseTransactions =
+                await getExpenseTransactionsQuery.ToListAsync(cancellationToken);
 
             response.Transactions.AddRange(userExpenseTransactions.Select(MapExpenseTransaction));
 
@@ -49,9 +49,10 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
 
         if (request.TransactionTypes.Contains(TransactionType.Income))
         {
-            var getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userId, request);
+            IQueryable<IncomeTransaction>? getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userId, request);
 
-            var userIncomeTransactions = await getIncomeTransactionsQuery.ToListAsync(cancellationToken);
+            List<IncomeTransaction>? userIncomeTransactions =
+                await getIncomeTransactionsQuery.ToListAsync(cancellationToken);
 
             response.Transactions.AddRange(userIncomeTransactions.Select(MapIncomeTransaction));
 
@@ -68,13 +69,16 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     {
         decimal totalSpent = expenseTransactions.Sum(x => x.Amount.Amount);
 
-        decimal totalSpentOnNeeds = expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Needs).Sum(x => x.Amount.Amount);
+        decimal totalSpentOnNeeds =
+            expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Needs).Sum(x => x.Amount.Amount);
 
-        decimal totalSpentOnWants = expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Wants).Sum(x => x.Amount.Amount);
+        decimal totalSpentOnWants =
+            expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Wants).Sum(x => x.Amount.Amount);
 
-        decimal totalSpentOnSavings = expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Savings).Sum(x => x.Amount.Amount);
+        decimal totalSpentOnSavings = expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Savings)
+            .Sum(x => x.Amount.Amount);
 
-        var summary = new ExpenseSummaryDto
+        ExpenseSummaryDto? summary = new ExpenseSummaryDto
         {
             TotalSpent = totalSpent,
             TotalSpentOnNeeds = totalSpentOnNeeds,
@@ -90,7 +94,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     {
         decimal totalIncome = incomeTransactions.Sum(x => x.Amount.Amount);
 
-        var summary = new IncomeSummaryDto
+        IncomeSummaryDto? summary = new IncomeSummaryDto
         {
             TotalIncome = totalIncome,
             Currency = incomeTransactions.FirstOrDefault()?.Amount.Currency.Code ?? string.Empty
@@ -99,9 +103,10 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         return summary;
     }
 
-    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(string userId, GetUserFinancialTransactionsRequest request)
+    private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(string userId,
+        GetUserFinancialTransactionsRequest request)
     {
-        var query = _databaseContext.ExpenseTransactions.AsQueryable();
+        IQueryable<ExpenseTransaction>? query = _databaseContext.ExpenseTransactions.AsQueryable();
 
         query = query.Where(x => x.UserId.Equals(userId));
 
@@ -130,9 +135,10 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         return query;
     }
 
-    private IQueryable<IncomeTransaction> GetIncomeTransactionsQuery(string userId, GetUserFinancialTransactionsRequest request)
+    private IQueryable<IncomeTransaction> GetIncomeTransactionsQuery(string userId,
+        GetUserFinancialTransactionsRequest request)
     {
-        var query = _databaseContext.IncomeTransactions.AsQueryable();
+        IQueryable<IncomeTransaction>? query = _databaseContext.IncomeTransactions.AsQueryable();
 
         query = query.Where(x => x.UserId.Equals(userId));
 
@@ -157,7 +163,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     }
 
     private GetExpenseFinancialTransactionDto MapExpenseTransaction(ExpenseTransaction x) =>
-        new GetExpenseFinancialTransactionDto
+        new()
         {
             Id = x.Id.ToString(),
             Amount = x.Amount.Amount,
@@ -169,7 +175,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         };
 
     private GetIncomeFinancialTransactionDto MapIncomeTransaction(IncomeTransaction x) =>
-        new GetIncomeFinancialTransactionDto
+        new()
         {
             Id = x.Id.ToString(),
             Amount = x.Amount.Amount,

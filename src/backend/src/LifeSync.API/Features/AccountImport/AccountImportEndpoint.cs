@@ -1,13 +1,13 @@
 ﻿using FastEndpoints;
-using LifeSync.API.Extensions;
-using LifeSync.API.Shared.Results;
+using LifeSync.Common.Extensions;
+using LifeSync.Common.Results;
 using System.Security.Claims;
 
 namespace LifeSync.API.Features.AccountImport;
 
 public enum AccountImportFileFormat
 {
-    Json = 1,
+    Json = 1
 }
 
 public record AccountImportRequest
@@ -21,10 +21,8 @@ public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, Messa
 {
     private readonly IAccountImportService _accountImportService;
 
-    public AccountImportEndpoint(IAccountImportService accountImportService)
-    {
+    public AccountImportEndpoint(IAccountImportService accountImportService) =>
         _accountImportService = accountImportService;
-    }
 
     public override void Configure()
     {
@@ -43,13 +41,17 @@ public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, Messa
 
     public override async Task HandleAsync(AccountImportRequest request, CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
-        
-        var result = await _accountImportService.ImportAccountDataAsync(userId, request, ct);
+        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+
+        MessageResult result = await _accountImportService.ImportAccountDataAsync(userId, request, ct);
 
         if (!result.IsSuccess)
-            await SendAsync(result, 400, cancellation: ct);
+        {
+            await SendAsync(result, 400, ct);
+        }
         else
-            await SendOkAsync(result, cancellation: ct);
+        {
+            await SendOkAsync(result, ct);
+        }
     }
 }

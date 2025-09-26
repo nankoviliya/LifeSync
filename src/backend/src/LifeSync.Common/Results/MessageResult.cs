@@ -1,4 +1,4 @@
-﻿namespace LifeSync.API.Shared.Results;
+﻿namespace LifeSync.Common.Results;
 
 public class MessageResult
 {
@@ -15,13 +15,7 @@ public class MessageResult
         Errors = errors?.ToList().AsReadOnly() ?? Array.Empty<string>().AsReadOnly();
     }
 
-    public static MessageResult Success(string message = "")
-    {
-        return new MessageResult(true, message, null);
-    }
+    public static MessageResult Success(string message = "") => new(true, message, null);
 
-    public static MessageResult Failure(params string[] errors)
-    {
-        return new MessageResult(false, string.Empty, errors);
-    }
+    public static MessageResult Failure(params string[] errors) => new(false, string.Empty, errors);
 }

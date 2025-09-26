@@ -5,132 +5,136 @@ using LifeSync.API.Features.Translations.Services.Contracts;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.Common.Results;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.Translations.Services
+namespace LifeSync.UnitTests.Features.Translations.Services;
+
+public class TranslationsServiceTests
 {
-    public class TranslationsServiceTests
+    private readonly DbConnection _connection;
+    private readonly DbContextOptions<ApplicationDbContext> _contextOptions;
+
+    private readonly ISecretsManager _secretsManager = Substitute.For<ISecretsManager>();
+
+    private readonly ITranslationsLoader _translationsLoader = Substitute.For<ITranslationsLoader>();
+    private readonly ILogger<TranslationsService> _logger = Substitute.For<ILogger<TranslationsService>>();
+
+    public TranslationsServiceTests()
     {
-        private readonly DbConnection _connection;
-        private readonly DbContextOptions<ApplicationDbContext> _contextOptions;
+        _connection = new SqliteConnection("Filename=:memory:");
+        _connection.Open();
+        _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlite(_connection)
+            .Options;
 
-        private readonly ISecretsManager _secretsManager = Substitute.For<ISecretsManager>();
+        ApplicationDbContext? context = new ApplicationDbContext(_contextOptions, _secretsManager);
 
-        private readonly ITranslationsLoader _translationsLoader = Substitute.For<ITranslationsLoader>();
-        private readonly ILogger<TranslationsService> _logger = Substitute.For<ILogger<TranslationsService>>();
-
-        public TranslationsServiceTests()
+        if (context.Database.EnsureCreated())
         {
-            _connection = new SqliteConnection("Filename=:memory:");
-            _connection.Open();
-            _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlite(_connection)
-                .Options;
+            using DbCommand? viewCommand = context.Database.GetDbConnection().CreateCommand();
 
-            var context = new ApplicationDbContext(_contextOptions, _secretsManager);
-
-            if (context.Database.EnsureCreated())
-            {
-                using var viewCommand = context.Database.GetDbConnection().CreateCommand();
-
-                viewCommand.ExecuteNonQuery();
-            }
-
-            context.Add(new Language { Name = "English", Code = "en" });
-            context.SaveChanges();
+            viewCommand.ExecuteNonQuery();
         }
 
-        ApplicationDbContext CreateContext() => new ApplicationDbContext(_contextOptions, _secretsManager);
+        context.Add(new Language { Name = "English", Code = "en" });
+        context.SaveChanges();
+    }
 
-        [Fact]
-        public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnFailure_WhenLanguageCodeIsNullOrEmpty()
-        {
-            var emptyLanguageCode = string.Empty;
+    private ApplicationDbContext CreateContext() => new(_contextOptions, _secretsManager);
 
-            var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
+    [Fact]
+    public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnFailure_WhenLanguageCodeIsNullOrEmpty()
+    {
+        string? emptyLanguageCode = string.Empty;
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(emptyLanguageCode, CancellationToken.None);
+        TranslationsService? translationsService =
+            new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().Contain(TranslationsResultMessages.LanguageCodeNotProvided);
-        }
+        DataResult<IReadOnlyDictionary<string, string>>? result =
+            await translationsService.GetTranslationsByLanguageCodeAsync(emptyLanguageCode, CancellationToken.None);
 
-        [Fact]
-        public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnFailure_WhenLanguageNotFound()
-        {
-            var nonExistingLanguage = "TEST_nOn-EXiSTED-CODE";
+        result.IsSuccess.Should().BeFalse();
+        result.Errors.Should().Contain(TranslationsResultMessages.LanguageCodeNotProvided);
+    }
 
-            var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
+    [Fact]
+    public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnFailure_WhenLanguageNotFound()
+    {
+        string? nonExistingLanguage = "TEST_nOn-EXiSTED-CODE";
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(nonExistingLanguage, CancellationToken.None);
+        TranslationsService? translationsService =
+            new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().Contain(TranslationsResultMessages.LanguageNotFound);
-        }
+        DataResult<IReadOnlyDictionary<string, string>>? result =
+            await translationsService.GetTranslationsByLanguageCodeAsync(nonExistingLanguage, CancellationToken.None);
 
-        [Fact]
-        public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnTranslations_WhenLanguageIsValid()
-        {
-            var languageCode = "en";
+        result.IsSuccess.Should().BeFalse();
+        result.Errors.Should().Contain(TranslationsResultMessages.LanguageNotFound);
+    }
 
-            var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
+    [Fact]
+    public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnTranslations_WhenLanguageIsValid()
+    {
+        string? languageCode = "en";
 
-            _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(new Dictionary<string, string>
-            {
-                { "button", "Click" },
-                { "input-label", "Insert value" }
-            });
+        TranslationsService? translationsService =
+            new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
+        _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(
+            new Dictionary<string, string> { { "button", "Click" }, { "input-label", "Insert value" } });
 
-            result.IsSuccess.Should().BeTrue();
-            result.Data.Should().NotBeNull();
-            result.Data.Should().HaveCount(2);
-            result.Data["button"].Should().Be("Click");
-            result.Data["input-label"].Should().Be("Insert value");
-        }
+        DataResult<IReadOnlyDictionary<string, string>>? result =
+            await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
 
-        [Fact]
-        public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnTranslationsFromCache_WhenMoreThanOneCall()
-        {
-            var languageCode = "en";
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().NotBeNull();
+        result.Data.Should().HaveCount(2);
+        result.Data["button"].Should().Be("Click");
+        result.Data["input-label"].Should().Be("Insert value");
+    }
 
-            var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
+    [Fact]
+    public async Task GetTranslationsByLanguageCodeAsync_ShouldReturnTranslationsFromCache_WhenMoreThanOneCall()
+    {
+        string? languageCode = "en";
 
-            _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(new Dictionary<string, string>
-            {
-                { "button", "Click" },
-            });
+        TranslationsService? translationsService =
+            new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            var result1 = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
-            var result2 = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
+        _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None)
+            .Returns(new Dictionary<string, string> { { "button", "Click" } });
 
-            await _translationsLoader.Received(1).LoadTranslationsAsync(languageCode, CancellationToken.None);
-            result1.Data.Should().BeEquivalentTo(result2.Data);
-        }
+        DataResult<IReadOnlyDictionary<string, string>>? result1 =
+            await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
+        DataResult<IReadOnlyDictionary<string, string>>? result2 =
+            await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
 
-        [Fact]
-        public async Task GetTranslationsByLanguageCodeAsync_LanguageCodeCheckShouldBeCaseInsensitive()
-        {
-            var languageCode = "EN";
+        await _translationsLoader.Received(1).LoadTranslationsAsync(languageCode, CancellationToken.None);
+        result1.Data.Should().BeEquivalentTo(result2.Data);
+    }
 
-            var translationsService = new TranslationsService(CreateContext(), _translationsLoader, _logger);
+    [Fact]
+    public async Task GetTranslationsByLanguageCodeAsync_LanguageCodeCheckShouldBeCaseInsensitive()
+    {
+        string? languageCode = "EN";
 
-            _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None).Returns(new Dictionary<string, string>
-            {
-                { "button", "Click" },
-            });
+        TranslationsService? translationsService =
+            new TranslationsService(CreateContext(), _translationsLoader, _logger);
 
-            var result = await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
+        _translationsLoader.LoadTranslationsAsync(languageCode, CancellationToken.None)
+            .Returns(new Dictionary<string, string> { { "button", "Click" } });
 
-            result.IsSuccess.Should().BeTrue();
-            result.Data.Should().NotBeNull();
-            result.Data.Should().HaveCount(1);
-            result.Data["button"].Should().Be("Click");
-        }
+        DataResult<IReadOnlyDictionary<string, string>>? result =
+            await translationsService.GetTranslationsByLanguageCodeAsync(languageCode, CancellationToken.None);
+
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().NotBeNull();
+        result.Data.Should().HaveCount(1);
+        result.Data["button"].Should().Be("Click");
     }
 }
