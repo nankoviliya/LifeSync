@@ -1,4 +1,5 @@
-﻿using LifeSync.API.Features.AccountImport.Importers;
+﻿using LifeSync.API.Features.AccountImport.DataReaders;
+using LifeSync.API.Features.AccountImport.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
@@ -21,16 +22,16 @@ public interface IAccountImportService
 public class AccountImportService : BaseService, IAccountImportService
 {
     private readonly ApplicationDbContext _databaseContext;
-    private readonly IEnumerable<IAccountImporter> _importers;
+    private readonly IEnumerable<IAccountDataReader> _dataReaders;
     private readonly ILogger<AccountImportService> _logger;
 
     public AccountImportService(
         ApplicationDbContext databaseContext,
-        IEnumerable<IAccountImporter> importers,
+        IEnumerable<IAccountDataReader> dataReaders,
         ILogger<AccountImportService> logger)
     {
         _databaseContext = databaseContext;
-        _importers = importers;
+        _dataReaders = dataReaders;
         _logger = logger;
     }
 
@@ -41,30 +42,32 @@ public class AccountImportService : BaseService, IAccountImportService
     {
         using IDisposable? logScope = _logger.BeginScope("UserId:{UserId}, Format:{Format}", userId, request.Format);
 
-        IAccountImporter? importer = _importers.SingleOrDefault(i => i.Format == request.Format);
-        if (importer is null)
+        IAccountDataReader? dataReader = _dataReaders.SingleOrDefault(i => i.Format == request.Format);
+        if (dataReader is null)
         {
-            _logger.LogWarning("Unsupported format");
+            _logger.LogWarning("Unsupported format: {Format}", request.Format);
             return FailureMessage("Unsupported file format.");
         }
 
-        ImportAccountData? data = await importer.ImportAsync(request.File, ct);
+        ImportAccountData? data = await dataReader.ReadAsync(request.File, ct);
         if (data is null)
         {
-            _logger.LogWarning("Import returned null");
-            return MessageResult.Failure("Failed to parse file.");
+            _logger.LogWarning("Cannot read data from file");
+            return MessageResult.Failure("Cannot read data from file.");
         }
 
         User? user = await _databaseContext.Users.FindAsync(new object[] { userId }, ct);
         if (user is null)
         {
-            _logger.LogWarning("User not found");
+            _logger.LogWarning("User not found, User Id: {UserId}", userId);
             return MessageResult.Failure("User account not found.");
         }
 
         await using IDbContextTransaction? tx = await _databaseContext.Database.BeginTransactionAsync(ct);
         try
         {
+            // TODO: add data validation. Good idea would be to use rich domain models and build entities
+            // via predefined create methods
             if (data.ProfileData.BalanceAmount.HasValue && data.ProfileData.BalanceCurrency != null)
             {
                 user.Balance = new Money(data.ProfileData.BalanceAmount.Value,

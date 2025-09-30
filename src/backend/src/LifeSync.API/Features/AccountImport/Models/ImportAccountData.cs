@@ -1,28 +1,18 @@
 ﻿using LifeSync.API.Models.Expenses;
 
-namespace LifeSync.API.Features.AccountImport.Importers;
+namespace LifeSync.API.Features.AccountImport.Models;
 
 public record ImportAccountData
 {
-    public ImportAccountProfile ProfileData { get; set; } = default!;
+    public ImportAccountProfile ProfileData { get; init; } = default!;
 
-    public List<ImportAccountExpenseTransaction> ExpenseTransactions { get; set; } = default!;
+    public List<ImportAccountExpenseTransaction> ExpenseTransactions { get; init; } = default!;
 
-    public List<ImportAccountIncomeTransaction> IncomeTransactions { get; set; } = default!;
+    public List<ImportAccountIncomeTransaction> IncomeTransactions { get; init; } = default!;
 }
 
 public record ImportAccountProfile
 {
-    public required string UserId { get; init; }
-
-    public string? UserName { get; init; }
-
-    public string? Email { get; init; }
-
-    public string? FirstName { get; init; }
-
-    public string? LastName { get; init; }
-
     public decimal? BalanceAmount { get; init; }
 
     public string? BalanceCurrency { get; init; }
@@ -32,8 +22,6 @@ public record ImportAccountProfile
 
 public record ImportAccountExpenseTransaction
 {
-    public required Guid Id { get; init; }
-
     public required decimal Amount { get; init; }
 
     public required string Currency { get; init; }
@@ -47,8 +35,6 @@ public record ImportAccountExpenseTransaction
 
 public record ImportAccountIncomeTransaction
 {
-    public required Guid Id { get; init; }
-
     public required decimal Amount { get; init; }
 
     public required string Currency { get; init; }

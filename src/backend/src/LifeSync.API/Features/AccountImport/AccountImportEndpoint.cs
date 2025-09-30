@@ -12,7 +12,7 @@ public enum AccountImportFileFormat
 
 public record AccountImportRequest
 {
-    public AccountImportFileFormat Format { get; init; } = default!;
+    public AccountImportFileFormat Format { get; init; }
 
     public IFormFile File { get; init; } = default!;
 }
@@ -31,8 +31,9 @@ public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, Messa
 
         Summary(s =>
         {
-            s.Summary = "Imports account data from a desired format";
-            s.Description = "Parses the account data from the file. Returns success result if data is imported.";
+            s.Summary = "[PREVIEW] Imports account data from a desired format";
+            s.Description = "**PREVIEW WARNING**: Validations are not implemented yet" +
+                            "Parses the account data from the file. Returns success result if data is imported.";
             s.Responses[200] = "Success";
             s.Responses[400] = "Bad Request";
             s.Responses[401] = "Unauthorized";
