@@ -6,6 +6,7 @@ using LifeSync.API.Models.Incomes;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -44,10 +45,7 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
             Description = x.Description
         }).ToList();
 
-        GetIncomeTransactionsResponse? response = new GetIncomeTransactionsResponse
-        {
-            IncomeTransactions = userIncomeTransactionsDto
-        };
+        GetIncomeTransactionsResponse? response = new() { IncomeTransactions = userIncomeTransactionsDto };
 
         return Success(response);
     }
@@ -70,21 +68,18 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
                 return Failure<Guid>(IncomeTrackingResultMessages.UserNotFound);
             }
 
-            Money? incomeAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
+            Money? incomeAmount = new(request.Amount, Currency.FromCode(request.Currency));
 
             if (user.Balance.Currency != incomeAmount.Currency)
             {
                 return Failure<Guid>(IncomeTrackingResultMessages.CurrencyMismatch);
             }
 
-            IncomeTransaction? transactionData = new IncomeTransaction
-            {
-                Id = Guid.NewGuid(),
-                Amount = new Money(request.Amount, Currency.FromCode(request.Currency)),
-                Date = request.Date,
-                Description = request.Description,
-                UserId = userId.ToString()
-            };
+            IncomeTransaction transactionData = IncomeTransaction.From(
+                new Money(request.Amount, Currency.FromCode(request.Currency)).ToRequiredReference(),
+                request.Date.ToRequiredStruct(),
+                request.Description.ToRequiredString(),
+                userId.ToRequiredString());
 
             await _databaseContext.IncomeTransactions.AddAsync(transactionData, cancellationToken);
             user.Balance += incomeAmount;

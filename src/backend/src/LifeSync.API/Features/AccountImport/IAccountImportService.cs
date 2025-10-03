@@ -86,13 +86,13 @@ public class AccountImportService : BaseService, IAccountImportService
                     userId.ToRequiredString()))
             );
 
-            _databaseContext.IncomeTransactions.AddRange(data.IncomeTransactions.Select(i => new IncomeTransaction
-            {
-                Amount = new Money(i.Amount, Currency.FromCode(i.Currency)),
-                Description = i.Description,
-                Date = i.Date,
-                UserId = userId
-            }));
+            _databaseContext.IncomeTransactions.AddRange(
+                data.IncomeTransactions.Select(i => IncomeTransaction.From(
+                    new Money(i.Amount, Currency.FromCode(i.Currency)).ToRequiredReference(),
+                    i.Date.ToRequiredStruct(),
+                    i.Description.ToRequiredString(),
+                    userId.ToRequiredString()))
+            );
 
             await _databaseContext.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
