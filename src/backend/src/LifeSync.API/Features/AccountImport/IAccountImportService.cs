@@ -6,6 +6,7 @@ using LifeSync.API.Models.Incomes;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -76,14 +77,14 @@ public class AccountImportService : BaseService, IAccountImportService
 
             user.LanguageId = data.ProfileData.LanguageId ?? user.LanguageId;
 
-            _databaseContext.ExpenseTransactions.AddRange(data.ExpenseTransactions.Select(e => new ExpenseTransaction
-            {
-                Amount = new Money(e.Amount, Currency.FromCode(e.Currency)),
-                Description = e.Description,
-                ExpenseType = e.ExpenseType,
-                Date = e.Date,
-                UserId = userId
-            }));
+            _databaseContext.ExpenseTransactions.AddRange(
+                data.ExpenseTransactions.Select(e => ExpenseTransaction.From(
+                    new Money(e.Amount, Currency.FromCode(e.Currency)).ToRequiredReference(),
+                    e.Date.ToRequiredStruct(),
+                    e.Description.ToRequiredString(),
+                    e.ExpenseType,
+                    userId.ToRequiredString()))
+            );
 
             _databaseContext.IncomeTransactions.AddRange(data.IncomeTransactions.Select(i => new IncomeTransaction
             {

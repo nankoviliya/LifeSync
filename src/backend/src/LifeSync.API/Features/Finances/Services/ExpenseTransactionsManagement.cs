@@ -6,6 +6,7 @@ using LifeSync.API.Models.Expenses;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -66,7 +67,7 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
             .Where(x => x.ExpenseType == ExpenseType.Savings)
             .Sum(x => x.Amount.Amount);
 
-        GetExpenseTransactionsResponse response = new GetExpenseTransactionsResponse
+        GetExpenseTransactionsResponse response = new()
         {
             ExpenseTransactions = userExpenseTransactionsDto,
             ExpenseSummary = new ExpenseSummaryDto
@@ -135,21 +136,19 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
                 return Failure<Guid>(ExpenseTrackingResultMessages.UserNotFound);
             }
 
-            Money expenseAmount = new Money(request.Amount, Currency.FromCode(request.Currency));
+            Money expenseAmount = new(request.Amount, Currency.FromCode(request.Currency));
 
             if (user.Balance.Currency != expenseAmount.Currency)
             {
                 return Failure<Guid>(ExpenseTrackingResultMessages.CurrencyMismatch);
             }
 
-            ExpenseTransaction transactionData = new ExpenseTransaction
-            {
-                Amount = expenseAmount,
-                Date = request.Date,
-                Description = request.Description,
-                ExpenseType = request.ExpenseType,
-                UserId = userId.ToString()
-            };
+            ExpenseTransaction transactionData = ExpenseTransaction.From(
+                expenseAmount.ToRequiredReference(),
+                request.Date.ToRequiredStruct(),
+                request.Description.ToRequiredString(),
+                request.ExpenseType,
+                userId.ToRequiredString());
 
             await _databaseContext.ExpenseTransactions.AddAsync(transactionData, cancellationToken);
             user.Balance -= expenseAmount;
