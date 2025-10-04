@@ -4,6 +4,7 @@ using LifeSync.API.Features.Account.Services.Contracts;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 
@@ -76,9 +77,9 @@ public class AccountService : BaseService, IAccountService
             return FailureMessage(AccountResultMessages.UnableToParseLanguageId);
         }
 
-        userToUpdate.FirstName = data.FirstName;
-        userToUpdate.LastName = data.LastName;
-        userToUpdate.LanguageId = parsedLanguageId;
+        userToUpdate.UpdateFirstName(data.FirstName.ToRequiredString());
+        userToUpdate.UpdateLastName(data.LastName.ToRequiredString());
+        userToUpdate.UpdateLanguage(parsedLanguageId.ToRequiredStruct());
 
         try
         {

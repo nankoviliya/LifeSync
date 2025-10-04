@@ -67,15 +67,12 @@ public class AccountImportService : BaseService, IAccountImportService
         await using IDbContextTransaction? tx = await _databaseContext.Database.BeginTransactionAsync(ct);
         try
         {
-            // TODO: add data validation. Good idea would be to use rich domain models and build entities
-            // via predefined create methods
-            if (data.ProfileData.BalanceAmount.HasValue && data.ProfileData.BalanceCurrency != null)
-            {
-                user.Balance = new Money(data.ProfileData.BalanceAmount.Value,
-                    Currency.FromCode(data.ProfileData.BalanceCurrency));
-            }
+            user.UpdateBalance(
+                new Money(data.ProfileData.BalanceAmount.ToRequiredStruct(),
+                    Currency.FromCode(data.ProfileData.BalanceCurrency.ToRequiredString()))
+            );
 
-            user.LanguageId = data.ProfileData.LanguageId ?? user.LanguageId;
+            user.UpdateLanguage(data.ProfileData.LanguageId.ToRequiredStruct());
 
             _databaseContext.ExpenseTransactions.AddRange(
                 data.ExpenseTransactions.Select(e => ExpenseTransaction.From(

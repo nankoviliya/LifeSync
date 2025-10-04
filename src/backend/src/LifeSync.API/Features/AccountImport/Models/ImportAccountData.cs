@@ -13,11 +13,11 @@ public record ImportAccountData
 
 public record ImportAccountProfile
 {
-    public decimal? BalanceAmount { get; init; }
+    public required decimal BalanceAmount { get; init; }
 
-    public string? BalanceCurrency { get; init; }
+    public required string BalanceCurrency { get; init; }
 
-    public Guid? LanguageId { get; init; }
+    public required Guid LanguageId { get; init; }
 }
 
 public record ImportAccountExpenseTransaction

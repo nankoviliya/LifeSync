@@ -32,17 +32,17 @@ public class ExpenseTransaction : Entity
         UserId = userId;
     }
 
-    public Money Amount { get; init; } = default!;
+    public Money Amount { get; private set; } = default!;
 
-    public DateTime Date { get; init; }
+    public DateTime Date { get; private set; }
 
-    public string Description { get; init; } = default!;
+    public string Description { get; private set; } = default!;
 
-    public ExpenseType ExpenseType { get; init; }
+    public ExpenseType ExpenseType { get; private set; }
 
-    public string UserId { get; init; } = default!;
+    public string UserId { get; private set; } = default!;
 
-    public User User { get; init; } = default!;
+    public User User { get; private set; } = default!;
 }
 
 public enum ExpenseType

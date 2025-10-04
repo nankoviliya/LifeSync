@@ -3,6 +3,7 @@ using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
@@ -47,16 +48,17 @@ public class AuthService : BaseService, IAuthService
 
     public async Task<MessageResult> RegisterAsync(RegisterRequest request)
     {
-        User? user = new User
-        {
-            UserName = request.Email,
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Balance = new Money(request.Balance, Currency.FromCode(request.Currency)),
-            CurrencyPreference = Currency.FromCode(request.Currency),
-            LanguageId = request.LanguageId
-        };
+        Money userBalance = new(request.Balance, Currency.FromCode(request.Currency));
+
+        User user = User.From(
+            request.Email.ToRequiredString(),
+            request.Email.ToRequiredString(),
+            request.FirstName.ToRequiredString(),
+            request.LastName.ToRequiredString(),
+            userBalance.ToRequiredReference(),
+            Currency.FromCode(request.Currency).ToRequiredReference(),
+            request.LanguageId.ToRequiredStruct()
+        );
 
         IdentityResult? createResult = await _userManager.CreateAsync(user, request.Password);
 

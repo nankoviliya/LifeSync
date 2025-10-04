@@ -1,8 +1,11 @@
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
+using LifeSync.API.Shared;
+using LifeSync.Common.Required;
 using NSubstitute;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -13,26 +16,30 @@ public class JwtTokenGeneratorTests
     [Fact]
     public async Task GenerateJwtTokenAsync_ShouldReturnTokenResponse_WhenUserIsValid()
     {
-        var jwtSecrets = JwtSecrets.Create(
-            "super_secret_key_1234567890123456", 
-            "TestIssuer", 
-            "TestAudience", 
+        JwtSecrets jwtSecrets = JwtSecrets.Create(
+            "super_secret_key_1234567890123456",
+            "TestIssuer",
+            "TestAudience",
             30);
 
-        var user = new User
-        {
-            Id = "user123",
-            Email = "test@example.com"
-        };
+        User user = User.From(
+            "user123@gmail.com".ToRequiredString(),
+            "user123@gmail.com".ToRequiredString(),
+            "F".ToRequiredString(),
+            "L".ToRequiredString(),
+            new Money(200, Currency.Bgn).ToRequiredReference(),
+            Currency.Bgn.ToRequiredReference(),
+            Guid.Parse("BE9E8EEA-E3A4-475E-B364-08218FB3CC6C").ToRequiredStruct()
+        );
 
-        var secretsManager = Substitute.For<ISecretsManager>();
-        var securityTokenHandler = new JwtSecurityTokenHandler();
+        ISecretsManager? secretsManager = Substitute.For<ISecretsManager>();
+        JwtSecurityTokenHandler securityTokenHandler = new();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
+        JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        var tokenResponse = await generator.GenerateJwtTokenAsync(user);
+        TokenResponse tokenResponse = await generator.GenerateJwtTokenAsync(user);
 
         tokenResponse.Token.Should().NotBeNullOrEmpty();
         tokenResponse.Expiry.Should().BeAfter(DateTime.UtcNow);
@@ -41,28 +48,32 @@ public class JwtTokenGeneratorTests
     [Fact]
     public async Task GenerateJwtTokenAsync_ShouldIncludeCorrectClaims_WhenUserIsValid()
     {
-        var jwtSecrets = JwtSecrets.Create(
-            "super_secret_key_1234567890123456", 
-            "TestIssuer", 
-            "TestAudience", 
+        JwtSecrets jwtSecrets = JwtSecrets.Create(
+            "super_secret_key_1234567890123456",
+            "TestIssuer",
+            "TestAudience",
             30);
 
-        var user = new User
-        {
-            Id = "user123",
-            Email = "test@example.com"
-        };
+        User user = User.From(
+            "user123@gmail.com".ToRequiredString(),
+            "user123@gmail.com".ToRequiredString(),
+            "F".ToRequiredString(),
+            "L".ToRequiredString(),
+            new Money(200, Currency.Bgn).ToRequiredReference(),
+            Currency.Bgn.ToRequiredReference(),
+            Guid.Parse("BE9E8EEA-E3A4-475E-B364-08218FB3CC6C").ToRequiredStruct()
+        );
 
-        var secretsManager = Substitute.For<ISecretsManager>();
-        var securityTokenHandler = new JwtSecurityTokenHandler();
+        ISecretsManager? secretsManager = Substitute.For<ISecretsManager>();
+        JwtSecurityTokenHandler securityTokenHandler = new();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
+        JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        var tokenResponse = await generator.GenerateJwtTokenAsync(user);
-        var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(tokenResponse.Token);
+        TokenResponse tokenResponse = await generator.GenerateJwtTokenAsync(user);
+        JwtSecurityTokenHandler handler = new();
+        JwtSecurityToken? jwtToken = handler.ReadJwtToken(tokenResponse.Token);
 
         jwtToken.Claims.Should().Contain(c => c.Type == JwtRegisteredClaimNames.Sub && c.Value == user.Id);
         jwtToken.Claims.Should().Contain(c => c.Type == JwtRegisteredClaimNames.Email && c.Value == user.Email);
@@ -72,18 +83,22 @@ public class JwtTokenGeneratorTests
     [Fact]
     public async Task GenerateJwtTokenAsync_ShouldThrowArgumentException_WhenSecretsAreNull()
     {
-        var user = new User
-        {
-            Id = "user123",
-            Email = "test@example.com"
-        };
+        User user = User.From(
+            "user123@gmail.com".ToRequiredString(),
+            "user123@gmail.com".ToRequiredString(),
+            "F".ToRequiredString(),
+            "L".ToRequiredString(),
+            new Money(200, Currency.Bgn).ToRequiredReference(),
+            Currency.Bgn.ToRequiredReference(),
+            Guid.Parse("BE9E8EEA-E3A4-475E-B364-08218FB3CC6C").ToRequiredStruct()
+        );
 
-        var secretsManager = Substitute.For<ISecretsManager>();
-        var securityTokenHandler = new JwtSecurityTokenHandler();
+        ISecretsManager? secretsManager = Substitute.For<ISecretsManager>();
+        JwtSecurityTokenHandler securityTokenHandler = new();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult<JwtSecrets>(null));
 
-        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
+        JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
         Func<Task> act = async () => await generator.GenerateJwtTokenAsync(user);
 
@@ -93,18 +108,18 @@ public class JwtTokenGeneratorTests
     [Fact]
     public async Task GenerateJwtToken_ShouldThrowArgumentNullException_WhenUserIsNull()
     {
-        var jwtSecrets = JwtSecrets.Create(
-            "super_secret_key_1234567890123456", 
-            "TestIssuer", 
-            "TestAudience", 
+        JwtSecrets jwtSecrets = JwtSecrets.Create(
+            "super_secret_key_1234567890123456",
+            "TestIssuer",
+            "TestAudience",
             30);
 
-        var secretsManager = Substitute.For<ISecretsManager>();
-        var securityTokenHandler = new JwtSecurityTokenHandler();
+        ISecretsManager? secretsManager = Substitute.For<ISecretsManager>();
+        JwtSecurityTokenHandler securityTokenHandler = new();
 
         secretsManager.GetJwtSecretsAsync().Returns(Task.FromResult(jwtSecrets));
 
-        var generator = new JwtTokenGenerator(secretsManager, securityTokenHandler);
+        JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
         Func<Task> act = async () => await generator.GenerateJwtTokenAsync(null);
 

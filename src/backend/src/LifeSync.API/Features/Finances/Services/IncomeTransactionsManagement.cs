@@ -82,7 +82,8 @@ public class IncomeTransactionsManagement : BaseService, IIncomeTransactionsMana
                 userId.ToRequiredString());
 
             await _databaseContext.IncomeTransactions.AddAsync(transactionData, cancellationToken);
-            user.Balance += incomeAmount;
+
+            user.Deposit(incomeAmount);
 
             await _databaseContext.SaveChangesAsync(cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);

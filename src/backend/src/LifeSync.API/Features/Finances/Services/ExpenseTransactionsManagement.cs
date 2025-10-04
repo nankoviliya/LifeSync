@@ -151,7 +151,8 @@ public class ExpenseTransactionsManagement : BaseService, IExpenseTransactionsMa
                 userId.ToRequiredString());
 
             await _databaseContext.ExpenseTransactions.AddAsync(transactionData, cancellationToken);
-            user.Balance -= expenseAmount;
+
+            user.Withdraw(expenseAmount);
 
             await _databaseContext.SaveChangesAsync(cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
