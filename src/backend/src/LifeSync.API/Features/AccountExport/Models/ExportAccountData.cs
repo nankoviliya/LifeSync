@@ -1,6 +1,6 @@
 ﻿using LifeSync.API.Models.Expenses;
 
-namespace LifeSync.API.Features.AccountExport.Exporters;
+namespace LifeSync.API.Features.AccountExport.Models;
 
 public record ExportAccountData
 {
@@ -59,4 +59,3 @@ public record ExportAccountIncomeTransaction
 
     public DateTime Date { get; init; }
 }
-

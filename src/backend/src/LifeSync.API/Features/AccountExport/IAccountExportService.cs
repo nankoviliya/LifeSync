@@ -1,4 +1,5 @@
-﻿using LifeSync.API.Features.AccountExport.Exporters;
+﻿using LifeSync.API.Features.AccountExport.DataExporters;
+using LifeSync.API.Features.AccountExport.Models;
 using LifeSync.API.Features.AccountExport.ResultMessages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared.Services;
@@ -19,16 +20,16 @@ public interface IAccountExportService
 public class AccountExportService : BaseService, IAccountExportService
 {
     private readonly ApplicationDbContext _databaseContext;
-    private readonly IEnumerable<IAccountExporter> _exporters;
+    private readonly IEnumerable<IAccountDataExporter> _dataExporters;
     private readonly ILogger<AccountExportService> _logger;
 
     public AccountExportService(
         ApplicationDbContext databaseContext,
-        IEnumerable<IAccountExporter> exporters,
+        IEnumerable<IAccountDataExporter> dataExporters,
         ILogger<AccountExportService> logger)
     {
         _databaseContext = databaseContext;
-        _exporters = exporters;
+        _dataExporters = dataExporters;
         _logger = logger;
     }
 
@@ -37,9 +38,9 @@ public class AccountExportService : BaseService, IAccountExportService
         ExportAccountRequest request,
         CancellationToken cancellationToken)
     {
-        IAccountExporter? exporter = _exporters.SingleOrDefault(e => e.Format == request.Format);
+        IAccountDataExporter? dataExporter = _dataExporters.SingleOrDefault(e => e.Format == request.Format);
 
-        if (exporter is null)
+        if (dataExporter is null)
         {
             return Failure<ExportAccountResponse>(AccountExportResultMessages.ExportAccountDataFileFormatInvalid);
         }
@@ -93,7 +94,7 @@ public class AccountExportService : BaseService, IAccountExportService
             return Failure<ExportAccountResponse>(AccountExportResultMessages.UserNotFound);
         }
 
-        ExportAccountResponse? result = await exporter.Export(accountData, cancellationToken);
+        ExportAccountResponse? result = await dataExporter.Export(accountData, cancellationToken);
 
         return Success(result);
     }

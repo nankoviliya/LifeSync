@@ -1,6 +1,8 @@
-﻿namespace LifeSync.API.Features.AccountExport.Exporters;
+﻿using LifeSync.API.Features.AccountExport.Models;
 
-public interface IAccountExporter
+namespace LifeSync.API.Features.AccountExport.DataExporters;
+
+public interface IAccountDataExporter
 {
     ExportAccountFileFormat Format { get; }
 
