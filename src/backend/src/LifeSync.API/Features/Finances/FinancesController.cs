@@ -1,6 +1,6 @@
 ﻿using LifeSync.API.Features.Finances.Models;
 using LifeSync.API.Features.Finances.Services.Contracts;
-using LifeSync.Common.Extensions;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,9 +38,9 @@ public class FinancesController : ControllerBase
         [FromQuery] GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        RequiredString userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        DataResult<GetUserFinancialTransactionsResponse>? result =
+        DataResult<GetUserFinancialTransactionsResponse> result =
             await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
@@ -62,9 +62,9 @@ public class FinancesController : ControllerBase
         [FromQuery] GetUserExpenseTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        RequiredString userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        DataResult<GetExpenseTransactionsResponse>? result =
+        DataResult<GetExpenseTransactionsResponse> result =
             await _expenseTransactionsManagement.GetUserExpenseTransactionsAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
@@ -85,9 +85,9 @@ public class FinancesController : ControllerBase
         AddExpenseDto request,
         CancellationToken cancellationToken)
     {
-        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        RequiredString userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        DataResult<Guid>? result =
+        DataResult<Guid> result =
             await _expenseTransactionsManagement.AddExpenseAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)
@@ -106,9 +106,9 @@ public class FinancesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetIncomeTransactions(CancellationToken cancellationToken)
     {
-        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        RequiredString userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        DataResult<GetIncomeTransactionsResponse>? result =
+        DataResult<GetIncomeTransactionsResponse> result =
             await _incomeTransactionsManagement.GetUserIncomesAsync(userId, cancellationToken);
 
         if (!result.IsSuccess)
@@ -129,9 +129,9 @@ public class FinancesController : ControllerBase
         AddIncomeDto request,
         CancellationToken cancellationToken)
     {
-        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
+        RequiredString userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
 
-        DataResult<Guid>? result =
+        DataResult<Guid> result =
             await _incomeTransactionsManagement.AddIncomeAsync(userId, request, cancellationToken);
 
         if (!result.IsSuccess)

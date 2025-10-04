@@ -2,6 +2,7 @@
 using LifeSync.API.Features.AccountExport.ResultMessages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared.Services;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,7 @@ namespace LifeSync.API.Features.AccountExport;
 public interface IAccountExportService
 {
     Task<DataResult<ExportAccountResponse>> ExportAccountData(
-        string userId,
+        RequiredString userId,
         ExportAccountRequest request,
         CancellationToken cancellationToken);
 }
@@ -32,13 +33,15 @@ public class AccountExportService : BaseService, IAccountExportService
     }
 
     public async Task<DataResult<ExportAccountResponse>> ExportAccountData(
-        string userId,
+        RequiredString userId,
         ExportAccountRequest request,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(userId))
+        IAccountExporter? exporter = _exporters.SingleOrDefault(e => e.Format == request.Format);
+
+        if (exporter is null)
         {
-            return Failure<ExportAccountResponse>(AccountExportResultMessages.InvalidUserId);
+            return Failure<ExportAccountResponse>(AccountExportResultMessages.ExportAccountDataFileFormatInvalid);
         }
 
         ExportAccountData? accountData = await _databaseContext.Users
@@ -89,8 +92,6 @@ public class AccountExportService : BaseService, IAccountExportService
             _logger.LogWarning("User not found for userId: {UserId}", userId);
             return Failure<ExportAccountResponse>(AccountExportResultMessages.UserNotFound);
         }
-
-        IAccountExporter? exporter = _exporters.Single(e => e.Format == request.Format);
 
         ExportAccountResponse? result = await exporter.Export(accountData, cancellationToken);
 

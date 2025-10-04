@@ -2,7 +2,7 @@ using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
-using LifeSync.Common.Extensions;
+using LifeSync.Common.Required;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -45,10 +45,10 @@ public class JwtTokenGenerator
         };
 
         byte[]? keyBytes = Encoding.UTF8.GetBytes(jwtSecrets.SecretKey);
-        SymmetricSecurityKey? key = new SymmetricSecurityKey(keyBytes);
-        SigningCredentials? signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        SymmetricSecurityKey? key = new(keyBytes);
+        SigningCredentials? signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
 
-        SecurityTokenDescriptor? tokenDescriptor = new SecurityTokenDescriptor
+        SecurityTokenDescriptor? tokenDescriptor = new()
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(jwtSecrets.ExpiryMinutes),

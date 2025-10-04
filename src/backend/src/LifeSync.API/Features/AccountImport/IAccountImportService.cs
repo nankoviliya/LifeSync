@@ -15,7 +15,7 @@ namespace LifeSync.API.Features.AccountImport;
 public interface IAccountImportService
 {
     Task<MessageResult> ImportAccountDataAsync(
-        string userId,
+        RequiredString userId,
         AccountImportRequest request,
         CancellationToken ct);
 }
@@ -37,7 +37,7 @@ public class AccountImportService : BaseService, IAccountImportService
     }
 
     public async Task<MessageResult> ImportAccountDataAsync(
-        string userId,
+        RequiredString userId,
         AccountImportRequest request,
         CancellationToken ct)
     {
@@ -74,22 +74,25 @@ public class AccountImportService : BaseService, IAccountImportService
 
             user.UpdateLanguage(data.ProfileData.LanguageId.ToRequiredStruct());
 
-            _databaseContext.ExpenseTransactions.AddRange(
-                data.ExpenseTransactions.Select(e => ExpenseTransaction.From(
+            IEnumerable<ExpenseTransaction> incomeTransactions = data.ExpenseTransactions.Select(e =>
+                ExpenseTransaction.From(
                     new Money(e.Amount, Currency.FromCode(e.Currency)).ToRequiredReference(),
                     e.Date.ToRequiredStruct(),
                     e.Description.ToRequiredString(),
                     e.ExpenseType,
-                    userId.ToRequiredString()))
-            );
+                    userId)
+            ).ToList();
 
-            _databaseContext.IncomeTransactions.AddRange(
-                data.IncomeTransactions.Select(i => IncomeTransaction.From(
+            IEnumerable<IncomeTransaction> expenseTransactions = data.IncomeTransactions.Select(i =>
+                IncomeTransaction.From(
                     new Money(i.Amount, Currency.FromCode(i.Currency)).ToRequiredReference(),
                     i.Date.ToRequiredStruct(),
                     i.Description.ToRequiredString(),
-                    userId.ToRequiredString()))
-            );
+                    userId)
+            ).ToList();
+
+            await _databaseContext.AddRangeAsync(incomeTransactions, ct);
+            await _databaseContext.AddRangeAsync(expenseTransactions, ct);
 
             await _databaseContext.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
