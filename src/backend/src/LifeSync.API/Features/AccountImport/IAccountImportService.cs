@@ -57,7 +57,7 @@ public class AccountImportService : BaseService, IAccountImportService
             return MessageResult.Failure("Cannot read data from file.");
         }
 
-        User? user = await _databaseContext.Users.FindAsync(new object[] { userId }, ct);
+        User? user = await _databaseContext.Users.FindAsync(new object[] { userId.Value }, ct);
         if (user is null)
         {
             _logger.LogWarning("User not found, User Id: {UserId}", userId);
@@ -91,6 +91,7 @@ public class AccountImportService : BaseService, IAccountImportService
                     userId)
             ).ToList();
 
+            _databaseContext.Update(user);
             await _databaseContext.AddRangeAsync(incomeTransactions, ct);
             await _databaseContext.AddRangeAsync(expenseTransactions, ct);
 

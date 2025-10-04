@@ -2,6 +2,7 @@ using FluentAssertions;
 using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.AccountImport.Models;
+using LifeSync.Common.Required;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
@@ -24,7 +25,7 @@ public class JsonAccountDataReaderTests
     {
         JsonAccountDataReader dataReader = new();
 
-        ImportAccountData expectedData = ImportData.Data;
+        ImportAccountData expectedData = ImportData.GetData(Guid.NewGuid().ToRequiredStruct());
 
         string json = JsonSerializer.Serialize(expectedData);
         IFormFile file = ImportData.CreateSubstituteFormFile("test.json", json);
