@@ -6,6 +6,7 @@ using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
+using LifeSync.API.Features.Finances.Search;
 using LifeSync.API.Features.Finances.Services;
 using LifeSync.API.Features.Finances.Services.Contracts;
 using LifeSync.API.Features.FrontendSettings.Services;

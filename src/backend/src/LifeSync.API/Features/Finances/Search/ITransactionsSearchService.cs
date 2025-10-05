@@ -1,5 +1,5 @@
-﻿using LifeSync.API.Features.Finances.Models;
-using LifeSync.API.Features.Finances.Services.Contracts;
+using LifeSync.API.Features.Finances.Models;
+using LifeSync.API.Features.Finances.Search.Models;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Persistence;
@@ -7,7 +7,15 @@ using LifeSync.API.Shared.Services;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeSync.API.Features.Finances.Services;
+namespace LifeSync.API.Features.Finances.Search;
+
+public interface ITransactionsSearchService
+{
+    Task<DataResult<GetUserFinancialTransactionsResponse>> GetUserFinancialTransactionsAsync(
+        string userId,
+        GetUserFinancialTransactionsRequest request,
+        CancellationToken cancellationToken);
+}
 
 public class TransactionsSearchService : BaseService, ITransactionsSearchService
 {
@@ -27,7 +35,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         GetUserFinancialTransactionsRequest request,
         CancellationToken cancellationToken)
     {
-        GetUserFinancialTransactionsResponse? response = new GetUserFinancialTransactionsResponse()
+        GetUserFinancialTransactionsResponse? response = new()
         {
             Transactions = new List<GetFinancialTransactionDto>(),
             ExpenseSummary = new ExpenseSummaryDto(),
@@ -78,7 +86,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         decimal totalSpentOnSavings = expenseTransactions.Where(x => x.ExpenseType == ExpenseType.Savings)
             .Sum(x => x.Amount.Amount);
 
-        ExpenseSummaryDto? summary = new ExpenseSummaryDto
+        ExpenseSummaryDto? summary = new()
         {
             TotalSpent = totalSpent,
             TotalSpentOnNeeds = totalSpentOnNeeds,
@@ -94,7 +102,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     {
         decimal totalIncome = incomeTransactions.Sum(x => x.Amount.Amount);
 
-        IncomeSummaryDto? summary = new IncomeSummaryDto
+        IncomeSummaryDto? summary = new()
         {
             TotalIncome = totalIncome,
             Currency = incomeTransactions.FirstOrDefault()?.Amount.Currency.Code ?? string.Empty

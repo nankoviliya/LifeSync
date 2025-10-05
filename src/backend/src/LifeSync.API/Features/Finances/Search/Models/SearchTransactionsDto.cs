@@ -1,8 +1,9 @@
-﻿using LifeSync.API.Models.Expenses;
-using Microsoft.AspNetCore.Mvc;
+﻿using FastEndpoints;
+using LifeSync.API.Features.Finances.Models;
+using LifeSync.API.Models.Expenses;
 using System.Text.Json.Serialization;
 
-namespace LifeSync.API.Features.Finances.Models;
+namespace LifeSync.API.Features.Finances.Search.Models;
 
 public record GetUserFinancialTransactionsRequest
 {
@@ -12,10 +13,10 @@ public record GetUserFinancialTransactionsRequest
 
     public DateTime? EndDate { get; init; }
 
-    [FromQuery(Name = "expenseTypes[]")]
+    [FromQuery(BindingSources = Source.QueryParam)]
     public List<ExpenseType>? ExpenseTypes { get; init; } = [];
 
-    [FromQuery(Name = "transactionTypes[]")]
+    [FromQuery(BindingSources = Source.QueryParam)]
     public List<TransactionType> TransactionTypes { get; init; } = [];
 }
 
@@ -55,7 +56,6 @@ public enum TransactionType
 
 public class GetIncomeFinancialTransactionDto : GetFinancialTransactionDto
 {
-
 }
 
 public class GetExpenseFinancialTransactionDto : GetFinancialTransactionDto

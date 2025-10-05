@@ -13,42 +13,15 @@ namespace LifeSync.API.Features.Finances;
 [Route("api/finances")]
 public class FinancesController : ControllerBase
 {
-    private readonly ITransactionsSearchService _transactionsSearchService;
     private readonly IExpenseTransactionsManagement _expenseTransactionsManagement;
     private readonly IIncomeTransactionsManagement _incomeTransactionsManagement;
 
     public FinancesController(
-        ITransactionsSearchService transactionsSearchService,
         IExpenseTransactionsManagement expenseTransactionsManagement,
         IIncomeTransactionsManagement incomeTransactionsManagement)
     {
-        _transactionsSearchService = transactionsSearchService;
         _expenseTransactionsManagement = expenseTransactionsManagement;
         _incomeTransactionsManagement = incomeTransactionsManagement;
-    }
-
-    [HttpGet("transactions", Name = nameof(GetTransactions))]
-    [EndpointSummary("Retrieves financial transactions.")]
-    [EndpointDescription(
-        "Returns object that contains a list of financial transactions for the authenticated user, filtered by query parameters.")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserFinancialTransactionsResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetTransactions(
-        [FromQuery] GetUserFinancialTransactionsRequest request,
-        CancellationToken cancellationToken)
-    {
-        RequiredString userId = User.FindFirstValue(ClaimTypes.NameIdentifier).ToRequiredString();
-
-        DataResult<GetUserFinancialTransactionsResponse> result =
-            await _transactionsSearchService.GetUserFinancialTransactionsAsync(userId, request, cancellationToken);
-
-        if (!result.IsSuccess)
-        {
-            return BadRequest(result.Errors);
-        }
-
-        return Ok(result.Data);
     }
 
     [HttpGet("transactions/expense", Name = nameof(GetExpenseTransactions))]
