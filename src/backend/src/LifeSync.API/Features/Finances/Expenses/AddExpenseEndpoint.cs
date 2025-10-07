@@ -16,7 +16,7 @@ public sealed class AddExpenseEndpoint : Endpoint<AddExpenseRequest, AddExpenseR
 
     public override void Configure()
     {
-        Post("api/finances/expenses");
+        Post("api/finances/transactions/expense");
 
         Summary(s =>
         {

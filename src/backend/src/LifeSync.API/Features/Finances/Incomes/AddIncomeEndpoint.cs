@@ -16,7 +16,7 @@ public sealed class AddIncomeEndpoint : Endpoint<AddIncomeRequest, AddIncomeResp
 
     public override void Configure()
     {
-        Post("api/finances/incomes");
+        Post("api/finances/transactions/income");
 
         Summary(s =>
         {
