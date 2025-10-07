@@ -6,8 +6,9 @@ using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Services;
-using LifeSync.API.Features.Finances.Services;
-using LifeSync.API.Features.Finances.Services.Contracts;
+using LifeSync.API.Features.Finances.Expenses.Services;
+using LifeSync.API.Features.Finances.Incomes.Services;
+using LifeSync.API.Features.Finances.Search.Services;
 using LifeSync.API.Features.FrontendSettings.Services;
 using LifeSync.API.Features.Translations.Services;
 using LifeSync.API.Features.Translations.Services.Contracts;
@@ -22,6 +23,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Extensions;
 
@@ -32,6 +34,7 @@ public static class ServiceCollectionExtensions
         services.Configure<JsonOptions>(options =>
         {
             options.SerializerOptions.PropertyNameCaseInsensitive = true;
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
         return services;
@@ -110,8 +113,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAccountDataReader, JsonAccountDataReader>();
         services.AddScoped<IAccountImportService, AccountImportService>();
 
-        services.AddScoped<IExpenseTransactionsManagement, ExpenseTransactionsManagement>();
-        services.AddScoped<IIncomeTransactionsManagement, IncomeTransactionsManagement>();
+        services.AddScoped<IExpenseService, ExpenseService>();
+        services.AddScoped<IIncomeService, IncomeService>();
         services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
 
         services.AddTransient<JwtTokenGenerator>();

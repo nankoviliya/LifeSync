@@ -13,6 +13,9 @@ function authRequestInterceptor(config: InternalAxiosRequestConfig) {
 
 export const apiClient = axios.create({
   baseURL: environment.xApiUrl,
+  paramsSerializer: {
+    indexes: true,
+  },
 });
 
 apiClient.interceptors.request.use(authRequestInterceptor);
