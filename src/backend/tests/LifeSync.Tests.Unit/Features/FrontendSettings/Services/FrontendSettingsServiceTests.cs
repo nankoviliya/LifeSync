@@ -5,6 +5,7 @@ using LifeSync.API.Models.Currencies;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -33,37 +34,14 @@ public class FrontendSettingsServiceTests
         using ApplicationDbContext context = new(_contextOptions, _secretsManager);
         if (context.Database.EnsureCreated())
         {
-            Language englishLanguage = new() { Name = "English", Code = "en" };
-            Language spanishLanguage = new() { Name = "Spanish", Code = "es" };
+            Language englishLanguage = Language.From("English".ToRequiredString(), "en".ToRequiredString());
+            Language spanishLanguage = Language.From("Spanish".ToRequiredString(), "es".ToRequiredString());
 
             context.Languages.AddRange(englishLanguage, spanishLanguage);
 
-            Currency usdCurrency = new()
-            {
-                Code = "USD",
-                Name = "US Dollar",
-                NativeName = "US Dollar",
-                Symbol = "$",
-                NumericCode = 840
-            };
-
-            Currency eurCurrency = new()
-            {
-                Code = "EUR",
-                Name = "Euro",
-                NativeName = "Euro",
-                Symbol = "€",
-                NumericCode = 978
-            };
-
-            Currency bgnCurrency = new()
-            {
-                Code = "BGN",
-                Name = "Bulgarian Lev",
-                NativeName = "Лев",
-                Symbol = "лв",
-                NumericCode = 975
-            };
+            Currency usdCurrency = Currency.From("USD".ToRequiredString(), "US Dollar".ToRequiredString(), "US Dollar".ToRequiredString(), "$".ToRequiredString(), 840.ToRequiredStruct());
+            Currency eurCurrency = Currency.From("EUR".ToRequiredString(), "Euro".ToRequiredString(), "Euro".ToRequiredString(), "€".ToRequiredString(), 978.ToRequiredStruct());
+            Currency bgnCurrency = Currency.From("BGN".ToRequiredString(), "Bulgarian Lev".ToRequiredString(), "Лев".ToRequiredString(), "лв".ToRequiredString(), 975.ToRequiredStruct());
 
             context.Currencies.AddRange(usdCurrency, eurCurrency, bgnCurrency);
 

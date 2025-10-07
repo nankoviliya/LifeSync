@@ -5,6 +5,7 @@ using LifeSync.API.Features.Translations.Services.Contracts;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets.Contracts;
+using LifeSync.Common.Required;
 using LifeSync.Common.Results;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,7 @@ public class TranslationsServiceTests
             viewCommand.ExecuteNonQuery();
         }
 
-        context.Add(new Language { Name = "English", Code = "en" });
+        context.Add(Language.From("English".ToRequiredString(), "en".ToRequiredString()));
         context.SaveChanges();
     }
 
