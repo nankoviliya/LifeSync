@@ -3,6 +3,7 @@ using LifeSync.API.Features.Finances.Search.Models;
 using LifeSync.API.Features.Finances.Search.Services;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 
 namespace LifeSync.API.Features.Finances.Search;
@@ -17,6 +18,7 @@ public sealed class SearchTransactionsEndpoint : Endpoint<SearchTransactionsRequ
     public override void Configure()
     {
         Get("api/finances/transactions");
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
         Summary(s =>
         {

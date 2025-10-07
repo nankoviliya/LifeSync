@@ -3,6 +3,7 @@ using LifeSync.API.Features.Finances.Expenses.Models;
 using LifeSync.API.Features.Finances.Expenses.Services;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 
 namespace LifeSync.API.Features.Finances.Expenses;
@@ -17,6 +18,7 @@ public sealed class AddExpenseEndpoint : Endpoint<AddExpenseRequest, AddExpenseR
     public override void Configure()
     {
         Post("api/finances/transactions/expense");
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
         Summary(s =>
         {

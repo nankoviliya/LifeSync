@@ -3,6 +3,7 @@ using LifeSync.API.Features.Finances.Incomes.Models;
 using LifeSync.API.Features.Finances.Incomes.Services;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
 
 namespace LifeSync.API.Features.Finances.Incomes;
@@ -17,6 +18,7 @@ public sealed class AddIncomeEndpoint : Endpoint<AddIncomeRequest, AddIncomeResp
     public override void Configure()
     {
         Post("api/finances/transactions/income");
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
         Summary(s =>
         {
