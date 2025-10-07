@@ -28,6 +28,8 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         SearchTransactionsRequest request,
         CancellationToken cancellationToken)
     {
+        SearchTransactionsFilters filters = request.Filters;
+
         SearchTransactionsResponse response = new()
         {
             Transactions = new List<FinancialTransactionDto>(),
@@ -36,9 +38,9 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
             TransactionsCount = 0
         };
 
-        if (request.TransactionTypes.Contains(TransactionType.Expense))
+        if (filters.TransactionTypes.Contains(TransactionType.Expense))
         {
-            IQueryable<ExpenseTransaction> getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userId, request);
+            IQueryable<ExpenseTransaction> getExpenseTransactionsQuery = GetExpenseTransactionsQuery(userId, filters);
 
             List<ExpenseTransaction> userExpenseTransactions =
                 await getExpenseTransactionsQuery.ToListAsync(cancellationToken);
@@ -48,9 +50,9 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
             response.ExpenseSummary = CalculateExpenseSummary(userExpenseTransactions);
         }
 
-        if (request.TransactionTypes.Contains(TransactionType.Income))
+        if (filters.TransactionTypes.Contains(TransactionType.Income))
         {
-            IQueryable<IncomeTransaction> getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userId, request);
+            IQueryable<IncomeTransaction> getIncomeTransactionsQuery = GetIncomeTransactionsQuery(userId, filters);
 
             List<IncomeTransaction> userIncomeTransactions =
                 await getIncomeTransactionsQuery.ToListAsync(cancellationToken);
@@ -105,30 +107,30 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     }
 
     private IQueryable<ExpenseTransaction> GetExpenseTransactionsQuery(RequiredString userId,
-        SearchTransactionsRequest request)
+        SearchTransactionsFilters filters)
     {
         IQueryable<ExpenseTransaction> query = _databaseContext.ExpenseTransactions.AsQueryable();
 
         query = query.Where(x => x.UserId.Equals(userId.Value));
 
-        if (!string.IsNullOrEmpty(request.Description))
+        if (!string.IsNullOrEmpty(filters.Description))
         {
-            query = query.Where(x => x.Description.Contains(request.Description));
+            query = query.Where(x => x.Description.Contains(filters.Description));
         }
 
-        if (request.StartDate.HasValue)
+        if (filters.StartDate.HasValue)
         {
-            query = query.Where(x => x.Date >= request.StartDate.Value);
+            query = query.Where(x => x.Date >= filters.StartDate.Value);
         }
 
-        if (request.EndDate.HasValue)
+        if (filters.EndDate.HasValue)
         {
-            query = query.Where(x => x.Date <= request.EndDate.Value);
+            query = query.Where(x => x.Date <= filters.EndDate.Value);
         }
 
-        if (request.ExpenseTypes is not null && request.ExpenseTypes.Count > 0)
+        if (filters.ExpenseTypes is not null && filters.ExpenseTypes.Count > 0)
         {
-            query = query.Where(x => request.ExpenseTypes.Contains(x.ExpenseType));
+            query = query.Where(x => filters.ExpenseTypes.Contains(x.ExpenseType));
         }
 
         query = query.AsNoTracking().OrderByDescending(x => x.Date);
@@ -137,25 +139,25 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
     }
 
     private IQueryable<IncomeTransaction> GetIncomeTransactionsQuery(RequiredString userId,
-        SearchTransactionsRequest request)
+        SearchTransactionsFilters filters)
     {
         IQueryable<IncomeTransaction> query = _databaseContext.IncomeTransactions.AsQueryable();
 
         query = query.Where(x => x.UserId.Equals(userId.Value));
 
-        if (!string.IsNullOrEmpty(request.Description))
+        if (!string.IsNullOrEmpty(filters.Description))
         {
-            query = query.Where(x => x.Description.Contains(request.Description));
+            query = query.Where(x => x.Description.Contains(filters.Description));
         }
 
-        if (request.StartDate.HasValue)
+        if (filters.StartDate.HasValue)
         {
-            query = query.Where(x => x.Date >= request.StartDate.Value);
+            query = query.Where(x => x.Date >= filters.StartDate.Value);
         }
 
-        if (request.EndDate.HasValue)
+        if (filters.EndDate.HasValue)
         {
-            query = query.Where(x => x.Date <= request.EndDate.Value);
+            query = query.Where(x => x.Date <= filters.EndDate.Value);
         }
 
         query = query.AsNoTracking().OrderByDescending(x => x.Date);

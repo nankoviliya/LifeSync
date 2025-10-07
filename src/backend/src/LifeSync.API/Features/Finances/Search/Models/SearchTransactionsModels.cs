@@ -7,16 +7,19 @@ namespace LifeSync.API.Features.Finances.Search.Models;
 
 public record SearchTransactionsRequest
 {
+    [FromQuery] public SearchTransactionsFilters Filters { get; set; } = default!;
+}
+
+public record SearchTransactionsFilters
+{
     public string? Description { get; init; }
 
     public DateTime? StartDate { get; init; }
 
     public DateTime? EndDate { get; init; }
 
-    [FromQuery(BindingSources = Source.QueryParam)]
     public List<ExpenseType>? ExpenseTypes { get; init; } = [];
 
-    [FromQuery(BindingSources = Source.QueryParam)]
     public List<TransactionType> TransactionTypes { get; init; } = [];
 }
 
