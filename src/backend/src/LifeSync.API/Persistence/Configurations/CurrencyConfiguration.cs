@@ -32,5 +32,11 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 
         builder.HasIndex(c => c.Code)
             .IsUnique();
+
+        // Soft delete query filter
+        builder.HasQueryFilter(c => !c.IsDeleted);
+
+        // Index for soft delete queries
+        builder.HasIndex(c => c.IsDeleted);
     }
 }

@@ -63,7 +63,7 @@ public abstract class Entity : IEquatable<Entity>
     /// <summary>
     /// Updates the UpdatedAt timestamp
     /// </summary>
-    protected void MarkAsUpdated()
+    internal void MarkAsUpdated()
     {
         UpdatedAt = DateTime.UtcNow;
     }

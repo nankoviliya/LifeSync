@@ -18,5 +18,11 @@ internal sealed class ExpenseTransactionConfiguration : IEntityTypeConfiguration
             balance.Property(price => price.Currency)
                 .HasConversion(currency => currency.Code, code => Currency.FromCode(code));
         });
+
+        // Soft delete query filter
+        builder.HasQueryFilter(x => !x.IsDeleted);
+
+        // Index for soft delete queries
+        builder.HasIndex(x => x.IsDeleted);
     }
 }
