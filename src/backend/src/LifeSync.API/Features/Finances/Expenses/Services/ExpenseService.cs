@@ -68,11 +68,13 @@ public class ExpenseService : BaseService, IExpenseService
         }
         catch (DbUpdateConcurrencyException ex)
         {
+            await dbTransaction.RollbackAsync(cancellationToken);
             _logger.LogWarning(ex, "Concurrency conflict when adding expense for user {UserId}", userId);
             return Failure<Guid>(FinancesResultMessages.ConcurrencyConflict);
         }
         catch (Exception ex)
         {
+            await dbTransaction.RollbackAsync(cancellationToken);
             _logger.LogError(ex, "Failed to add expense for user {UserId}: {Error}", userId, ex.Message);
             return Failure<Guid>(FinancesResultMessages.RequestFailed);
         }
