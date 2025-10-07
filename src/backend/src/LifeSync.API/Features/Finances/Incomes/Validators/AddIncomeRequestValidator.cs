@@ -1,11 +1,11 @@
-﻿using FluentValidation;
-using LifeSync.API.Features.Finances.Models;
+using FluentValidation;
+using LifeSync.API.Features.Finances.Incomes.Models;
 
-namespace LifeSync.API.Features.Finances.Validators;
+namespace LifeSync.API.Features.Finances.Incomes.Validators;
 
-public class AddIncomeDtoValidator : AbstractValidator<AddIncomeDto>
+public class AddIncomeRequestValidator : AbstractValidator<AddIncomeRequest>
 {
-    public AddIncomeDtoValidator()
+    public AddIncomeRequestValidator()
     {
         RuleFor(x => x.Amount)
             .GreaterThan(0)

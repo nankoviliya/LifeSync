@@ -1,11 +1,11 @@
-﻿using FastEndpoints;
-using LifeSync.API.Features.Finances.Models;
+using FastEndpoints;
+using LifeSync.API.Features.Finances.Shared.Models;
 using LifeSync.API.Models.Expenses;
 using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Features.Finances.Search.Models;
 
-public record GetUserFinancialTransactionsRequest
+public record SearchTransactionsRequest
 {
     public string? Description { get; init; }
 
@@ -20,9 +20,9 @@ public record GetUserFinancialTransactionsRequest
     public List<TransactionType> TransactionTypes { get; init; } = [];
 }
 
-public class GetUserFinancialTransactionsResponse
+public class SearchTransactionsResponse
 {
-    public List<GetFinancialTransactionDto> Transactions { get; set; } = [];
+    public List<FinancialTransactionDto> Transactions { get; set; } = [];
 
     public ExpenseSummaryDto ExpenseSummary { get; set; } = default!;
 
@@ -31,9 +31,9 @@ public class GetUserFinancialTransactionsResponse
     public int TransactionsCount { get; set; }
 }
 
-[JsonDerivedType(typeof(GetExpenseFinancialTransactionDto), "Expense")]
-[JsonDerivedType(typeof(GetIncomeFinancialTransactionDto), "Income")]
-public abstract class GetFinancialTransactionDto
+[JsonDerivedType(typeof(ExpenseTransactionDto), "Expense")]
+[JsonDerivedType(typeof(IncomeTransactionDto), "Income")]
+public abstract class FinancialTransactionDto
 {
     public string Id { get; init; } = default!;
 
@@ -48,17 +48,31 @@ public abstract class GetFinancialTransactionDto
     public TransactionType TransactionType { get; init; }
 }
 
-public enum TransactionType
-{
-    Income,
-    Expense
-}
-
-public class GetIncomeFinancialTransactionDto : GetFinancialTransactionDto
+public class IncomeTransactionDto : FinancialTransactionDto
 {
 }
 
-public class GetExpenseFinancialTransactionDto : GetFinancialTransactionDto
+public class ExpenseTransactionDto : FinancialTransactionDto
 {
     public ExpenseType ExpenseType { get; init; }
+}
+
+public class ExpenseSummaryDto
+{
+    public decimal TotalSpent { get; set; }
+
+    public decimal TotalSpentOnNeeds { get; set; }
+
+    public decimal TotalSpentOnWants { get; set; }
+
+    public decimal TotalSpentOnSavings { get; set; }
+
+    public string Currency { get; set; } = default!;
+}
+
+public class IncomeSummaryDto
+{
+    public decimal TotalIncome { get; set; }
+
+    public string Currency { get; set; } = default!;
 }
