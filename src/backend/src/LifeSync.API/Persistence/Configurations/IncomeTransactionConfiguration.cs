@@ -19,13 +19,6 @@ internal sealed class IncomeTransactionConfiguration : IEntityTypeConfiguration<
                 .HasConversion(currency => currency.Code, code => Currency.FromCode(code));
         });
 
-        // Auditing columns with SQL default values
-        builder.Property(x => x.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
-
-        builder.Property(x => x.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
-
         // Soft delete query filter
         builder.HasQueryFilter(x => !x.IsDeleted);
 

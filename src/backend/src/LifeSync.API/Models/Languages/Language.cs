@@ -47,7 +47,6 @@ public class Language : Entity
         var normalizedName = nameValue.Trim();
         ValidateName(normalizedName);
         Name = normalizedName;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -59,7 +58,6 @@ public class Language : Entity
         var normalizedCode = NormalizeCode(codeValue);
         ValidateCode(normalizedCode);
         Code = normalizedCode;
-        MarkAsUpdated();
     }
 
     /// <summary>

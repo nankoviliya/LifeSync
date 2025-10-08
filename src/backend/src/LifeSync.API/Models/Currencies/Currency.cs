@@ -73,7 +73,6 @@ public class Currency : Entity
         ValidateNativeName(nativeName);
         string value = nativeName;
         NativeName = value.Trim();
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -84,7 +83,6 @@ public class Currency : Entity
         ValidateSymbol(symbol);
         string value = symbol;
         Symbol = value.Trim();
-        MarkAsUpdated();
     }
 
     /// <summary>

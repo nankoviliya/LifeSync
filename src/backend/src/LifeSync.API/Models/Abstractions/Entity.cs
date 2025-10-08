@@ -10,29 +10,28 @@ public abstract class Entity : IEquatable<Entity>
         }
 
         Id = id;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     protected Entity()
     {
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     public Guid Id { get; init; }
 
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; internal set; }
 
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime UpdatedAt { get; internal set; }
 
     public bool IsDeleted { get; private set; }
 
     public DateTime? DeletedAt { get; private set; }
 
     /// <summary>
-    /// Marks the entity as deleted (soft delete)
+    /// Marks the entity as deleted (soft delete).
+    /// Sets IsDeleted to true and records the deletion timestamp.
+    /// The UpdatedAt timestamp will be automatically set by the database on save.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when entity is already marked as deleted</exception>
     public void MarkAsDeleted()
     {
         if (IsDeleted)
@@ -42,12 +41,14 @@ public abstract class Entity : IEquatable<Entity>
 
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     /// <summary>
-    /// Restores a soft-deleted entity
+    /// Restores a soft-deleted entity.
+    /// Sets IsDeleted to false and clears the deletion timestamp.
+    /// The UpdatedAt timestamp will be automatically set by the database on save.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when entity is not deleted</exception>
     public void Restore()
     {
         if (!IsDeleted)
@@ -57,15 +58,6 @@ public abstract class Entity : IEquatable<Entity>
 
         IsDeleted = false;
         DeletedAt = null;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    /// <summary>
-    /// Updates the UpdatedAt timestamp
-    /// </summary>
-    internal void MarkAsUpdated()
-    {
-        UpdatedAt = DateTime.UtcNow;
     }
 
     public bool Equals(Entity? other)

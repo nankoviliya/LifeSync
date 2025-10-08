@@ -18,13 +18,6 @@ internal sealed class LanguageConfiguration : IEntityTypeConfiguration<Language>
         builder.Property(x => x.Code)
             .HasMaxLength(20);
 
-        // Auditing columns with SQL default values
-        builder.Property(x => x.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
-
-        builder.Property(x => x.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
-
         // Soft delete query filter
         builder.HasQueryFilter(x => !x.IsDeleted);
 

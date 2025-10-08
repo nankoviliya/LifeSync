@@ -33,13 +33,6 @@ public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
         builder.HasIndex(c => c.Code)
             .IsUnique();
 
-        // Auditing columns with SQL default values
-        builder.Property(c => c.CreatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
-
-        builder.Property(c => c.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()");
-
         // Soft delete query filter
         builder.HasQueryFilter(c => !c.IsDeleted);
 

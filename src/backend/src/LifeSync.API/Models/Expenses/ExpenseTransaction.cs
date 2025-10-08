@@ -66,7 +66,6 @@ public class ExpenseTransaction : Entity
     {
         ValidateAmount(newAmount);
         Amount = newAmount;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -76,7 +75,6 @@ public class ExpenseTransaction : Entity
     {
         ValidateDate(newDate);
         Date = newDate;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -87,7 +85,6 @@ public class ExpenseTransaction : Entity
         string value = newDescription;
         ValidateDescription(value);
         Description = value.Trim();
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -97,7 +94,6 @@ public class ExpenseTransaction : Entity
     {
         ValidateExpenseType(newExpenseType);
         ExpenseType = newExpenseType;
-        MarkAsUpdated();
     }
 
     /// <summary>

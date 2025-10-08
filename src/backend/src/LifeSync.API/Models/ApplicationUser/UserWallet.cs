@@ -50,7 +50,6 @@ public class UserWallet : Entity
         ValidateName(newName);
         string value = newName;
         Name = value.Trim();
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -76,7 +75,6 @@ public class UserWallet : Entity
         }
 
         Balance += amount;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -108,7 +106,6 @@ public class UserWallet : Entity
         }
 
         Balance -= amount;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -162,7 +159,6 @@ public class UserWallet : Entity
         }
 
         Balance = newBalance;
-        MarkAsUpdated();
     }
 
     /// <summary>

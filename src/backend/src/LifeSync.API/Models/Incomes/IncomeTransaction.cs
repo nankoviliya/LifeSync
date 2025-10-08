@@ -60,7 +60,6 @@ public class IncomeTransaction : Entity
     {
         ValidateAmount(newAmount);
         Amount = newAmount;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -70,7 +69,6 @@ public class IncomeTransaction : Entity
     {
         ValidateDate(newDate);
         Date = newDate;
-        MarkAsUpdated();
     }
 
     /// <summary>
@@ -81,7 +79,6 @@ public class IncomeTransaction : Entity
         string value = newDescription;
         ValidateDescription(value);
         Description = value.Trim();
-        MarkAsUpdated();
     }
 
     /// <summary>
