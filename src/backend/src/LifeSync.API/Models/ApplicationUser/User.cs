@@ -167,6 +167,11 @@ public class User : IdentityUser
     /// </summary>
     public void UpdateBalance(Money newBalance)
     {
+        if (newBalance == null)
+        {
+            throw new ArgumentNullException(nameof(newBalance), "Balance cannot be null.");
+        }
+
         if (newBalance.Currency != CurrencyPreference)
         {
             throw new ArgumentException(

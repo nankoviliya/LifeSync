@@ -166,23 +166,29 @@ public class EntityTests
     }
 
     [Fact]
-    public void CreatedAt_ShouldBeSettableInternally()
+    public void CreatedAt_ShouldBeSettableViaReflection()
     {
         var entity = new TestEntity(Guid.NewGuid());
         var timestamp = DateTime.UtcNow;
 
-        entity.GetType().GetProperty("CreatedAt")!.SetValue(entity, timestamp);
+        // Using reflection to set private setter (simulating what EF Core does)
+        var property = typeof(Entity).GetProperty("CreatedAt")!;
+        var setter = property.GetSetMethod(nonPublic: true)!;
+        setter.Invoke(entity, new object[] { timestamp });
 
         entity.CreatedAt.Should().Be(timestamp);
     }
 
     [Fact]
-    public void UpdatedAt_ShouldBeSettableInternally()
+    public void UpdatedAt_ShouldBeSettableViaReflection()
     {
         var entity = new TestEntity(Guid.NewGuid());
         var timestamp = DateTime.UtcNow;
 
-        entity.GetType().GetProperty("UpdatedAt")!.SetValue(entity, timestamp);
+        // Using reflection to set private setter (simulating what EF Core does)
+        var property = typeof(Entity).GetProperty("UpdatedAt")!;
+        var setter = property.GetSetMethod(nonPublic: true)!;
+        setter.Invoke(entity, new object[] { timestamp });
 
         entity.UpdatedAt.Should().Be(timestamp);
     }

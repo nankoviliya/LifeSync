@@ -18,9 +18,9 @@ public abstract class Entity : IEquatable<Entity>
 
     public Guid Id { get; init; }
 
-    public DateTime CreatedAt { get; internal set; }
+    public DateTime CreatedAt { get; private set; }
 
-    public DateTime UpdatedAt { get; internal set; }
+    public DateTime UpdatedAt { get; private set; }
 
     public bool IsDeleted { get; private set; }
 

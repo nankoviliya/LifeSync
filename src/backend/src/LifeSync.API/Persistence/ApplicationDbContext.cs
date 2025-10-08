@@ -55,17 +55,18 @@ public class ApplicationDbContext : DbContext
     private void UpdateTimestamps()
     {
         var entries = ChangeTracker.Entries<Entity>();
+        var now = DateTime.UtcNow;
 
         foreach (var entry in entries)
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = DateTime.UtcNow;
-                entry.Entity.UpdatedAt = DateTime.UtcNow;
+                entry.Property(nameof(Entity.CreatedAt)).CurrentValue = now;
+                entry.Property(nameof(Entity.UpdatedAt)).CurrentValue = now;
             }
             else if (entry.State == EntityState.Modified)
             {
-                entry.Entity.UpdatedAt = DateTime.UtcNow;
+                entry.Property(nameof(Entity.UpdatedAt)).CurrentValue = now;
             }
         }
     }

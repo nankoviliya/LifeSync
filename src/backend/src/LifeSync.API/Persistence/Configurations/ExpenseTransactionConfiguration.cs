@@ -24,5 +24,11 @@ internal sealed class ExpenseTransactionConfiguration : IEntityTypeConfiguration
 
         // Index for soft delete queries
         builder.HasIndex(x => x.IsDeleted);
+
+        // Index for audit queries - CreatedAt is frequently used for filtering/sorting transactions
+        builder.HasIndex(x => x.CreatedAt);
+
+        // Composite index for common query pattern: active transactions by creation date
+        builder.HasIndex(x => new { x.IsDeleted, x.CreatedAt });
     }
 }
