@@ -8,9 +8,9 @@ namespace LifeSync.API.Features.FrontendSettings.Services;
 
 public class FrontendSettingsService : BaseService, IFrontendSettingsService
 {
-    private readonly ApplicationDbContext databaseContext;
+    private readonly ApplicationDbContext _databaseContext;
 
-    public FrontendSettingsService(ApplicationDbContext databaseContext) => this.databaseContext = databaseContext;
+    public FrontendSettingsService(ApplicationDbContext databaseContext) => _databaseContext = databaseContext;
 
     public async Task<DataResult<FrontendSettingsResponse>> GetFrontendSettingsAsync(
         CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
     private async Task<List<LanguageOption>> GetLanguageOptionsAsync(
         CancellationToken cancellationToken)
     {
-        List<LanguageOption>? languageOptions = await databaseContext.Languages
+        List<LanguageOption>? languageOptions = await _databaseContext.Languages
             .AsNoTracking()
             .Select(l => new LanguageOption { Id = l.Id, Name = l.Name })
             .ToListAsync(cancellationToken);
@@ -41,7 +41,7 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
     private async Task<List<CurrencyOption>> GetCurrencyOptionsAsync(
         CancellationToken cancellationToken)
     {
-        List<CurrencyOption>? currencyOptions = await databaseContext.Currencies
+        List<CurrencyOption>? currencyOptions = await _databaseContext.Currencies
             .AsNoTracking()
             .Select(c => new CurrencyOption { Code = c.Code, Name = $"{c.Name} ({c.NativeName})" })
             .ToListAsync(cancellationToken);
