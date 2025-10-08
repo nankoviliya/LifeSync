@@ -28,21 +28,6 @@ public class ApplicationDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        // Apply audit properties defaults to all Entity types automatically
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            if (typeof(Entity).IsAssignableFrom(entityType.ClrType))
-            {
-                modelBuilder.Entity(entityType.ClrType)
-                    .Property<DateTime>(nameof(Entity.CreatedAt))
-                    .HasDefaultValueSql("GETUTCDATE()");
-
-                modelBuilder.Entity(entityType.ClrType)
-                    .Property<DateTime>(nameof(Entity.UpdatedAt))
-                    .HasDefaultValueSql("GETUTCDATE()");
-            }
-        }
-
         base.OnModelCreating(modelBuilder);
     }
 
@@ -69,12 +54,19 @@ public class ApplicationDbContext : DbContext
 
     private void UpdateTimestamps()
     {
-        var entries = ChangeTracker.Entries<Entity>()
-            .Where(e => e.State == EntityState.Modified);
+        var entries = ChangeTracker.Entries<Entity>();
 
         foreach (var entry in entries)
         {
-            entry.Entity.UpdatedAt = DateTime.UtcNow;
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedAt = DateTime.UtcNow;
+                entry.Entity.UpdatedAt = DateTime.UtcNow;
+            }
+            else if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedAt = DateTime.UtcNow;
+            }
         }
     }
 
