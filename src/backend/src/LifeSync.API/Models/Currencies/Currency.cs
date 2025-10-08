@@ -6,7 +6,7 @@ namespace LifeSync.API.Models.Currencies;
 
 public class Currency : Entity
 {
-    private static readonly Regex CodeRegex = new(@"^[A-Z]{3}$", RegexOptions.Compiled);
+    private static readonly Regex CodeRegex = new(@"^[A-Z]{3}$", RegexOptions.Compiled, TimeSpan.FromMilliseconds(250));
 
     private Currency() { }
 

@@ -7,7 +7,7 @@ namespace LifeSync.API.Models.Languages;
 public class Language : Entity
 {
     // ISO 639-1 (2-letter) or ISO 639-2 (3-letter) language code
-    private static readonly Regex CodeRegex = new(@"^[a-z]{2}(-[A-Z]{2})?$|^[a-z]{3}$", RegexOptions.Compiled);
+    private static readonly Regex CodeRegex = new(@"^[a-z]{2}(-[A-Z]{2})?$|^[a-z]{3}$", RegexOptions.Compiled, TimeSpan.FromMilliseconds(500));
 
     private Language() { }
 

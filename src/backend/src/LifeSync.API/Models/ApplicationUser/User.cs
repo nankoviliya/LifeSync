@@ -14,7 +14,8 @@ public class User : IdentityUser
     private const int MaxNameLength = 100;
     private static readonly Regex EmailRegex = new(
         @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        RegexOptions.Compiled | RegexOptions.IgnoreCase,
+        TimeSpan.FromMilliseconds(500));
 
     private User() { }
 
