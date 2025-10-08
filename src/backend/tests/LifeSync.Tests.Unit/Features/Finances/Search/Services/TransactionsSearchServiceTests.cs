@@ -45,7 +45,7 @@ public class TransactionsSearchServiceTests
         using ApplicationDbContext context = new(_contextOptions, _secretsManager);
         if (context.Database.EnsureCreated())
         {
-            Language language = new() { Name = "English", Code = "en" };
+            Language language = Language.From("English".ToRequiredString(), "en".ToRequiredString());
 
             context.Add(language);
 

@@ -1,3 +1,4 @@
+using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Currencies;
 using LifeSync.API.Models.Expenses;
@@ -19,7 +20,7 @@ public class ApplicationDbContext : DbContext
         this.secretsManager = secretsManager;
     }
 
-#pragma warning disable CS8618 
+#pragma warning disable CS8618
     public ApplicationDbContext() { }
 #pragma warning restore CS8618
 
@@ -36,6 +37,37 @@ public class ApplicationDbContext : DbContext
         {
             var connectionString = secretsManager.GetConnectionStringAsync().GetAwaiter().GetResult();
             optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateTimestamps();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        UpdateTimestamps();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateTimestamps()
+    {
+        var entries = ChangeTracker.Entries<Entity>();
+        var now = DateTime.UtcNow;
+
+        foreach (var entry in entries)
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Property(nameof(Entity.CreatedAt)).CurrentValue = now;
+                entry.Property(nameof(Entity.UpdatedAt)).CurrentValue = now;
+            }
+            else if (entry.State == EntityState.Modified)
+            {
+                entry.Property(nameof(Entity.UpdatedAt)).CurrentValue = now;
+            }
         }
     }
 

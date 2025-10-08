@@ -16,6 +16,12 @@ internal sealed class LanguageConfiguration : IEntityTypeConfiguration<Language>
             .HasMaxLength(100);
 
         builder.Property(x => x.Code)
-        .HasMaxLength(20);
+            .HasMaxLength(20);
+
+        // Soft delete query filter
+        builder.HasQueryFilter(x => !x.IsDeleted);
+
+        // Index for soft delete queries
+        builder.HasIndex(x => x.IsDeleted);
     }
 }

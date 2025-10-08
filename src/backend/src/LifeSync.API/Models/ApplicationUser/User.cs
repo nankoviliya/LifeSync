@@ -4,11 +4,19 @@ using LifeSync.API.Models.Languages;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
 using Microsoft.AspNetCore.Identity;
+using System.Text.RegularExpressions;
 
 namespace LifeSync.API.Models.ApplicationUser;
 
 public class User : IdentityUser
 {
+    private const int MinNameLength = 1;
+    private const int MaxNameLength = 100;
+    private static readonly Regex EmailRegex = new(
+        @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase,
+        TimeSpan.FromMilliseconds(500));
+
     private User() { }
 
     public static User From(
@@ -20,15 +28,31 @@ public class User : IdentityUser
         RequiredReference<Currency> currencyPreference,
         RequiredStruct<Guid> languageId)
     {
+        string userNameValue = userName;
+        string emailValue = email;
+        string firstNameValue = firstName;
+        string lastNameValue = lastName;
+        Money balanceValue = balance;
+        Currency currencyValue = currencyPreference;
+        Guid languageIdValue = languageId;
+
+        ValidateUserName(userNameValue);
+        ValidateEmail(emailValue);
+        ValidateFirstName(firstNameValue);
+        ValidateLastName(lastNameValue);
+        ValidateBalance(balanceValue);
+        ValidateCurrencyPreference(currencyValue);
+        ValidateLanguageId(languageIdValue);
+
         User user = new();
         user.Initialize(
-            userName,
-            email,
-            firstName,
-            lastName,
-            balance,
-            currencyPreference,
-            languageId);
+            userNameValue.Trim(),
+            emailValue.Trim(),
+            firstNameValue.Trim(),
+            lastNameValue.Trim(),
+            balanceValue,
+            currencyValue,
+            languageIdValue);
 
         return user;
     }
@@ -73,31 +97,81 @@ public class User : IdentityUser
     public ICollection<ExpenseTransaction> ExpenseTransactions { get; init; } = [];
 
     /// <summary>
+    /// Gets the user's full name
+    /// </summary>
+    public string GetFullName() => $"{FirstName} {LastName}";
+
+    /// <summary>
     /// Updates user's first name
     /// </summary>
-    /// <param name="firstName">New first name of the user</param>
-    public void UpdateFirstName(RequiredString firstName) => FirstName = firstName;
+    public void UpdateFirstName(RequiredString firstName)
+    {
+        string value = firstName;
+        ValidateFirstName(value);
+        FirstName = value.Trim();
+    }
 
     /// <summary>
     /// Updates user's last name
     /// </summary>
-    /// <param name="lastName">New last name of the user</param>
-    public void UpdateLastName(RequiredString lastName) => LastName = lastName;
+    public void UpdateLastName(RequiredString lastName)
+    {
+        string value = lastName;
+        ValidateLastName(value);
+        LastName = value.Trim();
+    }
 
+    /// <summary>
+    /// Updates both first and last names
+    /// </summary>
+    public void UpdateFullName(RequiredString firstName, RequiredString lastName)
+    {
+        string firstNameValue = firstName;
+        string lastNameValue = lastName;
+        ValidateFirstName(firstNameValue);
+        ValidateLastName(lastNameValue);
+        FirstName = firstNameValue.Trim();
+        LastName = lastNameValue.Trim();
+    }
 
     /// <summary>
     /// Updates the user's preferred language
     /// </summary>
-    /// <param name="languageId">The ID of the new language</param>
-    public void UpdateLanguage(RequiredStruct<Guid> languageId) => LanguageId = languageId;
+    public void UpdateLanguage(RequiredStruct<Guid> languageId)
+    {
+        ValidateLanguageId(languageId);
+        LanguageId = languageId;
+    }
+
+    /// <summary>
+    /// Updates the user's currency preference and converts balance
+    /// </summary>
+    public void UpdateCurrencyPreference(RequiredReference<Currency> newCurrency, decimal exchangeRate)
+    {
+        ValidateCurrencyPreference(newCurrency);
+
+        if (exchangeRate <= 0)
+        {
+            throw new ArgumentException("Exchange rate must be positive.", nameof(exchangeRate));
+        }
+
+        if (newCurrency != CurrencyPreference)
+        {
+            Balance = Balance.ConvertTo(newCurrency, exchangeRate);
+            CurrencyPreference = newCurrency;
+        }
+    }
 
     /// <summary>
     /// Updates the user's balance to a new value
     /// </summary>
-    /// <param name="newBalance">The new balance amount</param>
-    /// <exception cref="ArgumentException">Thrown when currency doesn't match user's currency preference</exception>
     public void UpdateBalance(Money newBalance)
     {
+        if (newBalance == null)
+        {
+            throw new ArgumentNullException(nameof(newBalance), "Balance cannot be null.");
+        }
+
         if (newBalance.Currency != CurrencyPreference)
         {
             throw new ArgumentException(
@@ -111,13 +185,16 @@ public class User : IdentityUser
     /// <summary>
     /// Deposits money into the user's balance
     /// </summary>
-    /// <param name="amount">The amount to deposit</param>
-    /// <exception cref="ArgumentException">Thrown when amount is negative or has different currency</exception>
     public void Deposit(Money amount)
     {
-        if (amount.Amount < 0)
+        if (amount.IsNegative())
         {
-            throw new ArgumentException("Cannot record negative income amount", nameof(amount));
+            throw new ArgumentException("Cannot deposit negative amount", nameof(amount));
+        }
+
+        if (amount.IsZero())
+        {
+            throw new ArgumentException("Cannot deposit zero amount", nameof(amount));
         }
 
         if (amount.Currency != Balance.Currency)
@@ -127,20 +204,22 @@ public class User : IdentityUser
                 nameof(amount));
         }
 
-        Balance = new Money(Balance.Amount + amount.Amount, Balance.Currency);
+        Balance += amount;
     }
 
     /// <summary>
     /// Withdraws money from the user's balance
     /// </summary>
-    /// <param name="amount">The amount to withdraw</param>
-    /// <exception cref="ArgumentException">Thrown when amount is negative or has different currency</exception>
-    /// <exception cref="InvalidOperationException">Thrown when balance is insufficient</exception>
     public void Withdraw(Money amount)
     {
-        if (amount.Amount < 0)
+        if (amount.IsNegative())
         {
             throw new ArgumentException("Cannot withdraw negative amount", nameof(amount));
+        }
+
+        if (amount.IsZero())
+        {
+            throw new ArgumentException("Cannot withdraw zero amount", nameof(amount));
         }
 
         if (amount.Currency != Balance.Currency)
@@ -150,12 +229,184 @@ public class User : IdentityUser
                 nameof(amount));
         }
 
-        if (Balance.Amount < amount.Amount)
+        if (Balance < amount)
         {
             throw new InvalidOperationException(
-                $"Insufficient balance: Cannot withdraw {amount.Amount} from balance of {Balance.Amount}");
+                $"Insufficient balance: Cannot withdraw {amount} from balance of {Balance}");
         }
 
-        Balance = new Money(Balance.Amount - amount.Amount, Balance.Currency);
+        Balance -= amount;
+    }
+
+    /// <summary>
+    /// Checks if the user has sufficient balance
+    /// </summary>
+    public bool HasSufficientBalance(Money amount)
+    {
+        if (amount.Currency != Balance.Currency)
+        {
+            return false;
+        }
+
+        return Balance >= amount;
+    }
+
+    /// <summary>
+    /// Gets total income for a specific period
+    /// </summary>
+    public Money GetTotalIncome(DateTime startDate, DateTime endDate)
+    {
+        var total = Money.Zero(CurrencyPreference);
+
+        foreach (var income in IncomeTransactions.Where(i => i.IsWithinDateRange(startDate, endDate)))
+        {
+            total += income.Amount;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Gets total expenses for a specific period
+    /// </summary>
+    public Money GetTotalExpenses(DateTime startDate, DateTime endDate)
+    {
+        var total = Money.Zero(CurrencyPreference);
+
+        foreach (var expense in ExpenseTransactions.Where(e => e.IsWithinDateRange(startDate, endDate)))
+        {
+            total += expense.Amount;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Gets net income (income - expenses) for a specific period
+    /// </summary>
+    public Money GetNetIncome(DateTime startDate, DateTime endDate)
+    {
+        var totalIncome = GetTotalIncome(startDate, endDate);
+        var totalExpenses = GetTotalExpenses(startDate, endDate);
+        return totalIncome - totalExpenses;
+    }
+
+    /// <summary>
+    /// Gets total expenses by type for a specific period
+    /// </summary>
+    public Money GetExpensesByType(ExpenseType expenseType, DateTime startDate, DateTime endDate)
+    {
+        var total = Money.Zero(CurrencyPreference);
+
+        foreach (var expense in ExpenseTransactions
+            .Where(e => e.ExpenseType == expenseType && e.IsWithinDateRange(startDate, endDate)))
+        {
+            total += expense.Amount;
+        }
+
+        return total;
+    }
+
+    private static void ValidateUserName(string userName)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+        {
+            throw new ArgumentException("Username cannot be null or empty.", nameof(userName));
+        }
+
+        if (userName.Trim().Length < 3)
+        {
+            throw new ArgumentException("Username must be at least 3 characters.", nameof(userName));
+        }
+
+        if (userName.Trim().Length > 50)
+        {
+            throw new ArgumentException("Username cannot exceed 50 characters.", nameof(userName));
+        }
+    }
+
+    private static void ValidateEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+        }
+
+        if (!EmailRegex.IsMatch(email.Trim()))
+        {
+            throw new ArgumentException("Email format is invalid.", nameof(email));
+        }
+    }
+
+    private static void ValidateFirstName(string firstName)
+    {
+        if (string.IsNullOrWhiteSpace(firstName))
+        {
+            throw new ArgumentException("First name cannot be null or empty.", nameof(firstName));
+        }
+
+        var trimmedLength = firstName.Trim().Length;
+
+        if (trimmedLength < MinNameLength)
+        {
+            throw new ArgumentException(
+                $"First name must be at least {MinNameLength} character(s).",
+                nameof(firstName));
+        }
+
+        if (trimmedLength > MaxNameLength)
+        {
+            throw new ArgumentException(
+                $"First name cannot exceed {MaxNameLength} characters.",
+                nameof(firstName));
+        }
+    }
+
+    private static void ValidateLastName(string lastName)
+    {
+        if (string.IsNullOrWhiteSpace(lastName))
+        {
+            throw new ArgumentException("Last name cannot be null or empty.", nameof(lastName));
+        }
+
+        var trimmedLength = lastName.Trim().Length;
+
+        if (trimmedLength < MinNameLength)
+        {
+            throw new ArgumentException(
+                $"Last name must be at least {MinNameLength} character(s).",
+                nameof(lastName));
+        }
+
+        if (trimmedLength > MaxNameLength)
+        {
+            throw new ArgumentException(
+                $"Last name cannot exceed {MaxNameLength} characters.",
+                nameof(lastName));
+        }
+    }
+
+    private static void ValidateBalance(Money balance)
+    {
+        if (balance == null)
+        {
+            throw new ArgumentNullException(nameof(balance), "Balance cannot be null.");
+        }
+    }
+
+    private static void ValidateCurrencyPreference(Currency currencyPreference)
+    {
+        if (currencyPreference == null)
+        {
+            throw new ArgumentNullException(nameof(currencyPreference), "Currency preference cannot be null.");
+        }
+    }
+
+    private static void ValidateLanguageId(Guid languageId)
+    {
+        if (languageId == Guid.Empty)
+        {
+            throw new ArgumentException("Language ID cannot be empty.", nameof(languageId));
+        }
     }
 }
