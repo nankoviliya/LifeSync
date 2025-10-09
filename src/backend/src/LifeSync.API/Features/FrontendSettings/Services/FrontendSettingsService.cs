@@ -1,5 +1,6 @@
 ﻿using LifeSync.API.Features.FrontendSettings.Models;
 using LifeSync.API.Persistence;
+using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
 using LifeSync.Common.Results;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,11 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
     {
         List<LanguageOption>? languageOptions = await GetLanguageOptionsAsync(cancellationToken);
 
-        List<CurrencyOption>? curencyOptions = await GetCurrencyOptionsAsync(cancellationToken);
+        List<CurrencyOption>? currencyOptions = GetCurrencyOptions();
 
         FrontendSettingsResponse? frontendSettings = new FrontendSettingsResponse
         {
-            LanguageOptions = languageOptions, CurrencyOptions = curencyOptions
+            LanguageOptions = languageOptions, CurrencyOptions = currencyOptions
         };
 
         return Success(frontendSettings);
@@ -38,14 +39,14 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
         return languageOptions;
     }
 
-    private async Task<List<CurrencyOption>> GetCurrencyOptionsAsync(
-        CancellationToken cancellationToken)
+    private static List<CurrencyOption> GetCurrencyOptions()
     {
-        List<CurrencyOption>? currencyOptions = await _databaseContext.Currencies
-            .AsNoTracking()
-            .Select(c => new CurrencyOption { Code = c.Code, Name = $"{c.Name} ({c.NativeName})" })
-            .ToListAsync(cancellationToken);
-
-        return currencyOptions;
+        return CurrencyRegistry.All
+            .Select(c => new CurrencyOption
+            {
+                Code = c.Code,
+                Name = $"{c.Name} ({c.NativeName})"
+            })
+            .ToList();
     }
 }

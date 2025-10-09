@@ -8,16 +8,16 @@ public class MoneyTests
     [Fact]
     public void Constructor_WithValidAmountAndCurrency_ShouldCreateMoney()
     {
-        var money = new Money(100.50m, Currency.Usd);
+        var money = new Money(100.50m, "USD");
 
         money.Amount.Should().Be(100.50m);
-        money.Currency.Should().Be(Currency.Usd);
+        money.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void Constructor_ShouldRoundAmountToTwoDecimalPlaces()
     {
-        var money = new Money(100.999m, Currency.Eur);
+        var money = new Money(100.999m, "EUR");
 
         money.Amount.Should().Be(101.00m);
     }
@@ -25,29 +25,29 @@ public class MoneyTests
     [Fact]
     public void Constructor_WithNegativeAmount_ShouldSucceed()
     {
-        var money = new Money(-100.50m, Currency.Usd);
+        var money = new Money(-100.50m, "USD");
 
         money.Amount.Should().Be(-100.50m);
-        money.Currency.Should().Be(Currency.Usd);
+        money.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void AdditionOperator_WithSameCurrency_ShouldReturnSum()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "USD");
 
         var result = money1 + money2;
 
         result.Amount.Should().Be(150m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void AdditionOperator_WithDifferentCurrencies_ShouldThrowInvalidOperationException()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Eur);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "EUR");
 
         Action act = () => { var result = money1 + money2; };
 
@@ -58,20 +58,20 @@ public class MoneyTests
     [Fact]
     public void SubtractionOperator_WithSameCurrency_ShouldReturnDifference()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(30m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(30m, "USD");
 
         var result = money1 - money2;
 
         result.Amount.Should().Be(70m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void SubtractionOperator_WithDifferentCurrencies_ShouldThrowInvalidOperationException()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Eur);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "EUR");
 
         Action act = () => { var result = money1 - money2; };
 
@@ -82,40 +82,40 @@ public class MoneyTests
     [Fact]
     public void MultiplicationOperator_MoneyTimesDecimal_ShouldReturnProduct()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = money * 1.5m;
 
         result.Amount.Should().Be(150m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void MultiplicationOperator_DecimalTimesMoney_ShouldReturnProduct()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = 2m * money;
 
         result.Amount.Should().Be(200m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void DivisionOperator_WithValidDivisor_ShouldReturnQuotient()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = money / 4m;
 
         result.Amount.Should().Be(25m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void DivisionOperator_WithZeroDivisor_ShouldThrowDivideByZeroException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         Action act = () => { var result = money / 0m; };
 
@@ -126,8 +126,8 @@ public class MoneyTests
     [Fact]
     public void GreaterThanOperator_WithSameCurrency_ShouldCompareCorrectly()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "USD");
 
         (money1 > money2).Should().BeTrue();
         (money2 > money1).Should().BeFalse();
@@ -136,8 +136,8 @@ public class MoneyTests
     [Fact]
     public void GreaterThanOperator_WithDifferentCurrencies_ShouldThrowInvalidOperationException()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Eur);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "EUR");
 
         Action act = () => { var result = money1 > money2; };
 
@@ -148,8 +148,8 @@ public class MoneyTests
     [Fact]
     public void LessThanOperator_WithSameCurrency_ShouldCompareCorrectly()
     {
-        var money1 = new Money(50m, Currency.Usd);
-        var money2 = new Money(100m, Currency.Usd);
+        var money1 = new Money(50m, "USD");
+        var money2 = new Money(100m, "USD");
 
         (money1 < money2).Should().BeTrue();
         (money2 < money1).Should().BeFalse();
@@ -158,9 +158,9 @@ public class MoneyTests
     [Fact]
     public void GreaterThanOrEqualOperator_WithSameCurrency_ShouldCompareCorrectly()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(100m, Currency.Usd);
-        var money3 = new Money(50m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(100m, "USD");
+        var money3 = new Money(50m, "USD");
 
         (money1 >= money2).Should().BeTrue();
         (money1 >= money3).Should().BeTrue();
@@ -170,9 +170,9 @@ public class MoneyTests
     [Fact]
     public void LessThanOrEqualOperator_WithSameCurrency_ShouldCompareCorrectly()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(100m, Currency.Usd);
-        var money3 = new Money(150m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(100m, "USD");
+        var money3 = new Money(150m, "USD");
 
         (money1 <= money2).Should().BeTrue();
         (money1 <= money3).Should().BeTrue();
@@ -180,27 +180,18 @@ public class MoneyTests
     }
 
     [Fact]
-    public void Zero_WithoutCurrency_ShouldReturnZero()
-    {
-        var money = Money.Zero();
-
-        money.Amount.Should().Be(0m);
-        money.IsZero().Should().BeTrue();
-    }
-
-    [Fact]
     public void Zero_WithCurrency_ShouldReturnZeroWithSpecifiedCurrency()
     {
-        var money = Money.Zero(Currency.Usd);
+        var money = Money.Zero("USD");
 
         money.Amount.Should().Be(0m);
-        money.Currency.Should().Be(Currency.Usd);
+        money.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void IsZero_WithZeroAmount_ShouldReturnTrue()
     {
-        var money = new Money(0m, Currency.Usd);
+        var money = new Money(0m, "USD");
 
         money.IsZero().Should().BeTrue();
     }
@@ -208,7 +199,7 @@ public class MoneyTests
     [Fact]
     public void IsZero_WithNonZeroAmount_ShouldReturnFalse()
     {
-        var money = new Money(0.01m, Currency.Usd);
+        var money = new Money(0.01m, "USD");
 
         money.IsZero().Should().BeFalse();
     }
@@ -216,7 +207,7 @@ public class MoneyTests
     [Fact]
     public void IsPositive_WithPositiveAmount_ShouldReturnTrue()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         money.IsPositive().Should().BeTrue();
     }
@@ -224,8 +215,8 @@ public class MoneyTests
     [Fact]
     public void IsPositive_WithZeroOrNegativeAmount_ShouldReturnFalse()
     {
-        var zero = new Money(0m, Currency.Usd);
-        var negative = new Money(-100m, Currency.Usd);
+        var zero = new Money(0m, "USD");
+        var negative = new Money(-100m, "USD");
 
         zero.IsPositive().Should().BeFalse();
         negative.IsPositive().Should().BeFalse();
@@ -234,7 +225,7 @@ public class MoneyTests
     [Fact]
     public void IsNegative_WithNegativeAmount_ShouldReturnTrue()
     {
-        var money = new Money(-100m, Currency.Usd);
+        var money = new Money(-100m, "USD");
 
         money.IsNegative().Should().BeTrue();
     }
@@ -242,8 +233,8 @@ public class MoneyTests
     [Fact]
     public void IsNegative_WithZeroOrPositiveAmount_ShouldReturnFalse()
     {
-        var zero = new Money(0m, Currency.Usd);
-        var positive = new Money(100m, Currency.Usd);
+        var zero = new Money(0m, "USD");
+        var positive = new Money(100m, "USD");
 
         zero.IsNegative().Should().BeFalse();
         positive.IsNegative().Should().BeFalse();
@@ -252,44 +243,44 @@ public class MoneyTests
     [Fact]
     public void Abs_WithNegativeAmount_ShouldReturnPositiveAmount()
     {
-        var money = new Money(-100m, Currency.Usd);
+        var money = new Money(-100m, "USD");
 
         var result = money.Abs();
 
         result.Amount.Should().Be(100m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void Abs_WithPositiveAmount_ShouldReturnSameAmount()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = money.Abs();
 
         result.Amount.Should().Be(100m);
-        result.Currency.Should().Be(Currency.Usd);
+        result.CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void Negate_ShouldReturnNegatedAmount()
     {
-        var positive = new Money(100m, Currency.Usd);
-        var negative = new Money(-50m, Currency.Eur);
+        var positive = new Money(100m, "USD");
+        var negative = new Money(-50m, "EUR");
 
         var negatedPositive = positive.Negate();
         var negatedNegative = negative.Negate();
 
         negatedPositive.Amount.Should().Be(-100m);
-        negatedPositive.Currency.Should().Be(Currency.Usd);
+        negatedPositive.CurrencyCode.Should().Be("USD");
         negatedNegative.Amount.Should().Be(50m);
-        negatedNegative.Currency.Should().Be(Currency.Eur);
+        negatedNegative.CurrencyCode.Should().Be("EUR");
     }
 
     [Fact]
     public void Allocate_WithValidRatios_ShouldAllocateCorrectly()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = money.Allocate(50, 30, 20);
 
@@ -303,21 +294,21 @@ public class MoneyTests
     [Fact]
     public void Allocate_WithRoundingRemainder_ShouldAddRemainderToFirst()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = money.Allocate(33, 33, 34);
 
         result.Should().HaveCount(3);
         result.Sum(m => m.Amount).Should().Be(100m);
-        result[0].Currency.Should().Be(Currency.Usd);
-        result[1].Currency.Should().Be(Currency.Usd);
-        result[2].Currency.Should().Be(Currency.Usd);
+        result[0].CurrencyCode.Should().Be("USD");
+        result[1].CurrencyCode.Should().Be("USD");
+        result[2].CurrencyCode.Should().Be("USD");
     }
 
     [Fact]
     public void Allocate_WithNullRatios_ShouldThrowArgumentException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         Action act = () => money.Allocate(null);
 
@@ -329,7 +320,7 @@ public class MoneyTests
     [Fact]
     public void Allocate_WithEmptyRatios_ShouldThrowArgumentException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         Action act = () => money.Allocate();
 
@@ -341,7 +332,7 @@ public class MoneyTests
     [Fact]
     public void Allocate_WithNegativeRatios_ShouldThrowArgumentException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         Action act = () => money.Allocate(50, -30, 20);
 
@@ -353,7 +344,7 @@ public class MoneyTests
     [Fact]
     public void Allocate_WithAllZeroRatios_ShouldThrowArgumentException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         Action act = () => money.Allocate(0, 0, 0);
 
@@ -365,21 +356,21 @@ public class MoneyTests
     [Fact]
     public void ConvertTo_WithValidExchangeRate_ShouldConvertCorrectly()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
         var exchangeRate = 0.85m; // USD to EUR
 
-        var result = money.ConvertTo(Currency.Eur, exchangeRate);
+        var result = money.ConvertTo("EUR", exchangeRate);
 
         result.Amount.Should().Be(85m);
-        result.Currency.Should().Be(Currency.Eur);
+        result.CurrencyCode.Should().Be("EUR");
     }
 
     [Fact]
     public void ConvertTo_WithSameCurrency_ShouldReturnSameMoney()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
-        var result = money.ConvertTo(Currency.Usd, 1m);
+        var result = money.ConvertTo("USD", 1m);
 
         result.Should().Be(money);
     }
@@ -387,9 +378,9 @@ public class MoneyTests
     [Fact]
     public void ConvertTo_WithZeroExchangeRate_ShouldThrowArgumentException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
-        Action act = () => money.ConvertTo(Currency.Eur, 0m);
+        Action act = () => money.ConvertTo("EUR", 0m);
 
         act.Should().Throw<ArgumentException>()
             .WithMessage("Exchange rate must be positive.*")
@@ -399,9 +390,9 @@ public class MoneyTests
     [Fact]
     public void ConvertTo_WithNegativeExchangeRate_ShouldThrowArgumentException()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
-        Action act = () => money.ConvertTo(Currency.Eur, -0.85m);
+        Action act = () => money.ConvertTo("EUR", -0.85m);
 
         act.Should().Throw<ArgumentException>()
             .WithMessage("Exchange rate must be positive.*")
@@ -411,9 +402,9 @@ public class MoneyTests
     [Fact]
     public void CompareTo_WithSameCurrency_ShouldCompareCorrectly()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Usd);
-        var money3 = new Money(100m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "USD");
+        var money3 = new Money(100m, "USD");
 
         money1.CompareTo(money2).Should().BePositive();
         money2.CompareTo(money1).Should().BeNegative();
@@ -423,7 +414,7 @@ public class MoneyTests
     [Fact]
     public void CompareTo_WithNull_ShouldReturnPositive()
     {
-        var money = new Money(100m, Currency.Usd);
+        var money = new Money(100m, "USD");
 
         var result = money.CompareTo(null);
 
@@ -433,8 +424,8 @@ public class MoneyTests
     [Fact]
     public void CompareTo_WithDifferentCurrencies_ShouldThrowInvalidOperationException()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(50m, Currency.Eur);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(50m, "EUR");
 
         Action act = () => money1.CompareTo(money2);
 
@@ -445,7 +436,7 @@ public class MoneyTests
     [Fact]
     public void ToString_ShouldFormatCorrectly()
     {
-        var money = new Money(1234.56m, Currency.Usd);
+        var money = new Money(1234.56m, "USD");
 
         var result = money.ToString();
 
@@ -456,8 +447,8 @@ public class MoneyTests
     [Fact]
     public void RecordEquality_WithSameValues_ShouldBeEqual()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(100m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(100m, "USD");
 
         money1.Should().Be(money2);
         (money1 == money2).Should().BeTrue();
@@ -466,11 +457,97 @@ public class MoneyTests
     [Fact]
     public void RecordEquality_WithDifferentValues_ShouldNotBeEqual()
     {
-        var money1 = new Money(100m, Currency.Usd);
-        var money2 = new Money(100m, Currency.Eur);
-        var money3 = new Money(50m, Currency.Usd);
+        var money1 = new Money(100m, "USD");
+        var money2 = new Money(100m, "EUR");
+        var money3 = new Money(50m, "USD");
 
         money1.Should().NotBe(money2);
         money1.Should().NotBe(money3);
+    }
+
+    [Fact]
+    public void Constructor_WithNullCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, null!);
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code cannot be null or empty.*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithEmptyCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, "");
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code cannot be null or empty.*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithWhitespaceCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, "   ");
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code cannot be null or empty.*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithTooShortCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, "US");
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code must be 3 characters (ISO 4217 format).*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithTooLongCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, "USDD");
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code must be 3 characters (ISO 4217 format).*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithNonLetterCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, "U$D");
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code must contain only letters (ISO 4217 format).*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithNumericCurrencyCode_ShouldThrowArgumentException()
+    {
+        Action act = () => new Money(100m, "123");
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Currency code must contain only letters (ISO 4217 format).*")
+            .WithParameterName("currencyCode");
+    }
+
+    [Fact]
+    public void Constructor_WithMixedCaseCurrencyCode_ShouldNormalizeToUpperCase()
+    {
+        var money = new Money(100m, "usd");
+
+        money.CurrencyCode.Should().Be("USD");
+    }
+
+    [Fact]
+    public void Constructor_WithLowercaseCurrencyCode_ShouldNormalizeToUpperCase()
+    {
+        var money = new Money(100m, "eur");
+
+        money.CurrencyCode.Should().Be("EUR");
     }
 }

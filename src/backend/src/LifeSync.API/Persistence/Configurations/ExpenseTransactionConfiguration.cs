@@ -13,10 +13,10 @@ internal sealed class ExpenseTransactionConfiguration : IEntityTypeConfiguration
 
         builder.HasKey(x => x.Id);
 
-        builder.OwnsOne(x => x.Amount, balance =>
+        builder.OwnsOne(x => x.Amount, amount =>
         {
-            balance.Property(price => price.Currency)
-                .HasConversion(currency => currency.Code, code => Currency.FromCode(code));
+            amount.Property(m => m.Amount).HasColumnName("Amount");
+            amount.Property(m => m.CurrencyCode).HasColumnName("CurrencyCode").HasMaxLength(3);
         });
 
         // Soft delete query filter

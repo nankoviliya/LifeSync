@@ -27,8 +27,8 @@ public class JwtTokenGeneratorTests
             "user123@gmail.com".ToRequiredString(),
             "F".ToRequiredString(),
             "L".ToRequiredString(),
-            new Money(200, Currency.Bgn).ToRequiredReference(),
-            Currency.Bgn.ToRequiredReference(),
+            new Money(200, "BGN").ToRequiredReference(),
+            "BGN".ToRequiredString(),
             Guid.Parse("BE9E8EEA-E3A4-475E-B364-08218FB3CC6C").ToRequiredStruct()
         );
 
@@ -59,8 +59,8 @@ public class JwtTokenGeneratorTests
             "user123@gmail.com".ToRequiredString(),
             "F".ToRequiredString(),
             "L".ToRequiredString(),
-            new Money(200, Currency.Bgn).ToRequiredReference(),
-            Currency.Bgn.ToRequiredReference(),
+            new Money(200, "BGN").ToRequiredReference(),
+            "BGN".ToRequiredString(),
             Guid.Parse("BE9E8EEA-E3A4-475E-B364-08218FB3CC6C").ToRequiredStruct()
         );
 
@@ -88,8 +88,8 @@ public class JwtTokenGeneratorTests
             "user123@gmail.com".ToRequiredString(),
             "F".ToRequiredString(),
             "L".ToRequiredString(),
-            new Money(200, Currency.Bgn).ToRequiredReference(),
-            Currency.Bgn.ToRequiredReference(),
+            new Money(200, "BGN").ToRequiredReference(),
+            "BGN".ToRequiredString(),
             Guid.Parse("BE9E8EEA-E3A4-475E-B364-08218FB3CC6C").ToRequiredStruct()
         );
 

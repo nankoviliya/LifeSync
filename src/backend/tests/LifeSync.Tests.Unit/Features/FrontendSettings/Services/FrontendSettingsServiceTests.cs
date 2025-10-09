@@ -1,7 +1,6 @@
 using FluentAssertions;
 using LifeSync.API.Features.FrontendSettings.Models;
 using LifeSync.API.Features.FrontendSettings.Services;
-using LifeSync.API.Models.Currencies;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Secrets.Contracts;
@@ -39,12 +38,6 @@ public class FrontendSettingsServiceTests
 
             context.Languages.AddRange(englishLanguage, spanishLanguage);
 
-            Currency usdCurrency = Currency.From("USD".ToRequiredString(), "US Dollar".ToRequiredString(), "US Dollar".ToRequiredString(), "$".ToRequiredString(), 840.ToRequiredStruct());
-            Currency eurCurrency = Currency.From("EUR".ToRequiredString(), "Euro".ToRequiredString(), "Euro".ToRequiredString(), "€".ToRequiredString(), 978.ToRequiredStruct());
-            Currency bgnCurrency = Currency.From("BGN".ToRequiredString(), "Bulgarian Lev".ToRequiredString(), "Лев".ToRequiredString(), "лв".ToRequiredString(), 975.ToRequiredStruct());
-
-            context.Currencies.AddRange(usdCurrency, eurCurrency, bgnCurrency);
-
             context.SaveChanges();
         }
     }
@@ -78,19 +71,6 @@ public class FrontendSettingsServiceTests
         result.Data.LanguageOptions.Should().Contain(l => l.Name == "Spanish");
     }
 
-    [Fact]
-    public async Task GetFrontendSettingsAsync_ShouldReturnAllCurrencyOptions()
-    {
-        FrontendSettingsService sut = new(CreateContext());
-
-        DataResult<FrontendSettingsResponse> result = await sut.GetFrontendSettingsAsync(CancellationToken.None);
-
-        result.IsSuccess.Should().BeTrue();
-        result.Data.CurrencyOptions.Should().HaveCount(3);
-        result.Data.CurrencyOptions.Should().Contain(c => c.Code == "USD" && c.Name == "US Dollar (US Dollar)");
-        result.Data.CurrencyOptions.Should().Contain(c => c.Code == "EUR" && c.Name == "Euro (Euro)");
-        result.Data.CurrencyOptions.Should().Contain(c => c.Code == "BGN" && c.Name == "Bulgarian Lev (Лев)");
-    }
 
     [Fact]
     public async Task GetFrontendSettingsAsync_ShouldReturnLanguageOptionsWithCorrectIds()
@@ -111,7 +91,6 @@ public class FrontendSettingsServiceTests
     {
         await using ApplicationDbContext clearContext = CreateContext();
         clearContext.Languages.RemoveRange(clearContext.Languages);
-        clearContext.Currencies.RemoveRange(clearContext.Currencies);
         await clearContext.SaveChangesAsync();
 
         FrontendSettingsService sut = new(CreateContext());
@@ -120,22 +99,8 @@ public class FrontendSettingsServiceTests
 
         result.IsSuccess.Should().BeTrue();
         result.Data.LanguageOptions.Should().BeEmpty();
-        result.Data.CurrencyOptions.Should().BeEmpty();
     }
 
-    [Fact]
-    public async Task GetFrontendSettingsAsync_ShouldFormatCurrencyNameCorrectly()
-    {
-        FrontendSettingsService sut = new(CreateContext());
-
-        DataResult<FrontendSettingsResponse> result = await sut.GetFrontendSettingsAsync(CancellationToken.None);
-
-        result.IsSuccess.Should().BeTrue();
-
-        CurrencyOption? bgnCurrency = result.Data.CurrencyOptions.FirstOrDefault(c => c.Code == "BGN");
-        bgnCurrency.Should().NotBeNull();
-        bgnCurrency!.Name.Should().Be("Bulgarian Lev (Лев)");
-    }
 
     [Fact]
     public async Task GetFrontendSettingsAsync_ShouldNotTrackEntities()

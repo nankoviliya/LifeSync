@@ -59,8 +59,8 @@ public class AccountExportServiceTests
                 "user123@gmail.com".ToRequiredString(),
                 "F".ToRequiredString(),
                 "L".ToRequiredString(),
-                new Money(200, Currency.Bgn).ToRequiredReference(),
-                Currency.Bgn.ToRequiredReference(),
+                new Money(200, "BGN").ToRequiredReference(),
+                "BGN".ToRequiredString(),
                 _testLanguageId.ToRequiredStruct()
             );
 
@@ -170,14 +170,14 @@ public class AccountExportServiceTests
         await using ApplicationDbContext seedContext = CreateContext();
         
         IncomeTransaction incomeTransaction = IncomeTransaction.From(
-            new Money(500, Currency.Bgn).ToRequiredReference(),
+            new Money(500, "BGN").ToRequiredReference(),
             DateTime.UtcNow.ToRequiredStruct(),
             "Salary".ToRequiredString(),
             _testUserId.ToRequiredString()
         );
 
         ExpenseTransaction expenseTransaction = ExpenseTransaction.From(
-            new Money(100, Currency.Bgn).ToRequiredReference(),
+            new Money(100, "BGN").ToRequiredReference(),
             DateTime.UtcNow.ToRequiredStruct(),
             "Groceries".ToRequiredString(),
             ExpenseType.Needs,

@@ -87,7 +87,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
             TotalSpentOnNeeds = totalSpentOnNeeds,
             TotalSpentOnWants = totalSpentOnWants,
             TotalSpentOnSavings = totalSpentOnSavings,
-            Currency = expenseTransactions.FirstOrDefault()?.Amount.Currency.Code ?? string.Empty
+            Currency = expenseTransactions.FirstOrDefault()?.Amount.CurrencyCode ?? string.Empty
         };
 
         return summary;
@@ -100,7 +100,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         IncomeSummaryDto summary = new()
         {
             TotalIncome = totalIncome,
-            Currency = incomeTransactions.FirstOrDefault()?.Amount.Currency.Code ?? string.Empty
+            Currency = incomeTransactions.FirstOrDefault()?.Amount.CurrencyCode ?? string.Empty
         };
 
         return summary;
@@ -170,7 +170,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         {
             Id = x.Id.ToString(),
             Amount = x.Amount.Amount,
-            Currency = x.Amount.Currency.Code,
+            Currency = x.Amount.CurrencyCode,
             Date = x.Date.ToString("yyyy-MM-dd"),
             Description = x.Description,
             ExpenseType = x.ExpenseType,
@@ -182,7 +182,7 @@ public class TransactionsSearchService : BaseService, ITransactionsSearchService
         {
             Id = x.Id.ToString(),
             Amount = x.Amount.Amount,
-            Currency = x.Amount.Currency.Code,
+            Currency = x.Amount.CurrencyCode,
             Date = x.Date.ToString("yyyy-MM-dd"),
             Description = x.Description,
             TransactionType = TransactionType.Income

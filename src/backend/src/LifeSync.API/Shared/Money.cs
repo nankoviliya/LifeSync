@@ -3,45 +3,99 @@ namespace LifeSync.API.Shared;
 public record Money : IComparable<Money>
 {
     public decimal Amount { get; init; }
-    public Currency Currency { get; init; }
+    public string CurrencyCode { get; init; }
 
     private Money()
     {
         Amount = 0;
-        Currency = Currency.None;
+        CurrencyCode = string.Empty;
     }
 
-    public Money(decimal amount, Currency currency)
+    public Money(decimal amount, string currencyCode)
     {
-        if (currency == Currency.None && amount != 0)
+        if (string.IsNullOrWhiteSpace(currencyCode))
         {
-            throw new ArgumentException("Amount must be zero when currency is None.", nameof(amount));
+            throw new ArgumentException("Currency code cannot be null or empty.", nameof(currencyCode));
+        }
+
+        if (currencyCode.Length != 3)
+        {
+            throw new ArgumentException("Currency code must be 3 characters (ISO 4217 format).", nameof(currencyCode));
+        }
+
+        if (!IsValidIsoCurrencyFormat(currencyCode))
+        {
+            throw new ArgumentException(
+                "Currency code must contain only letters (ISO 4217 format).",
+                nameof(currencyCode));
+        }
+
+        var normalizedCode = currencyCode.ToUpperInvariant();
+
+        // Validate against CurrencyRegistry to enforce business rule: only supported currencies can exist
+        if (!CurrencyRegistry.IsSupported(normalizedCode))
+        {
+            throw new ArgumentException(
+                $"Currency '{normalizedCode}' is not supported. Available currencies: {CurrencyRegistry.GetSupportedCodesString()}",
+                nameof(currencyCode));
         }
 
         Amount = Math.Round(amount, 2);
-        Currency = currency;
+        CurrencyCode = normalizedCode;
+    }
+
+    /// <summary>
+    /// Creates a Money instance from persistence layer without business rule validation.
+    /// This allows loading historical data with deprecated currencies.
+    /// For internal use only - EF Core and deserialization scenarios.
+    /// </summary>
+    internal static Money FromPersistence(decimal amount, string currencyCode)
+    {
+        if (string.IsNullOrWhiteSpace(currencyCode))
+        {
+            throw new ArgumentException("Currency code cannot be null or empty.", nameof(currencyCode));
+        }
+
+        if (currencyCode.Length != 3)
+        {
+            throw new ArgumentException("Currency code must be 3 characters (ISO 4217 format).", nameof(currencyCode));
+        }
+
+        if (!IsValidIsoCurrencyFormat(currencyCode))
+        {
+            throw new ArgumentException(
+                "Currency code must contain only letters (ISO 4217 format).",
+                nameof(currencyCode));
+        }
+
+        // NOTE: Intentionally skips CurrencyRegistry validation for historical data
+        return new Money
+        {
+            Amount = Math.Round(amount, 2),
+            CurrencyCode = currencyCode.ToUpperInvariant()
+        };
     }
 
     public static Money operator +(Money first, Money second)
     {
         ValidateSameCurrency(first, second, "add");
-        return new Money(first.Amount + second.Amount, first.Currency);
+        return new Money(first.Amount + second.Amount, first.CurrencyCode);
     }
 
     public static Money operator -(Money first, Money second)
     {
         ValidateSameCurrency(first, second, "subtract");
-        return new Money(first.Amount - second.Amount, first.Currency);
+        return new Money(first.Amount - second.Amount, first.CurrencyCode);
     }
 
     public static Money operator *(Money money, decimal multiplier)
     {
-        return new Money(money.Amount * multiplier, money.Currency);
+        return new Money(money.Amount * multiplier, money.CurrencyCode);
     }
 
     public static Money operator *(decimal multiplier, Money money)
     {
-        return new Money(money.Amount * multiplier, money.Currency);
+        return new Money(money.Amount * multiplier, money.CurrencyCode);
     }
 
     public static Money operator /(Money money, decimal divisor)
@@ -51,7 +105,7 @@ public record Money : IComparable<Money>
             throw new DivideByZeroException("Cannot divide money by zero.");
         }
 
-        return new Money(money.Amount / divisor, money.Currency);
+        return new Money(money.Amount / divisor, money.CurrencyCode);
     }
 
     public static bool operator >(Money first, Money second)
@@ -78,9 +132,7 @@ public record Money : IComparable<Money>
         return first.Amount <= second.Amount;
     }
 
-    public static Money Zero() => new Money(0, Currency.None);
-
-    public static Money Zero(Currency currency) => new Money(0, currency);
+    public static Money Zero(string currencyCode) => new Money(0, currencyCode);
 
     public bool IsZero() => Amount == 0;
 
@@ -88,9 +140,9 @@ public record Money : IComparable<Money>
 
     public bool IsNegative() => Amount < 0;
 
-    public Money Abs() => new Money(Math.Abs(Amount), Currency);
+    public Money Abs() => new Money(Math.Abs(Amount), CurrencyCode);
 
-    public Money Negate() => new Money(-Amount, Currency);
+    public Money Negate() => new Money(-Amount, CurrencyCode);
 
     /// <summary>
     /// Allocates money into parts according to given ratios
@@ -121,14 +173,14 @@ public record Money : IComparable<Money>
         for (int i = 0; i < ratios.Length; i++)
         {
             var share = Math.Round(Amount * ratios[i] / total, 2);
-            result[i] = new Money(share, Currency);
+            result[i] = new Money(share, CurrencyCode);
             remainder -= share;
         }
 
         // Add any remainder to the first allocation to handle rounding
         if (remainder != 0 && ratios.Length > 0)
         {
-            result[0] = new Money(result[0].Amount + remainder, Currency);
+            result[0] = new Money(result[0].Amount + remainder, CurrencyCode);
         }
 
         return result;
@@ -137,19 +189,19 @@ public record Money : IComparable<Money>
     /// <summary>
     /// Converts money to a different currency (requires exchange rate)
     /// </summary>
-    public Money ConvertTo(Currency targetCurrency, decimal exchangeRate)
+    public Money ConvertTo(string targetCurrencyCode, decimal exchangeRate)
     {
         if (exchangeRate <= 0)
         {
             throw new ArgumentException("Exchange rate must be positive.", nameof(exchangeRate));
         }
 
-        if (Currency == targetCurrency)
+        if (CurrencyCode == targetCurrencyCode)
         {
             return this;
         }
 
-        return new Money(Amount * exchangeRate, targetCurrency);
+        return new Money(Amount * exchangeRate, targetCurrencyCode);
     }
 
     public int CompareTo(Money? other)
@@ -165,12 +217,18 @@ public record Money : IComparable<Money>
 
     private static void ValidateSameCurrency(Money first, Money second, string operation)
     {
-        if (first.Currency != second.Currency)
+        if (first.CurrencyCode != second.CurrencyCode)
         {
             throw new InvalidOperationException(
-                $"Cannot {operation} money with different currencies: {first.Currency} and {second.Currency}");
+                $"Cannot {operation} money with different currencies: {first.CurrencyCode} and {second.CurrencyCode}");
         }
     }
 
-    public override string ToString() => $"{Amount:N2} {Currency}";
+    private static bool IsValidIsoCurrencyFormat(string currencyCode)
+    {
+        // ISO 4217 currency codes consist of 3 uppercase letters
+        return currencyCode.All(char.IsLetter);
+    }
+
+    public override string ToString() => $"{Amount:N2} {CurrencyCode}";
 }

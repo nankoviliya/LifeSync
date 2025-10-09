@@ -43,9 +43,9 @@ public class ExpenseService : BaseService, IExpenseService
                 return Failure<Guid>(FinancesResultMessages.UserNotFound);
             }
 
-            Money expenseAmount = new(request.Amount, Currency.FromCode(request.Currency));
+            Money expenseAmount = new(request.Amount, request.Currency);
 
-            if (user.Balance.Currency != expenseAmount.Currency)
+            if (user.Balance.CurrencyCode != expenseAmount.CurrencyCode)
             {
                 return Failure<Guid>(FinancesResultMessages.CurrencyMismatch);
             }
@@ -65,6 +65,12 @@ public class ExpenseService : BaseService, IExpenseService
             await dbTransaction.CommitAsync(cancellationToken);
 
             return Success(transactionData.Id);
+        }
+        catch (ArgumentException ex) when (ex.ParamName == "currencyCode")
+        {
+            await dbTransaction.RollbackAsync(cancellationToken);
+            _logger.LogWarning("Invalid currency in AddExpense: {Currency}. Error: {Error}", request.Currency, ex.Message);
+            return Failure<Guid>(ex.Message);
         }
         catch (DbUpdateConcurrencyException ex)
         {

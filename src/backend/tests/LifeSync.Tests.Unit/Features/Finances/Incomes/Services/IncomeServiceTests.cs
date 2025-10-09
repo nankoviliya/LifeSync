@@ -56,8 +56,8 @@ public class IncomeServiceTests
                 "user@test.com".ToRequiredString(),
                 "Jane".ToRequiredString(),
                 "Smith".ToRequiredString(),
-                new Money(500, Currency.Bgn).ToRequiredReference(),
-                Currency.Bgn.ToRequiredReference(),
+                new Money(500, "BGN").ToRequiredReference(),
+                "BGN".ToRequiredString(),
                 _testLanguageId.ToRequiredStruct()
             );
 
