@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using LifeSync.API.Features.Authentication.Models;
+using FluentValidation;
+using LifeSync.API.Shared;
 
-namespace LifeSync.API.Features.Authentication.Validators;
+namespace LifeSync.API.Features.Authentication.Register.Models;
 
 public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
@@ -27,7 +27,10 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 
         RuleFor(x => x.Currency)
             .NotEmpty().WithMessage("Currency is required.")
-            .Length(3).WithMessage("Currency code must be exactly 3 characters.");
+            .Length(3).WithMessage("Currency code must be exactly 3 characters.")
+            .Must(CurrencyRegistry.IsSupported)
+            .WithMessage(x =>
+                $"Currency '{x.Currency}' is not supported. Supported currencies: {CurrencyRegistry.GetSupportedCodesString()}.");
 
         RuleFor(x => x.LanguageId)
             .NotEmpty().WithMessage("Language selection is required.");
