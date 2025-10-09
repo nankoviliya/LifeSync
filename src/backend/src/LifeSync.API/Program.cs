@@ -60,6 +60,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+builder.Services.AddRateLimitingPolicies();
+
 builder.Services.AddFastEndpoints();
 
 builder.Services.AddControllers()
@@ -95,6 +97,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
