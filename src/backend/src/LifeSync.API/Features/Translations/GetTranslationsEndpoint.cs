@@ -5,7 +5,7 @@ using LifeSync.Common.Results;
 
 namespace LifeSync.API.Features.Translations;
 
-public sealed class GetTranslationsEndpoint : Endpoint<GetTranslationsRequest, GetTranslationsResponse>
+public sealed class GetTranslationsEndpoint : Endpoint<GetTranslationsRequest, IReadOnlyDictionary<string, string>>
 {
     private readonly ITranslationsService _translationsService;
 
@@ -17,12 +17,15 @@ public sealed class GetTranslationsEndpoint : Endpoint<GetTranslationsRequest, G
         Get("api/translations");
         AllowAnonymous();
 
+        Options(x => x.RequireRateLimiting("PublicApi"));
+
         Summary(s =>
         {
             s.Summary = "Retrieves translations for specified language code";
             s.Description = "Retrieves translations inside dictionary based on the provided language code.";
             s.Responses[200] = "Success";
             s.Responses[400] = "Bad Request";
+            s.Responses[429] = "Too Many Requests";
         });
     }
 
@@ -42,7 +45,7 @@ public sealed class GetTranslationsEndpoint : Endpoint<GetTranslationsRequest, G
         }
         else
         {
-            await SendOkAsync(new GetTranslationsResponse { Translations = result.Data }, ct);
+            await SendOkAsync(result.Data, ct);
         }
     }
 }
