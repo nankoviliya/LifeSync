@@ -4,19 +4,16 @@ using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LifeSync.API.Migrations
+namespace LifeSync.API.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251008105558_AddAuditColumnIndexes")]
-    partial class AddAuditColumnIndexes
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +32,11 @@ namespace LifeSync.API.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrencyPreference")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(320)
@@ -95,57 +97,6 @@ namespace LifeSync.API.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("LifeSync.API.Models.Currencies.Currency", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(3)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("NativeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumericCode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("LifeSync.API.Models.Expenses.ExpenseTransaction", b =>
@@ -284,29 +235,14 @@ namespace LifeSync.API.Migrations
                                 .HasColumnType("nvarchar(450)");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Balance_Amount");
 
-                            b1.Property<string>("Currency")
+                            b1.Property<string>("CurrencyCode")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.OwnsOne("LifeSync.API.Shared.Currency", "CurrencyPreference", b1 =>
-                        {
-                            b1.Property<string>("UserId")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<string>("Code")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("CurrencyPreference");
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("Balance_CurrencyCode");
 
                             b1.HasKey("UserId");
 
@@ -317,9 +253,6 @@ namespace LifeSync.API.Migrations
                         });
 
                     b.Navigation("Balance")
-                        .IsRequired();
-
-                    b.Navigation("CurrencyPreference")
                         .IsRequired();
 
                     b.Navigation("Language");
@@ -339,11 +272,14 @@ namespace LifeSync.API.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Amount");
 
-                            b1.Property<string>("Currency")
+                            b1.Property<string>("CurrencyCode")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("CurrencyCode");
 
                             b1.HasKey("ExpenseTransactionId");
 
@@ -373,11 +309,14 @@ namespace LifeSync.API.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("Amount");
 
-                            b1.Property<string>("Currency")
+                            b1.Property<string>("CurrencyCode")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("CurrencyCode");
 
                             b1.HasKey("IncomeTransactionId");
 
