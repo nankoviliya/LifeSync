@@ -39,7 +39,7 @@ public class AccountService : BaseService, IAccountService
                 LastName = u.LastName,
                 Language = u.Language,
                 BalanceAmount = u.Balance.Amount,
-                BalanceCurrency = u.Balance.Currency.Code
+                BalanceCurrency = u.Balance.CurrencyCode
             })
             .FirstOrDefaultAsync(cancellationToken);
 

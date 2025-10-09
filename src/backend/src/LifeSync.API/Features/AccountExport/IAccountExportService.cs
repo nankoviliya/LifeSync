@@ -58,7 +58,7 @@ public class AccountExportService : BaseService, IAccountExportService
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     BalanceAmount = u.Balance.Amount,
-                    BalanceCurrency = u.Balance.Currency.Code,
+                    BalanceCurrency = u.Balance.CurrencyCode,
                     LanguageId = u.Language.Id,
                     LanguageCode = u.Language.Code
                 },
@@ -67,7 +67,7 @@ public class AccountExportService : BaseService, IAccountExportService
                     {
                         Id = it.Id,
                         Amount = it.Amount.Amount,
-                        Currency = it.Amount.Currency.Code,
+                        Currency = it.Amount.CurrencyCode,
                         Description = it.Description,
                         Date = it.Date
                     })
@@ -78,7 +78,7 @@ public class AccountExportService : BaseService, IAccountExportService
                     {
                         Id = et.Id,
                         Amount = et.Amount.Amount,
-                        Currency = et.Amount.Currency.Code,
+                        Currency = et.Amount.CurrencyCode,
                         Description = et.Description,
                         ExpenseType = et.ExpenseType,
                         Date = et.Date

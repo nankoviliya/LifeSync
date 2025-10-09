@@ -43,9 +43,9 @@ public class IncomeService : BaseService, IIncomeService
                 return Failure<Guid>(FinancesResultMessages.UserNotFound);
             }
 
-            Money incomeAmount = new(request.Amount, Currency.FromCode(request.Currency));
+            Money incomeAmount = new(request.Amount, request.Currency);
 
-            if (user.Balance.Currency != incomeAmount.Currency)
+            if (user.Balance.CurrencyCode != incomeAmount.CurrencyCode)
             {
                 return Failure<Guid>(FinancesResultMessages.CurrencyMismatch);
             }
@@ -64,6 +64,12 @@ public class IncomeService : BaseService, IIncomeService
             await dbTransaction.CommitAsync(cancellationToken);
 
             return Success(transactionData.Id);
+        }
+        catch (ArgumentException ex) when (ex.ParamName == "currencyCode")
+        {
+            await dbTransaction.RollbackAsync(cancellationToken);
+            _logger.LogWarning("Invalid currency in AddIncome: {Currency}. Error: {Error}", request.Currency, ex.Message);
+            return Failure<Guid>(ex.Message);
         }
         catch (DbUpdateConcurrencyException ex)
         {

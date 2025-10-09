@@ -11,7 +11,7 @@ public class IncomeTransactionTests
     [Fact]
     public void From_WithValidData_ShouldCreateIncomeTransaction()
     {
-        var amount = new Money(1000m, Currency.Usd).ToRequiredReference();
+        var amount = new Money(1000m, "USD").ToRequiredReference();
         var date = new DateTime(2024, 6, 15).ToRequiredStruct();
         var description = "Monthly Salary".ToRequiredString();
         var userId = "user123".ToRequiredString();
@@ -27,7 +27,7 @@ public class IncomeTransactionTests
     [Fact]
     public void From_WithNegativeAmount_ShouldThrowArgumentException()
     {
-        var amount = new Money(-1000m, Currency.Usd).ToRequiredReference();
+        var amount = new Money(-1000m, "USD").ToRequiredReference();
 
         Action act = () => IncomeTransaction.From(
             amount,
@@ -42,7 +42,7 @@ public class IncomeTransactionTests
     [Fact]
     public void From_WithZeroAmount_ShouldThrowArgumentException()
     {
-        var amount = new Money(0m, Currency.Usd).ToRequiredReference();
+        var amount = new Money(0m, "USD").ToRequiredReference();
 
         Action act = () => IncomeTransaction.From(
             amount,
@@ -60,7 +60,7 @@ public class IncomeTransactionTests
         var futureDate = DateTime.UtcNow.AddDays(2).ToRequiredStruct();
 
         Action act = () => IncomeTransaction.From(
-            new Money(1000m, Currency.Usd).ToRequiredReference(),
+            new Money(1000m, "USD").ToRequiredReference(),
             futureDate,
             "Test".ToRequiredString(),
             "user123".ToRequiredString());
@@ -75,7 +75,7 @@ public class IncomeTransactionTests
         var oldDate = new DateTime(1899, 12, 31).ToRequiredStruct();
 
         Action act = () => IncomeTransaction.From(
-            new Money(1000m, Currency.Usd).ToRequiredReference(),
+            new Money(1000m, "USD").ToRequiredReference(),
             oldDate,
             "Test".ToRequiredString(),
             "user123".ToRequiredString());
@@ -90,7 +90,7 @@ public class IncomeTransactionTests
         var longDescription = new string('a', 501);
 
         Action act = () => IncomeTransaction.From(
-            new Money(1000m, Currency.Usd).ToRequiredReference(),
+            new Money(1000m, "USD").ToRequiredReference(),
             DateTime.UtcNow.ToRequiredStruct(),
             longDescription.ToRequiredString(),
             "user123".ToRequiredString());
@@ -103,7 +103,7 @@ public class IncomeTransactionTests
     public void UpdateAmount_WithValidAmount_ShouldUpdateAmount()
     {
         var income = CreateTestIncome();
-        var newAmount = new Money(1500m, Currency.Usd).ToRequiredReference();
+        var newAmount = new Money(1500m, "USD").ToRequiredReference();
 
         income.UpdateAmount(newAmount);
 
@@ -254,7 +254,7 @@ public class IncomeTransactionTests
     {
         var (income1, income2) = EntityTestHelper.CreateTwoWithSameId(() =>
             IncomeTransaction.From(
-                new Money(1000m, Currency.Usd).ToRequiredReference(),
+                new Money(1000m, "USD").ToRequiredReference(),
                 new DateTime(2024, 6, 15).ToRequiredStruct(),
                 "Test".ToRequiredString(),
                 "user123".ToRequiredString()));
@@ -269,7 +269,7 @@ public class IncomeTransactionTests
     {
         var (income1, income2) = EntityTestHelper.CreateTwoWithDifferentIds(() =>
             IncomeTransaction.From(
-                new Money(1000m, Currency.Usd).ToRequiredReference(),
+                new Money(1000m, "USD").ToRequiredReference(),
                 new DateTime(2024, 6, 15).ToRequiredStruct(),
                 "Test".ToRequiredString(),
                 "user123".ToRequiredString()));
@@ -282,13 +282,13 @@ public class IncomeTransactionTests
     public void Equality_WithSameIdButDifferentData_ShouldBeEqual()
     {
         var income1 = IncomeTransaction.From(
-            new Money(1000m, Currency.Usd).ToRequiredReference(),
+            new Money(1000m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 15).ToRequiredStruct(),
             "Salary".ToRequiredString(),
             "user123".ToRequiredString());
 
         var income2 = IncomeTransaction.From(
-            new Money(500m, Currency.Eur).ToRequiredReference(),
+            new Money(500m, "EUR").ToRequiredReference(),
             new DateTime(2023, 1, 1).ToRequiredStruct(),
             "Bonus".ToRequiredString(),
             "user999".ToRequiredString());
@@ -303,7 +303,7 @@ public class IncomeTransactionTests
     private IncomeTransaction CreateTestIncome(decimal amount = 1000m, DateTime? date = null)
     {
         return IncomeTransaction.From(
-            new Money(amount, Currency.Usd).ToRequiredReference(),
+            new Money(amount, "USD").ToRequiredReference(),
             (date ?? new DateTime(2024, 6, 15)).ToRequiredStruct(),
             "Monthly Salary".ToRequiredString(),
             "user123".ToRequiredString());

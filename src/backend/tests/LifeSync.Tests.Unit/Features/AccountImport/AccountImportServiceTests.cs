@@ -59,8 +59,8 @@ public class AccountImportServiceTests
                 "user123@gmail.com".ToRequiredString(),
                 "F".ToRequiredString(),
                 "L".ToRequiredString(),
-                new Money(200, Currency.Bgn).ToRequiredReference(),
-                Currency.Bgn.ToRequiredReference(),
+                new Money(200, "BGN").ToRequiredReference(),
+                "BGN".ToRequiredString(),
                 _testLanguageId.ToRequiredStruct()
             );
 
@@ -112,7 +112,7 @@ public class AccountImportServiceTests
         User? updatedUser = await assertContext.Users.FindAsync(_testUserId);
         updatedUser.Should().NotBeNull();
         updatedUser!.Balance.Amount.Should().Be(testData.ProfileData.BalanceAmount);
-        updatedUser.Balance.Currency.Code.Should().Be(testData.ProfileData.BalanceCurrency);
+        updatedUser.Balance.CurrencyCode.Should().Be(testData.ProfileData.BalanceCurrency);
         updatedUser.LanguageId.Should().Be(testData.ProfileData.LanguageId);
 
         int incomeCount = await assertContext.IncomeTransactions.CountAsync();

@@ -56,8 +56,8 @@ public class ExpenseServiceTests
                 "user@test.com".ToRequiredString(),
                 "John".ToRequiredString(),
                 "Doe".ToRequiredString(),
-                new Money(1000, Currency.Bgn).ToRequiredReference(),
-                Currency.Bgn.ToRequiredReference(),
+                new Money(1000, "BGN").ToRequiredReference(),
+                "BGN".ToRequiredString(),
                 _testLanguageId.ToRequiredStruct()
             );
 

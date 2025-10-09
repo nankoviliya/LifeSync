@@ -48,29 +48,37 @@ public class AuthService : BaseService, IAuthService
 
     public async Task<MessageResult> RegisterAsync(RegisterRequest request)
     {
-        Money userBalance = new(request.Balance, Currency.FromCode(request.Currency));
-
-        User user = User.From(
-            request.Email.ToRequiredString(),
-            request.Email.ToRequiredString(),
-            request.FirstName.ToRequiredString(),
-            request.LastName.ToRequiredString(),
-            userBalance.ToRequiredReference(),
-            Currency.FromCode(request.Currency).ToRequiredReference(),
-            request.LanguageId.ToRequiredStruct()
-        );
-
-        IdentityResult? createResult = await _userManager.CreateAsync(user, request.Password);
-
-        if (!createResult.Succeeded)
+        try
         {
-            string? errorDescriptions = string.Join("; ", createResult.Errors.Select(e => e.Description));
+            Money userBalance = new(request.Balance, request.Currency);
 
-            _logger.LogWarning("Registration failed. Errors: {Errors}", errorDescriptions);
+            User user = User.From(
+                request.Email.ToRequiredString(),
+                request.Email.ToRequiredString(),
+                request.FirstName.ToRequiredString(),
+                request.LastName.ToRequiredString(),
+                userBalance.ToRequiredReference(),
+                request.Currency.ToRequiredString(),
+                request.LanguageId.ToRequiredStruct()
+            );
 
-            return FailureMessage(createResult.Errors.Select(e => e.Description).ToArray());
+            IdentityResult? createResult = await _userManager.CreateAsync(user, request.Password);
+
+            if (!createResult.Succeeded)
+            {
+                string? errorDescriptions = string.Join("; ", createResult.Errors.Select(e => e.Description));
+
+                _logger.LogWarning("Registration failed. Errors: {Errors}", errorDescriptions);
+
+                return FailureMessage(createResult.Errors.Select(e => e.Description).ToArray());
+            }
+
+            return SuccessMessage("Successfully registered");
         }
-
-        return SuccessMessage("Successfully registered");
+        catch (ArgumentException ex) when (ex.ParamName == "currencyCode")
+        {
+            _logger.LogWarning("Registration failed. Invalid currency: {Currency}. Error: {Error}", request.Currency, ex.Message);
+            return FailureMessage(ex.Message);
+        }
     }
 }

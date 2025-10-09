@@ -56,8 +56,8 @@ public class TransactionsSearchServiceTests
                 "user@test.com".ToRequiredString(),
                 "Test".ToRequiredString(),
                 "User".ToRequiredString(),
-                new Money(1000, Currency.Bgn).ToRequiredReference(),
-                Currency.Bgn.ToRequiredReference(),
+                new Money(1000, "BGN").ToRequiredReference(),
+                "BGN".ToRequiredString(),
                 _testLanguageId.ToRequiredStruct()
             );
 
@@ -78,7 +78,7 @@ public class TransactionsSearchServiceTests
         await using ApplicationDbContext context = CreateContext();
 
         ExpenseTransaction expense1 = ExpenseTransaction.From(
-            new Money(100, Currency.Bgn).ToRequiredReference(),
+            new Money(100, "BGN").ToRequiredReference(),
             new DateTime(2024, 10, 1, 0, 0, 0, DateTimeKind.Utc).ToRequiredStruct(),
             "Groceries".ToRequiredString(),
             ExpenseType.Needs,
@@ -86,7 +86,7 @@ public class TransactionsSearchServiceTests
         );
 
         ExpenseTransaction expense2 = ExpenseTransaction.From(
-            new Money(200, Currency.Bgn).ToRequiredReference(),
+            new Money(200, "BGN").ToRequiredReference(),
             new DateTime(2024, 10, 5, 0, 0, 0, DateTimeKind.Utc).ToRequiredStruct(),
             "Entertainment".ToRequiredString(),
             ExpenseType.Wants,
@@ -94,7 +94,7 @@ public class TransactionsSearchServiceTests
         );
 
         ExpenseTransaction expense3 = ExpenseTransaction.From(
-            new Money(300, Currency.Bgn).ToRequiredReference(),
+            new Money(300, "BGN").ToRequiredReference(),
             new DateTime(2024, 10, 10, 0, 0, 0, DateTimeKind.Utc).ToRequiredStruct(),
             "Investment".ToRequiredString(),
             ExpenseType.Savings,
@@ -102,14 +102,14 @@ public class TransactionsSearchServiceTests
         );
 
         IncomeTransaction income1 = IncomeTransaction.From(
-            new Money(1500, Currency.Bgn).ToRequiredReference(),
+            new Money(1500, "BGN").ToRequiredReference(),
             new DateTime(2024, 10, 1, 0, 0, 0, DateTimeKind.Utc).ToRequiredStruct(),
             "Salary".ToRequiredString(),
             _testUserId.ToRequiredString()
         );
 
         IncomeTransaction income2 = IncomeTransaction.From(
-            new Money(500, Currency.Bgn).ToRequiredReference(),
+            new Money(500, "BGN").ToRequiredReference(),
             new DateTime(2024, 10, 15, 0, 0, 0, DateTimeKind.Utc).ToRequiredStruct(),
             "Bonus".ToRequiredString(),
             _testUserId.ToRequiredString()
@@ -475,8 +475,8 @@ public class TransactionsSearchServiceTests
             "another@test.com".ToRequiredString(),
             "Another".ToRequiredString(),
             "User".ToRequiredString(),
-            new Money(500, Currency.Bgn).ToRequiredReference(),
-            Currency.Bgn.ToRequiredReference(),
+            new Money(500, "BGN").ToRequiredReference(),
+            "BGN".ToRequiredString(),
             _testLanguageId.ToRequiredStruct()
         );
 
@@ -484,7 +484,7 @@ public class TransactionsSearchServiceTests
         await seedContext.SaveChangesAsync();
 
         ExpenseTransaction anotherExpense = ExpenseTransaction.From(
-            new Money(50, Currency.Bgn).ToRequiredReference(),
+            new Money(50, "BGN").ToRequiredReference(),
             DateTime.UtcNow.ToRequiredStruct(),
             "Another user expense".ToRequiredString(),
             ExpenseType.Needs,

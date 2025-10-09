@@ -30,15 +30,14 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.Email)
             .IsUnique();
 
+        builder.Property(x => x.CurrencyPreference)
+            .HasMaxLength(3)
+            .IsRequired();
+
         builder.OwnsOne(x => x.Balance, balance =>
         {
-            balance.Property(price => price.Currency)
-                .HasConversion(currency => currency.Code, code => Currency.FromCode(code));
-        });
-
-        builder.OwnsOne(e => e.CurrencyPreference, currency =>
-        {
-            currency.Property(c => c.Code).HasColumnName("CurrencyPreference");
+            balance.Property(m => m.Amount).HasColumnName("Balance_Amount");
+            balance.Property(m => m.CurrencyCode).HasColumnName("Balance_CurrencyCode").HasMaxLength(3);
         });
     }
 }

@@ -11,7 +11,7 @@ public class ExpenseTransactionTests
     [Fact]
     public void From_WithValidData_ShouldCreateExpenseTransaction()
     {
-        var amount = new Money(50m, Currency.Usd).ToRequiredReference();
+        var amount = new Money(50m, "USD").ToRequiredReference();
         var date = new DateTime(2024, 6, 15).ToRequiredStruct();
         var description = "Groceries".ToRequiredString();
         var expenseType = ExpenseType.Needs;
@@ -29,7 +29,7 @@ public class ExpenseTransactionTests
     [Fact]
     public void From_WithNegativeAmount_ShouldThrowArgumentException()
     {
-        var amount = new Money(-50m, Currency.Usd).ToRequiredReference();
+        var amount = new Money(-50m, "USD").ToRequiredReference();
 
         Action act = () => ExpenseTransaction.From(
             amount,
@@ -45,7 +45,7 @@ public class ExpenseTransactionTests
     [Fact]
     public void From_WithZeroAmount_ShouldThrowArgumentException()
     {
-        var amount = new Money(0m, Currency.Usd).ToRequiredReference();
+        var amount = new Money(0m, "USD").ToRequiredReference();
 
         Action act = () => ExpenseTransaction.From(
             amount,
@@ -64,7 +64,7 @@ public class ExpenseTransactionTests
         var futureDate = DateTime.UtcNow.AddDays(2).ToRequiredStruct();
 
         Action act = () => ExpenseTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             futureDate,
             "Test".ToRequiredString(),
             ExpenseType.Needs,
@@ -80,7 +80,7 @@ public class ExpenseTransactionTests
         var oldDate = new DateTime(1899, 12, 31).ToRequiredStruct();
 
         Action act = () => ExpenseTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             oldDate,
             "Test".ToRequiredString(),
             ExpenseType.Needs,
@@ -96,7 +96,7 @@ public class ExpenseTransactionTests
         var longDescription = new string('a', 501);
 
         Action act = () => ExpenseTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             DateTime.UtcNow.ToRequiredStruct(),
             longDescription.ToRequiredString(),
             ExpenseType.Needs,
@@ -110,7 +110,7 @@ public class ExpenseTransactionTests
     public void UpdateAmount_WithValidAmount_ShouldUpdateAmount()
     {
         var expense = CreateTestExpense();
-        var newAmount = new Money(75m, Currency.Usd).ToRequiredReference();
+        var newAmount = new Money(75m, "USD").ToRequiredReference();
 
         expense.UpdateAmount(newAmount);
 
@@ -259,7 +259,7 @@ public class ExpenseTransactionTests
     {
         var (expense1, expense2) = EntityTestHelper.CreateTwoWithSameId(() =>
             ExpenseTransaction.From(
-                new Money(50m, Currency.Usd).ToRequiredReference(),
+                new Money(50m, "USD").ToRequiredReference(),
                 new DateTime(2024, 6, 15).ToRequiredStruct(),
                 "Test".ToRequiredString(),
                 ExpenseType.Needs,
@@ -275,7 +275,7 @@ public class ExpenseTransactionTests
     {
         var (expense1, expense2) = EntityTestHelper.CreateTwoWithDifferentIds(() =>
             ExpenseTransaction.From(
-                new Money(50m, Currency.Usd).ToRequiredReference(),
+                new Money(50m, "USD").ToRequiredReference(),
                 new DateTime(2024, 6, 15).ToRequiredStruct(),
                 "Test".ToRequiredString(),
                 ExpenseType.Needs,
@@ -289,14 +289,14 @@ public class ExpenseTransactionTests
     public void Equality_WithSameIdButDifferentData_ShouldBeEqual()
     {
         var expense1 = ExpenseTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 15).ToRequiredStruct(),
             "Groceries".ToRequiredString(),
             ExpenseType.Needs,
             "user123".ToRequiredString());
 
         var expense2 = ExpenseTransaction.From(
-            new Money(999m, Currency.Eur).ToRequiredReference(),
+            new Money(999m, "EUR").ToRequiredReference(),
             new DateTime(2023, 1, 1).ToRequiredStruct(),
             "Entertainment".ToRequiredString(),
             ExpenseType.Wants,
@@ -312,7 +312,7 @@ public class ExpenseTransactionTests
     private ExpenseTransaction CreateTestExpense(ExpenseType type = ExpenseType.Needs, DateTime? date = null)
     {
         return ExpenseTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             (date ?? new DateTime(2024, 6, 15)).ToRequiredStruct(),
             "Groceries".ToRequiredString(),
             type,

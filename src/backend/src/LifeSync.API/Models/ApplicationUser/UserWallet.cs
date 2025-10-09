@@ -67,10 +67,10 @@ public class UserWallet : Entity
             throw new ArgumentException("Cannot deposit zero amount.", nameof(amount));
         }
 
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot deposit {amount.Currency} into wallet with {Balance.Currency}",
+                $"Currency mismatch: Cannot deposit {amount.CurrencyCode} into wallet with {Balance.CurrencyCode}",
                 nameof(amount));
         }
 
@@ -92,10 +92,10 @@ public class UserWallet : Entity
             throw new ArgumentException("Cannot withdraw zero amount.", nameof(amount));
         }
 
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot withdraw {amount.Currency} from wallet with {Balance.Currency}",
+                $"Currency mismatch: Cannot withdraw {amount.CurrencyCode} from wallet with {Balance.CurrencyCode}",
                 nameof(amount));
         }
 
@@ -128,17 +128,17 @@ public class UserWallet : Entity
             throw new InvalidOperationException("Cannot transfer to a deleted wallet.");
         }
 
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot transfer {amount.Currency} from wallet with {Balance.Currency}",
+                $"Currency mismatch: Cannot transfer {amount.CurrencyCode} from wallet with {Balance.CurrencyCode}",
                 nameof(amount));
         }
 
-        if (amount.Currency != targetWallet.Balance.Currency)
+        if (amount.CurrencyCode != targetWallet.Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot transfer {amount.Currency} to wallet with {targetWallet.Balance.Currency}",
+                $"Currency mismatch: Cannot transfer {amount.CurrencyCode} to wallet with {targetWallet.Balance.CurrencyCode}",
                 nameof(amount));
         }
 
@@ -151,10 +151,10 @@ public class UserWallet : Entity
     /// </summary>
     public void SetBalance(Money newBalance)
     {
-        if (newBalance.Currency != Balance.Currency)
+        if (newBalance.CurrencyCode != Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot set balance to {newBalance.Currency} when wallet currency is {Balance.Currency}",
+                $"Currency mismatch: Cannot set balance to {newBalance.CurrencyCode} when wallet currency is {Balance.CurrencyCode}",
                 nameof(newBalance));
         }
 
@@ -166,7 +166,7 @@ public class UserWallet : Entity
     /// </summary>
     public bool HasSufficientBalance(Money amount)
     {
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             return false;
         }

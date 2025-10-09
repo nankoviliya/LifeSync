@@ -25,7 +25,7 @@ public class User : IdentityUser
         RequiredString firstName,
         RequiredString lastName,
         RequiredReference<Money> balance,
-        RequiredReference<Currency> currencyPreference,
+        RequiredString currencyPreference,
         RequiredStruct<Guid> languageId)
     {
         string userNameValue = userName;
@@ -33,7 +33,7 @@ public class User : IdentityUser
         string firstNameValue = firstName;
         string lastNameValue = lastName;
         Money balanceValue = balance;
-        Currency currencyValue = currencyPreference;
+        string currencyValue = currencyPreference;
         Guid languageIdValue = languageId;
 
         ValidateUserName(userNameValue);
@@ -51,7 +51,7 @@ public class User : IdentityUser
             firstNameValue.Trim(),
             lastNameValue.Trim(),
             balanceValue,
-            currencyValue,
+            currencyValue.ToUpperInvariant().Trim(),
             languageIdValue);
 
         return user;
@@ -68,7 +68,7 @@ public class User : IdentityUser
         string firstName,
         string lastName,
         Money balance,
-        Currency currencyPreference,
+        string currencyPreference,
         Guid languageId)
     {
         UserName = userName;
@@ -86,7 +86,7 @@ public class User : IdentityUser
 
     public Money Balance { get; private set; } = default!;
 
-    public Currency CurrencyPreference { get; private set; } = default!;
+    public string CurrencyPreference { get; private set; } = default!;
 
     public Guid LanguageId { get; private set; }
 
@@ -146,19 +146,22 @@ public class User : IdentityUser
     /// <summary>
     /// Updates the user's currency preference and converts balance
     /// </summary>
-    public void UpdateCurrencyPreference(RequiredReference<Currency> newCurrency, decimal exchangeRate)
+    public void UpdateCurrencyPreference(RequiredString newCurrency, decimal exchangeRate)
     {
-        ValidateCurrencyPreference(newCurrency);
+        string newCurrencyValue = newCurrency;
+        ValidateCurrencyPreference(newCurrencyValue);
 
         if (exchangeRate <= 0)
         {
             throw new ArgumentException("Exchange rate must be positive.", nameof(exchangeRate));
         }
 
-        if (newCurrency != CurrencyPreference)
+        string normalizedCurrency = newCurrencyValue.ToUpperInvariant().Trim();
+
+        if (normalizedCurrency != CurrencyPreference)
         {
-            Balance = Balance.ConvertTo(newCurrency, exchangeRate);
-            CurrencyPreference = newCurrency;
+            Balance = Balance.ConvertTo(normalizedCurrency, exchangeRate);
+            CurrencyPreference = normalizedCurrency;
         }
     }
 
@@ -172,10 +175,10 @@ public class User : IdentityUser
             throw new ArgumentNullException(nameof(newBalance), "Balance cannot be null.");
         }
 
-        if (newBalance.Currency != CurrencyPreference)
+        if (newBalance.CurrencyCode != CurrencyPreference)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot set balance to {newBalance.Currency} when user's currency preference is {CurrencyPreference}",
+                $"Currency mismatch: Cannot set balance to {newBalance.CurrencyCode} when user's currency preference is {CurrencyPreference}",
                 nameof(newBalance));
         }
 
@@ -197,10 +200,10 @@ public class User : IdentityUser
             throw new ArgumentException("Cannot deposit zero amount", nameof(amount));
         }
 
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot add {amount.Currency} to balance in {Balance.Currency}",
+                $"Currency mismatch: Cannot add {amount.CurrencyCode} to balance in {Balance.CurrencyCode}",
                 nameof(amount));
         }
 
@@ -222,10 +225,10 @@ public class User : IdentityUser
             throw new ArgumentException("Cannot withdraw zero amount", nameof(amount));
         }
 
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             throw new ArgumentException(
-                $"Currency mismatch: Cannot withdraw {amount.Currency} from balance in {Balance.Currency}",
+                $"Currency mismatch: Cannot withdraw {amount.CurrencyCode} from balance in {Balance.CurrencyCode}",
                 nameof(amount));
         }
 
@@ -243,7 +246,7 @@ public class User : IdentityUser
     /// </summary>
     public bool HasSufficientBalance(Money amount)
     {
-        if (amount.Currency != Balance.Currency)
+        if (amount.CurrencyCode != Balance.CurrencyCode)
         {
             return false;
         }
@@ -394,11 +397,16 @@ public class User : IdentityUser
         }
     }
 
-    private static void ValidateCurrencyPreference(Currency currencyPreference)
+    private static void ValidateCurrencyPreference(string currencyPreference)
     {
-        if (currencyPreference == null)
+        if (string.IsNullOrWhiteSpace(currencyPreference))
         {
-            throw new ArgumentNullException(nameof(currencyPreference), "Currency preference cannot be null.");
+            throw new ArgumentException("Currency preference cannot be null or empty.", nameof(currencyPreference));
+        }
+
+        if (currencyPreference.Trim().Length != 3)
+        {
+            throw new ArgumentException("Currency code must be 3 characters (ISO 4217 format).", nameof(currencyPreference));
         }
     }
 

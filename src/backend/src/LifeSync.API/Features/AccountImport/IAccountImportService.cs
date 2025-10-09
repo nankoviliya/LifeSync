@@ -69,14 +69,14 @@ public class AccountImportService : BaseService, IAccountImportService
         {
             user.UpdateBalance(
                 new Money(data.ProfileData.BalanceAmount.ToRequiredStruct(),
-                    Currency.FromCode(data.ProfileData.BalanceCurrency.ToRequiredString()))
+                    data.ProfileData.BalanceCurrency.ToRequiredString())
             );
 
             user.UpdateLanguage(data.ProfileData.LanguageId.ToRequiredStruct());
 
             IEnumerable<ExpenseTransaction> incomeTransactions = data.ExpenseTransactions.Select(e =>
                 ExpenseTransaction.From(
-                    new Money(e.Amount, Currency.FromCode(e.Currency)).ToRequiredReference(),
+                    new Money(e.Amount, e.Currency).ToRequiredReference(),
                     e.Date.ToRequiredStruct(),
                     e.Description.ToRequiredString(),
                     e.ExpenseType,
@@ -85,7 +85,7 @@ public class AccountImportService : BaseService, IAccountImportService
 
             IEnumerable<IncomeTransaction> expenseTransactions = data.IncomeTransactions.Select(i =>
                 IncomeTransaction.From(
-                    new Money(i.Amount, Currency.FromCode(i.Currency)).ToRequiredReference(),
+                    new Money(i.Amount, i.Currency).ToRequiredReference(),
                     i.Date.ToRequiredStruct(),
                     i.Description.ToRequiredString(),
                     userId)
@@ -99,6 +99,12 @@ public class AccountImportService : BaseService, IAccountImportService
             await tx.CommitAsync(ct);
 
             return MessageResult.Success("Account data imported successfully.");
+        }
+        catch (ArgumentException ex) when (ex.ParamName == "currencyCode")
+        {
+            await tx.RollbackAsync(ct);
+            _logger.LogWarning("Invalid currency in import. Error: {Error}", ex.Message);
+            return MessageResult.Failure(ex.Message);
         }
         catch (Exception ex)
         {

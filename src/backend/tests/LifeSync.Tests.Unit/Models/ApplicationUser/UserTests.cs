@@ -18,8 +18,8 @@ public class UserTests
         var email = "test@example.com".ToRequiredString();
         var firstName = "John".ToRequiredString();
         var lastName = "Doe".ToRequiredString();
-        var balance = new Money(100m, Currency.Usd).ToRequiredReference();
-        var currencyPreference = Currency.Usd.ToRequiredReference();
+        var balance = new Money(100m, "USD").ToRequiredReference();
+        var currencyPreference = "USD".ToRequiredString();
         var languageId = _testLanguageId.ToRequiredStruct();
 
         var user = User.From(userName, email, firstName, lastName, balance, currencyPreference, languageId);
@@ -29,7 +29,7 @@ public class UserTests
         user.FirstName.Should().Be("John");
         user.LastName.Should().Be("Doe");
         user.Balance.Amount.Should().Be(100m);
-        user.CurrencyPreference.Should().Be(Currency.Usd);
+        user.CurrencyPreference.Should().Be("USD");
         user.LanguageId.Should().Be(_testLanguageId);
     }
 
@@ -43,8 +43,8 @@ public class UserTests
             "test@example.com".ToRequiredString(),
             "John".ToRequiredString(),
             "Doe".ToRequiredString(),
-            new Money(100m, Currency.Usd).ToRequiredReference(),
-            Currency.Usd.ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
+            "USD".ToRequiredString(),
             _testLanguageId.ToRequiredStruct());
 
         act.Should().Throw<ArgumentException>()
@@ -61,8 +61,8 @@ public class UserTests
             "test@example.com".ToRequiredString(),
             "John".ToRequiredString(),
             "Doe".ToRequiredString(),
-            new Money(100m, Currency.Usd).ToRequiredReference(),
-            Currency.Usd.ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
+            "USD".ToRequiredString(),
             _testLanguageId.ToRequiredStruct());
 
         act.Should().Throw<ArgumentException>()
@@ -81,8 +81,8 @@ public class UserTests
             email.ToRequiredString(),
             "John".ToRequiredString(),
             "Doe".ToRequiredString(),
-            new Money(100m, Currency.Usd).ToRequiredReference(),
-            Currency.Usd.ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
+            "USD".ToRequiredString(),
             _testLanguageId.ToRequiredStruct());
 
         act.Should().Throw<ArgumentException>()
@@ -97,8 +97,8 @@ public class UserTests
             "test@example.com".ToRequiredString(),
             "John".ToRequiredString(),
             "Doe".ToRequiredString(),
-            new Money(100m, Currency.Usd).ToRequiredReference(),
-            Currency.Usd.ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
+            "USD".ToRequiredString(),
             Guid.Empty.ToRequiredStruct());
 
         act.Should().Throw<ArgumentException>();
@@ -174,10 +174,10 @@ public class UserTests
         var user = CreateTestUser();
         var originalBalance = user.Balance;
 
-        user.UpdateCurrencyPreference(Currency.Usd.ToRequiredReference(), 1.0m);
+        user.UpdateCurrencyPreference("USD".ToRequiredString(), 1.0m);
 
         user.Balance.Should().Be(originalBalance);
-        user.CurrencyPreference.Should().Be(Currency.Usd);
+        user.CurrencyPreference.Should().Be("USD");
     }
 
     [Fact]
@@ -186,11 +186,11 @@ public class UserTests
         var user = CreateTestUser();
         var exchangeRate = 0.85m;
 
-        user.UpdateCurrencyPreference(Currency.Eur.ToRequiredReference(), exchangeRate);
+        user.UpdateCurrencyPreference("EUR".ToRequiredString(), exchangeRate);
 
         user.Balance.Amount.Should().Be(85m);
-        user.Balance.Currency.Should().Be(Currency.Eur);
-        user.CurrencyPreference.Should().Be(Currency.Eur);
+        user.Balance.CurrencyCode.Should().Be("EUR");
+        user.CurrencyPreference.Should().Be("EUR");
     }
 
     [Fact]
@@ -198,7 +198,7 @@ public class UserTests
     {
         var user = CreateTestUser();
 
-        Action act = () => user.UpdateCurrencyPreference(Currency.Eur.ToRequiredReference(), -0.85m);
+        Action act = () => user.UpdateCurrencyPreference("EUR".ToRequiredString(), -0.85m);
 
         act.Should().Throw<ArgumentException>()
             .WithMessage("Exchange rate must be positive.*");
@@ -208,7 +208,7 @@ public class UserTests
     public void UpdateBalance_WithMatchingCurrency_ShouldUpdateBalance()
     {
         var user = CreateTestUser();
-        var newBalance = new Money(200m, Currency.Usd);
+        var newBalance = new Money(200m, "USD");
 
         user.UpdateBalance(newBalance);
 
@@ -219,7 +219,7 @@ public class UserTests
     public void UpdateBalance_WithDifferentCurrency_ShouldThrowArgumentException()
     {
         var user = CreateTestUser();
-        var newBalance = new Money(200m, Currency.Eur);
+        var newBalance = new Money(200m, "EUR");
 
         Action act = () => user.UpdateBalance(newBalance);
 
@@ -231,7 +231,7 @@ public class UserTests
     public void Deposit_WithValidAmount_ShouldIncreaseBalance()
     {
         var user = CreateTestUser();
-        var depositAmount = new Money(50m, Currency.Usd);
+        var depositAmount = new Money(50m, "USD");
 
         user.Deposit(depositAmount);
 
@@ -242,7 +242,7 @@ public class UserTests
     public void Deposit_WithZeroAmount_ShouldThrowArgumentException()
     {
         var user = CreateTestUser();
-        var depositAmount = new Money(0m, Currency.Usd);
+        var depositAmount = new Money(0m, "USD");
 
         Action act = () => user.Deposit(depositAmount);
 
@@ -254,7 +254,7 @@ public class UserTests
     public void Deposit_WithNegativeAmount_ShouldThrowArgumentException()
     {
         var user = CreateTestUser();
-        var depositAmount = new Money(-50m, Currency.Usd);
+        var depositAmount = new Money(-50m, "USD");
 
         Action act = () => user.Deposit(depositAmount);
 
@@ -266,7 +266,7 @@ public class UserTests
     public void Deposit_WithDifferentCurrency_ShouldThrowArgumentException()
     {
         var user = CreateTestUser();
-        var depositAmount = new Money(50m, Currency.Eur);
+        var depositAmount = new Money(50m, "EUR");
 
         Action act = () => user.Deposit(depositAmount);
 
@@ -278,7 +278,7 @@ public class UserTests
     public void Withdraw_WithValidAmount_ShouldDecreaseBalance()
     {
         var user = CreateTestUser();
-        var withdrawAmount = new Money(30m, Currency.Usd);
+        var withdrawAmount = new Money(30m, "USD");
 
         user.Withdraw(withdrawAmount);
 
@@ -289,7 +289,7 @@ public class UserTests
     public void Withdraw_WithAmountExceedingBalance_ShouldThrowInvalidOperationException()
     {
         var user = CreateTestUser();
-        var withdrawAmount = new Money(200m, Currency.Usd);
+        var withdrawAmount = new Money(200m, "USD");
 
         Action act = () => user.Withdraw(withdrawAmount);
 
@@ -301,7 +301,7 @@ public class UserTests
     public void Withdraw_WithZeroAmount_ShouldThrowArgumentException()
     {
         var user = CreateTestUser();
-        var withdrawAmount = new Money(0m, Currency.Usd);
+        var withdrawAmount = new Money(0m, "USD");
 
         Action act = () => user.Withdraw(withdrawAmount);
 
@@ -313,7 +313,7 @@ public class UserTests
     public void Withdraw_WithNegativeAmount_ShouldThrowArgumentException()
     {
         var user = CreateTestUser();
-        var withdrawAmount = new Money(-50m, Currency.Usd);
+        var withdrawAmount = new Money(-50m, "USD");
 
         Action act = () => user.Withdraw(withdrawAmount);
 
@@ -325,7 +325,7 @@ public class UserTests
     public void HasSufficientBalance_WithSufficientAmount_ShouldReturnTrue()
     {
         var user = CreateTestUser();
-        var amount = new Money(50m, Currency.Usd);
+        var amount = new Money(50m, "USD");
 
         var result = user.HasSufficientBalance(amount);
 
@@ -336,7 +336,7 @@ public class UserTests
     public void HasSufficientBalance_WithInsufficientAmount_ShouldReturnFalse()
     {
         var user = CreateTestUser();
-        var amount = new Money(200m, Currency.Usd);
+        var amount = new Money(200m, "USD");
 
         var result = user.HasSufficientBalance(amount);
 
@@ -347,7 +347,7 @@ public class UserTests
     public void HasSufficientBalance_WithDifferentCurrency_ShouldReturnFalse()
     {
         var user = CreateTestUser();
-        var amount = new Money(50m, Currency.Eur);
+        var amount = new Money(50m, "EUR");
 
         var result = user.HasSufficientBalance(amount);
 
@@ -362,13 +362,13 @@ public class UserTests
         var endDate = new DateTime(2024, 12, 31);
 
         var income1 = IncomeTransaction.From(
-            new Money(100m, Currency.Usd).ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 1).ToRequiredStruct(),
             "Salary".ToRequiredString(),
             "user1".ToRequiredString());
 
         var income2 = IncomeTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             new DateTime(2024, 7, 1).ToRequiredStruct(),
             "Bonus".ToRequiredString(),
             "user1".ToRequiredString());
@@ -389,14 +389,14 @@ public class UserTests
         var endDate = new DateTime(2024, 12, 31);
 
         var expense1 = ExpenseTransaction.From(
-            new Money(30m, Currency.Usd).ToRequiredReference(),
+            new Money(30m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 1).ToRequiredStruct(),
             "Groceries".ToRequiredString(),
             ExpenseType.Needs,
             "user1".ToRequiredString());
 
         var expense2 = ExpenseTransaction.From(
-            new Money(20m, Currency.Usd).ToRequiredReference(),
+            new Money(20m, "USD").ToRequiredReference(),
             new DateTime(2024, 7, 1).ToRequiredStruct(),
             "Entertainment".ToRequiredString(),
             ExpenseType.Wants,
@@ -418,13 +418,13 @@ public class UserTests
         var endDate = new DateTime(2024, 12, 31);
 
         var income = IncomeTransaction.From(
-            new Money(100m, Currency.Usd).ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 1).ToRequiredStruct(),
             "Salary".ToRequiredString(),
             "user1".ToRequiredString());
 
         var expense = ExpenseTransaction.From(
-            new Money(30m, Currency.Usd).ToRequiredReference(),
+            new Money(30m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 15).ToRequiredStruct(),
             "Rent".ToRequiredString(),
             ExpenseType.Needs,
@@ -446,14 +446,14 @@ public class UserTests
         var endDate = new DateTime(2024, 12, 31);
 
         var needsExpense = ExpenseTransaction.From(
-            new Money(100m, Currency.Usd).ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 1).ToRequiredStruct(),
             "Rent".ToRequiredString(),
             ExpenseType.Needs,
             "user1".ToRequiredString());
 
         var wantsExpense = ExpenseTransaction.From(
-            new Money(50m, Currency.Usd).ToRequiredReference(),
+            new Money(50m, "USD").ToRequiredReference(),
             new DateTime(2024, 6, 15).ToRequiredStruct(),
             "Entertainment".ToRequiredString(),
             ExpenseType.Wants,
@@ -474,8 +474,8 @@ public class UserTests
             "test@example.com".ToRequiredString(),
             firstName.ToRequiredString(),
             lastName.ToRequiredString(),
-            new Money(100m, Currency.Usd).ToRequiredReference(),
-            Currency.Usd.ToRequiredReference(),
+            new Money(100m, "USD").ToRequiredReference(),
+            "USD".ToRequiredString(),
             _testLanguageId.ToRequiredStruct());
     }
 }
