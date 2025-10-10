@@ -1,4 +1,3 @@
-using LifeSync.API.Features.Authentication.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;

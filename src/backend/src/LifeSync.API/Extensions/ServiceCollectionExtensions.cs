@@ -5,7 +5,8 @@ using LifeSync.API.Features.AccountExport.DataExporters;
 using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.Authentication.Helpers;
-using LifeSync.API.Features.Authentication.Services;
+using LifeSync.API.Features.Authentication.Login.Services;
+using LifeSync.API.Features.Authentication.Register.Services;
 using LifeSync.API.Features.Finances.Expenses.Services;
 using LifeSync.API.Features.Finances.Incomes.Services;
 using LifeSync.API.Features.Finances.Search.Services;
@@ -119,7 +120,8 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<JwtTokenGenerator>();
 
-        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ILoginService, LoginService>();
+        services.AddScoped<IRegisterService, RegisterService>();
 
         return services;
     }

@@ -35,6 +35,15 @@
         <ProjectReference Include="..\LifeSync.Common\LifeSync.Common.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Update="Features\Authentication\Login\Models\LoginRequestValidator.cs">
+            <DependentUpon>LoginRequest.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Features\Authentication\Register\Models\RegisterRequestValidator.cs">
+            <DependentUpon>RegisterRequest.cs</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
     <PropertyGroup>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
     </PropertyGroup>

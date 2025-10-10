@@ -1,4 +1,4 @@
-namespace LifeSync.API.Features.Authentication.Models;
+namespace LifeSync.API.Features.Authentication.Helpers;
 
 public class TokenResponse
 {

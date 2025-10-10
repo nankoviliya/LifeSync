@@ -12,6 +12,7 @@ public class User : IdentityUser
 {
     private const int MinNameLength = 1;
     private const int MaxNameLength = 100;
+
     private static readonly Regex EmailRegex = new(
         @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase,
@@ -259,9 +260,9 @@ public class User : IdentityUser
     /// </summary>
     public Money GetTotalIncome(DateTime startDate, DateTime endDate)
     {
-        var total = Money.Zero(CurrencyPreference);
+        Money total = Money.Zero(CurrencyPreference);
 
-        foreach (var income in IncomeTransactions.Where(i => i.IsWithinDateRange(startDate, endDate)))
+        foreach (IncomeTransaction income in IncomeTransactions.Where(i => i.IsWithinDateRange(startDate, endDate)))
         {
             total += income.Amount;
         }
@@ -274,9 +275,9 @@ public class User : IdentityUser
     /// </summary>
     public Money GetTotalExpenses(DateTime startDate, DateTime endDate)
     {
-        var total = Money.Zero(CurrencyPreference);
+        Money total = Money.Zero(CurrencyPreference);
 
-        foreach (var expense in ExpenseTransactions.Where(e => e.IsWithinDateRange(startDate, endDate)))
+        foreach (ExpenseTransaction expense in ExpenseTransactions.Where(e => e.IsWithinDateRange(startDate, endDate)))
         {
             total += expense.Amount;
         }
@@ -289,8 +290,8 @@ public class User : IdentityUser
     /// </summary>
     public Money GetNetIncome(DateTime startDate, DateTime endDate)
     {
-        var totalIncome = GetTotalIncome(startDate, endDate);
-        var totalExpenses = GetTotalExpenses(startDate, endDate);
+        Money totalIncome = GetTotalIncome(startDate, endDate);
+        Money totalExpenses = GetTotalExpenses(startDate, endDate);
         return totalIncome - totalExpenses;
     }
 
@@ -299,10 +300,10 @@ public class User : IdentityUser
     /// </summary>
     public Money GetExpensesByType(ExpenseType expenseType, DateTime startDate, DateTime endDate)
     {
-        var total = Money.Zero(CurrencyPreference);
+        Money total = Money.Zero(CurrencyPreference);
 
-        foreach (var expense in ExpenseTransactions
-            .Where(e => e.ExpenseType == expenseType && e.IsWithinDateRange(startDate, endDate)))
+        foreach (ExpenseTransaction expense in ExpenseTransactions
+                     .Where(e => e.ExpenseType == expenseType && e.IsWithinDateRange(startDate, endDate)))
         {
             total += expense.Amount;
         }
@@ -348,7 +349,7 @@ public class User : IdentityUser
             throw new ArgumentException("First name cannot be null or empty.", nameof(firstName));
         }
 
-        var trimmedLength = firstName.Trim().Length;
+        int trimmedLength = firstName.Trim().Length;
 
         if (trimmedLength < MinNameLength)
         {
@@ -372,7 +373,7 @@ public class User : IdentityUser
             throw new ArgumentException("Last name cannot be null or empty.", nameof(lastName));
         }
 
-        var trimmedLength = lastName.Trim().Length;
+        int trimmedLength = lastName.Trim().Length;
 
         if (trimmedLength < MinNameLength)
         {
@@ -404,9 +405,9 @@ public class User : IdentityUser
             throw new ArgumentException("Currency preference cannot be null or empty.", nameof(currencyPreference));
         }
 
-        if (currencyPreference.Trim().Length != 3)
+        if (!CurrencyRegistry.IsSupported(currencyPreference))
         {
-            throw new ArgumentException("Currency code must be 3 characters (ISO 4217 format).", nameof(currencyPreference));
+            throw new ArgumentException("Currency is not supported.", nameof(currencyPreference));
         }
     }
 
