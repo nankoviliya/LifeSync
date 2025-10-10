@@ -42,6 +42,9 @@
         <Compile Update="Features\Authentication\Register\Models\RegisterRequestValidator.cs">
             <DependentUpon>RegisterRequest.cs</DependentUpon>
         </Compile>
+        <Compile Update="Features\Account\UpdateAccount\Models\UpdateAccountRequestValidator.cs">
+            <DependentUpon>UpdateAccountRequest.cs</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <PropertyGroup>
