@@ -1,6 +1,6 @@
-﻿namespace LifeSync.API.Features.Account.Models;
+namespace LifeSync.API.Features.Account.UpdateAccount.Models;
 
-public record ModifyUserAccountDataDto
+public record UpdateAccountRequest
 {
     public string FirstName { get; init; } = default!;
 

@@ -1,5 +1,5 @@
-﻿using LifeSync.API.Features.Account.Services;
-using LifeSync.API.Features.Account.Services.Contracts;
+﻿using LifeSync.API.Features.Account.GetAccount.Services;
+using LifeSync.API.Features.Account.UpdateAccount.Services;
 using LifeSync.API.Features.AccountExport;
 using LifeSync.API.Features.AccountExport.DataExporters;
 using LifeSync.API.Features.AccountImport;
@@ -106,7 +106,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITranslationsService, TranslationsService>();
 
         services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
-        services.AddScoped<IAccountService, AccountService>();
+
+        services.AddScoped<IGetAccountService, GetAccountService>();
+        services.AddScoped<IUpdateAccountService, UpdateAccountService>();
 
         services.AddScoped<IAccountDataExporter, JsonAccountDataExporter>();
         services.AddScoped<IAccountExportService, AccountExportService>();
