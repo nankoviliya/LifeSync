@@ -1,17 +1,14 @@
 using LifeSync.API.Shared;
-using Xunit;
 
-namespace LifeSync.Tests.Unit.Shared;
+namespace LifeSync.UnitTests.Shared;
 
 public class CurrencyRegistryTests
 {
     [Fact]
     public void GetByCode_ShouldReturnCurrency_WhenCodeIsValid()
     {
-        // Act
-        var result = CurrencyRegistry.GetByCode("USD");
+        CurrencyInfo? result = CurrencyRegistry.GetByCode("USD");
 
-        // Assert
         Assert.NotNull(result);
         Assert.Equal("USD", result.Code);
         Assert.Equal("US Dollar", result.Name);
@@ -26,10 +23,8 @@ public class CurrencyRegistryTests
     [InlineData("RuB", "RUB")]
     public void GetByCode_ShouldBeCaseInsensitive(string input, string expectedCode)
     {
-        // Act
-        var result = CurrencyRegistry.GetByCode(input);
+        CurrencyInfo? result = CurrencyRegistry.GetByCode(input);
 
-        // Assert
         Assert.NotNull(result);
         Assert.Equal(expectedCode, result.Code);
     }
@@ -40,10 +35,8 @@ public class CurrencyRegistryTests
     [InlineData("   ")]
     public void GetByCode_ShouldReturnNull_WhenCodeIsNullOrWhitespace(string code)
     {
-        // Act
-        var result = CurrencyRegistry.GetByCode(code);
+        CurrencyInfo? result = CurrencyRegistry.GetByCode(code);
 
-        // Assert
         Assert.Null(result);
     }
 
@@ -53,17 +46,14 @@ public class CurrencyRegistryTests
     [InlineData("123")]
     public void GetByCode_ShouldReturnNull_WhenCodeIsNotSupported(string code)
     {
-        // Act
-        var result = CurrencyRegistry.GetByCode(code);
+        CurrencyInfo? result = CurrencyRegistry.GetByCode(code);
 
-        // Assert
         Assert.Null(result);
     }
 
     [Fact]
     public void IsSupported_ShouldReturnTrue_WhenCodeIsSupported()
     {
-        // Act & Assert
         Assert.True(CurrencyRegistry.IsSupported("USD"));
         Assert.True(CurrencyRegistry.IsSupported("EUR"));
         Assert.True(CurrencyRegistry.IsSupported("BGN"));
@@ -75,39 +65,28 @@ public class CurrencyRegistryTests
     [InlineData("usd")]
     [InlineData("eur")]
     [InlineData("bgn")]
-    public void IsSupported_ShouldBeCaseInsensitive(string code)
-    {
-        // Act & Assert
+    public void IsSupported_ShouldBeCaseInsensitive(string code) =>
         Assert.True(CurrencyRegistry.IsSupported(code));
-    }
 
     [Theory]
     [InlineData("XXX")]
     [InlineData("INVALID")]
     [InlineData("123")]
-    public void IsSupported_ShouldReturnFalse_WhenCodeIsNotSupported(string code)
-    {
-        // Act & Assert
+    public void IsSupported_ShouldReturnFalse_WhenCodeIsNotSupported(string code) =>
         Assert.False(CurrencyRegistry.IsSupported(code));
-    }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void IsSupported_ShouldReturnFalse_WhenCodeIsNullOrWhitespace(string code)
-    {
-        // Act & Assert
+    public void IsSupported_ShouldReturnFalse_WhenCodeIsNullOrWhitespace(string code) =>
         Assert.False(CurrencyRegistry.IsSupported(code));
-    }
 
     [Fact]
     public void All_ShouldReturnAllSupportedCurrencies()
     {
-        // Act
-        var allCurrencies = CurrencyRegistry.All;
+        IReadOnlyCollection<CurrencyInfo> allCurrencies = CurrencyRegistry.All;
 
-        // Assert
         Assert.NotNull(allCurrencies);
         Assert.Equal(5, allCurrencies.Count);
         Assert.Contains(allCurrencies, c => c.Code == "USD");
@@ -120,10 +99,8 @@ public class CurrencyRegistryTests
     [Fact]
     public void GetSupportedCodesString_ShouldReturnCommaSeparatedCodes()
     {
-        // Act
-        var result = CurrencyRegistry.GetSupportedCodesString();
+        string result = CurrencyRegistry.GetSupportedCodesString();
 
-        // Assert
         Assert.NotNull(result);
         Assert.Contains("USD", result);
         Assert.Contains("EUR", result);
@@ -135,38 +112,32 @@ public class CurrencyRegistryTests
     [Fact]
     public void CurrencyInfo_Properties_ShouldBeCorrect()
     {
-        // Arrange
-        var usd = CurrencyRegistry.USD;
-        var eur = CurrencyRegistry.EUR;
-        var bgn = CurrencyRegistry.BGN;
-        var uah = CurrencyRegistry.UAH;
-        var rub = CurrencyRegistry.RUB;
+        CurrencyInfo usd = CurrencyRegistry.USD;
+        CurrencyInfo eur = CurrencyRegistry.EUR;
+        CurrencyInfo bgn = CurrencyRegistry.BGN;
+        CurrencyInfo uah = CurrencyRegistry.UAH;
+        CurrencyInfo rub = CurrencyRegistry.RUB;
 
-        // Assert USD
         Assert.Equal("USD", usd.Code);
         Assert.Equal("US Dollar", usd.Name);
         Assert.Equal("United States Dollar", usd.NativeName);
         Assert.Equal("$", usd.Symbol);
 
-        // Assert EUR
         Assert.Equal("EUR", eur.Code);
         Assert.Equal("Euro", eur.Name);
         Assert.Equal("Euro", eur.NativeName);
         Assert.Equal("€", eur.Symbol);
 
-        // Assert BGN
         Assert.Equal("BGN", bgn.Code);
         Assert.Equal("Bulgarian Lev", bgn.Name);
         Assert.Equal("Български лев", bgn.NativeName);
         Assert.Equal("лв", bgn.Symbol);
 
-        // Assert UAH
         Assert.Equal("UAH", uah.Code);
         Assert.Equal("Ukrainian Hryvnia", uah.Name);
         Assert.Equal("Українська гривня", uah.NativeName);
         Assert.Equal("₴", uah.Symbol);
 
-        // Assert RUB
         Assert.Equal("RUB", rub.Code);
         Assert.Equal("Russian Ruble", rub.Name);
         Assert.Equal("Российский рубль", rub.NativeName);
@@ -176,34 +147,27 @@ public class CurrencyRegistryTests
     [Fact]
     public void CurrencyInfo_ToString_ShouldReturnNameAndCode()
     {
-        // Arrange
-        var usd = CurrencyRegistry.USD;
+        CurrencyInfo usd = CurrencyRegistry.USD;
 
-        // Act
-        var result = usd.ToString();
+        string result = usd.ToString();
 
-        // Assert
         Assert.Equal("US Dollar (USD)", result);
     }
 
     [Fact]
     public void GetByCode_ShouldReturnSameInstance_WhenCalledMultipleTimes()
     {
-        // Act
-        var first = CurrencyRegistry.GetByCode("USD");
-        var second = CurrencyRegistry.GetByCode("USD");
+        CurrencyInfo? first = CurrencyRegistry.GetByCode("USD");
+        CurrencyInfo? second = CurrencyRegistry.GetByCode("USD");
 
-        // Assert
         Assert.Same(first, second);
     }
 
     [Fact]
     public void All_ShouldBeReadOnly()
     {
-        // Act
-        var allCurrencies = CurrencyRegistry.All;
+        IReadOnlyCollection<CurrencyInfo> allCurrencies = CurrencyRegistry.All;
 
-        // Assert
         Assert.IsAssignableFrom<IReadOnlyCollection<CurrencyInfo>>(allCurrencies);
     }
 }
