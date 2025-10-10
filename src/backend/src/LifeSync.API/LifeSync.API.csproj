@@ -28,10 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Infrastructure\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\LifeSync.Common\LifeSync.Common.csproj"/>
     </ItemGroup>
 
