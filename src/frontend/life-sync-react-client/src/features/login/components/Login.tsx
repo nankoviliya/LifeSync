@@ -1,15 +1,23 @@
-import { Button } from '@/components/buttons/Button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';
+import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
+import { Button } from '@/components/buttons/Button';
 import { routePaths } from '@/config/routing/routePaths';
 import { useLogin } from '@/features/login/hooks/useLogin';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
 import styles from './Login.module.scss';
+
+const ForceError = () => {
+  React.useEffect(() => {
+    throw new Error('Debug: trigger main fallback');
+  }, []);
+  return null;
+};
 
 export const Login = () => {
   const { translate } = useAppTranslations();
@@ -20,6 +28,7 @@ export const Login = () => {
   return (
     <form className={styles['login-page']} onSubmit={onSubmit}>
       <div className={styles['login-page__label']}>
+        <ForceError />
         <h2>Login</h2>
       </div>
 

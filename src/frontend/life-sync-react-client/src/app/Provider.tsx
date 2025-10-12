@@ -5,7 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { I18nextProvider } from 'react-i18next';
 
 import i18n from '@/app/translations/i18n';
-import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
+import { GlobalErrorFallback } from '@/components/errors/globalError/GlobalErrorFallback';
 import { queryConfig } from '@/lib/reactQuery';
 import { AuthProvider } from '@/stores/AuthProvider';
 
@@ -22,7 +22,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   );
 
   return (
-    <ErrorBoundary FallbackComponent={MainErrorFallback}>
+    <ErrorBoundary FallbackComponent={GlobalErrorFallback}>
       <PrimeReactProvider>
         <QueryClientProvider client={queryClient}>
           <I18nextProvider i18n={i18n}>

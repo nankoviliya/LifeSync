@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 
 import { AppRoot } from '@/app/AppRoot';
-import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
+import { GlobalErrorFallback } from '@/components/errors/globalError/GlobalErrorFallback';
 import { routePaths } from '@/config/routing/routePaths';
 import { Finances } from '@/features/finances/Finances';
 import { Transactions } from '@/features/finances/transactions/components/Transactions';
@@ -40,11 +40,11 @@ export const AppRouter = () => {
         <Route
           key="app"
           element={
-            <ErrorBoundary FallbackComponent={MainErrorFallback}>
+            <ErrorBoundary FallbackComponent={GlobalErrorFallback}>
               <AppRoot />
             </ErrorBoundary>
           }
-          errorElement={<MainErrorFallback />}
+          errorElement={<GlobalErrorFallback />}
         >
           {isAuthenticated && protectedPages}
           <Route path={routePaths.login.path} element={<Login />} />
