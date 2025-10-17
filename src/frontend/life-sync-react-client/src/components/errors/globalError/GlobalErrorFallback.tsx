@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { FallbackProps } from 'react-error-boundary';
 
 import sadFace from '@/assets/sad-face.svg';
@@ -9,8 +10,14 @@ import styles from './GlobalErrorFallback.module.scss';
 
 type GlobalErrorFallbackProps = Partial<FallbackProps>;
 
-export const GlobalErrorFallback = ({ error }: GlobalErrorFallbackProps) => {
+export const GlobalErrorFallback = ({
+  error,
+  resetErrorBoundary,
+}: GlobalErrorFallbackProps) => {
   const { translate } = useAppTranslations();
+
+  const [retryCount, setRetryCount] = useState<number>(0);
+  const MAX_RETRIES = 3;
 
   const showErrorDetails = import.meta.env.DEV && !!error;
   const errorDetails = error?.stack ?? error?.message ?? 'Unknown error';
@@ -47,7 +54,14 @@ export const GlobalErrorFallback = ({ error }: GlobalErrorFallbackProps) => {
         )}
         <Button
           className={styles['error-fallback__button']}
-          onClick={() => window.location.assign(window.location.origin)}
+          onClick={() => {
+            if (retryCount >= MAX_RETRIES) {
+              window.location.assign(window.location.origin);
+            } else {
+              setRetryCount((prev) => prev + 1);
+              resetErrorBoundary?.();
+            }
+          }}
         >
           {refreshLabel}
         </Button>
