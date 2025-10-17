@@ -1,47 +1,136 @@
 @use '/src/sharedStyles/abstracts/index.scss' as *;
 
 .error-fallback {
+  --error-fallback-padding-block: 4rem;
+  --error-fallback-padding-inline: 1.5rem;
+
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
-  max-width: 32rem;
-  margin: 0 auto;
-  padding: 3rem 2.5rem;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  color: $softRed;
-  gap: 2.5rem;
+  padding: var(--error-fallback-padding-block)
+    var(--error-fallback-padding-inline);
+  box-sizing: border-box;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(222, 232, 255, 0.9) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
 
-  @include Tablet {
-    padding: 2.5rem 2rem;
-    gap: 2rem;
+  &__card {
+    width: min(32rem, 100%);
+    max-height: calc(100vh - (var(--error-fallback-padding-block) * 2));
+    max-height: calc(100dvh - (var(--error-fallback-padding-block) * 2));
+    padding: 3.5rem 2.75rem 3rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 1.75rem;
+    box-shadow: 0 24px 48px -24px rgba(64, 93, 184, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.75rem;
+    color: rgba(35, 45, 76, 1);
+    overflow-y: auto;
   }
 
-  @include Mobile {
-    min-height: auto;
-    padding: 2rem 1.5rem 3rem;
-    gap: 1.5rem;
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8rem;
+    height: 8rem;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 
-  &__header {
-    font-size: clamp(1.35rem, 1rem + 1vw, 2rem);
-    font-weight: 600;
-    line-height: 1.3;
+  &__icon-img {
+    width: 100%;
+    height: auto;
+  }
 
-    @include Mobile {
-      font-size: 1.25rem;
-    }
+  &__title {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  &__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(68, 86, 125, 1);
+    max-width: 24rem;
+  }
+
+  &__debug {
+    width: 100%;
   }
 
   &__button {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     width: 100%;
     max-width: 16rem;
+  }
 
-    @include Mobile {
-      margin-top: 0.5rem;
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    color: rgba(35, 45, 76, 1);
+    font-weight: 600;
+    font-size: 1.15rem;
+    letter-spacing: 0.01em;
+  }
+
+  &__brand-name {
+    font-family: inherit;
+  }
+
+  @include Tablet {
+    --error-fallback-padding-block: 3rem;
+
+    &__card {
+      padding: 3rem 2.25rem 2.5rem;
+      gap: 1.5rem;
+    }
+
+    &__icon {
+      width: 7rem;
+      height: 7rem;
+    }
+  }
+
+  @include Mobile {
+    --error-fallback-padding-block: 2.5rem;
+    --error-fallback-padding-inline: 1.25rem;
+
+    &__card {
+      padding: 2.5rem 1.75rem 2.25rem;
+      gap: 1.25rem;
+      border-radius: 1.5rem;
+    }
+
+    &__title {
+      font-size: 1.75rem;
+    }
+
+    &__description {
+      font-size: 0.95rem;
+    }
+
+    &__icon {
+      width: 6rem;
+      height: 6rem;
+    }
+
+    &__brand {
+      margin-top: 0.75rem;
+      font-size: 1.05rem;
     }
   }
 }

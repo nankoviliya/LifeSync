@@ -1,4 +1,4 @@
 {
-  "main-error-fallback-label": "Ой, что-то пошло не так :(",
-  "main-error-fallback-refresh-button-label": "Обновить"
+  "global-error-fallback-label": "Произошла ошибка",
+  "global-error-fallback-refresh-button-label": "Обновить"
 }
