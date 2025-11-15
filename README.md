@@ -26,7 +26,7 @@ LifeSync aims to provide a unified platform for managing personal tasks on a dai
 ## Technologies Used
 
 ### Backend
-- .NET 9
+- .NET 10 (preview)
 - ASP.NET Core
 - Entity Framework Core
 
@@ -44,7 +44,18 @@ LifeSync aims to provide a unified platform for managing personal tasks on a dai
 
 Follow these steps to set up your development environment for LifeSync.
 
-### 1. Install and Configure MSSQL Developer Edition
+### 1. Install the .NET 10 Preview SDK
+
+1. **Download & Install:**
+   - Install the latest [.NET 10 preview SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) to ensure compatibility with the backend projects.
+   - When using Visual Studio, select workloads that include preview features or enable preview SDK usage in the IDE settings.
+
+2. **Verify Installation:**
+   - Run `dotnet --info` to confirm the `10.0.0` preview SDK is available and set as the default for this repository.
+
+---
+
+### 2. Install and Configure MSSQL Developer Edition
 
 1. **Download & Install:**
    - Download [MSSQL Developer Edition](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) and run the installer. Follow the prompts in the installation wizard.
@@ -58,7 +69,7 @@ Follow these steps to set up your development environment for LifeSync.
 
 ---
 
-### 2. Configure Local Secrets for ASP.NET Core
+### 3. Configure Local Secrets for ASP.NET Core
 
 To securely store sensitive information (e.g., JWT secret, database credentials), use ASP.NET Core’s user secrets.
 
@@ -102,7 +113,7 @@ To securely store sensitive information (e.g., JWT secret, database credentials)
 
 ---
 
-### 3. Apply Entity Framework Core Migrations
+### 4. Apply Entity Framework Core Migrations
 
 1. **Update the Connection String:**
    - Ensure your ASP.NET Core configuration (in *appsettings.json* or via user secrets) correctly points to your `LifeSync` MSSQL database.
