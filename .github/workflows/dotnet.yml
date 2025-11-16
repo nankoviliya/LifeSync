@@ -18,10 +18,10 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
       - name: Restore dependencies
-        run: dotnet restore ./src/backend/LifeSync.sln
+        run: dotnet restore ./src/backend/LifeSync.slnx
       - name: Build
-        run: dotnet build --no-restore ./src/backend/LifeSync.sln
+        run: dotnet build --no-restore ./src/backend/LifeSync.slnx
       - name: Test
-        run: dotnet test --no-build --verbosity normal ./src/backend/LifeSync.sln
+        run: dotnet test --no-build --verbosity normal ./src/backend/LifeSync.slnx
