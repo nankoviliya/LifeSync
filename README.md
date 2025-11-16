@@ -26,7 +26,7 @@ LifeSync aims to provide a unified platform for managing personal tasks on a dai
 ## Technologies Used
 
 ### Backend
-- .NET 9
+- .NET 10
 - ASP.NET Core
 - Entity Framework Core
 
