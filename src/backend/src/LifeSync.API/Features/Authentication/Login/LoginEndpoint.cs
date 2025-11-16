@@ -41,11 +41,11 @@ public sealed class LoginEndpoint : Endpoint<LoginRequest, TokenResponse>
                 AddError(error);
             }
 
-            await SendErrorsAsync(401, ct);
+            await Send.ErrorsAsync(401, ct);
         }
         else
         {
-            await SendOkAsync(result.Data, ct);
+            await Send.OkAsync(result.Data, ct);
         }
     }
 }

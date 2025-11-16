@@ -56,11 +56,11 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
 
         if (!result.IsSuccess)
         {
-            await SendAsync(result, 400, ct);
+            await Send.ResponseAsync(result, 400, ct);
         }
         else
         {
-            await SendOkAsync(result, ct);
+            await Send.OkAsync(result, ct);
         }
     }
 }

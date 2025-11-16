@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="src/LifeSync.API/LifeSync.API.csproj" />
+  <Project Path="src/LifeSync.Common/LifeSync.Common.csproj" />
+  <Project Path="tests/LifeSync.Tests.Unit/LifeSync.Tests.Unit.csproj" />
+</Solution>

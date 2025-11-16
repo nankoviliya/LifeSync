@@ -9,7 +9,7 @@ namespace LifeSync.API.Secrets;
 /// Loads secrets from local secrets storage or AWS Secrets Manager
 /// based on current application environment
 /// To see more about local secrets storage -
-/// <see cref="https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-9.0&tabs=windows"/>
+/// <see cref="https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-10.0&tabs=windows"/>
 /// To see more about AWS Secrets Manager - 
 /// <see cref="https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_cache-net.html"/>
 /// </summary>

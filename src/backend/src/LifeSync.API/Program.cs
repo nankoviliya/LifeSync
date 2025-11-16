@@ -1,13 +1,10 @@
 using Amazon.SecretsManager;
 using FastEndpoints;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using LifeSync.API.Extensions;
 using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,18 +54,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
 builder.Services.AddRateLimitingPolicies();
 
 builder.Services.AddFastEndpoints();
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+builder.Services.AddControllers();
 
 builder.Services.AddOpenApi(options =>
 {
@@ -80,7 +70,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
+
     await context.Database.MigrateAsync();
 }
 
