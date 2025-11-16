@@ -1,7 +1,5 @@
 using Amazon.SecretsManager;
 using FastEndpoints;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using LifeSync.API.Extensions;
 using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
@@ -57,9 +55,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
-
 builder.Services.AddRateLimitingPolicies();
 
 builder.Services.AddFastEndpoints();
@@ -80,7 +75,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
+
     await context.Database.MigrateAsync();
 }
 

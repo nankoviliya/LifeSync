@@ -40,11 +40,11 @@ public sealed class RegisterEndpoint : Endpoint<RegisterRequest, string>
                 AddError(error);
             }
 
-            await SendErrorsAsync(400, ct);
+            await Send.ErrorsAsync(400, ct);
         }
         else
         {
-            await SendOkAsync(result.Message, ct);
+            await Send.OkAsync(result.Message, ct);
         }
     }
 }

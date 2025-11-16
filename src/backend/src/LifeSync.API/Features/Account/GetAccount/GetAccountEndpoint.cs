@@ -42,11 +42,11 @@ public sealed class GetAccountEndpoint : EndpointWithoutRequest<GetAccountRespon
                 AddError(error);
             }
 
-            await SendErrorsAsync(400, ct);
+            await Send.ErrorsAsync(400, ct);
         }
         else
         {
-            await SendOkAsync(result.Data, ct);
+            await Send.OkAsync(result.Data, ct);
         }
     }
 }

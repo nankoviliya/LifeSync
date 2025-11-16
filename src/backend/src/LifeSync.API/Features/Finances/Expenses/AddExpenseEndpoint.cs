@@ -43,11 +43,11 @@ public sealed class AddExpenseEndpoint : Endpoint<AddExpenseRequest, AddExpenseR
                 AddError(error);
             }
 
-            await SendErrorsAsync(400, ct);
+            await Send.ErrorsAsync(400, ct);
         }
         else
         {
-            await SendOkAsync(new AddExpenseResponse { TransactionId = result.Data }, ct);
+            await Send.OkAsync(new AddExpenseResponse { TransactionId = result.Data }, ct);
         }
     }
 }

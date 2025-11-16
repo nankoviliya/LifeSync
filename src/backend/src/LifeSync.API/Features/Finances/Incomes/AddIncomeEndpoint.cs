@@ -43,11 +43,11 @@ public sealed class AddIncomeEndpoint : Endpoint<AddIncomeRequest, AddIncomeResp
                 AddError(error);
             }
 
-            await SendErrorsAsync(400, ct);
+            await Send.ErrorsAsync(400, ct);
         }
         else
         {
-            await SendOkAsync(new AddIncomeResponse { TransactionId = result.Data }, ct);
+            await Send.OkAsync(new AddIncomeResponse { TransactionId = result.Data }, ct);
         }
     }
 }
