@@ -5,7 +5,6 @@ using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,11 +58,7 @@ builder.Services.AddRateLimitingPolicies();
 
 builder.Services.AddFastEndpoints();
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+builder.Services.AddControllers();
 
 builder.Services.AddOpenApi(options =>
 {
