@@ -118,6 +118,50 @@ namespace LifeSync.API.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            var utcTimeNow = DateTime.UtcNow;
+            migrationBuilder.InsertData(
+                table: "Languages",
+                columns: new[] { "Id", "Name", "Code", "CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt" },
+                values: new object[,]
+                {
+                    { 
+                        new Guid("A0B10001-1A2B-4C3D-9E10-000000000001"), 
+                        "Bulgarian", 
+                        "bg", 
+                        utcTimeNow, 
+                        utcTimeNow, 
+                        false, 
+                        null 
+                    },
+                    { 
+                        new Guid("A0B10002-1A2B-4C3D-9E10-000000000002"), 
+                        "English", 
+                        "en", 
+                        utcTimeNow, 
+                        utcTimeNow, 
+                        false, 
+                        null 
+                    },
+                    { 
+                        new Guid("A0B10003-1A2B-4C3D-9E10-000000000003"), 
+                        "Ukrainian", 
+                        "uk", 
+                        utcTimeNow, 
+                        utcTimeNow, 
+                        false, 
+                        null 
+                    },
+                    { 
+                        new Guid("A0B10004-1A2B-4C3D-9E10-000000000004"), 
+                        "Russian", 
+                        "ru", 
+                        utcTimeNow, 
+                        utcTimeNow, 
+                        false, 
+                        null 
+                    }
+                });
+            
             migrationBuilder.CreateIndex(
                 name: "IX_ExpenseTransactions_CreatedAt",
                 table: "ExpenseTransactions",
