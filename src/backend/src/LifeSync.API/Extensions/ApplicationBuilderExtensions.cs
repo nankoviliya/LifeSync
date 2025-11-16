@@ -2,10 +2,15 @@ namespace LifeSync.API.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static WebApplication UseGlobalErrorHandling(this WebApplication app)
+    extension(WebApplication app)
     {
-        app.UseExceptionHandler();
+        public WebApplication LifeSync => app;
 
-        return app;
+        public WebApplication UseGlobalErrorHandling()
+        {
+            app.UseExceptionHandler();
+
+            return app;
+        }
     }
 }

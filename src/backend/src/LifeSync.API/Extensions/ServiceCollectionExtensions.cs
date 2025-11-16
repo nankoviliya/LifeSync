@@ -31,134 +31,138 @@ namespace LifeSync.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddJsonOptions(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        void ConfigureSerializer(JsonSerializerOptions serializerOptions)
-        {
-            serializerOptions.PropertyNameCaseInsensitive = false;
-            serializerOptions.NumberHandling = JsonNumberHandling.Strict;
-            serializerOptions.AllowTrailingCommas = false;
-            serializerOptions.ReadCommentHandling = JsonCommentHandling.Disallow;
+        public IServiceCollection LifeSync => services;
 
-            if (!serializerOptions.Converters.OfType<JsonStringEnumConverter>().Any())
+        public IServiceCollection AddJsonOptions()
+        {
+            void ConfigureSerializer(JsonSerializerOptions serializerOptions)
             {
-                serializerOptions.Converters.Add(new JsonStringEnumConverter());
-            }
-        }
+                serializerOptions.PropertyNameCaseInsensitive = false;
+                serializerOptions.NumberHandling = JsonNumberHandling.Strict;
+                serializerOptions.AllowTrailingCommas = false;
+                serializerOptions.ReadCommentHandling = JsonCommentHandling.Disallow;
 
-        services.Configure<JsonOptions>(options =>
-        {
-            ConfigureSerializer(options.SerializerOptions);
-        });
-
-        services.ConfigureHttpJsonOptions(options =>
-        {
-            ConfigureSerializer(options.SerializerOptions);
-        });
-
-        return services;
-    }
-
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
-    {
-        services.AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
-
-        return services;
-    }
-
-    public static IServiceCollection AddApplicationSecrets(this IServiceCollection services,
-        IWebHostEnvironment environment)
-    {
-        if (environment.IsDevelopment())
-        {
-            services.AddScoped<ISecretsProvider, LocalSecretsProvider>();
-        }
-        else
-        {
-            services.AddScoped<ISecretsProvider, CloudSecretsProvider>();
-        }
-
-        services.AddScoped<ISecretsProviderFactory, SecretsProviderFactory>();
-
-        services.AddScoped<ISecretsManager, SecretsManager>();
-
-        return services;
-    }
-
-    public static async Task<IServiceCollection> AddJwtAuthentication(this IServiceCollection services)
-    {
-        services.AddSingleton<JwtSecurityTokenHandler>();
-
-        ServiceProvider serviceProvider = services.BuildServiceProvider();
-        ISecretsManager secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
-
-        JwtSecrets jwtSecrets = await secretsManager.GetJwtSecretsAsync();
-
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
+                if (!serializerOptions.Converters.OfType<JsonStringEnumConverter>().Any())
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSecrets.Issuer,
-                    ValidAudience = jwtSecrets.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey))
+                    serializerOptions.Converters.Add(new JsonStringEnumConverter());
+                }
+            }
+
+            services.Configure<JsonOptions>(options =>
+            {
+                ConfigureSerializer(options.SerializerOptions);
+            });
+
+            services.ConfigureHttpJsonOptions(options =>
+            {
+                ConfigureSerializer(options.SerializerOptions);
+            });
+
+            return services;
+        }
+
+        public IServiceCollection AddIdentityServices()
+        {
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            return services;
+        }
+
+        public IServiceCollection AddApplicationSecrets(IWebHostEnvironment environment)
+        {
+            if (environment.IsDevelopment())
+            {
+                services.AddScoped<ISecretsProvider, LocalSecretsProvider>();
+            }
+            else
+            {
+                services.AddScoped<ISecretsProvider, CloudSecretsProvider>();
+            }
+
+            services.AddScoped<ISecretsProviderFactory, SecretsProviderFactory>();
+
+            services.AddScoped<ISecretsManager, SecretsManager>();
+
+            return services;
+        }
+
+        public async Task<IServiceCollection> AddJwtAuthentication()
+        {
+            services.AddSingleton<JwtSecurityTokenHandler>();
+
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            ISecretsManager secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
+
+            JwtSecrets jwtSecrets = await secretsManager.GetJwtSecretsAsync();
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSecrets.Issuer,
+                        ValidAudience = jwtSecrets.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey))
+                    };
+                });
+
+            return services;
+        }
+
+        public IServiceCollection AddApplicationServices()
+        {
+            services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
+            services.AddScoped<ITranslationsService, TranslationsService>();
+
+            services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
+
+            services.AddScoped<IGetAccountService, GetAccountService>();
+            services.AddScoped<IUpdateAccountService, UpdateAccountService>();
+
+            services.AddScoped<IAccountDataExporter, JsonAccountDataExporter>();
+            services.AddScoped<IAccountExportService, AccountExportService>();
+
+            services.AddScoped<IAccountDataReader, JsonAccountDataReader>();
+            services.AddScoped<IAccountImportService, AccountImportService>();
+
+            services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<IIncomeService, IncomeService>();
+            services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
+
+            services.AddTransient<JwtTokenGenerator>();
+
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IRegisterService, RegisterService>();
+
+            return services;
+        }
+
+        public IServiceCollection AddGlobalErrorHandling()
+        {
+            services.AddProblemDetails(options =>
+            {
+                options.CustomizeProblemDetails = context =>
+                {
+                    context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+                    context.ProblemDetails.Status = StatusCodes.Status500InternalServerError;
+                    context.ProblemDetails.Title = "Internal Server Error";
+                    context.ProblemDetails.Detail = "An unexpected error occurred.";
                 };
             });
 
-        return services;
-    }
-
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-    {
-        services.AddScoped<ITranslationsLoader, TranslationsFileLoader>();
-        services.AddScoped<ITranslationsService, TranslationsService>();
-
-        services.AddScoped<IFrontendSettingsService, FrontendSettingsService>();
-
-        services.AddScoped<IGetAccountService, GetAccountService>();
-        services.AddScoped<IUpdateAccountService, UpdateAccountService>();
-
-        services.AddScoped<IAccountDataExporter, JsonAccountDataExporter>();
-        services.AddScoped<IAccountExportService, AccountExportService>();
-
-        services.AddScoped<IAccountDataReader, JsonAccountDataReader>();
-        services.AddScoped<IAccountImportService, AccountImportService>();
-
-        services.AddScoped<IExpenseService, ExpenseService>();
-        services.AddScoped<IIncomeService, IncomeService>();
-        services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
-
-        services.AddTransient<JwtTokenGenerator>();
-
-        services.AddScoped<ILoginService, LoginService>();
-        services.AddScoped<IRegisterService, RegisterService>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddGlobalErrorHandling(this IServiceCollection services)
-    {
-        services.AddProblemDetails(options =>
-        {
-            options.CustomizeProblemDetails = context =>
-            {
-                context.ProblemDetails.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
-                context.ProblemDetails.Status = StatusCodes.Status500InternalServerError;
-                context.ProblemDetails.Title = "Internal Server Error";
-                context.ProblemDetails.Detail = "An unexpected error occurred.";
-            };
-        });
-
-        return services;
+            return services;
+        }
     }
 }
