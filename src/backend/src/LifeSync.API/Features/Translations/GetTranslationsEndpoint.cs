@@ -14,7 +14,7 @@ public sealed class GetTranslationsEndpoint : Endpoint<GetTranslationsRequest, I
 
     public override void Configure()
     {
-        Get("api/translations");
+        Get("api/translations/{languageCode}");
         AllowAnonymous();
 
         Options(x => x.RequireRateLimiting("PublicApi"));
