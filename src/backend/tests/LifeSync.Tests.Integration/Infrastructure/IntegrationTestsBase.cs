@@ -1,3 +1,4 @@
+using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,12 +25,28 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestsWebAp
         }
     }
 
+    protected virtual Task OnInitializeAsync() => Task.CompletedTask;
+    protected virtual Task OnDisposeAsync() => Task.CompletedTask;
 
-    public virtual Task InitializeAsync() => Task.CompletedTask;
+    protected User GetDefaultUser() =>
+        DbContext.Users.FirstOrDefault(x => x.Email == DefaultUserAccount.RegisterUserRequest.Email) ??
+        throw new InvalidOperationException("Default user should be inserted");
 
-    public virtual async Task DisposeAsync()
+    public async Task InitializeAsync()
     {
-        _scope.Dispose();
-        await DbContext.DisposeAsync();
+        await HttpClient.InsertDefaultUserAsync(DefaultUserAccount.RegisterUserRequest);
+        await OnInitializeAsync();
+    }
+
+    public async Task DisposeAsync()
+    {
+        try
+        {
+            await OnDisposeAsync();
+        }
+        finally
+        {
+            _scope.Dispose();
+        }
     }
 }

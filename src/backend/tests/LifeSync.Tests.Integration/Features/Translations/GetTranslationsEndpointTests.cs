@@ -14,7 +14,7 @@ public class GetTranslationsEndpointTests : IntegrationTestsBase
     {
     }
 
-    public override async Task InitializeAsync() =>
+    protected override async Task OnInitializeAsync() =>
         _supportedLanguageCodes = await DbContext.Languages
             .Select(l => l.Code)
             .ToListAsync();
