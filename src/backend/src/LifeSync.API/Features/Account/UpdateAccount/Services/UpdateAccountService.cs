@@ -52,6 +52,7 @@ public class UpdateAccountService : BaseService, IUpdateAccountService
 
         try
         {
+            _databaseContext.Update(userToUpdate);
             await _databaseContext.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
