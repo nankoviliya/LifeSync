@@ -50,7 +50,7 @@ public class RegisterEndpointTests : IntegrationTestsBase
         {
             FirstName = "John",
             LastName = "Doe",
-            Email = "john.doe@gmail.com",
+            Email = "john.doe2@gmail.com",
             Password = "Test!Pa$$Wor1d",
             Balance = 1000,
             Currency = "BGN",
