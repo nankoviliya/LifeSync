@@ -1,7 +1,10 @@
+using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http.Json;
 
 namespace LifeSync.Tests.Integration.Infrastructure;
 
@@ -31,6 +34,18 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestsWebAp
     protected User GetDefaultUser() =>
         DbContext.Users.FirstOrDefault(x => x.Email == DefaultUserAccount.RegisterUserRequest.Email) ??
         throw new InvalidOperationException("Default user should be inserted");
+
+    protected async Task<TokenResponse> LoginUserAsync(string email, string password)
+    {
+        LoginRequest loginRequest = new() { Email = email, Password = password };
+
+        HttpResponseMessage response = await HttpClient.PostAsJsonAsync($"/api/auth/login", loginRequest);
+
+        TokenResponse responseData = await response.Content.ReadFromJsonAsync<TokenResponse>() ??
+                                     throw new InvalidOperationException("Login failed");
+
+        return responseData;
+    }
 
     public async Task InitializeAsync()
     {
