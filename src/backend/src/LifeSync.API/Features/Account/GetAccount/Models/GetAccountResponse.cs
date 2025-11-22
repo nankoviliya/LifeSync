@@ -1,5 +1,3 @@
-using LifeSync.API.Models.Languages;
-
 namespace LifeSync.API.Features.Account.GetAccount.Models;
 
 public record GetAccountResponse
@@ -18,5 +16,7 @@ public record GetAccountResponse
 
     public string BalanceCurrency { get; init; } = default!;
 
-    public Language Language { get; init; } = default!;
+    public LanguageResponse Language { get; init; } = default!;
 }
+
+public record LanguageResponse(Guid Id, string Name, string Code);

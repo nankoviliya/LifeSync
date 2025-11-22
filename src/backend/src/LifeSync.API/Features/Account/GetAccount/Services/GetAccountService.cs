@@ -35,7 +35,7 @@ public class GetAccountService : BaseService, IGetAccountService
                 Email = u.Email,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
-                Language = u.Language,
+                Language = new LanguageResponse(u.Language.Id, u.Language.Name, u.Language.Code),
                 BalanceAmount = u.Balance.Amount,
                 BalanceCurrency = u.Balance.CurrencyCode
             })
