@@ -1,3 +1,4 @@
+using FastEndpoints;
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.API.Models.ApplicationUser;
@@ -65,8 +66,10 @@ public class RegisterEndpointTests : IntegrationTestsBase
 
         secondUserCreateResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-        // TODO: deserialize and assess entire response model
-        string content = await secondUserCreateResponse.Content.ReadAsStringAsync();
-        content.Should().Contain($"Username '{request.Email}' is already taken.");
+        ErrorResponse? errorResponse = await secondUserCreateResponse.Content.ReadFromJsonAsync<ErrorResponse>();
+
+        errorResponse.Should().NotBeNull();
+        errorResponse.Errors.Should().ContainKey("generalErrors");
+        errorResponse.Errors["generalErrors"].Should().Contain($"Username '{request.Email}' is already taken.");
     }
 }
