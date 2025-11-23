@@ -17,7 +17,7 @@ public record AccountImportRequest
     public IFormFile File { get; init; } = default!;
 }
 
-public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, MessageResult>
+public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, string>
 {
     private readonly IAccountImportService _accountImportService;
 
@@ -48,11 +48,16 @@ public sealed class AccountImportEndpoint : Endpoint<AccountImportRequest, Messa
 
         if (!result.IsSuccess)
         {
-            await Send.ResponseAsync(result, 400, ct);
+            foreach (string error in result.Errors)
+            {
+                AddError(error);
+            }
+
+            await Send.ErrorsAsync(400, ct);
         }
         else
         {
-            await Send.OkAsync(result, ct);
+            await Send.OkAsync(result.Message, ct);
         }
     }
 }
