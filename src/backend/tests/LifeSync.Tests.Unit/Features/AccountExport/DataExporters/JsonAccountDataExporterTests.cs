@@ -2,7 +2,6 @@ using FluentAssertions;
 using LifeSync.API.Features.AccountExport;
 using LifeSync.API.Features.AccountExport.DataExporters;
 using LifeSync.API.Features.AccountExport.Models;
-using System.Text;
 using System.Text.Json;
 
 namespace LifeSync.UnitTests.Features.AccountExport.DataExporters;
@@ -29,7 +28,7 @@ public class JsonAccountDataExporterTests
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
         result.Should().NotBeNull();
-        result.Data.Should().NotBeEmpty();
+        result.EncodedData.Should().NotBeEmpty();
         result.ContentType.Should().Be("application/json");
         result.FileName.Should().Be("account-data.json");
     }
@@ -43,8 +42,7 @@ public class JsonAccountDataExporterTests
 
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
-        string json = Encoding.UTF8.GetString(result.Data);
-        ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(json);
+        ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(result.EncodedData);
 
         deserializedData.Should().NotBeNull();
         deserializedData.Should().BeEquivalentTo(accountData);
@@ -60,7 +58,7 @@ public class JsonAccountDataExporterTests
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
         result.Should().NotBeNull();
-        result.Data.Should().NotBeEmpty();
+        result.EncodedData.Should().NotBeEmpty();
         result.ContentType.Should().Be("application/json");
     }
 }

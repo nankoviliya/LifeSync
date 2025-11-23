@@ -20,7 +20,9 @@ public class JsonAccountDataExporter : IAccountDataExporter
 
         ExportAccountResponse exportResult = new()
         {
-            Data = fileBytes, ContentType = "application/json", FileName = "account-data.json"
+            EncodedData = Convert.ToBase64String(fileBytes),
+            ContentType = "application/json",
+            FileName = "account-data.json"
         };
 
         return exportResult;
