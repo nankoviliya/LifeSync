@@ -6,6 +6,8 @@ using LifeSync.Tests.Integration.Infrastructure;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LifeSync.Tests.Integration.Features.Finances.Search;
 
@@ -45,9 +47,12 @@ public class SearchTransactionsEndpointTests : IntegrationTestsBase
 
         searchTransactionsResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        // TODO: solve the problem with deserialization
         SearchTransactionsResponse? responseData =
-            await searchTransactionsResponse.Content.ReadFromJsonAsync<SearchTransactionsResponse>();
+            await searchTransactionsResponse.Content.ReadFromJsonAsync<SearchTransactionsResponse>(
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() }
+                });
 
         responseData.Should().NotBeNull();
         responseData.TransactionsCount.Should().Be(2);
