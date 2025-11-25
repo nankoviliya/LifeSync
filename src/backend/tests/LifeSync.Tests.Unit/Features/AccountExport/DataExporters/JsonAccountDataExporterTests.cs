@@ -2,6 +2,7 @@ using FluentAssertions;
 using LifeSync.API.Features.AccountExport;
 using LifeSync.API.Features.AccountExport.DataExporters;
 using LifeSync.API.Features.AccountExport.Models;
+using System.Text;
 using System.Text.Json;
 
 namespace LifeSync.UnitTests.Features.AccountExport.DataExporters;
@@ -42,7 +43,9 @@ public class JsonAccountDataExporterTests
 
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
-        ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(result.EncodedData);
+        string json = Encoding.UTF8.GetString(Convert.FromBase64String(result.EncodedData));
+
+        ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(json);
 
         deserializedData.Should().NotBeNull();
         deserializedData.Should().BeEquivalentTo(accountData);
