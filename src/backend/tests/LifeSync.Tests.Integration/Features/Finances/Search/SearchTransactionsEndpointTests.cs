@@ -1,12 +1,8 @@
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Register.Models;
-using LifeSync.API.Features.Finances.Expenses.Models;
-using LifeSync.API.Features.Finances.Incomes.Models;
 using LifeSync.API.Features.Finances.Search.Models;
 using LifeSync.API.Features.Finances.Shared.Models;
-using LifeSync.API.Models.Expenses;
-using LifeSync.Tests.Integration.Features.Finances.TestQueryStringBuilder;
 using LifeSync.Tests.Integration.Infrastructure;
 using System.Net;
 using System.Net.Http.Headers;

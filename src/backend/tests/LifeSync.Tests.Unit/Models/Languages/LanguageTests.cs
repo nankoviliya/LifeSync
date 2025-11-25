@@ -1,9 +1,9 @@
 using FluentAssertions;
 using LifeSync.API.Models.Languages;
 using LifeSync.Common.Required;
-using LifeSync.UnitTests.TestHelpers;
+using LifeSync.Tests.Unit.TestHelpers;
 
-namespace LifeSync.UnitTests.Models.Languages;
+namespace LifeSync.Tests.Unit.Models.Languages;
 
 public class LanguageTests
 {

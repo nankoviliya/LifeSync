@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Models.Abstractions;
 
-namespace LifeSync.UnitTests.Models.Abstractions;
+namespace LifeSync.Tests.Unit.Models.Abstractions;
 
 public class EntityTests
 {

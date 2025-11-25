@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.Finances.Search.Services;
+namespace LifeSync.Tests.Unit.Features.Finances.Search.Services;
 
 public class TransactionsSearchServiceTests
 {

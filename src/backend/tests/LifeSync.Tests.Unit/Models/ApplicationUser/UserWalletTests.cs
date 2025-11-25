@@ -2,9 +2,9 @@ using FluentAssertions;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
-using LifeSync.UnitTests.TestHelpers;
+using LifeSync.Tests.Unit.TestHelpers;
 
-namespace LifeSync.UnitTests.Models.ApplicationUser;
+namespace LifeSync.Tests.Unit.Models.ApplicationUser;
 
 public class UserWalletTests
 {

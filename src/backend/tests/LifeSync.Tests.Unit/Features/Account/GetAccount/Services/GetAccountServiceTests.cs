@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.Account.GetAccount.Services;
+namespace LifeSync.Tests.Unit.Features.Account.GetAccount.Services;
 
 public class GetAccountServiceTests : IDisposable
 {

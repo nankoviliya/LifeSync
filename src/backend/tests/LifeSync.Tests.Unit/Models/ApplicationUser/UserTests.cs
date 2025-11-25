@@ -5,7 +5,7 @@ using LifeSync.API.Models.Incomes;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
 
-namespace LifeSync.UnitTests.Models.ApplicationUser;
+namespace LifeSync.Tests.Unit.Models.ApplicationUser;
 
 public class UserTests
 {

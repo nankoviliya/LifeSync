@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Login.Models;
 
-namespace LifeSync.UnitTests.Features.Authentication.Login.Validators;
+namespace LifeSync.Tests.Unit.Features.Authentication.Login.Validators;
 
 public class LoginRequestValidatorTests
 {

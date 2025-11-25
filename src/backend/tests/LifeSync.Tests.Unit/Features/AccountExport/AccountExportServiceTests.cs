@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.AccountExport;
+namespace LifeSync.Tests.Unit.Features.AccountExport;
 
 public class AccountExportServiceTests
 {

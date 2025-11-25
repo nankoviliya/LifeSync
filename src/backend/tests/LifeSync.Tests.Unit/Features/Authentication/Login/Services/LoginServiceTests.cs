@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace LifeSync.UnitTests.Features.Authentication.Login.Services;
+namespace LifeSync.Tests.Unit.Features.Authentication.Login.Services;
 
 public class LoginServiceTests
 {

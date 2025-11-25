@@ -9,7 +9,7 @@ using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
-using LifeSync.UnitTests.SharedUtils;
+using LifeSync.Tests.Unit.SharedUtils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,7 @@ using NSubstitute;
 using System.Data.Common;
 using System.Text.Json;
 
-namespace LifeSync.UnitTests.Features.AccountImport;
+namespace LifeSync.Tests.Unit.Features.AccountImport;
 
 public class AccountImportServiceTests
 {

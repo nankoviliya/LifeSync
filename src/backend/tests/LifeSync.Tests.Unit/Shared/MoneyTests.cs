@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Shared;
 
-namespace LifeSync.UnitTests.Shared;
+namespace LifeSync.Tests.Unit.Shared;
 
 public class MoneyTests
 {

@@ -6,7 +6,7 @@ using LifeSync.Common.Required;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace LifeSync.UnitTests.Features.AccountImport.DataReaders;
+namespace LifeSync.Tests.Unit.Features.AccountImport.DataReaders;
 
 public class JsonAccountDataReaderTests
 {

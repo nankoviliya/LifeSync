@@ -10,14 +10,14 @@ using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
-using LifeSync.UnitTests.SharedUtils;
+using LifeSync.Tests.Unit.SharedUtils;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.Finances.Incomes.Services;
+namespace LifeSync.Tests.Unit.Features.Finances.Incomes.Services;
 
 public class IncomeServiceTests
 {

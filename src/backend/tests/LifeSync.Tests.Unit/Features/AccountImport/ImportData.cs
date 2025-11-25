@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using System.Text;
 
-namespace LifeSync.UnitTests.Features.AccountImport;
+namespace LifeSync.Tests.Unit.Features.AccountImport;
 
 public static class ImportData
 {

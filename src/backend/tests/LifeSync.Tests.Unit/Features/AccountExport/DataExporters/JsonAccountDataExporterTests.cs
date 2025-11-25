@@ -5,7 +5,7 @@ using LifeSync.API.Features.AccountExport.Models;
 using System.Text;
 using System.Text.Json;
 
-namespace LifeSync.UnitTests.Features.AccountExport.DataExporters;
+namespace LifeSync.Tests.Unit.Features.AccountExport.DataExporters;
 
 public class JsonAccountDataExporterTests
 {

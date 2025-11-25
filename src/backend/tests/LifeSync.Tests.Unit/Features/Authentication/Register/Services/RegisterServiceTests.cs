@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
-namespace LifeSync.UnitTests.Features.Authentication.Register.Services;
+namespace LifeSync.Tests.Unit.Features.Authentication.Register.Services;
 
 public class RegisterServiceTests
 {

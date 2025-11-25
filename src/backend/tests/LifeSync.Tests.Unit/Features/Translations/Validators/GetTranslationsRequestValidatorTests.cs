@@ -2,7 +2,7 @@ using FluentAssertions;
 using LifeSync.API.Features.Translations.Models;
 using LifeSync.API.Features.Translations.Validators;
 
-namespace LifeSync.UnitTests.Features.Translations.Validators;
+namespace LifeSync.Tests.Unit.Features.Translations.Validators;
 
 public class GetTranslationsRequestValidatorTests
 {

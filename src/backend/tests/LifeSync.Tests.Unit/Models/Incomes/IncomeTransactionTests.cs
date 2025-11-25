@@ -2,9 +2,9 @@ using FluentAssertions;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
-using LifeSync.UnitTests.TestHelpers;
+using LifeSync.Tests.Unit.TestHelpers;
 
-namespace LifeSync.UnitTests.Models.Incomes;
+namespace LifeSync.Tests.Unit.Models.Incomes;
 
 public class IncomeTransactionTests
 {

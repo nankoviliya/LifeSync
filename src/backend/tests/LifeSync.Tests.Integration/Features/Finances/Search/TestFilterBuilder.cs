@@ -1,6 +1,6 @@
 using LifeSync.API.Features.Finances.Search.Models;
 
-namespace LifeSync.Tests.Integration.Features.Finances.TestQueryStringBuilder;
+namespace LifeSync.Tests.Integration.Features.Finances.Search;
 
 public static class TestFilterBuilder
 {

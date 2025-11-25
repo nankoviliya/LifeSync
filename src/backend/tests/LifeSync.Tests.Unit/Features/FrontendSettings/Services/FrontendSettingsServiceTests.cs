@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.FrontendSettings.Services;
+namespace LifeSync.Tests.Unit.Features.FrontendSettings.Services;
 
 public class FrontendSettingsServiceTests
 {
