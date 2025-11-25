@@ -14,8 +14,8 @@ public class IntegrationTestsWebAppFactory : WebApplicationFactory<IApiMarker>, 
     private readonly MsSqlContainer _databaseContainer = new MsSqlBuilder()
         .WithImage("mcr.microsoft.com/mssql/server")
         .WithEnvironment("DB_PORT", "1433")
-        .WithEnvironment("DB_HOST", "database")
-        .WithEnvironment("DB_NAME", "LifeSync")
+        .WithEnvironment("DB_HOST", "localhost")
+        .WithEnvironment("DB_NAME", "LifeSync_Test")
         .WithEnvironment("DB_USER", "SA")
         .WithEnvironment("DB_PASSWD", "YourStrongPassword123!")
         .Build();
