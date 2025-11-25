@@ -40,5 +40,9 @@ public class IntegrationTestsWebAppFactory : WebApplicationFactory<IApiMarker>, 
             });
         });
 
-    public async Task DisposeAsync() => await _databaseContainer.DisposeAsync();
+    public new async Task DisposeAsync()
+    {
+        await _databaseContainer.DisposeAsync();
+        await base.DisposeAsync();
+    }
 }
