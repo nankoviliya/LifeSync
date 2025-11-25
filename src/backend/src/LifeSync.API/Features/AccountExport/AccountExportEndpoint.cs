@@ -17,14 +17,14 @@ public record ExportAccountRequest
 
 public record ExportAccountResponse
 {
-    public byte[] Data { get; set; } = [];
+    public string EncodedData { get; set; } = default!;
 
     public string ContentType { get; set; } = default!;
 
     public string FileName { get; set; } = default!;
 }
 
-public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataResult<ExportAccountResponse>>
+public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, ExportAccountResponse>
 {
     private readonly IAccountExportService _accountExportService;
 
@@ -34,7 +34,6 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
     public override void Configure()
     {
         Post("api/accountExport");
-        AllowFormData();
 
         Summary(s =>
         {
@@ -56,11 +55,16 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, DataR
 
         if (!result.IsSuccess)
         {
-            await Send.ResponseAsync(result, 400, ct);
+            foreach (string error in result.Errors)
+            {
+                AddError(error);
+            }
+
+            await Send.ErrorsAsync(400, ct);
         }
         else
         {
-            await Send.OkAsync(result, ct);
+            await Send.OkAsync(result.Data, ct);
         }
     }
 }

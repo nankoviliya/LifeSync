@@ -5,7 +5,7 @@ using LifeSync.API.Features.AccountExport.Models;
 using System.Text;
 using System.Text.Json;
 
-namespace LifeSync.UnitTests.Features.AccountExport.DataExporters;
+namespace LifeSync.Tests.Unit.Features.AccountExport.DataExporters;
 
 public class JsonAccountDataExporterTests
 {
@@ -29,7 +29,7 @@ public class JsonAccountDataExporterTests
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
         result.Should().NotBeNull();
-        result.Data.Should().NotBeEmpty();
+        result.EncodedData.Should().NotBeEmpty();
         result.ContentType.Should().Be("application/json");
         result.FileName.Should().Be("account-data.json");
     }
@@ -43,7 +43,8 @@ public class JsonAccountDataExporterTests
 
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
-        string json = Encoding.UTF8.GetString(result.Data);
+        string json = Encoding.UTF8.GetString(Convert.FromBase64String(result.EncodedData));
+
         ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(json);
 
         deserializedData.Should().NotBeNull();
@@ -60,7 +61,7 @@ public class JsonAccountDataExporterTests
         ExportAccountResponse result = await exporter.Export(accountData, CancellationToken.None);
 
         result.Should().NotBeNull();
-        result.Data.Should().NotBeEmpty();
+        result.EncodedData.Should().NotBeEmpty();
         result.ContentType.Should().Be("application/json");
     }
 }

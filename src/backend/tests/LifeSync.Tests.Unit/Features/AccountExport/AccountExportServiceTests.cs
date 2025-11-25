@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System.Data.Common;
 
-namespace LifeSync.UnitTests.Features.AccountExport;
+namespace LifeSync.Tests.Unit.Features.AccountExport;
 
 public class AccountExportServiceTests
 {
@@ -83,7 +83,9 @@ public class AccountExportServiceTests
 
         ExportAccountResponse expectedResponse = new()
         {
-            Data = new byte[] { 1, 2, 3 }, ContentType = "application/json", FileName = "account-data.json"
+            EncodedData = Convert.ToBase64String(new byte[] { 1, 2, 3 }),
+            ContentType = "application/json",
+            FileName = "account-data.json"
         };
 
         _dataExporter.Format.Returns(ExportAccountFileFormat.Json);
@@ -98,7 +100,7 @@ public class AccountExportServiceTests
         result.Should().NotBeNull();
         result.IsSuccess.Should().BeTrue();
         result.Data.Should().NotBeNull();
-        result.Data!.Data.Should().BeEquivalentTo(expectedResponse.Data);
+        result.Data!.EncodedData.Should().BeEquivalentTo(expectedResponse.EncodedData);
         result.Data.ContentType.Should().Be(expectedResponse.ContentType);
         result.Data.FileName.Should().Be(expectedResponse.FileName);
     }
@@ -168,7 +170,7 @@ public class AccountExportServiceTests
     public async Task ExportAccountData_ShouldIncludeTransactions_InExportedData()
     {
         await using ApplicationDbContext seedContext = CreateContext();
-        
+
         IncomeTransaction incomeTransaction = IncomeTransaction.From(
             new Money(500, "BGN").ToRequiredReference(),
             DateTime.UtcNow.ToRequiredStruct(),

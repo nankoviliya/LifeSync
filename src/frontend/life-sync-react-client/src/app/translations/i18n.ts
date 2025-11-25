@@ -10,7 +10,7 @@ i18n.use(HttpBackend).init<HttpBackendOptions>({
   fallbackLng: appLanguages.english,
   supportedLngs: Object.values(appLanguages),
   backend: {
-    loadPath: `${environment.xApiUrl}${endpointsOptions.getTranslations.endpoint}?languageCode={{lng}}`,
+    loadPath: `${environment.xApiUrl}${endpointsOptions.getTranslations.endpoint}/{{lng}}`,
   },
   load: 'currentOnly',
   debug: false,

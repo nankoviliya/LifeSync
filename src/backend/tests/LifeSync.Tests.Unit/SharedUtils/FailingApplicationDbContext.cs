@@ -2,7 +2,7 @@ using LifeSync.API.Persistence;
 using LifeSync.API.Secrets.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace LifeSync.UnitTests.SharedUtils;
+namespace LifeSync.Tests.Unit.SharedUtils;
 
 public class FailingApplicationDbContext : ApplicationDbContext
 {

@@ -1,6 +1,6 @@
 using LifeSync.API.Features.AccountExport.Models;
 
-namespace LifeSync.UnitTests.Features.AccountExport;
+namespace LifeSync.Tests.Unit.Features.AccountExport;
 
 public static class ExportData
 {

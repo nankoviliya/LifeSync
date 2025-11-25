@@ -19,8 +19,8 @@ using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -39,20 +39,16 @@ public static class ServiceCollectionExtensions
         {
             void ConfigureSerializer(JsonSerializerOptions serializerOptions)
             {
-                serializerOptions.PropertyNameCaseInsensitive = false;
+                serializerOptions.PropertyNameCaseInsensitive = true;
                 serializerOptions.NumberHandling = JsonNumberHandling.Strict;
                 serializerOptions.AllowTrailingCommas = false;
                 serializerOptions.ReadCommentHandling = JsonCommentHandling.Disallow;
-
-                if (!serializerOptions.Converters.OfType<JsonStringEnumConverter>().Any())
-                {
-                    serializerOptions.Converters.Add(new JsonStringEnumConverter());
-                }
+                serializerOptions.Converters.Add(new JsonStringEnumConverter());
             }
 
             services.Configure<JsonOptions>(options =>
             {
-                ConfigureSerializer(options.SerializerOptions);
+                ConfigureSerializer(options.JsonSerializerOptions);
             });
 
             services.ConfigureHttpJsonOptions(options =>

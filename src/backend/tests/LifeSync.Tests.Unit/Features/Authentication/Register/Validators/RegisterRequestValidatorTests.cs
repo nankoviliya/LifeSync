@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Register.Models;
 
-namespace LifeSync.UnitTests.Features.Authentication.Register.Validators;
+namespace LifeSync.Tests.Unit.Features.Authentication.Register.Validators;
 
 public class RegisterRequestValidatorTests
 {

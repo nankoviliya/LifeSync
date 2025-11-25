@@ -1,7 +1,6 @@
 using LifeSync.API.Models.Abstractions;
-using System.Reflection;
 
-namespace LifeSync.UnitTests.TestHelpers;
+namespace LifeSync.Tests.Unit.TestHelpers;
 
 /// <summary>
 /// Helper class for setting up Entity instances in tests.

@@ -262,3 +262,7 @@ npm update
 ---
 
 **For AI Assistants**: Consult project-specific documentation in `src/backend/docs/` and `.claude/agents/` for detailed implementation guidance. When in doubt, ask the user for clarification or refer to existing code examples.
+
+* Never commit or push anything until I see the changes and approve them
+* Keep .md files concise and clean
+* Try not to create a lot of .md files. Keep all the info inside the main README.md or CLAUDE.md files

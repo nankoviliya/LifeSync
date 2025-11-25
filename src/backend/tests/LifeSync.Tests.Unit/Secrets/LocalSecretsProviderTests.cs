@@ -1,14 +1,11 @@
 ﻿using FluentAssertions;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Common;
-using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
 using System.Text;
 
-namespace LifeSync.UnitTests.Secrets;
+namespace LifeSync.Tests.Unit.Secrets;
 
 public class LocalSecretsProviderTests
 {

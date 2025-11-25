@@ -5,7 +5,7 @@ using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
 using NSubstitute;
 
-namespace LifeSync.UnitTests.Secrets;
+namespace LifeSync.Tests.Unit.Secrets;
 
 public class SecretsManagerTests
 {

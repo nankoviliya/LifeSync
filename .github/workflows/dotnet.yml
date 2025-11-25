@@ -25,3 +25,15 @@ jobs:
         run: dotnet build --no-restore ./src/backend/LifeSync.slnx
       - name: Test
         run: dotnet test --no-build --verbosity normal ./src/backend/LifeSync.slnx
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+          DOCKER: "false"
+          DB_USER: "SA"
+          DB_PASSWD: "YourStrongPassword123!"
+          DB_HOST: "localhost"
+          DB_PORT: "1433"
+          DB_NAME: "LifeSync_Test"
+          JWT_SECRET_KEY: "test-secret-key-for-integration-tests-minimum-32-characters-long"
+          JWT_ISSUER: "LifeSyncApp"
+          JWT_AUDIENCE: "LifeSyncAppUsers"
+          JWT_EXPIRY_MINUTES: "60"

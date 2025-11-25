@@ -2,7 +2,7 @@ using FluentAssertions;
 using FluentValidation.Results;
 using LifeSync.API.Features.Account.UpdateAccount.Models;
 
-namespace LifeSync.UnitTests.Features.Account.UpdateAccount.Validators;
+namespace LifeSync.Tests.Unit.Features.Account.UpdateAccount.Validators;
 
 public class UpdateAccountRequestValidatorTests
 {

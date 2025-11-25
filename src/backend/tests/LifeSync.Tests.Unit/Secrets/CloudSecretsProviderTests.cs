@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using System.Text;
 
-namespace LifeSync.UnitTests.Secrets;
+namespace LifeSync.Tests.Unit.Secrets;
 
 public class CloudSecretsProviderTests
 {

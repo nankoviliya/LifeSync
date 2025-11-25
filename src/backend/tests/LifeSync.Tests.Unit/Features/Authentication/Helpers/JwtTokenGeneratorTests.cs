@@ -8,7 +8,7 @@ using LifeSync.Common.Required;
 using NSubstitute;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace LifeSync.UnitTests.Features.Authentication.Helpers;
+namespace LifeSync.Tests.Unit.Features.Authentication.Helpers;
 
 public class JwtTokenGeneratorTests
 {
