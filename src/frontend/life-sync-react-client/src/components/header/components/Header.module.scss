@@ -19,6 +19,7 @@
     span {
       font-size: 25px;
       font-family: 'Montserrat', sans-serif;
+      color: var(--header-text);
     }
 
     img {
@@ -27,5 +28,11 @@
       border-radius: 50%;
       object-fit: cover;
     }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
   }
 }
