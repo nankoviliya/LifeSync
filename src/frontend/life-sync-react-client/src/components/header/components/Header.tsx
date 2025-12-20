@@ -30,7 +30,7 @@ export const Header = () => {
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
-        <img src="app.ico" />
+        <img src="app.ico" alt="Life Sync logo" />
         <span>Life Sync</span>
       </div>
       <div className={styles['header__actions']}>
