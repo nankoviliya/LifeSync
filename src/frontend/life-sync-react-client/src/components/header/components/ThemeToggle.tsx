@@ -1,17 +1,28 @@
 import { Button } from 'primereact/button';
+import { Menu } from 'primereact/menu';
 
-import { useTheme } from '@/hooks/useTheme';
+import { useThemeToggle } from '@/components/header/hooks/useThemeToggle';
 
 export const ThemeToggle = () => {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { menuRef, themeMenuItems, toggleMenu, icon, ariaLabel } =
+    useThemeToggle();
 
   return (
-    <Button
-      icon={isDarkMode ? 'pi pi-sun' : 'pi pi-moon'}
-      onClick={toggleTheme}
-      rounded
-      text
-      aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-    />
+    <div>
+      <Button
+        icon={icon}
+        onClick={toggleMenu}
+        rounded
+        text
+        aria-label={ariaLabel}
+      />
+      <Menu
+        model={themeMenuItems}
+        popup
+        ref={menuRef}
+        id="theme-menu"
+        popupAlignment="left"
+      />
+    </div>
   );
 };

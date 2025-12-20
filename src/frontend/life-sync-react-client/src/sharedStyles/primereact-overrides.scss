@@ -230,6 +230,10 @@
       background: var(--surface-section);
     }
   }
+
+  .p-menuitem.selected-theme > .p-menuitem-content {
+    background: var(--surface-section);
+  }
 }
 
 // Avatar

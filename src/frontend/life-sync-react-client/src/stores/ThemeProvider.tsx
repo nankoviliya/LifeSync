@@ -1,16 +1,23 @@
 import {
   createContext,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
 
-import { DEFAULT_THEME, Theme, THEME_STORAGE_KEY } from '@/types/theme';
+import {
+  DEFAULT_THEME,
+  EffectiveTheme,
+  Theme,
+  THEME_STORAGE_KEY,
+} from '@/types/theme';
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
+  effectiveTheme: EffectiveTheme;
+  setTheme: (theme: Theme) => void;
   isDarkMode: boolean;
 }
 
@@ -24,33 +31,53 @@ export interface IThemeProviderProps {
 
 const getStoredTheme = (): Theme => {
   const stored = localStorage.getItem(THEME_STORAGE_KEY);
-  return stored === 'light' || stored === 'dark' ? stored : DEFAULT_THEME;
+  if (stored === 'light' || stored === 'dark' || stored === 'system') {
+    return stored;
+  }
+  return DEFAULT_THEME;
+};
+
+const getSystemTheme = (): EffectiveTheme => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
 };
 
 export const ThemeProvider = ({ children }: IThemeProviderProps) => {
-  const [theme, setTheme] = useState<Theme>(getStoredTheme);
+  const [theme, setThemeState] = useState<Theme>(getStoredTheme);
+  const [systemTheme, setSystemTheme] = useState<EffectiveTheme>(getSystemTheme);
 
-  const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const newTheme = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-      return newTheme;
-    });
+  const setTheme = useCallback((newTheme: Theme) => {
+    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    setThemeState(newTheme);
   }, []);
 
-  const isDarkMode = theme === 'dark';
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e: MediaQueryListEvent) => {
+      setSystemTheme(e.matches ? 'dark' : 'light');
+    };
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+
+  const effectiveTheme: EffectiveTheme =
+    theme === 'system' ? systemTheme : theme;
+
+  const isDarkMode = effectiveTheme === 'dark';
 
   useLayoutEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+    document.documentElement.setAttribute('data-theme', effectiveTheme);
+  }, [effectiveTheme]);
 
   const contextValue = useMemo(
     () => ({
       theme,
-      toggleTheme,
+      effectiveTheme,
+      setTheme,
       isDarkMode,
     }),
-    [theme, toggleTheme, isDarkMode],
+    [theme, effectiveTheme, setTheme, isDarkMode],
   );
 
   return (
