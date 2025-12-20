@@ -45,7 +45,8 @@ const getSystemTheme = (): EffectiveTheme => {
 
 export const ThemeProvider = ({ children }: IThemeProviderProps) => {
   const [theme, setThemeState] = useState<Theme>(getStoredTheme);
-  const [systemTheme, setSystemTheme] = useState<EffectiveTheme>(getSystemTheme);
+  const [systemTheme, setSystemTheme] =
+    useState<EffectiveTheme>(getSystemTheme);
 
   const setTheme = useCallback((newTheme: Theme) => {
     localStorage.setItem(THEME_STORAGE_KEY, newTheme);
