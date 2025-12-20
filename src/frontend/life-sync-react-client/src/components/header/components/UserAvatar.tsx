@@ -1,4 +1,4 @@
-import { Avatar } from 'primereact/avatar';
+import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
 
 import { useUserAvatar } from '@/components/header/hooks/useUserAvatar';
@@ -8,12 +8,14 @@ export const UserAvatar = () => {
 
   return (
     <div>
-      <Avatar
-        className=""
+      <Button
         icon="pi pi-user"
-        size="normal"
-        shape="circle"
         onClick={toggleAvatarMenu}
+        rounded
+        text
+        aria-label="User avatar"
+        aria-haspopup="menu"
+        aria-controls="avatar-menu"
       />
       <Menu
         model={avatarMenuItems}

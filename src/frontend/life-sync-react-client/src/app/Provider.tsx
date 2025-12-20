@@ -8,6 +8,7 @@ import i18n from '@/app/translations/i18n';
 import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 import { queryConfig } from '@/lib/reactQuery';
 import { AuthProvider } from '@/stores/AuthProvider';
+import { ThemeProvider } from '@/stores/ThemeProvider';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -23,13 +24,15 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
   return (
     <ErrorBoundary FallbackComponent={MainErrorFallback}>
-      <PrimeReactProvider>
-        <QueryClientProvider client={queryClient}>
-          <I18nextProvider i18n={i18n}>
-            <AuthProvider>{children}</AuthProvider>
-          </I18nextProvider>
-        </QueryClientProvider>
-      </PrimeReactProvider>
+      <ThemeProvider>
+        <PrimeReactProvider>
+          <QueryClientProvider client={queryClient}>
+            <I18nextProvider i18n={i18n}>
+              <AuthProvider>{children}</AuthProvider>
+            </I18nextProvider>
+          </QueryClientProvider>
+        </PrimeReactProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };

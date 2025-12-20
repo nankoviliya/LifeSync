@@ -1,10 +1,10 @@
-import { Button } from '@/components/buttons/Button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
+import { Button } from '@/components/buttons/Button';
 import { routePaths } from '@/config/routing/routePaths';
 import { useLogin } from '@/features/login/hooks/useLogin';
 import { useAppTranslations } from '@/hooks/useAppTranslations';

@@ -1,0 +1,253 @@
+// PrimeReact component overrides for dark mode support
+// These styles use CSS variables defined in index.scss
+
+// Input fields
+.p-inputtext {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+
+  &:enabled:hover {
+    border-color: var(--primary-color);
+  }
+
+  &:enabled:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+  }
+
+  &::placeholder {
+    color: var(--text-color-secondary);
+  }
+}
+
+// Password input
+.p-password-input {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+}
+
+// Dropdown
+.p-dropdown {
+  background: var(--surface-card);
+  border-color: var(--surface-border);
+
+  .p-dropdown-label {
+    color: var(--text-color);
+  }
+
+  .p-dropdown-trigger {
+    color: var(--text-color-secondary);
+  }
+
+  &:not(.p-disabled):hover {
+    border-color: var(--primary-color);
+  }
+}
+
+.p-dropdown-panel {
+  background: var(--surface-overlay);
+  border-color: var(--surface-border);
+
+  .p-dropdown-items {
+    .p-dropdown-item {
+      color: var(--text-color);
+
+      &:not(.p-highlight):not(.p-disabled):hover {
+        background: var(--surface-section);
+      }
+
+      &.p-highlight {
+        background: var(--primary-color);
+        color: var(--primary-color-text);
+      }
+    }
+  }
+}
+
+// MultiSelect
+.p-multiselect {
+  background: var(--surface-card);
+  border-color: var(--surface-border);
+
+  .p-multiselect-label {
+    color: var(--text-color);
+  }
+
+  .p-multiselect-trigger {
+    color: var(--text-color-secondary);
+  }
+}
+
+.p-multiselect-panel {
+  background: var(--surface-overlay);
+  border-color: var(--surface-border);
+
+  .p-multiselect-items {
+    .p-multiselect-item {
+      color: var(--text-color);
+
+      &:not(.p-highlight):not(.p-disabled):hover {
+        background: var(--surface-section);
+      }
+    }
+  }
+}
+
+// Calendar
+.p-calendar {
+  .p-inputtext {
+    background: var(--surface-card);
+    color: var(--text-color);
+    border-color: var(--surface-border);
+  }
+}
+
+.p-datepicker {
+  background: var(--surface-overlay);
+  border-color: var(--surface-border);
+  color: var(--text-color);
+
+  .p-datepicker-header {
+    background: var(--surface-overlay);
+    color: var(--text-color);
+    border-bottom-color: var(--surface-border);
+  }
+
+  table {
+    td {
+      > span {
+        color: var(--text-color);
+
+        &:not(.p-highlight):not(.p-disabled):hover {
+          background: var(--surface-section);
+        }
+      }
+
+      &.p-datepicker-today > span {
+        background: var(--surface-section);
+      }
+    }
+  }
+
+  .p-monthpicker .p-monthpicker-month,
+  .p-yearpicker .p-yearpicker-year {
+    color: var(--text-color);
+
+    &:not(.p-highlight):hover {
+      background: var(--surface-section);
+    }
+  }
+}
+
+// InputNumber
+.p-inputnumber-input {
+  background: var(--surface-card);
+  color: var(--text-color);
+  border-color: var(--surface-border);
+}
+
+// Dialog
+.p-dialog {
+  background: var(--surface-overlay);
+  border-color: var(--surface-border);
+  color: var(--text-color);
+
+  .p-dialog-header {
+    background: var(--surface-overlay);
+    color: var(--text-color);
+    border-bottom-color: var(--surface-border);
+
+    .p-dialog-header-icon {
+      color: var(--text-color-secondary);
+
+      &:hover {
+        background: var(--surface-section);
+      }
+    }
+  }
+
+  .p-dialog-content {
+    background: var(--surface-overlay);
+    color: var(--text-color);
+  }
+
+  .p-dialog-footer {
+    background: var(--surface-overlay);
+    border-top-color: var(--surface-border);
+  }
+}
+
+// Sidebar
+.p-sidebar {
+  background: var(--surface-overlay);
+  border-color: var(--surface-border);
+  color: var(--text-color);
+
+  .p-sidebar-header {
+    .p-sidebar-close,
+    .p-sidebar-icon {
+      color: var(--text-color-secondary);
+
+      &:hover {
+        background: var(--surface-section);
+      }
+    }
+  }
+}
+
+// Card
+.p-card {
+  background: var(--surface-card);
+  color: var(--text-color);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+
+  .p-card-title {
+    color: var(--text-color);
+  }
+
+  .p-card-subtitle {
+    color: var(--text-color-secondary);
+  }
+}
+
+// Menu
+.p-menu {
+  background: var(--surface-overlay);
+  border-color: var(--surface-border);
+  color: var(--text-color);
+
+  .p-menuitem-link {
+    color: var(--text-color);
+
+    .p-menuitem-icon {
+      color: var(--text-color-secondary);
+    }
+
+    &:not(.p-disabled):hover {
+      background: var(--surface-section);
+    }
+  }
+
+  .p-menuitem.selected-theme > .p-menuitem-content {
+    background: var(--surface-section);
+  }
+}
+
+// Avatar
+.p-avatar {
+  background: var(--surface-section);
+  color: var(--text-color);
+}
+
+// Button text variant for theme toggle
+.p-button.p-button-text {
+  color: var(--text-color);
+
+  &:hover {
+    background: var(--surface-section);
+    color: var(--text-color);
+  }
+}
