@@ -1,4 +1,7 @@
 {
   "main-error-fallback-label": "Ooops, something went wrong :(",
-  "main-error-fallback-refresh-button-label": "Refresh"
+  "main-error-fallback-refresh-button-label": "Refresh",
+  "theme-light-label": "Light",
+  "theme-dark-label": "Dark",
+  "theme-system-label": "System"
 }

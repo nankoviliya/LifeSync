@@ -2,9 +2,11 @@ import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { useMemo, useRef } from 'react';
 
+import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useTheme } from '@/hooks/useTheme';
 
 export const useThemeToggle = () => {
+  const { translate } = useAppTranslations();
   const { theme, effectiveTheme, setTheme } = useTheme();
 
   const menuRef = useRef<Menu>(null);
@@ -12,25 +14,25 @@ export const useThemeToggle = () => {
   const themeMenuItems = useMemo<MenuItem[]>(
     () => [
       {
-        label: 'Light',
+        label: translate('theme-light-label'),
         icon: 'pi pi-sun',
         className: theme === 'light' ? 'selected-theme' : '',
         command: () => setTheme('light'),
       },
       {
-        label: 'Dark',
+        label: translate('theme-dark-label'),
         icon: 'pi pi-moon',
         className: theme === 'dark' ? 'selected-theme' : '',
         command: () => setTheme('dark'),
       },
       {
-        label: 'System',
+        label: translate('theme-system-label'),
         icon: 'pi pi-desktop',
         className: theme === 'system' ? 'selected-theme' : '',
         command: () => setTheme('system'),
       },
     ],
-    [theme, setTheme],
+    [theme, setTheme, translate],
   );
 
   const toggleMenu = (e: React.MouseEvent<HTMLElement>) => {

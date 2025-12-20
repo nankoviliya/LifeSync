@@ -1,4 +1,7 @@
 {
   "main-error-fallback-label": "Ой, щось пішло не так :(",
-  "main-error-fallback-refresh-button-label": "Оновити"
+  "main-error-fallback-refresh-button-label": "Оновити",
+  "theme-light-label": "Світла",
+  "theme-dark-label": "Темна",
+  "theme-system-label": "Системна"
 }
