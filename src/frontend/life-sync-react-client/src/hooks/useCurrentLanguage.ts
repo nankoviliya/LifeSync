@@ -1,10 +1,14 @@
 import { useEffect } from 'react';
 
 import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { useAuth } from '@/hooks/useAuthentication';
 import { useUserProfile } from '@/hooks/useUserProfile';
 
 export const useCurrentLanguage = () => {
-  const { data, isLoading, isSuccess } = useUserProfile();
+  const { isAuthenticated } = useAuth();
+  const { data, isLoading, isSuccess } = useUserProfile({
+    enabled: isAuthenticated,
+  });
 
   const { i18n } = useAppTranslations();
 
