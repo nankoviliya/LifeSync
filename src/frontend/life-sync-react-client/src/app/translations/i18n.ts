@@ -1,23 +1,27 @@
 import i18n from 'i18next';
 import HttpBackend, { HttpBackendOptions } from 'i18next-http-backend';
+import { initReactI18next } from 'react-i18next';
 
 import { appLanguages } from '@/app/translations/data/appLanguages';
 import { environment } from '@/config/currentEnvironment';
 import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
 
-i18n.use(HttpBackend).init<HttpBackendOptions>({
-  lng: appLanguages.english,
-  fallbackLng: appLanguages.english,
-  supportedLngs: Object.values(appLanguages),
-  backend: {
-    loadPath: `${environment.xApiUrl}${endpointsOptions.getTranslations.endpoint}/{{lng}}`,
-  },
-  load: 'currentOnly',
-  debug: false,
-  keySeparator: false,
-  interpolation: {
-    escapeValue: false,
-  },
-});
+i18n
+  .use(HttpBackend)
+  .use(initReactI18next)
+  .init<HttpBackendOptions>({
+    lng: appLanguages.english,
+    fallbackLng: appLanguages.english,
+    supportedLngs: Object.values(appLanguages),
+    backend: {
+      loadPath: `${environment.xApiUrl}${endpointsOptions.getTranslations.endpoint}/{{lng}}`,
+    },
+    load: 'currentOnly',
+    debug: false,
+    keySeparator: false,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export default i18n;

@@ -1,6 +1,5 @@
 import { Footer } from '@/components/footer/components/Footer';
 import { Header } from '@/components/header/components/Header';
-import { useCurrentLanguage } from '@/hooks/useCurrentLanguage';
 
 import styles from './BaseLayout.module.scss';
 
@@ -9,8 +8,6 @@ type BaseLayoutProps = {
 };
 
 export const BaseLayout = ({ children }: BaseLayoutProps) => {
-  useCurrentLanguage();
-
   return (
     <div className={styles['base-layout']}>
       <Header />
