@@ -7,16 +7,17 @@ interface IUseReadQueryOptions {
   endpoint: string;
   queryKey: QueryKey;
   config?: AxiosRequestConfig;
+  enabled?: boolean;
 }
 
 export const useReadQuery = <TResponse>(
   options: IUseReadQueryOptions & UseQueryOptions<TResponse, AxiosError>,
 ) => {
-  const { endpoint, queryKey, config, ...queryOptions } = options;
+  const { endpoint, queryKey, config, enabled, ...queryOptions } = options;
 
   const queryFn = () => get<TResponse>(endpoint, config);
 
-  const query = useQuery({ queryKey, queryFn, ...queryOptions });
+  const query = useQuery({ queryKey, queryFn, enabled, ...queryOptions });
 
   return query;
 };
