@@ -8,8 +8,11 @@ import './index.scss';
 import './sharedStyles/primereact-overrides.scss';
 
 import { App } from '@/app/App';
+import { initializeTheme } from '@/lib/theme';
 
 const appRoot = document.getElementById('root')!;
+
+initializeTheme();
 
 const root = createRoot(appRoot);
 

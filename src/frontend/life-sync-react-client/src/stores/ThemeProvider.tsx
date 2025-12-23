@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 
+import { getStoredTheme, getSystemTheme } from '@/lib/theme';
 import {
   DEFAULT_THEME,
   EffectiveTheme,
@@ -28,20 +29,6 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(
 export interface IThemeProviderProps {
   children: React.ReactNode;
 }
-
-const getStoredTheme = (): Theme => {
-  const stored = localStorage.getItem(THEME_STORAGE_KEY);
-  if (stored === 'light' || stored === 'dark' || stored === 'system') {
-    return stored;
-  }
-  return DEFAULT_THEME;
-};
-
-const getSystemTheme = (): EffectiveTheme => {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
-};
 
 export const ThemeProvider = ({ children }: IThemeProviderProps) => {
   const [theme, setThemeState] = useState<Theme>(getStoredTheme);
