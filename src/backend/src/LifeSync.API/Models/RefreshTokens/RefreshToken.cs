@@ -12,7 +12,8 @@ public sealed class RefreshToken : Entity
     public static RefreshToken Create(
         string userId,
         string tokenHash,
-        DateTime expiresAt)
+        DateTime expiresAt,
+        DeviceType deviceType)
     {
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -34,6 +35,7 @@ public sealed class RefreshToken : Entity
             UserId = userId.Trim(),
             TokenHash = tokenHash.Trim(),
             ExpiresAt = expiresAt,
+            DeviceType = deviceType,
             IsRevoked = false,
             RevokedAt = null
         };
@@ -46,6 +48,8 @@ public sealed class RefreshToken : Entity
     public string TokenHash { get; private set; } = default!;
 
     public DateTime ExpiresAt { get; private set; }
+
+    public DeviceType DeviceType { get; private set; }
 
     public bool IsRevoked { get; private set; }
 

@@ -1,19 +1,21 @@
 using FastEndpoints;
 using LifeSync.API.Features.Authentication.Helpers;
-using LifeSync.API.Features.Authentication.Refresh.Services;
+using LifeSync.API.Models.RefreshTokens;
+using LifeSync.API.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace LifeSync.API.Features.Authentication.Logout;
 
 public sealed class LogoutEndpoint : EndpointWithoutRequest
 {
-    private readonly IRefreshTokenService _refreshTokenService;
+    private readonly ApplicationDbContext _context;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
 
     public LogoutEndpoint(
-        IRefreshTokenService refreshTokenService,
+        ApplicationDbContext context,
         JwtTokenGenerator jwtTokenGenerator)
     {
-        _refreshTokenService = refreshTokenService;
+        _context = context;
         _jwtTokenGenerator = jwtTokenGenerator;
     }
 
@@ -37,7 +39,15 @@ public sealed class LogoutEndpoint : EndpointWithoutRequest
         if (!string.IsNullOrWhiteSpace(refreshToken))
         {
             string tokenHash = _jwtTokenGenerator.HashRefreshToken(refreshToken);
-            await _refreshTokenService.RevokeRefreshTokenAsync(tokenHash);
+
+            RefreshToken? token = await _context.RefreshTokens
+                .FirstOrDefaultAsync(t => t.TokenHash == tokenHash, ct);
+
+            if (token is not null)
+            {
+                _context.RefreshTokens.Remove(token);
+                await _context.SaveChangesAsync(ct);
+            }
         }
 
         CookieHelper.ClearAuthCookies(HttpContext.Response);

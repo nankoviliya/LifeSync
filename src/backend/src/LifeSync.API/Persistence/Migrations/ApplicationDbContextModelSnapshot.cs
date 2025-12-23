@@ -233,6 +233,9 @@ namespace LifeSync.API.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DeviceType")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
@@ -240,7 +243,9 @@ namespace LifeSync.API.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime?>("RevokedAt")
                         .HasColumnType("datetime2");
@@ -260,14 +265,14 @@ namespace LifeSync.API.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExpiresAt")
-                        .HasDatabaseName("IX_RefreshTokens_ExpiresAt");
+                    b.HasIndex("ExpiresAt", "IsRevoked")
+                        .HasDatabaseName("IX_RefreshTokens_ExpiresAt_IsRevoked");
 
-                    b.HasIndex("IsRevoked")
-                        .HasDatabaseName("IX_RefreshTokens_IsRevoked");
+                    b.HasIndex("TokenHash", "UserId")
+                        .HasDatabaseName("IX_RefreshTokens_TokenHash_UserId");
 
-                    b.HasIndex("UserId", "TokenHash")
-                        .HasDatabaseName("IX_RefreshTokens_UserId_TokenHash");
+                    b.HasIndex("UserId", "DeviceType")
+                        .HasDatabaseName("IX_RefreshTokens_UserId_DeviceType");
 
                     b.ToTable("RefreshTokens", (string)null);
                 });

@@ -23,8 +23,12 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
         builder.Property(x => x.ExpiresAt)
             .IsRequired();
 
-        builder.Property(x => x.IsRevoked)
+        builder.Property(x => x.DeviceType)
             .IsRequired();
+
+        builder.Property(x => x.IsRevoked)
+            .IsRequired()
+            .HasDefaultValue(false);
 
         builder.Property(x => x.RevokedAt);
 
@@ -34,23 +38,21 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
         builder.Property(x => x.UpdatedAt)
             .IsRequired();
 
-        builder.Property(x => x.IsDeleted)
-            .IsRequired();
-
-        builder.Property(x => x.DeletedAt);
-
         builder.HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasIndex(x => new { x.UserId, x.TokenHash })
-            .HasDatabaseName("IX_RefreshTokens_UserId_TokenHash");
+        // Composite index for token lookup
+        builder.HasIndex(x => new { x.TokenHash, x.UserId })
+            .HasDatabaseName("IX_RefreshTokens_TokenHash_UserId");
 
-        builder.HasIndex(x => x.ExpiresAt)
-            .HasDatabaseName("IX_RefreshTokens_ExpiresAt");
+        // Index for cleanup job
+        builder.HasIndex(x => new { x.ExpiresAt, x.IsRevoked })
+            .HasDatabaseName("IX_RefreshTokens_ExpiresAt_IsRevoked");
 
-        builder.HasIndex(x => x.IsRevoked)
-            .HasDatabaseName("IX_RefreshTokens_IsRevoked");
+        // Index for user token management
+        builder.HasIndex(x => new { x.UserId, x.DeviceType })
+            .HasDatabaseName("IX_RefreshTokens_UserId_DeviceType");
     }
 }

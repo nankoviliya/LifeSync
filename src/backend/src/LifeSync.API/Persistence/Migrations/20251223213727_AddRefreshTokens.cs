@@ -19,8 +19,8 @@ namespace LifeSync.API.Persistence.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     TokenHash = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeviceInfo = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    DeviceType = table.Column<int>(type: "int", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     RevokedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -39,19 +39,19 @@ namespace LifeSync.API.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_ExpiresAt",
+                name: "IX_RefreshTokens_ExpiresAt_IsRevoked",
                 table: "RefreshTokens",
-                column: "ExpiresAt");
+                columns: new[] { "ExpiresAt", "IsRevoked" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_IsRevoked",
+                name: "IX_RefreshTokens_TokenHash_UserId",
                 table: "RefreshTokens",
-                column: "IsRevoked");
+                columns: new[] { "TokenHash", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserId_TokenHash",
+                name: "IX_RefreshTokens_UserId_DeviceType",
                 table: "RefreshTokens",
-                columns: new[] { "UserId", "TokenHash" });
+                columns: new[] { "UserId", "DeviceType" });
         }
 
         /// <inheritdoc />

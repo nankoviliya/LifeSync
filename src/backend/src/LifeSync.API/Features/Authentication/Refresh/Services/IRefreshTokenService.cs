@@ -1,12 +1,11 @@
-using LifeSync.API.Models.RefreshTokens;
+using LifeSync.API.Features.Authentication.Refresh.Models;
+using LifeSync.Common.Results;
 
 namespace LifeSync.API.Features.Authentication.Refresh.Services;
 
 public interface IRefreshTokenService
 {
-    Task<RefreshToken> CreateRefreshTokenAsync(string userId, string tokenHash);
-    Task<RefreshToken?> ValidateRefreshTokenAsync(string tokenHash);
-    Task RevokeRefreshTokenAsync(string tokenHash);
+    Task<DataResult<RefreshResponse>> RefreshTokenAsync(HttpRequest request, HttpResponse response);
     Task RevokeAllUserTokensAsync(string userId);
     Task CleanupExpiredTokensAsync();
 }

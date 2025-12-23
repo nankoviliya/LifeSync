@@ -12,5 +12,8 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.");
+
+        RuleFor(x => x.DeviceType)
+            .IsInEnum().WithMessage("Invalid device type.");
     }
 }
