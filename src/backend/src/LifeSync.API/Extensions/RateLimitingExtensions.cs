@@ -18,6 +18,15 @@ public static class RateLimitingExtensions
                 limiterOptions.QueueLimit = 10;
             });
 
+            // Strict policy for authentication endpoints (login, refresh)
+            options.AddFixedWindowLimiter("AuthEndpoints", limiterOptions =>
+            {
+                limiterOptions.PermitLimit = 5;
+                limiterOptions.Window = TimeSpan.FromMinutes(5);
+                limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                limiterOptions.QueueLimit = 0;
+            });
+
             // Global fallback rate limit
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                 RateLimitPartition.GetFixedWindowLimiter(

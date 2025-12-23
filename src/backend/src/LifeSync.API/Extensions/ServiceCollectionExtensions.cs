@@ -6,6 +6,7 @@ using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Login.Services;
+using LifeSync.API.Features.Authentication.Refresh.Services;
 using LifeSync.API.Features.Authentication.Register.Services;
 using LifeSync.API.Features.Finances.Expenses.Services;
 using LifeSync.API.Features.Finances.Incomes.Services;
@@ -18,6 +19,7 @@ using LifeSync.API.Persistence;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -97,10 +99,28 @@ public static class ServiceCollectionExtensions
 
             services.AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = "Smart";
+                    options.DefaultAuthenticateScheme = "Smart";
+                    options.DefaultChallengeScheme = "Smart";
                 })
-                .AddJwtBearer(options =>
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.Cookie.Name = "access_token";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
+                    options.Events.OnRedirectToLogin = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        return Task.CompletedTask;
+                    };
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -111,6 +131,39 @@ public static class ServiceCollectionExtensions
                         ValidIssuer = jwtSecrets.Issuer,
                         ValidAudience = jwtSecrets.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            string? accessToken = context.Request.Cookies["access_token"];
+                            if (!string.IsNullOrEmpty(accessToken))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                })
+                .AddPolicyScheme("Smart", "Smart", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        bool hasCookie = context.Request.Cookies.ContainsKey("access_token");
+                        if (hasCookie)
+                        {
+                            return JwtBearerDefaults.AuthenticationScheme;
+                        }
+
+                        string? authHeader = context.Request.Headers.Authorization.FirstOrDefault();
+                        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return JwtBearerDefaults.AuthenticationScheme;
+                        }
+
+                        return JwtBearerDefaults.AuthenticationScheme;
                     };
                 });
 
@@ -138,9 +191,11 @@ public static class ServiceCollectionExtensions
             services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
 
             services.AddTransient<JwtTokenGenerator>();
+            services.AddTransient<ICsrfTokenGenerator, CsrfTokenGenerator>();
 
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IRegisterService, RegisterService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             return services;
         }
