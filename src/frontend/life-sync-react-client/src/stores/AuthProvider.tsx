@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { jwtDecode } from 'jwt-decode';
 import {
   createContext,
   useCallback,
@@ -8,11 +7,15 @@ import {
   useState,
 } from 'react';
 
+import { endpoints } from '@/config/endpoints/endpoints';
+import { apiClient } from '@/lib/apiClient';
+import { SkeletonLoader } from '@/components/loaders/SkeletonLoader';
+
 interface AuthContextType {
-  token: string | null;
-  login: (token: string) => void;
-  logout: () => void;
+  login: () => void;
+  logout: () => Promise<void>;
   isAuthenticated: boolean;
+  isInitialized: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -26,43 +29,60 @@ export interface IAuthProviderProps {
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const queryClient = useQueryClient();
 
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem('token'),
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  const login = useCallback((token: string) => {
-    setToken(token);
-    localStorage.setItem('token', token);
-    queryClient.clear();
+  const checkAuthStatus = useCallback(async () => {
+    try {
+      await apiClient.get(`/api/${endpoints.auth.status}`);
+      setIsAuthenticated(true);
+    } catch {
+      setIsAuthenticated(false);
+      // Migration: clean up old localStorage token if exists
+      const oldToken = localStorage.getItem('token');
+      if (oldToken) {
+        localStorage.removeItem('token');
+      }
+    } finally {
+      setIsInitialized(true);
+    }
   }, []);
-
-  const logout = useCallback(() => {
-    setToken(null);
-    localStorage.removeItem('token');
-  }, []);
-
-  const isAuthenticated = Boolean(token);
 
   useEffect(() => {
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
+    checkAuthStatus();
+  }, [checkAuthStatus]);
 
-      if (decodedToken.exp * 1000 < Date.now()) {
-        logout();
-      }
+  const login = useCallback(() => {
+    setIsAuthenticated(true);
+    queryClient.clear();
+  }, [queryClient]);
+
+  const logout = useCallback(async () => {
+    try {
+      await apiClient.post(`/api/${endpoints.auth.logout}`);
+    } catch {
+      // Ignore errors during logout
+    } finally {
+      setIsAuthenticated(false);
+      queryClient.clear();
     }
-  }, [token, logout]);
+  }, [queryClient]);
 
   // React Context Provider values should have stable identities typescript:S6481
   const contextValue = useMemo(
     () => ({
-      token,
       login,
       logout,
       isAuthenticated,
+      isInitialized,
     }),
-    [token, login, logout, isAuthenticated],
+    [login, logout, isAuthenticated, isInitialized],
   );
+
+  // Show loading screen while checking authentication status
+  if (!isInitialized) {
+    return <SkeletonLoader />;
+  }
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
