@@ -2,7 +2,6 @@ using Amazon.SecretsManager;
 using FastEndpoints;
 using LifeSync.API.BackgroundJobs;
 using LifeSync.API.Extensions;
-using LifeSync.API.Middleware;
 using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -96,8 +95,6 @@ app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseMiddleware<CsrfProtectionMiddleware>();
 
 app.UseGlobalErrorHandling();
 

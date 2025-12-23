@@ -23,10 +23,6 @@ internal sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refre
         builder.Property(x => x.ExpiresAt)
             .IsRequired();
 
-        builder.Property(x => x.DeviceInfo)
-            .IsRequired()
-            .HasMaxLength(500);
-
         builder.Property(x => x.IsRevoked)
             .IsRequired();
 

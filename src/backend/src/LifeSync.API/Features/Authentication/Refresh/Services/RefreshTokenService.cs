@@ -13,7 +13,7 @@ public sealed class RefreshTokenService : IRefreshTokenService
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<RefreshToken> CreateRefreshTokenAsync(string userId, string tokenHash, string deviceInfo)
+    public async Task<RefreshToken> CreateRefreshTokenAsync(string userId, string tokenHash)
     {
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -25,14 +25,9 @@ public sealed class RefreshTokenService : IRefreshTokenService
             throw new ArgumentException("Token hash cannot be null or empty.", nameof(tokenHash));
         }
 
-        if (string.IsNullOrWhiteSpace(deviceInfo))
-        {
-            throw new ArgumentException("Device info cannot be null or empty.", nameof(deviceInfo));
-        }
-
         DateTime expiresAt = DateTime.UtcNow.AddDays(7);
 
-        RefreshToken refreshToken = RefreshToken.Create(userId, tokenHash, expiresAt, deviceInfo);
+        RefreshToken refreshToken = RefreshToken.Create(userId, tokenHash, expiresAt);
 
         await _context.RefreshTokens.AddAsync(refreshToken);
         await _context.SaveChangesAsync();

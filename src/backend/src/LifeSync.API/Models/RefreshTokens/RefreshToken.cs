@@ -12,8 +12,7 @@ public sealed class RefreshToken : Entity
     public static RefreshToken Create(
         string userId,
         string tokenHash,
-        DateTime expiresAt,
-        string deviceInfo)
+        DateTime expiresAt)
     {
         if (string.IsNullOrWhiteSpace(userId))
         {
@@ -30,17 +29,11 @@ public sealed class RefreshToken : Entity
             throw new ArgumentException("Expiration date must be in the future.", nameof(expiresAt));
         }
 
-        if (string.IsNullOrWhiteSpace(deviceInfo))
-        {
-            throw new ArgumentException("Device info cannot be null or empty.", nameof(deviceInfo));
-        }
-
         RefreshToken token = new()
         {
             UserId = userId.Trim(),
             TokenHash = tokenHash.Trim(),
             ExpiresAt = expiresAt,
-            DeviceInfo = deviceInfo.Trim(),
             IsRevoked = false,
             RevokedAt = null
         };
@@ -53,8 +46,6 @@ public sealed class RefreshToken : Entity
     public string TokenHash { get; private set; } = default!;
 
     public DateTime ExpiresAt { get; private set; }
-
-    public string DeviceInfo { get; private set; } = default!;
 
     public bool IsRevoked { get; private set; }
 

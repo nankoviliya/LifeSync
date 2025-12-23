@@ -191,7 +191,6 @@ public static class ServiceCollectionExtensions
             services.AddScoped<ITransactionsSearchService, TransactionsSearchService>();
 
             services.AddTransient<JwtTokenGenerator>();
-            services.AddTransient<ICsrfTokenGenerator, CsrfTokenGenerator>();
 
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IRegisterService, RegisterService>();

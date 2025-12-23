@@ -3,22 +3,9 @@ import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { environment } from '@/config/currentEnvironment';
 import { endpoints } from '@/config/endpoints/endpoints';
 
-function getCookie(name: string): string | null {
-  const matches = document.cookie.match(
-    new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`)
-  );
-  return matches ? decodeURIComponent(matches[1]) : null;
-}
-
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
     config.headers.Accept = 'application/json';
-
-    // Read CSRF token from cookie and add to header
-    const csrfToken = getCookie('csrf_token');
-    if (csrfToken) {
-      config.headers['X-CSRF-TOKEN'] = csrfToken;
-    }
   }
 
   config.withCredentials = true;

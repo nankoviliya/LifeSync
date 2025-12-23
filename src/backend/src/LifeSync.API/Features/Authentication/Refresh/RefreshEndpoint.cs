@@ -12,18 +12,15 @@ public sealed class RefreshEndpoint : EndpointWithoutRequest
     private readonly IRefreshTokenService _refreshTokenService;
     private readonly UserManager<User> _userManager;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
-    private readonly ICsrfTokenGenerator _csrfTokenGenerator;
 
     public RefreshEndpoint(
         IRefreshTokenService refreshTokenService,
         UserManager<User> userManager,
-        JwtTokenGenerator jwtTokenGenerator,
-        ICsrfTokenGenerator csrfTokenGenerator)
+        JwtTokenGenerator jwtTokenGenerator)
     {
         _refreshTokenService = refreshTokenService;
         _userManager = userManager;
         _jwtTokenGenerator = jwtTokenGenerator;
-        _csrfTokenGenerator = csrfTokenGenerator;
     }
 
     public override void Configure()
@@ -79,16 +76,12 @@ public sealed class RefreshEndpoint : EndpointWithoutRequest
 
         string newAccessToken = await _jwtTokenGenerator.GenerateAccessTokenAsync(user);
         string newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken();
-        string newCsrfToken = _csrfTokenGenerator.Generate();
-
-        string deviceInfo = $"{HttpContext.Request.Headers.UserAgent}|{HttpContext.Connection.RemoteIpAddress}";
         string newTokenHash = _jwtTokenGenerator.HashRefreshToken(newRefreshToken);
 
-        await _refreshTokenService.CreateRefreshTokenAsync(user.Id, newTokenHash, deviceInfo);
+        await _refreshTokenService.CreateRefreshTokenAsync(user.Id, newTokenHash);
 
         CookieHelper.SetAccessTokenCookie(HttpContext.Response, newAccessToken);
         CookieHelper.SetRefreshTokenCookie(HttpContext.Response, newRefreshToken);
-        CookieHelper.SetCsrfTokenCookie(HttpContext.Response, newCsrfToken);
 
         await Send.OkAsync(new { message = "Token refreshed successfully" }, ct);
     }

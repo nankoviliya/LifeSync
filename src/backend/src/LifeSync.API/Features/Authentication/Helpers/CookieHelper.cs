@@ -4,7 +4,6 @@ public static class CookieHelper
 {
     private const string AccessTokenCookieName = "access_token";
     private const string RefreshTokenCookieName = "refresh_token";
-    private const string CsrfTokenCookieName = "csrf_token";
 
     public static void SetAccessTokenCookie(HttpResponse response, string token)
     {
@@ -54,30 +53,6 @@ public static class CookieHelper
         response.Cookies.Append(RefreshTokenCookieName, token, options);
     }
 
-    public static void SetCsrfTokenCookie(HttpResponse response, string token)
-    {
-        if (response is null)
-        {
-            throw new ArgumentNullException(nameof(response));
-        }
-
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            throw new ArgumentException("Token cannot be null or empty.", nameof(token));
-        }
-
-        CookieOptions options = new()
-        {
-            HttpOnly = false,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            MaxAge = TimeSpan.FromHours(12),
-            Path = "/"
-        };
-
-        response.Cookies.Append(CsrfTokenCookieName, token, options);
-    }
-
     public static void ClearAuthCookies(HttpResponse response)
     {
         if (response is null)
@@ -96,17 +71,6 @@ public static class CookieHelper
 
         response.Cookies.Delete(AccessTokenCookieName, options);
         response.Cookies.Delete(RefreshTokenCookieName, options);
-
-        CookieOptions csrfOptions = new()
-        {
-            HttpOnly = false,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            MaxAge = TimeSpan.FromSeconds(-1),
-            Path = "/"
-        };
-
-        response.Cookies.Delete(CsrfTokenCookieName, csrfOptions);
     }
 
     public static string? GetRefreshTokenFromCookie(HttpRequest request)
