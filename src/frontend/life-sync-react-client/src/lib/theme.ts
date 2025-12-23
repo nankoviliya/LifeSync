@@ -20,7 +20,7 @@ export const getStoredTheme = (): Theme => {
  * Gets the system's preferred color scheme
  */
 export const getSystemTheme = (): EffectiveTheme => {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
+  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
     : 'light';
 };
@@ -39,5 +39,5 @@ export const getEffectiveTheme = (theme: Theme): EffectiveTheme => {
 export const initializeTheme = (): void => {
   const theme = getStoredTheme();
   const effectiveTheme = getEffectiveTheme(theme);
-  document.documentElement.setAttribute('data-theme', effectiveTheme);
+  document.documentElement.dataset.theme = effectiveTheme;
 };

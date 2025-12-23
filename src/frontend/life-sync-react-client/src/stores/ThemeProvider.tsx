@@ -8,12 +8,7 @@ import {
 } from 'react';
 
 import { getStoredTheme, getSystemTheme } from '@/lib/theme';
-import {
-  DEFAULT_THEME,
-  EffectiveTheme,
-  Theme,
-  THEME_STORAGE_KEY,
-} from '@/types/theme';
+import { EffectiveTheme, Theme, THEME_STORAGE_KEY } from '@/types/theme';
 
 interface ThemeContextType {
   theme: Theme;
