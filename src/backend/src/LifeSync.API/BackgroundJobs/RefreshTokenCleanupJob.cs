@@ -18,33 +18,27 @@ public sealed class RefreshTokenCleanupJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("RefreshTokenCleanupJob starting. Will run every {Hours} hours.", _period.TotalHours);
-
-        // Wait 1 minute after startup before first cleanup
         await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
 
-        using PeriodicTimer timer = new(_period);
-
-        while (!stoppingToken.IsCancellationRequested && await timer.WaitForNextTickAsync(stoppingToken))
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
                 _logger.LogInformation("Starting refresh token cleanup...");
 
                 using IServiceScope scope = _serviceProvider.CreateScope();
-                IRefreshTokenService refreshTokenService = scope.ServiceProvider
-                    .GetRequiredService<IRefreshTokenService>();
-
-                await refreshTokenService.CleanupExpiredTokensAsync();
+                await scope.ServiceProvider
+                    .GetRequiredService<IRefreshTokenService>()
+                    .CleanupExpiredTokensAsync();
 
                 _logger.LogInformation("Refresh token cleanup completed successfully.");
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
-                _logger.LogError(ex, "Error occurred during refresh token cleanup.");
+                _logger.LogError(ex, "Refresh token cleanup failed");
             }
-        }
 
-        _logger.LogInformation("RefreshTokenCleanupJob stopped.");
+            await Task.Delay(_period, stoppingToken);
+        }
     }
 }
