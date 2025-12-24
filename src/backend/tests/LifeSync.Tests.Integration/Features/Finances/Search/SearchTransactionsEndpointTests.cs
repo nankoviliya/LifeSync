@@ -1,5 +1,5 @@
 using FluentAssertions;
-using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.API.Features.Finances.Search.Models;
 using LifeSync.API.Features.Finances.Shared.Models;
@@ -22,10 +22,10 @@ public class SearchTransactionsEndpointTests : IntegrationTestsBase
     {
         RegisterRequest registerUserRequest = DefaultUserAccount.RegisterUserRequest;
 
-        TokenResponse tokenResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
 
-        await HttpClient.AddExpenseTransaction(FinanceTestsHelper.DefaultAddExpenseRequest, tokenResponse);
-        await HttpClient.AddIncomeTransaction(FinanceTestsHelper.DefaultAddIncomeRequest, tokenResponse);
+        await HttpClient.AddExpenseTransaction(FinanceTestsHelper.DefaultAddExpenseRequest, loginResponse.AccessToken);
+        await HttpClient.AddIncomeTransaction(FinanceTestsHelper.DefaultAddIncomeRequest, loginResponse.AccessToken);
     }
 
     [Fact]
@@ -33,10 +33,10 @@ public class SearchTransactionsEndpointTests : IntegrationTestsBase
     {
         RegisterRequest registerUserRequest = DefaultUserAccount.RegisterUserRequest;
 
-        TokenResponse tokenResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
         SearchTransactionsFilters filters = new()
         {

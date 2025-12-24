@@ -1,4 +1,3 @@
-using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Finances.Expenses.Models;
 using LifeSync.API.Features.Finances.Incomes.Models;
 using LifeSync.API.Models.Expenses;
@@ -25,10 +24,10 @@ public static class FinanceTestsHelper
 
     public static async Task<HttpResponseMessage> AddIncomeTransaction(this HttpClient httpClient,
         AddIncomeRequest addIncomeRequest,
-        TokenResponse tokenResponse)
+        string accessToken)
     {
         httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", accessToken);
 
         HttpResponseMessage response =
             await httpClient.PostAsJsonAsync($"/api/finances/transactions/income", addIncomeRequest);
@@ -38,10 +37,10 @@ public static class FinanceTestsHelper
 
     public static async Task<HttpResponseMessage> AddExpenseTransaction(this HttpClient httpClient,
         AddExpenseRequest addExpenseRequest,
-        TokenResponse tokenResponse)
+        string accessToken)
     {
         httpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", accessToken);
 
         HttpResponseMessage response =
             await httpClient.PostAsJsonAsync($"/api/finances/transactions/expense", addExpenseRequest);
