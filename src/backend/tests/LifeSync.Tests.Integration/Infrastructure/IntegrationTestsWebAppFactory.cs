@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Testcontainers.MsSql;
 
 namespace LifeSync.Tests.Integration.Infrastructure;
@@ -25,6 +27,8 @@ public class IntegrationTestsWebAppFactory : WebApplicationFactory<IApiMarker>, 
     protected override void ConfigureWebHost(IWebHostBuilder builder) =>
         builder.ConfigureTestServices(services =>
         {
+            services.RemoveAll(typeof(IHostedService));
+            
             ServiceDescriptor? descriptor =
                 services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
