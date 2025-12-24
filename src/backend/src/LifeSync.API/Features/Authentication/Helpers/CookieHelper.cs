@@ -2,58 +2,59 @@ namespace LifeSync.API.Features.Authentication.Helpers;
 
 public static class CookieHelper
 {
-    private const string AccessTokenCookieName = "access_token";
-    private const string RefreshTokenCookieName = "refresh_token";
+    public static string? GetAccessTokenFromCookie(HttpRequest request)
+        => GetCookie(request, AccessCookieType.AccessToken);
 
-    public static void SetAccessTokenCookie(HttpResponse response, string token)
-    {
-        if (response is null)
-        {
-            throw new ArgumentNullException(nameof(response));
-        }
+    public static string? GetRefreshTokenFromCookie(HttpRequest request)
+        => GetCookie(request, AccessCookieType.RefreshToken);
 
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            throw new ArgumentException("Token cannot be null or empty.", nameof(token));
-        }
+    public static void SetAccessTokenCookie(HttpResponse response, string token) =>
+        SetCookie(response, AccessCookieType.AccessToken, token, TimeSpan.FromMinutes(15));
 
-        CookieOptions options = new()
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            MaxAge = TimeSpan.FromMinutes(15),
-            Path = "/"
-        };
-
-        response.Cookies.Append(AccessTokenCookieName, token, options);
-    }
-
-    public static void SetRefreshTokenCookie(HttpResponse response, string token)
-    {
-        if (response is null)
-        {
-            throw new ArgumentNullException(nameof(response));
-        }
-
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            throw new ArgumentException("Token cannot be null or empty.", nameof(token));
-        }
-
-        CookieOptions options = new()
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            MaxAge = TimeSpan.FromDays(7),
-            Path = "/"
-        };
-
-        response.Cookies.Append(RefreshTokenCookieName, token, options);
-    }
+    public static void SetRefreshTokenCookie(HttpResponse response, string token) =>
+        SetCookie(response, AccessCookieType.RefreshToken, token, TimeSpan.FromDays(7));
 
     public static void ClearAuthCookies(HttpResponse response)
+    {
+        DeleteCookie(response, AccessCookieType.AccessToken);
+        DeleteCookie(response, AccessCookieType.RefreshToken);
+    }
+
+    private static string? GetCookie(HttpRequest request, AccessCookieType cookieType)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return request.Cookies[cookieType.ToStringValue()];
+    }
+
+    private static void SetCookie(
+        HttpResponse response,
+        AccessCookieType cookieType,
+        string token,
+        TimeSpan maxAge)
+    {
+        if (response is null)
+        {
+            throw new ArgumentNullException(nameof(response));
+        }
+
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            throw new ArgumentException("Token cannot be null or empty.", nameof(token));
+        }
+
+        CookieOptions options = new()
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            MaxAge = maxAge,
+            Path = "/"
+        };
+
+        response.Cookies.Append(cookieType.ToStringValue(), token, options);
+    }
+
+    private static void DeleteCookie(HttpResponse response, AccessCookieType cookieType)
     {
         if (response is null)
         {
@@ -69,27 +70,6 @@ public static class CookieHelper
             Path = "/"
         };
 
-        response.Cookies.Delete(AccessTokenCookieName, options);
-        response.Cookies.Delete(RefreshTokenCookieName, options);
-    }
-
-    public static string? GetRefreshTokenFromCookie(HttpRequest request)
-    {
-        if (request is null)
-        {
-            throw new ArgumentNullException(nameof(request));
-        }
-
-        return request.Cookies[RefreshTokenCookieName];
-    }
-
-    public static string? GetAccessTokenFromCookie(HttpRequest request)
-    {
-        if (request is null)
-        {
-            throw new ArgumentNullException(nameof(request));
-        }
-
-        return request.Cookies[AccessTokenCookieName];
+        response.Cookies.Delete(cookieType.ToStringValue(), options);
     }
 }

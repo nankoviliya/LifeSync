@@ -86,8 +86,7 @@ public class JwtTokenGenerator
     /// <summary>
     /// Gets platform-specific refresh token expiration duration.
     /// Web: 7 days (encourage re-authentication)
-    /// Mobile/Tablet: 30 days (better UX for mobile apps)
-    /// Desktop: 14 days (middle ground)
+    /// Mobile: 30 days (better UX for mobile apps)
     /// </summary>
     public static TimeSpan GetRefreshTokenLifetime(DeviceType deviceType) =>
         deviceType switch
