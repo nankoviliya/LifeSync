@@ -24,7 +24,7 @@ public class JwtTokenGenerator
         _tokenHandler = tokenHandler;
     }
 
-    public async Task<TokenResponse> GenerateJwtTokenAsync(User user, DeviceType deviceType)
+    public async Task<TokenResponse> GenerateAccessTokenAsync(User user, DeviceType deviceType)
     {
         if (user is null)
         {
@@ -62,14 +62,6 @@ public class JwtTokenGenerator
         return new TokenResponse { Token = tokenString, Expiry = token.ValidTo };
     }
 
-    public static string GenerateRefreshToken()
-    {
-        byte[] randomNumber = new byte[64];
-        using RandomNumberGenerator rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
-    }
-
     /// <summary>
     /// Gets platform-specific access token expiration duration.
     /// Web: 15 minutes (encourage re-authentication)
@@ -83,20 +75,21 @@ public class JwtTokenGenerator
             _ => TimeSpan.FromMinutes(15) // Default to most restrictive
         };
 
-    /// <summary>
-    /// Gets platform-specific refresh token expiration duration.
-    /// Web: 7 days (encourage re-authentication)
-    /// Mobile: 30 days (better UX for mobile apps)
-    /// </summary>
-    public static TimeSpan GetRefreshTokenLifetime(DeviceType deviceType) =>
-        deviceType switch
-        {
-            DeviceType.Web => TimeSpan.FromDays(7),
-            DeviceType.Mobile => TimeSpan.FromDays(30),
-            _ => TimeSpan.FromDays(7) // Default to most restrictive
-        };
+    public static TokenResponse GenerateRefreshToken(DeviceType deviceType)
+    {
+        byte[] randomNumber = new byte[64];
+        using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
 
-    public static string HashRefreshToken(string token)
+        string tokenString = Convert.ToBase64String(randomNumber);
+
+        TimeSpan refreshLifetime = GetRefreshTokenLifetime(deviceType);
+        DateTime refreshExpiry = DateTime.UtcNow.Add(refreshLifetime);
+
+        return new TokenResponse { Token = tokenString, Expiry = refreshExpiry };
+    }
+
+    internal static string HashRefreshToken(string token)
     {
         if (string.IsNullOrWhiteSpace(token))
         {
@@ -108,4 +101,17 @@ public class JwtTokenGenerator
 
         return Convert.ToBase64String(hashBytes);
     }
+
+    /// <summary>
+    /// Gets platform-specific refresh token expiration duration.
+    /// Web: 7 days (encourage re-authentication)
+    /// Mobile: 30 days (better UX for mobile apps)
+    /// </summary>
+    private static TimeSpan GetRefreshTokenLifetime(DeviceType deviceType) =>
+        deviceType switch
+        {
+            DeviceType.Web => TimeSpan.FromDays(7),
+            DeviceType.Mobile => TimeSpan.FromDays(30),
+            _ => TimeSpan.FromDays(7) // Default to most restrictive
+        };
 }

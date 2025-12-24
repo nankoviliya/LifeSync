@@ -39,7 +39,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        TokenResponse tokenResponse = await generator.GenerateJwtTokenAsync(user, DeviceType.Web);
+        TokenResponse tokenResponse = await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
 
         tokenResponse.Token.Should().NotBeNullOrEmpty();
         tokenResponse.Expiry.Should().BeAfter(DateTime.UtcNow);
@@ -71,7 +71,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        TokenResponse tokenResponse = await generator.GenerateJwtTokenAsync(user, DeviceType.Web);
+        TokenResponse tokenResponse = await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
         JwtSecurityTokenHandler handler = new();
         JwtSecurityToken? jwtToken = handler.ReadJwtToken(tokenResponse.Token);
 
@@ -100,7 +100,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        Func<Task> act = async () => await generator.GenerateJwtTokenAsync(user, DeviceType.Web);
+        Func<Task> act = async () => await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
 
         await act.Should().ThrowAsync<ArgumentException>();
     }
@@ -121,7 +121,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        Func<Task> act = async () => await generator.GenerateJwtTokenAsync(null, DeviceType.Web);
+        Func<Task> act = async () => await generator.GenerateAccessTokenAsync(null, DeviceType.Web);
 
         await act.Should().ThrowAsync<ArgumentNullException>();
     }

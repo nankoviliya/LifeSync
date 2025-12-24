@@ -35,30 +35,26 @@ public class LoginService : BaseService, ILoginService
             return Failure<LoginResponse>("Invalid email or password.");
         }
 
-        TokenResponse accessToken = await _jwtTokenGenerator.GenerateJwtTokenAsync(user, request.DeviceType);
+        TokenResponse accessToken = await _jwtTokenGenerator.GenerateAccessTokenAsync(user, request.DeviceType);
 
-        string refreshToken = JwtTokenGenerator.GenerateRefreshToken();
-        string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken);
+        TokenResponse refreshToken = JwtTokenGenerator.GenerateRefreshToken(request.DeviceType);
+        string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken.Token);
 
-        // Calculate platform-specific refresh token expiration
-        TimeSpan refreshLifetime = JwtTokenGenerator.GetRefreshTokenLifetime(request.DeviceType);
-        DateTime refreshExpiry = DateTime.UtcNow.Add(refreshLifetime);
-        
         RefreshToken refreshTokenEntity = RefreshToken.Create(
             user.Id,
             tokenHash,
-            refreshExpiry,
+            refreshToken.Expiry,
             request.DeviceType);
 
         await _context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         LoginResponse loginResponse = new()
         {
             AccessToken = accessToken.Token,
             AccessTokenExpiry = accessToken.Expiry,
-            RefreshToken = refreshToken,
-            RefreshTokenExpiry = refreshExpiry,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiry = refreshToken.Expiry,
             Message = "Login successful"
         };
 

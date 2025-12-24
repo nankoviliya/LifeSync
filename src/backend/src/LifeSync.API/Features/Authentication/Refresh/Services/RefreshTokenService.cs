@@ -59,13 +59,10 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
         User user = storedToken.User;
 
         // Generate new tokens with same device type
-        TokenResponse newAccessToken = await _jwtTokenGenerator.GenerateJwtTokenAsync(user, storedToken.DeviceType);
-        string newRefreshToken = JwtTokenGenerator.GenerateRefreshToken();
-        string newTokenHash = JwtTokenGenerator.HashRefreshToken(newRefreshToken);
+        TokenResponse newAccessToken = await _jwtTokenGenerator.GenerateAccessTokenAsync(user, storedToken.DeviceType);
+        TokenResponse newRefreshToken = JwtTokenGenerator.GenerateRefreshToken(storedToken.DeviceType);
 
-        // Calculate expiration (maintain same device type)
-        TimeSpan lifetime = JwtTokenGenerator.GetRefreshTokenLifetime(storedToken.DeviceType);
-        DateTime expiresAt = DateTime.UtcNow.Add(lifetime);
+        string newTokenHash = JwtTokenGenerator.HashRefreshToken(newRefreshToken.Token);
 
         // Refresh token rotation: delete old, create new
         _context.RefreshTokens.Remove(storedToken);
@@ -73,7 +70,7 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
         RefreshToken newRefreshTokenEntity = RefreshToken.Create(
             user.Id,
             newTokenHash,
-            expiresAt,
+            newRefreshToken.Expiry,
             storedToken.DeviceType);
 
         await _context.RefreshTokens.AddAsync(newRefreshTokenEntity);
@@ -81,14 +78,14 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
 
         // Set new cookies
         CookieHelper.SetAccessTokenCookie(response, newAccessToken.Token);
-        CookieHelper.SetRefreshTokenCookie(response, newRefreshToken);
+        CookieHelper.SetRefreshTokenCookie(response, newRefreshToken.Token);
 
         RefreshResponse refreshResponse = new()
         {
             AccessToken = newAccessToken.Token,
             AccessTokenExpiry = newAccessToken.Expiry,
-            RefreshToken = newRefreshToken,
-            RefreshTokenExpiry = expiresAt,
+            RefreshToken = newRefreshToken.Token,
+            RefreshTokenExpiry = newRefreshToken.Expiry,
             Message = "Token refreshed successfully"
         };
 
