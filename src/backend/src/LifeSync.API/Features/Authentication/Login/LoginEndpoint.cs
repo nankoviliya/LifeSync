@@ -32,7 +32,7 @@ public sealed class LoginEndpoint : Endpoint<LoginRequest>
 
     public override async Task HandleAsync(LoginRequest request, CancellationToken ct)
     {
-        DataResult<LoginResponse> result = await _loginService.LoginAsync(request);
+        DataResult<LoginResponse> result = await _loginService.LoginAsync(request, ct);
 
         if (!result.IsSuccess)
         {

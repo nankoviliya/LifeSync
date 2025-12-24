@@ -5,5 +5,5 @@ namespace LifeSync.API.Features.Authentication.Login.Services;
 
 public interface ILoginService
 {
-    Task<DataResult<LoginResponse>> LoginAsync(LoginRequest request);
+    Task<DataResult<LoginResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken);
 }

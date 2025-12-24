@@ -38,7 +38,7 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
         }
 
         // Hash and lookup token
-        string tokenHash = _jwtTokenGenerator.HashRefreshToken(refreshToken);
+        string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken);
 
         RefreshToken? storedToken = await _context.RefreshTokens
             .Include(rt => rt.User)
@@ -63,8 +63,8 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
 
         // Generate new tokens with same device type
         TokenResponse newAccessToken = await _jwtTokenGenerator.GenerateJwtTokenAsync(user, storedToken.DeviceType);
-        string newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken();
-        string newTokenHash = _jwtTokenGenerator.HashRefreshToken(newRefreshToken);
+        string newRefreshToken = JwtTokenGenerator.GenerateRefreshToken();
+        string newTokenHash = JwtTokenGenerator.HashRefreshToken(newRefreshToken);
 
         // Calculate expiration (maintain same device type)
         TimeSpan lifetime = JwtTokenGenerator.GetRefreshTokenLifetime(storedToken.DeviceType);

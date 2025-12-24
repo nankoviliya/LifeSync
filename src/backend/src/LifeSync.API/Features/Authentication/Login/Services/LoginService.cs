@@ -25,9 +25,9 @@ public class LoginService : BaseService, ILoginService
         _context = context;
     }
 
-    public async Task<DataResult<LoginResponse>> LoginAsync(LoginRequest request)
+    public async Task<DataResult<LoginResponse>> LoginAsync(LoginRequest request,
+        CancellationToken cancellationToken = default)
     {
-        // Validate credentials
         User? user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
@@ -35,28 +35,24 @@ public class LoginService : BaseService, ILoginService
             return Failure<LoginResponse>("Invalid email or password.");
         }
 
-        // Generate access token with platform-specific expiration
         TokenResponse accessToken = await _jwtTokenGenerator.GenerateJwtTokenAsync(user, request.DeviceType);
 
-        // Generate refresh token
-        string refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
-        string tokenHash = _jwtTokenGenerator.HashRefreshToken(refreshToken);
+        string refreshToken = JwtTokenGenerator.GenerateRefreshToken();
+        string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken);
 
         // Calculate platform-specific refresh token expiration
         TimeSpan refreshLifetime = JwtTokenGenerator.GetRefreshTokenLifetime(request.DeviceType);
         DateTime refreshExpiry = DateTime.UtcNow.Add(refreshLifetime);
-
-        // Store refresh token in database
+        
         RefreshToken refreshTokenEntity = RefreshToken.Create(
             user.Id,
             tokenHash,
             refreshExpiry,
             request.DeviceType);
 
-        await _context.RefreshTokens.AddAsync(refreshTokenEntity);
-        await _context.SaveChangesAsync();
-
-        // Build and return response
+        await _context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        
         LoginResponse loginResponse = new()
         {
             AccessToken = accessToken.Token,

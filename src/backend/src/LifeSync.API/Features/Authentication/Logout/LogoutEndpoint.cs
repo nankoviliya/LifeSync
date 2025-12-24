@@ -38,7 +38,7 @@ public sealed class LogoutEndpoint : EndpointWithoutRequest
 
         if (!string.IsNullOrWhiteSpace(refreshToken))
         {
-            string tokenHash = _jwtTokenGenerator.HashRefreshToken(refreshToken);
+            string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken);
 
             RefreshToken? token = await _context.RefreshTokens
                 .FirstOrDefaultAsync(t => t.TokenHash == tokenHash, ct);

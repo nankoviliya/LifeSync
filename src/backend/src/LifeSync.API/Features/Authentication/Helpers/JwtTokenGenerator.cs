@@ -62,7 +62,7 @@ public class JwtTokenGenerator
         return new TokenResponse { Token = tokenString, Expiry = token.ValidTo };
     }
 
-    public string GenerateRefreshToken()
+    public static string GenerateRefreshToken()
     {
         byte[] randomNumber = new byte[64];
         using RandomNumberGenerator rng = RandomNumberGenerator.Create();
@@ -96,7 +96,7 @@ public class JwtTokenGenerator
             _ => TimeSpan.FromDays(7) // Default to most restrictive
         };
 
-    public string HashRefreshToken(string token)
+    public static string HashRefreshToken(string token)
     {
         if (string.IsNullOrWhiteSpace(token))
         {
