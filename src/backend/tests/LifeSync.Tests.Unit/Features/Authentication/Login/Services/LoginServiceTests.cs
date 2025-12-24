@@ -101,7 +101,7 @@ public class LoginServiceTests
         _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(user));
         _userManager.CheckPasswordAsync(user, request.Password).Returns(Task.FromResult(true));
 
-        DataResult<LoginResponse> result = await _sut.LoginAsync(request);
+        DataResult<LoginResponse> result = await _sut.LoginAsync(request, CancellationToken.None);
 
         result.IsSuccess.Should().BeTrue();
         result.Data.Should().NotBeNull();
@@ -116,7 +116,7 @@ public class LoginServiceTests
 
         _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult<User>(null));
 
-        DataResult<LoginResponse> result = await _sut.LoginAsync(request);
+        DataResult<LoginResponse> result = await _sut.LoginAsync(request, CancellationToken.None);
 
         result.IsSuccess.Should().BeFalse();
         result.Errors.Should().Contain("Invalid email or password.");
@@ -140,7 +140,7 @@ public class LoginServiceTests
         _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(user));
         _userManager.CheckPasswordAsync(user, request.Password).Returns(Task.FromResult(false));
 
-        DataResult<LoginResponse> result = await _sut.LoginAsync(request);
+        DataResult<LoginResponse> result = await _sut.LoginAsync(request, CancellationToken.None);
 
         result.IsSuccess.Should().BeFalse();
         result.Errors.Should().Contain("Invalid email or password.");
@@ -153,7 +153,7 @@ public class LoginServiceTests
 
         _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult<User>(null));
 
-        await _sut.LoginAsync(request);
+        await _sut.LoginAsync(request, CancellationToken.None);
 
         await _userManager.Received(1).FindByEmailAsync(request.Email);
     }
@@ -176,7 +176,7 @@ public class LoginServiceTests
         _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(user));
         _userManager.CheckPasswordAsync(user, request.Password).Returns(Task.FromResult(false));
 
-        await _sut.LoginAsync(request);
+        await _sut.LoginAsync(request, CancellationToken.None);
 
         await _userManager.Received(1).CheckPasswordAsync(user, request.Password);
     }

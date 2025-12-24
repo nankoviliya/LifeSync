@@ -26,7 +26,7 @@ public class LoginService : BaseService, ILoginService
     }
 
     public async Task<DataResult<LoginResponse>> LoginAsync(LoginRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         User? user = await _userManager.FindByEmailAsync(request.Email);
 
