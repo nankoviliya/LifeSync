@@ -67,7 +67,7 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
         string newTokenHash = _jwtTokenGenerator.HashRefreshToken(newRefreshToken);
 
         // Calculate expiration (maintain same device type)
-        TimeSpan lifetime = _jwtTokenGenerator.GetRefreshTokenLifetime(storedToken.DeviceType);
+        TimeSpan lifetime = JwtTokenGenerator.GetRefreshTokenLifetime(storedToken.DeviceType);
         DateTime expiresAt = DateTime.UtcNow.Add(lifetime);
 
         // Refresh token rotation: delete old, create new

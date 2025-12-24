@@ -43,7 +43,7 @@ public class LoginService : BaseService, ILoginService
         string tokenHash = _jwtTokenGenerator.HashRefreshToken(refreshToken);
 
         // Calculate platform-specific refresh token expiration
-        TimeSpan refreshLifetime = _jwtTokenGenerator.GetRefreshTokenLifetime(request.DeviceType);
+        TimeSpan refreshLifetime = JwtTokenGenerator.GetRefreshTokenLifetime(request.DeviceType);
         DateTime refreshExpiry = DateTime.UtcNow.Add(refreshLifetime);
 
         // Store refresh token in database

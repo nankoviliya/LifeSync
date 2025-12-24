@@ -24,9 +24,6 @@ public class JwtTokenGenerator
         _tokenHandler = tokenHandler;
     }
 
-    /// <summary>
-    /// Generates a JWT access token for the specified user with platform-specific expiration.
-    /// </summary>
     public async Task<TokenResponse> GenerateJwtTokenAsync(User user, DeviceType deviceType)
     {
         if (user is null)
@@ -65,12 +62,20 @@ public class JwtTokenGenerator
         return new TokenResponse { Token = tokenString, Expiry = token.ValidTo };
     }
 
+    public string GenerateRefreshToken()
+    {
+        byte[] randomNumber = new byte[64];
+        using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+
     /// <summary>
     /// Gets platform-specific access token expiration duration.
     /// Web: 15 minutes (encourage re-authentication)
     /// Mobile: 60 minutes (better UX for mobile apps)
     /// </summary>
-    public TimeSpan GetAccessTokenLifetime(DeviceType deviceType) =>
+    private static TimeSpan GetAccessTokenLifetime(DeviceType deviceType) =>
         deviceType switch
         {
             DeviceType.Web => TimeSpan.FromMinutes(15),
@@ -84,24 +89,13 @@ public class JwtTokenGenerator
     /// Mobile/Tablet: 30 days (better UX for mobile apps)
     /// Desktop: 14 days (middle ground)
     /// </summary>
-    public TimeSpan GetRefreshTokenLifetime(DeviceType deviceType) =>
+    public static TimeSpan GetRefreshTokenLifetime(DeviceType deviceType) =>
         deviceType switch
         {
             DeviceType.Web => TimeSpan.FromDays(7),
             DeviceType.Mobile => TimeSpan.FromDays(30),
             _ => TimeSpan.FromDays(7) // Default to most restrictive
         };
-
-    public string GenerateRefreshToken()
-    {
-        byte[] randomBytes = new byte[32];
-        using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(randomBytes);
-        }
-
-        return Convert.ToBase64String(randomBytes);
-    }
 
     public string HashRefreshToken(string token)
     {
