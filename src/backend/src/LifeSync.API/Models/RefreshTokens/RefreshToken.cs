@@ -15,22 +15,15 @@ public sealed class RefreshToken : Entity
         DateTime expiresAt,
         DeviceType deviceType)
     {
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-        }
-
-        if (string.IsNullOrWhiteSpace(tokenHash))
-        {
-            throw new ArgumentException("Token hash cannot be null or empty.", nameof(tokenHash));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(tokenHash);
 
         if (expiresAt <= DateTime.UtcNow)
         {
             throw new ArgumentException("Expiration date must be in the future.", nameof(expiresAt));
         }
 
-        RefreshToken token = new()
+        return new RefreshToken
         {
             UserId = userId.Trim(),
             TokenHash = tokenHash.Trim(),
@@ -39,33 +32,26 @@ public sealed class RefreshToken : Entity
             IsRevoked = false,
             RevokedAt = null
         };
-
-        return token;
     }
 
-    public string UserId { get; private set; } = default!;
-
-    public string TokenHash { get; private set; } = default!;
-
-    public DateTime ExpiresAt { get; private set; }
-
-    public DeviceType DeviceType { get; private set; }
+    public string UserId { get; init; } = default!;
+    public string TokenHash { get; init; } = default!;
+    public DateTime ExpiresAt { get; init; }
+    public DeviceType DeviceType { get; init; }
 
     public bool IsRevoked { get; private set; }
-
     public DateTime? RevokedAt { get; private set; }
 
     public User User { get; init; } = default!;
 
     public bool IsExpired() => DateTime.UtcNow >= ExpiresAt;
-
     public bool IsValid() => !IsRevoked && !IsExpired();
 
     public void Revoke()
     {
         if (IsRevoked)
         {
-            throw new InvalidOperationException("Token is already revoked.");
+            return;
         }
 
         IsRevoked = true;
