@@ -6,6 +6,4 @@ namespace LifeSync.API.Features.Authentication.Refresh.Services;
 public interface IRefreshTokenService
 {
     Task<DataResult<RefreshResponse>> RefreshTokenAsync(HttpRequest request, HttpResponse response);
-    Task RevokeAllUserTokensAsync(string userId);
-    Task CleanupExpiredTokensAsync();
 }

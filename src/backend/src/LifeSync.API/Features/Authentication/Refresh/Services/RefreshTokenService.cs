@@ -28,7 +28,6 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
     /// </summary>
     public async Task<DataResult<RefreshResponse>> RefreshTokenAsync(HttpRequest request, HttpResponse response)
     {
-        // Extract refresh token from cookie
         string? refreshToken = CookieHelper.GetRefreshTokenFromCookie(request);
 
         if (string.IsNullOrWhiteSpace(refreshToken))
@@ -37,7 +36,6 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
             return Failure<RefreshResponse>("Refresh token not found.");
         }
 
-        // Hash and lookup token
         string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken);
 
         RefreshToken? storedToken = await _context.RefreshTokens
@@ -50,11 +48,10 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
             return Failure<RefreshResponse>("Invalid refresh token.");
         }
 
-        // Validate token
         if (!storedToken.IsValid())
         {
             CookieHelper.ClearAuthCookies(response);
-            _context.RefreshTokens.Remove(storedToken); // Hard delete invalid token
+            _context.RefreshTokens.Remove(storedToken);
             await _context.SaveChangesAsync();
             return Failure<RefreshResponse>("Refresh token expired or revoked.");
         }
@@ -86,7 +83,6 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
         CookieHelper.SetAccessTokenCookie(response, newAccessToken.Token);
         CookieHelper.SetRefreshTokenCookie(response, newRefreshToken);
 
-        // Build and return response
         RefreshResponse refreshResponse = new()
         {
             AccessToken = newAccessToken.Token,
@@ -97,51 +93,5 @@ public sealed class RefreshTokenService : BaseService, IRefreshTokenService
         };
 
         return Success(refreshResponse);
-    }
-
-    /// <summary>
-    /// Revokes all refresh tokens for a specific user.
-    /// Used for security operations like password change or "logout all devices".
-    /// </summary>
-    public async Task RevokeAllUserTokensAsync(string userId)
-    {
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            throw new ArgumentException("User ID cannot be null or empty.", nameof(userId));
-        }
-
-        List<RefreshToken> userTokens = await _context.RefreshTokens
-            .Where(t => t.UserId == userId && !t.IsRevoked)
-            .ToListAsync();
-
-        foreach (RefreshToken token in userTokens)
-        {
-            token.Revoke();
-        }
-
-        if (userTokens.Count > 0)
-        {
-            await _context.SaveChangesAsync();
-        }
-    }
-
-    /// <summary>
-    /// Hard deletes expired and revoked tokens from database.
-    /// Called by background cleanup job.
-    /// </summary>
-    public async Task CleanupExpiredTokensAsync()
-    {
-        DateTime cutoffDate = DateTime.UtcNow;
-
-        // Hard delete tokens that are expired OR revoked
-        List<RefreshToken> tokensToDelete = await _context.RefreshTokens
-            .Where(t => t.ExpiresAt < cutoffDate || t.IsRevoked)
-            .ToListAsync();
-
-        if (tokensToDelete.Count > 0)
-        {
-            _context.RefreshTokens.RemoveRange(tokensToDelete);
-            await _context.SaveChangesAsync();
-        }
     }
 }
