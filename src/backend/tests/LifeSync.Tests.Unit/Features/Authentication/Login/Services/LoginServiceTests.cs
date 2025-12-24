@@ -21,7 +21,8 @@ namespace LifeSync.Tests.Unit.Features.Authentication.Login.Services;
 
 public class LoginServiceTests
 {
-    private readonly string _testUserId;
+    private readonly Guid _testLanguageId;
+    private readonly User _testUser;
 
     private readonly DbConnection _connection;
     private readonly DbContextOptions<ApplicationDbContext> _contextOptions;
@@ -62,6 +63,8 @@ public class LoginServiceTests
 
             context.Add(language);
 
+            _testLanguageId = language.Id;
+
             User user = User.From(
                 "user123@gmail.com".ToRequiredString(),
                 "user123@gmail.com".ToRequiredString(),
@@ -74,7 +77,7 @@ public class LoginServiceTests
 
             context.Add(user);
 
-            _testUserId = user.Id.ToRequiredString();
+            _testUser = user;
 
             context.SaveChanges();
         }
@@ -88,18 +91,8 @@ public class LoginServiceTests
     {
         LoginRequest request = new() { Email = "test@example.com", Password = "ValidPassword123!" };
 
-        User user = User.From(
-            "test@example.com".ToRequiredString(),
-            "test@example.com".ToRequiredString(),
-            "John".ToRequiredString(),
-            "Doe".ToRequiredString(),
-            new Money(1000, "USD").ToRequiredReference(),
-            "USD".ToRequiredString(),
-            Guid.NewGuid().ToRequiredStruct()
-        );
-
-        _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(user));
-        _userManager.CheckPasswordAsync(user, request.Password).Returns(Task.FromResult(true));
+        _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(_testUser));
+        _userManager.CheckPasswordAsync(_testUser, request.Password).Returns(Task.FromResult(true));
 
         DataResult<LoginResponse> result = await _sut.LoginAsync(request, CancellationToken.None);
 
@@ -127,18 +120,8 @@ public class LoginServiceTests
     {
         LoginRequest request = new() { Email = "test@example.com", Password = "WrongPassword123!" };
 
-        User user = User.From(
-            "test@example.com".ToRequiredString(),
-            "test@example.com".ToRequiredString(),
-            "John".ToRequiredString(),
-            "Doe".ToRequiredString(),
-            new Money(1000, "USD").ToRequiredReference(),
-            "USD".ToRequiredString(),
-            Guid.NewGuid().ToRequiredStruct()
-        );
-
-        _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(user));
-        _userManager.CheckPasswordAsync(user, request.Password).Returns(Task.FromResult(false));
+        _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(_testUser));
+        _userManager.CheckPasswordAsync(_testUser, request.Password).Returns(Task.FromResult(false));
 
         DataResult<LoginResponse> result = await _sut.LoginAsync(request, CancellationToken.None);
 
@@ -163,21 +146,11 @@ public class LoginServiceTests
     {
         LoginRequest request = new() { Email = "test@example.com", Password = "ValidPassword123!" };
 
-        User user = User.From(
-            "test@example.com".ToRequiredString(),
-            "test@example.com".ToRequiredString(),
-            "John".ToRequiredString(),
-            "Doe".ToRequiredString(),
-            new Money(1000, "USD").ToRequiredReference(),
-            "USD".ToRequiredString(),
-            Guid.NewGuid().ToRequiredStruct()
-        );
-
-        _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(user));
-        _userManager.CheckPasswordAsync(user, request.Password).Returns(Task.FromResult(false));
+        _userManager.FindByEmailAsync(request.Email).Returns(Task.FromResult(_testUser));
+        _userManager.CheckPasswordAsync(_testUser, request.Password).Returns(Task.FromResult(false));
 
         await _sut.LoginAsync(request, CancellationToken.None);
 
-        await _userManager.Received(1).CheckPasswordAsync(user, request.Password);
+        await _userManager.Received(1).CheckPasswordAsync(_testUser, request.Password);
     }
 }

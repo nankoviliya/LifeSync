@@ -81,7 +81,7 @@ public class JwtTokenGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateJwtTokenAsync_ShouldThrowArgumentException_WhenSecretsAreNull()
+    public async Task GenerateJwtTokenAsync_ShouldThrowInvalidOperationException_WhenSecretsAreNull()
     {
         User user = User.From(
             "user123@gmail.com".ToRequiredString(),
@@ -102,7 +102,7 @@ public class JwtTokenGeneratorTests
 
         Func<Task> act = async () => await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
 
-        await act.Should().ThrowAsync<ArgumentException>();
+        await act.Should().ThrowAsync<InvalidOperationException>();
     }
 
     [Fact]
