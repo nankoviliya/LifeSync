@@ -19,7 +19,6 @@ using LifeSync.API.Persistence;
 using LifeSync.API.Secrets;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -94,33 +93,10 @@ public static class ServiceCollectionExtensions
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             ISecretsManager secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
-
             JwtSecrets jwtSecrets = await secretsManager.GetJwtSecretsAsync();
 
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = "Smart";
-                    options.DefaultAuthenticateScheme = "Smart";
-                    options.DefaultChallengeScheme = "Smart";
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                {
-                    options.Cookie.Name = "access_token";
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Events.OnRedirectToLogin = context =>
-                    {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        return Task.CompletedTask;
-                    };
-                    options.Events.OnRedirectToAccessDenied = context =>
-                    {
-                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                        return Task.CompletedTask;
-                    };
-                })
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -137,33 +113,10 @@ public static class ServiceCollectionExtensions
                     {
                         OnMessageReceived = context =>
                         {
-                            string? accessToken = context.Request.Cookies["access_token"];
-                            if (!string.IsNullOrEmpty(accessToken))
-                            {
-                                context.Token = accessToken;
-                            }
-
+                            // Support JWT from cookie OR Authorization header
+                            context.Token = context.Request.Cookies["access_token"];
                             return Task.CompletedTask;
                         }
-                    };
-                })
-                .AddPolicyScheme("Smart", "Smart", options =>
-                {
-                    options.ForwardDefaultSelector = context =>
-                    {
-                        bool hasCookie = context.Request.Cookies.ContainsKey("access_token");
-                        if (hasCookie)
-                        {
-                            return JwtBearerDefaults.AuthenticationScheme;
-                        }
-
-                        string? authHeader = context.Request.Headers.Authorization.FirstOrDefault();
-                        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                        {
-                            return JwtBearerDefaults.AuthenticationScheme;
-                        }
-
-                        return JwtBearerDefaults.AuthenticationScheme;
                     };
                 });
 
