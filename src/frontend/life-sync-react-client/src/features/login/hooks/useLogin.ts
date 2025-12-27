@@ -16,14 +16,10 @@ export const useLogin = () => {
 
   const mutation = useMutation({
     mutationFn: async (data: ILoginRequestModel) => {
-      // Response is now { message: "Login successful" }, no token
-      return post<void, ILoginRequestModel>(
-        endpoints.auth.login,
-        data,
-      );
+      return post<void, ILoginRequestModel>(endpoints.auth.login, data);
     },
     onSuccess: () => {
-      authLogin(); // No token argument
+      authLogin();
       navigate(routePaths.home.path);
     },
     onError: () => {

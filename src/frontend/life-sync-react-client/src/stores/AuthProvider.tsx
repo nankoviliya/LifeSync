@@ -7,9 +7,9 @@ import {
   useState,
 } from 'react';
 
+import { SkeletonLoader } from '@/components/loaders/SkeletonLoader';
 import { endpoints } from '@/config/endpoints/endpoints';
 import { apiClient } from '@/lib/apiClient';
-import { SkeletonLoader } from '@/components/loaders/SkeletonLoader';
 
 interface AuthContextType {
   login: () => void;
@@ -38,11 +38,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
       setIsAuthenticated(true);
     } catch {
       setIsAuthenticated(false);
-      // Migration: clean up old localStorage token if exists
-      const oldToken = localStorage.getItem('token');
-      if (oldToken) {
-        localStorage.removeItem('token');
-      }
     } finally {
       setIsInitialized(true);
     }
@@ -79,7 +74,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     [login, logout, isAuthenticated, isInitialized],
   );
 
-  // Show loading screen while checking authentication status
   if (!isInitialized) {
     return <SkeletonLoader />;
   }
