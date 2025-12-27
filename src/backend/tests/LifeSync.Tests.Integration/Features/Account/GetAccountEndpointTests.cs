@@ -1,6 +1,6 @@
 using FluentAssertions;
 using LifeSync.API.Features.Account.GetAccount.Models;
-using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.API.Shared;
 using LifeSync.Tests.Integration.Infrastructure;
@@ -20,10 +20,10 @@ public class GetAccountEndpointTests : IntegrationTestsBase
     {
         RegisterRequest registerUserRequest = DefaultUserAccount.RegisterUserRequest;
 
-        TokenResponse tokenResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
         HttpResponseMessage getAccountResponse = await HttpClient.GetAsync($"/api/account");
 
         GetAccountResponse? accountData = await getAccountResponse.Content.ReadFromJsonAsync<GetAccountResponse>();

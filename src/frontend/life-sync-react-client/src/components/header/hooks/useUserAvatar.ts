@@ -19,6 +19,11 @@ export const useUserAvatar = () => {
 
   const avatarMenuRef = useRef<Menu>(null);
 
+  const handleLogout = async () => {
+    await logout();
+    navigate(routePaths.login.path);
+  };
+
   const avatarMenuItems: MenuItem[] = [
     {
       label: translate('profile-button-name'),
@@ -26,7 +31,7 @@ export const useUserAvatar = () => {
     },
     {
       label: translate('logout-button-name'),
-      command: logout,
+      command: handleLogout,
     },
   ];
 

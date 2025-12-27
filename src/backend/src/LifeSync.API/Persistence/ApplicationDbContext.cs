@@ -3,6 +3,7 @@ using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Models.Languages;
+using LifeSync.API.Models.RefreshTokens;
 using LifeSync.API.Secrets.Contracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -77,4 +78,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<IncomeTransaction> IncomeTransactions { get; set; }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 }

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { endpoints } from '@/config/endpoints/endpoints';
 import { routePaths } from '@/config/routing/routePaths';
 import { ILoginRequestModel } from '@/features/login/models/loginRequestModel';
-import { ILoginResponseModel } from '@/features/login/models/loginResponseModel';
 import { useAuth } from '@/hooks/useAuthentication';
 import { post } from '@/lib/apiClient';
 
@@ -17,13 +16,10 @@ export const useLogin = () => {
 
   const mutation = useMutation({
     mutationFn: async (data: ILoginRequestModel) => {
-      return post<ILoginResponseModel, ILoginRequestModel>(
-        endpoints.auth.login,
-        data,
-      );
+      return post<void, ILoginRequestModel>(endpoints.auth.login, data);
     },
-    onSuccess: (data) => {
-      authLogin(data.token);
+    onSuccess: () => {
+      authLogin();
       navigate(routePaths.home.path);
     },
     onError: () => {
