@@ -1,9 +1,9 @@
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { environment } from '@/config/currentEnvironment';
 import { endpoints } from '@/config/endpoints/endpoints';
 
-interface ApiRequestConfig extends InternalAxiosRequestConfig {
+export interface ApiRequestConfig extends AxiosRequestConfig {
   skipAuthRefresh?: boolean;
 }
 
@@ -59,7 +59,7 @@ async function refreshToken(): Promise<void> {
 
 export const get = async <TResponse>(
   path: string,
-  config?: AxiosRequestConfig,
+  config?: ApiRequestConfig,
 ) => {
   const response = await apiClient.get<TResponse>(path, {
     ...config,
@@ -71,7 +71,7 @@ export const get = async <TResponse>(
 export const post = async <TResponse, TData>(
   path: string,
   data: TData,
-  config?: AxiosRequestConfig,
+  config?: ApiRequestConfig,
 ) => {
   const response = await apiClient.post<TResponse>(path, data, {
     ...config,
@@ -83,7 +83,7 @@ export const post = async <TResponse, TData>(
 export const put = async <TResponse, TData>(
   path: string,
   data: TData,
-  config?: AxiosRequestConfig,
+  config?: ApiRequestConfig,
 ) => {
   const response = await apiClient.put<TResponse>(path, data, {
     ...config,

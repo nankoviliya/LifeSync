@@ -10,7 +10,6 @@ export const endpoints = {
     register: 'Auth/Register',
     logout: 'Auth/Logout',
     refresh: 'Auth/Refresh',
-    status: 'Auth/Status',
   },
   account: {
     getAccountData: 'Account',
