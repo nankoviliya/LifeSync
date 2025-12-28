@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { routePaths } from '@/config/routing/routePaths';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { useAuth } from '@/hooks/useAuthentication';
+import { useLogout } from '@/hooks/useLogout';
 
 export const useUserAvatar = () => {
   const navigate = useNavigate();
   const { translate } = useAppTranslations();
 
-  const { logout } = useAuth();
+  const { logout } = useLogout();
 
   const navigateToUserProfile = () => {
     navigate(routePaths.userProfile.path);
@@ -19,9 +19,8 @@ export const useUserAvatar = () => {
 
   const avatarMenuRef = useRef<Menu>(null);
 
-  const handleLogout = async () => {
-    await logout();
-    navigate(routePaths.login.path);
+  const handleLogout = () => {
+    logout();
   };
 
   const avatarMenuItems: MenuItem[] = [

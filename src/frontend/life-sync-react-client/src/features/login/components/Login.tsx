@@ -63,9 +63,7 @@ export const Login = () => {
       <div className={styles['login-page__signup-container']}>
         <span>
           {noAccountMessage + ' '}
-          <Link to={routePaths.register.path}>
-            {routePaths.register.name}
-          </Link>
+          <Link to={routePaths.register.path}>{routePaths.register.name}</Link>
         </span>
       </div>
     </form>

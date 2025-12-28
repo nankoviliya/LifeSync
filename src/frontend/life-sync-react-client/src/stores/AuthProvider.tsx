@@ -14,7 +14,7 @@ import { post } from '@/lib/apiClient';
 
 interface AuthContextType {
   login: () => void;
-  logout: () => Promise<void>;
+  logout: () => void;
   isAuthenticated: boolean;
 }
 
@@ -39,8 +39,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     queryClient.clear();
   }, [queryClient]);
 
-  const logout = useCallback(async () => {
-    await post(`/api/${endpoints.auth.logout}`, {}).catch(() => {});
+  const logout = useCallback(() => {
     setIsAuthenticated(false);
     queryClient.clear();
   }, [queryClient]);
