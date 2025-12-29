@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
-    post(`/api/${endpoints.auth.refresh}`, {}, { skipAuthRefresh: true })
+    post(`${endpoints.auth.refresh}`, {}, { skipAuthRefresh: true })
       .then(() => setIsAuthenticated(true))
       .catch(() => setIsAuthenticated(false))
       .finally(() => setIsInitialized(true));

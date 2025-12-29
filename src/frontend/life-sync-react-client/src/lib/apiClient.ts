@@ -52,7 +52,7 @@ apiClient.interceptors.response.use(
 );
 
 async function refreshToken(): Promise<void> {
-  await apiClient.post(`/api/${endpoints.auth.refresh}`, null, {
+  await apiClient.post(`${endpoints.auth.refresh}`, null, {
     skipAuthRefresh: true,
   } as ApiRequestConfig);
 }
