@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Features.AccountExport;
 using LifeSync.API.Features.AccountExport.Models;
-using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.Tests.Integration.Infrastructure;
 using System.Net;
@@ -22,10 +22,10 @@ public class AccountExportEndpointTests : IntegrationTestsBase
     public async Task Export_ShouldReturnValidJsonFile_WhenJsonImportIsSelected()
     {
         RegisterRequest registerRequest = DefaultUserAccount.RegisterUserRequest;
-        TokenResponse tokenResponse = await LoginUserAsync(registerRequest.Email, registerRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerRequest.Email, registerRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
         ExportAccountRequest exportRequest = new() { Format = ExportAccountFileFormat.Json };
 

@@ -6,6 +6,7 @@ using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Login.Services;
+using LifeSync.API.Features.Authentication.Refresh.Services;
 using LifeSync.API.Features.Authentication.Register.Services;
 using LifeSync.API.Features.Finances.Expenses.Services;
 using LifeSync.API.Features.Finances.Incomes.Services;
@@ -65,6 +66,20 @@ public static class ServiceCollectionExtensions
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return Task.CompletedTask;
+                };
+            });
+
             return services;
         }
 
@@ -92,14 +107,13 @@ public static class ServiceCollectionExtensions
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             ISecretsManager secretsManager = serviceProvider.GetRequiredService<ISecretsManager>();
-
             JwtSecrets jwtSecrets = await secretsManager.GetJwtSecretsAsync();
 
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -111,6 +125,16 @@ public static class ServiceCollectionExtensions
                         ValidIssuer = jwtSecrets.Issuer,
                         ValidAudience = jwtSecrets.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecrets.SecretKey))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            // Support JWT from cookie OR Authorization header
+                            context.Token = context.Request.Cookies["access_token"];
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
@@ -141,6 +165,7 @@ public static class ServiceCollectionExtensions
 
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IRegisterService, RegisterService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             return services;
         }

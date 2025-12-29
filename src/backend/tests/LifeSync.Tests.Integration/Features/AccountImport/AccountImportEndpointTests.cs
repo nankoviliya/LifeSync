@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.Models;
-using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.Tests.Integration.Infrastructure;
@@ -23,10 +23,10 @@ public class AccountImportEndpointTests : IntegrationTestsBase
     {
         // Arrange
         RegisterRequest registerRequest = DefaultUserAccount.RegisterUserRequest;
-        TokenResponse tokenResponse = await LoginUserAsync(registerRequest.Email, registerRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerRequest.Email, registerRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
         ImportAccountData importData = new()
         {

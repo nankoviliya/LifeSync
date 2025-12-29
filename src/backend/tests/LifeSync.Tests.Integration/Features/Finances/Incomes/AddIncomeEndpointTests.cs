@@ -1,5 +1,5 @@
 using FluentAssertions;
-using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.API.Features.Finances.Incomes.Models;
 using LifeSync.API.Models.ApplicationUser;
@@ -23,10 +23,10 @@ public class AddIncomeEndpointTests : IntegrationTestsBase
     {
         RegisterRequest registerUserRequest = DefaultUserAccount.RegisterUserRequest;
 
-        TokenResponse tokenResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
         AddIncomeRequest request = new()
         {
@@ -62,10 +62,10 @@ public class AddIncomeEndpointTests : IntegrationTestsBase
         User? userBeforeUpdate = await DbContext.Users.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == registerUserRequest.Email);
 
-        TokenResponse tokenResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
         AddIncomeRequest request = new()
         {

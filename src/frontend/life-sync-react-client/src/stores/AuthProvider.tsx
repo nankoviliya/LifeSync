@@ -1,70 +1,48 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { jwtDecode } from 'jwt-decode';
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
+
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
+import { useReadQuery } from '@/hooks/api/useReadQuery';
+import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
 interface AuthContextType {
-  token: string | null;
-  login: (token: string) => void;
-  logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
+  user: IUserProfileDataModel | null;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined,
 );
 
-export interface IAuthProviderProps {
-  children: React.ReactNode;
-}
+export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const {
+    data: user,
+    isLoading,
+    isSuccess,
+  } = useReadQuery<IUserProfileDataModel>({
+    endpoint: endpointsOptions.getUserAccountData.endpoint,
+    queryKey: [endpointsOptions.getUserAccountData.key],
+    staleTime: 86_400_000,
+    retry: false,
+    config: { skipAuthRefresh: true },
+  });
 
-export const AuthProvider = ({ children }: IAuthProviderProps) => {
-  const queryClient = useQueryClient();
+  const isAuthenticated = isSuccess && user !== null;
 
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem('token'),
+  const value = useMemo(
+    () => ({ isAuthenticated, isLoading, user: user ?? null }),
+    [isAuthenticated, isLoading, user],
   );
 
-  const login = useCallback((token: string) => {
-    setToken(token);
-    localStorage.setItem('token', token);
-    queryClient.clear();
-  }, []);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
-  const logout = useCallback(() => {
-    setToken(null);
-    localStorage.removeItem('token');
-  }, []);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
 
-  const isAuthenticated = Boolean(token);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
 
-  useEffect(() => {
-    if (token) {
-      const decodedToken: any = jwtDecode(token);
-
-      if (decodedToken.exp * 1000 < Date.now()) {
-        logout();
-      }
-    }
-  }, [token, logout]);
-
-  // React Context Provider values should have stable identities typescript:S6481
-  const contextValue = useMemo(
-    () => ({
-      token,
-      login,
-      logout,
-      isAuthenticated,
-    }),
-    [token, login, logout, isAuthenticated],
-  );
-
-  return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-  );
+  return context;
 };

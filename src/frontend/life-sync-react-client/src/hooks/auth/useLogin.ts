@@ -1,30 +1,26 @@
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import { endpoints } from '@/config/endpoints/endpoints';
-import { routePaths } from '@/config/routing/routePaths';
-import { ILoginRequestModel } from '@/features/login/models/loginRequestModel';
-import { ILoginResponseModel } from '@/features/login/models/loginResponseModel';
-import { useAuth } from '@/hooks/useAuthentication';
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
+import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
 import { post } from '@/lib/apiClient';
 
-export const useLogin = () => {
-  const { control, handleSubmit } = useForm<ILoginRequestModel>();
+export interface ILoginRequestModel {
+  email: string;
+  password: string;
+}
 
-  const { login: authLogin } = useAuth();
-  const navigate = useNavigate();
+export const useLogin = () => {
+  const invalidateQuery = useQueryInvalidation();
+  const { control, handleSubmit } = useForm<ILoginRequestModel>();
 
   const mutation = useMutation({
     mutationFn: async (data: ILoginRequestModel) => {
-      return post<ILoginResponseModel, ILoginRequestModel>(
-        endpoints.auth.login,
-        data,
-      );
+      return post<void, ILoginRequestModel>(endpoints.auth.login, data);
     },
-    onSuccess: (data) => {
-      authLogin(data.token);
-      navigate(routePaths.home.path);
+    onSuccess: () => {
+      invalidateQuery({ queryKey: [endpointsOptions.getUserAccountData.key] });
     },
     onError: () => {
       console.log('Auth error');

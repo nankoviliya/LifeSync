@@ -1,6 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Models.RefreshTokens;
 using LifeSync.API.Secrets.Contracts;
 using LifeSync.API.Secrets.Models;
 using LifeSync.API.Shared;
@@ -38,7 +39,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        TokenResponse tokenResponse = await generator.GenerateJwtTokenAsync(user);
+        TokenResponse tokenResponse = await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
 
         tokenResponse.Token.Should().NotBeNullOrEmpty();
         tokenResponse.Expiry.Should().BeAfter(DateTime.UtcNow);
@@ -70,7 +71,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        TokenResponse tokenResponse = await generator.GenerateJwtTokenAsync(user);
+        TokenResponse tokenResponse = await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
         JwtSecurityTokenHandler handler = new();
         JwtSecurityToken? jwtToken = handler.ReadJwtToken(tokenResponse.Token);
 
@@ -80,7 +81,7 @@ public class JwtTokenGeneratorTests
     }
 
     [Fact]
-    public async Task GenerateJwtTokenAsync_ShouldThrowArgumentException_WhenSecretsAreNull()
+    public async Task GenerateJwtTokenAsync_ShouldThrowInvalidOperationException_WhenSecretsAreNull()
     {
         User user = User.From(
             "user123@gmail.com".ToRequiredString(),
@@ -99,9 +100,9 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        Func<Task> act = async () => await generator.GenerateJwtTokenAsync(user);
+        Func<Task> act = async () => await generator.GenerateAccessTokenAsync(user, DeviceType.Web);
 
-        await act.Should().ThrowAsync<ArgumentException>();
+        await act.Should().ThrowAsync<InvalidOperationException>();
     }
 
     [Fact]
@@ -120,7 +121,7 @@ public class JwtTokenGeneratorTests
 
         JwtTokenGenerator generator = new(secretsManager, securityTokenHandler);
 
-        Func<Task> act = async () => await generator.GenerateJwtTokenAsync(null);
+        Func<Task> act = async () => await generator.GenerateAccessTokenAsync(null, DeviceType.Web);
 
         await act.Should().ThrowAsync<ArgumentNullException>();
     }

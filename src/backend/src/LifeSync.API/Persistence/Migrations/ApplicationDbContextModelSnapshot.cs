@@ -17,7 +17,7 @@ namespace LifeSync.API.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -221,6 +221,62 @@ namespace LifeSync.API.Persistence.Migrations
                     b.ToTable("Languages", (string)null);
                 });
 
+            modelBuilder.Entity("LifeSync.API.Models.RefreshTokens.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DeviceType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRevoked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt", "IsRevoked")
+                        .HasDatabaseName("IX_RefreshTokens_ExpiresAt_IsRevoked");
+
+                    b.HasIndex("TokenHash", "UserId")
+                        .HasDatabaseName("IX_RefreshTokens_TokenHash_UserId");
+
+                    b.HasIndex("UserId", "DeviceType")
+                        .HasDatabaseName("IX_RefreshTokens_UserId_DeviceType");
+
+                    b.ToTable("RefreshTokens", (string)null);
+                });
+
             modelBuilder.Entity("LifeSync.API.Models.ApplicationUser.User", b =>
                 {
                     b.HasOne("LifeSync.API.Models.Languages.Language", "Language")
@@ -327,6 +383,17 @@ namespace LifeSync.API.Persistence.Migrations
                         });
 
                     b.Navigation("Amount")
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LifeSync.API.Models.RefreshTokens.RefreshToken", b =>
+                {
+                    b.HasOne("LifeSync.API.Models.ApplicationUser.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");

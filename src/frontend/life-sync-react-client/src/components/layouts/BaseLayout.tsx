@@ -1,13 +1,11 @@
+import { PropsWithChildren } from 'react';
+
 import { Footer } from '@/components/footer/components/Footer';
 import { Header } from '@/components/header/components/Header';
 
 import styles from './BaseLayout.module.scss';
 
-type BaseLayoutProps = {
-  children: React.ReactNode;
-};
-
-export const BaseLayout = ({ children }: BaseLayoutProps) => {
+export const BaseLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className={styles['base-layout']}>
       <Header />

@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LifeSync.API.Features.Account.Shared;
 using LifeSync.API.Features.Account.UpdateAccount.Models;
-using LifeSync.API.Features.Authentication.Helpers;
+using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Features.Authentication.Register.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.Tests.Integration.Infrastructure;
@@ -26,10 +26,10 @@ public class UpdateAccountEndpointTests : IntegrationTestsBase
         User? userBeforeUpdate = await DbContext.Users.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == registerUserRequest.Email);
 
-        TokenResponse tokenResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
+        LoginResponse loginResponse = await LoginUserAsync(registerUserRequest.Email, registerUserRequest.Password);
 
         HttpClient.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
+            new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
         UpdateAccountRequest updateAccountRequest = new()
         {

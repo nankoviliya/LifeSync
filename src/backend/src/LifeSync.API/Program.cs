@@ -1,5 +1,6 @@
 using Amazon.SecretsManager;
 using FastEndpoints;
+using LifeSync.API.BackgroundJobs;
 using LifeSync.API.Extensions;
 using LifeSync.API.OpenApi;
 using LifeSync.API.Persistence;
@@ -55,6 +56,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddRateLimitingPolicies();
+
+builder.Services.AddHostedService<RefreshTokenCleanupJob>();
 
 builder.Services.AddFastEndpoints();
 

@@ -4,20 +4,24 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routePaths } from '@/config/routing/routePaths';
+import { useLogout } from '@/hooks/auth/useLogout';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { useAuth } from '@/hooks/useAuthentication';
 
 export const useUserAvatar = () => {
   const navigate = useNavigate();
   const { translate } = useAppTranslations();
 
-  const { logout } = useAuth();
+  const { logout } = useLogout();
 
   const navigateToUserProfile = () => {
     navigate(routePaths.userProfile.path);
   };
 
   const avatarMenuRef = useRef<Menu>(null);
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const avatarMenuItems: MenuItem[] = [
     {
@@ -26,7 +30,7 @@ export const useUserAvatar = () => {
     },
     {
       label: translate('logout-button-name'),
-      command: logout,
+      command: handleLogout,
     },
   ];
 

@@ -1,6 +1,8 @@
 using LifeSync.API.Features.Authentication.Helpers;
 using LifeSync.API.Features.Authentication.Login.Models;
 using LifeSync.API.Models.ApplicationUser;
+using LifeSync.API.Models.RefreshTokens;
+using LifeSync.API.Persistence;
 using LifeSync.API.Shared.Services;
 using LifeSync.Common.Results;
 using Microsoft.AspNetCore.Identity;
@@ -9,33 +11,53 @@ namespace LifeSync.API.Features.Authentication.Login.Services;
 
 public class LoginService : BaseService, ILoginService
 {
-    private readonly JwtTokenGenerator _jwtTokenGenerator;
     private readonly UserManager<User> _userManager;
+    private readonly JwtTokenGenerator _jwtTokenGenerator;
+    private readonly ApplicationDbContext _context;
 
     public LoginService(
+        UserManager<User> userManager,
         JwtTokenGenerator jwtTokenGenerator,
-        UserManager<User> userManager)
+        ApplicationDbContext context)
     {
-        _jwtTokenGenerator = jwtTokenGenerator;
         _userManager = userManager;
+        _jwtTokenGenerator = jwtTokenGenerator;
+        _context = context;
     }
 
-    public async Task<DataResult<TokenResponse>> LoginAsync(LoginRequest request)
+    public async Task<DataResult<LoginResponse>> LoginAsync(LoginRequest request,
+        CancellationToken cancellationToken)
     {
         User? user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            return Failure<TokenResponse>("Invalid email or password.");
+            return Failure<LoginResponse>("Invalid email or password.");
         }
 
-        TokenResponse token = await _jwtTokenGenerator.GenerateJwtTokenAsync(user);
+        TokenResponse accessToken = await _jwtTokenGenerator.GenerateAccessTokenAsync(user, request.DeviceType);
 
-        if (token is null)
+        TokenResponse refreshToken = JwtTokenGenerator.GenerateRefreshToken(request.DeviceType);
+        string tokenHash = JwtTokenGenerator.HashRefreshToken(refreshToken.Token);
+
+        RefreshToken refreshTokenEntity = RefreshToken.Create(
+            user.Id,
+            tokenHash,
+            refreshToken.Expiry,
+            request.DeviceType);
+
+        await _context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        LoginResponse loginResponse = new()
         {
-            return Failure<TokenResponse>("Failed to generate token.");
-        }
+            AccessToken = accessToken.Token,
+            AccessTokenExpiry = accessToken.Expiry,
+            RefreshToken = refreshToken.Token,
+            RefreshTokenExpiry = refreshToken.Expiry,
+            Message = "Login successful"
+        };
 
-        return Success(token);
+        return Success(loginResponse);
     }
 }

@@ -8,6 +8,8 @@ export const endpoints = {
   auth: {
     login: 'Auth/Login',
     register: 'Auth/Register',
+    logout: 'Auth/Logout',
+    refresh: 'Auth/Refresh',
   },
   account: {
     getAccountData: 'Account',

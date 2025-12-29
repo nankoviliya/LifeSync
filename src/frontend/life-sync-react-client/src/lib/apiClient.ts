@@ -1,14 +1,10 @@
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { environment } from '@/config/currentEnvironment';
+import { endpoints } from '@/config/endpoints/endpoints';
 
-function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  if (config.headers) {
-    config.headers.Accept = 'application/json';
-  }
-
-  config.withCredentials = true;
-  return config;
+export interface ApiRequestConfig extends AxiosRequestConfig {
+  skipAuthRefresh?: boolean;
 }
 
 export const apiClient = axios.create({
@@ -18,45 +14,51 @@ export const apiClient = axios.create({
   },
 });
 
-apiClient.interceptors.request.use(authRequestInterceptor);
+apiClient.interceptors.request.use((config) => {
+  if (config.headers) {
+    config.headers.Accept = 'application/json';
+  }
 
-apiClient.interceptors.request.use(
-  (config) => {
-    // Retrieve the token from local storage or any storage mechanism you use
-    const token = localStorage.getItem('token');
+  config.withCredentials = true;
+  return config;
+});
 
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(
-      //Expected the Promise rejection reason to be an Error.
-      error instanceof Error ? error : new Error(String(error)),
-    );
-  },
-);
+let refreshPromise: Promise<void> | null = null;
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      // Optionally, clear token and redirect to login page
-      localStorage.removeItem('token');
+  async (error) => {
+    const config = error.config as ApiRequestConfig;
+
+    if (error.response?.status !== 401 || config?.skipAuthRefresh) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(
-      // Expected the Promise rejection reason to be an Error.
-      error instanceof Error ? error : new Error(String(error)),
-    );
+    if (!refreshPromise) {
+      refreshPromise = refreshToken()
+        .catch((err) => {
+          throw err;
+        })
+        .finally(() => {
+          refreshPromise = null;
+        });
+    }
+
+    await refreshPromise;
+    config.skipAuthRefresh = true;
+    return apiClient(config);
   },
 );
 
+async function refreshToken(): Promise<void> {
+  await apiClient.post(`${endpoints.auth.refresh}`, null, {
+    skipAuthRefresh: true,
+  } as ApiRequestConfig);
+}
+
 export const get = async <TResponse>(
   path: string,
-  config?: AxiosRequestConfig,
+  config?: ApiRequestConfig,
 ) => {
   const response = await apiClient.get<TResponse>(path, {
     ...config,
@@ -68,7 +70,7 @@ export const get = async <TResponse>(
 export const post = async <TResponse, TData>(
   path: string,
   data: TData,
-  config?: AxiosRequestConfig,
+  config?: ApiRequestConfig,
 ) => {
   const response = await apiClient.post<TResponse>(path, data, {
     ...config,
@@ -80,7 +82,7 @@ export const post = async <TResponse, TData>(
 export const put = async <TResponse, TData>(
   path: string,
   data: TData,
-  config?: AxiosRequestConfig,
+  config?: ApiRequestConfig,
 ) => {
   const response = await apiClient.put<TResponse>(path, data, {
     ...config,
