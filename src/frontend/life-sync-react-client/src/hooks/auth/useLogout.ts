@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { endpoints } from '@/config/endpoints/endpoints';
 import { routePaths } from '@/config/routing/routePaths';
-import { useAuth } from '@/hooks/useAuthentication';
 import { post } from '@/lib/apiClient';
+import { useAuth } from '@/stores/AuthProvider';
 
 export const useLogout = () => {
   const { logout: authLogout } = useAuth();

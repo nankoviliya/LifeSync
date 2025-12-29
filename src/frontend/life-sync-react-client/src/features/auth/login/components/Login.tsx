@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/buttons/Button';
 import { routePaths } from '@/config/routing/routePaths';
-import { useLogin } from '@/features/login/hooks/useLogin';
+import { useLogin } from '@/hooks/auth/useLogin';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
 import styles from './Login.module.scss';

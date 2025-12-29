@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { endpoints } from '@/config/endpoints/endpoints';
 import { routePaths } from '@/config/routing/routePaths';
-import { IRegisterRequestModel } from '@/features/register/models/registerRequestModel';
+import { IRegisterRequestModel } from '@/features/auth/register/models/registerRequestModel';
 import { post } from '@/lib/apiClient';
 
 export const useRegistration = () => {

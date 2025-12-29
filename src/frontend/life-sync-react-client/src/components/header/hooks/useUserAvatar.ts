@@ -4,8 +4,8 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routePaths } from '@/config/routing/routePaths';
+import { useLogout } from '@/hooks/auth/useLogout';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { useLogout } from '@/hooks/useLogout';
 
 export const useUserAvatar = () => {
   const navigate = useNavigate();

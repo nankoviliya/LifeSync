@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/buttons/Button';
 import { routePaths } from '@/config/routing/routePaths';
-import { useRegistration } from '@/features/register/hooks/useRegistration';
+import { useRegistration } from '@/features/auth/register/hooks/useRegistration';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
 

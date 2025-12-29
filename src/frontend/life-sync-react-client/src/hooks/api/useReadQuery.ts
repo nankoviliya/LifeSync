@@ -1,12 +1,12 @@
 import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError, AxiosRequestConfig } from 'axios';
+import { AxiosError } from 'axios';
 
-import { get } from '@/lib/apiClient';
+import { ApiRequestConfig, get } from '@/lib/apiClient';
 
 interface IUseReadQueryOptions {
   endpoint: string;
   queryKey: QueryKey;
-  config?: AxiosRequestConfig;
+  config?: ApiRequestConfig;
   enabled?: boolean;
 }
 

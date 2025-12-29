@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { endpoints } from '@/config/endpoints/endpoints';
 import { routePaths } from '@/config/routing/routePaths';
-import { ILoginRequestModel } from '@/features/login/models/loginRequestModel';
-import { useAuth } from '@/hooks/useAuthentication';
 import { post } from '@/lib/apiClient';
+import { useAuth } from '@/stores/AuthProvider';
+
+export interface ILoginRequestModel {
+  email: string;
+  password: string;
+}
 
 export const useLogin = () => {
   const { control, handleSubmit } = useForm<ILoginRequestModel>();

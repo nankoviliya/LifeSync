@@ -3,19 +3,20 @@ import {
   createContext,
   PropsWithChildren,
   useCallback,
-  useEffect,
+  useContext,
   useMemo,
-  useState,
 } from 'react';
 
-import { SkeletonLoader } from '@/components/loaders/SkeletonLoader';
-import { endpoints } from '@/config/endpoints/endpoints';
-import { post } from '@/lib/apiClient';
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
+import { useReadQuery } from '@/hooks/api/useReadQuery';
+import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
 interface AuthContextType {
   login: () => void;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
+  user: IUserProfileDataModel | null;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -24,34 +25,45 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const queryClient = useQueryClient();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  useEffect(() => {
-    post(`${endpoints.auth.refresh}`, {}, { skipAuthRefresh: true })
-      .then(() => setIsAuthenticated(true))
-      .catch(() => setIsAuthenticated(false))
-      .finally(() => setIsInitialized(true));
-  }, []);
+  const {
+    data: user,
+    isLoading,
+    isSuccess,
+  } = useReadQuery<IUserProfileDataModel>({
+    endpoint: endpointsOptions.getUserAccountData.endpoint,
+    queryKey: [endpointsOptions.getUserAccountData.key],
+    staleTime: 86_400_000,
+    retry: false,
+    config: { skipAuthRefresh: true },
+  });
+
+  const isAuthenticated = isSuccess && user !== null;
 
   const login = useCallback(() => {
-    setIsAuthenticated(true);
-    queryClient.clear();
+    queryClient.invalidateQueries({
+      queryKey: [endpointsOptions.getUserAccountData.key],
+    });
   }, [queryClient]);
 
   const logout = useCallback(() => {
-    setIsAuthenticated(false);
     queryClient.clear();
   }, [queryClient]);
 
   const value = useMemo(
-    () => ({ login, logout, isAuthenticated }),
-    [login, logout, isAuthenticated],
+    () => ({ login, logout, isAuthenticated, isLoading, user: user ?? null }),
+    [login, logout, isAuthenticated, isLoading, user],
   );
 
-  if (!isInitialized) {
-    return <SkeletonLoader />;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return context;
 };

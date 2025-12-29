@@ -1,5 +1,6 @@
 import {
   createContext,
+  PropsWithChildren,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -21,11 +22,7 @@ export const ThemeContext = createContext<ThemeContextType | undefined>(
   undefined,
 );
 
-export interface IThemeProviderProps {
-  children: React.ReactNode;
-}
-
-export const ThemeProvider = ({ children }: IThemeProviderProps) => {
+export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const [theme, setThemeState] = useState<Theme>(getStoredTheme);
   const [systemTheme, setSystemTheme] =
     useState<EffectiveTheme>(getSystemTheme);

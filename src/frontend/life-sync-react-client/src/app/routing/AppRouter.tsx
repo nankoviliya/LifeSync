@@ -10,13 +10,13 @@ import {
 import { AppRoot } from '@/app/AppRoot';
 import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 import { routePaths } from '@/config/routing/routePaths';
+import { Login } from '@/features/auth/login/components/Login';
+import { Register } from '@/features/auth/register/components/Register';
 import { Finances } from '@/features/finances/Finances';
 import { Transactions } from '@/features/finances/transactions/components/Transactions';
 import { Home } from '@/features/home/Home';
-import { Login } from '@/features/login/components/Login';
-import { Register } from '@/features/register/components/Register';
 import { UserProfile } from '@/features/userProfile/components/UserProfile';
-import { useAuth } from '@/hooks/useAuthentication';
+import { useAuth } from '@/stores/AuthProvider';
 
 export const AppRouter = () => {
   const { isAuthenticated } = useAuth();
@@ -46,15 +46,33 @@ export const AppRouter = () => {
           }
           errorElement={<MainErrorFallback />}
         >
-          {isAuthenticated && protectedPages}
-          <Route path={routePaths.login.path} element={<Login />} />
-          <Route path={routePaths.register.path} element={<Register />} />
+          <Route
+            path={routePaths.login.path}
+            element={
+              isAuthenticated ? (
+                <Navigate to={routePaths.home.path} replace />
+              ) : (
+                <Login />
+              )
+            }
+          />
+          <Route
+            path={routePaths.register.path}
+            element={
+              isAuthenticated ? (
+                <Navigate to={routePaths.home.path} replace />
+              ) : (
+                <Register />
+              )
+            }
+          />
           {!isAuthenticated && (
             <Route
               path="*"
               element={<Navigate to={routePaths.login.path} replace />}
             />
           )}
+          {isAuthenticated && protectedPages}
           {isAuthenticated && <Route path="*" element={<>not found</>} />}
         </Route>
       </>,
