@@ -10,7 +10,7 @@ import styles from './Header.module.scss';
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { isUserAuthenticated } = useHeader();
+  const { isAuthenticated } = useHeader();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -35,8 +35,8 @@ export const Header = () => {
       </div>
       <div className={styles['header__actions']}>
         <ThemeToggle />
-        {isUserAuthenticated && <UserAvatar />}
-        {!isUserAuthenticated && <HeaderUnauthenticatedButtons />}
+        {isAuthenticated && <UserAvatar />}
+        {!isAuthenticated && <HeaderUnauthenticatedButtons />}
       </div>
     </header>
   );

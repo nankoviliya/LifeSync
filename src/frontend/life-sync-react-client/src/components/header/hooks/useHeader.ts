@@ -1,11 +1,9 @@
 import { useAuth } from '@/stores/AuthProvider';
 
 export const useHeader = () => {
-  const login = useAuth();
-
-  const isUserAuthenticated = login.isAuthenticated;
+  const { isAuthenticated } = useAuth();
 
   return {
-    isUserAuthenticated,
+    isAuthenticated,
   };
 };

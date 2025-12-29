@@ -1,19 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query';
-import {
-  createContext,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useMemo,
-} from 'react';
+import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
 
 import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
 import { useReadQuery } from '@/hooks/api/useReadQuery';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
 interface AuthContextType {
-  login: () => void;
-  logout: () => void;
   isAuthenticated: boolean;
   isLoading: boolean;
   user: IUserProfileDataModel | null;
@@ -24,8 +15,6 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const queryClient = useQueryClient();
-
   const {
     data: user,
     isLoading,
@@ -40,19 +29,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const isAuthenticated = isSuccess && user !== null;
 
-  const login = useCallback(() => {
-    queryClient.invalidateQueries({
-      queryKey: [endpointsOptions.getUserAccountData.key],
-    });
-  }, [queryClient]);
-
-  const logout = useCallback(() => {
-    queryClient.clear();
-  }, [queryClient]);
-
   const value = useMemo(
-    () => ({ login, logout, isAuthenticated, isLoading, user: user ?? null }),
-    [login, logout, isAuthenticated, isLoading, user],
+    () => ({ isAuthenticated, isLoading, user: user ?? null }),
+    [isAuthenticated, isLoading, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

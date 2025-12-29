@@ -1,11 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import { endpoints } from '@/config/endpoints/endpoints';
-import { routePaths } from '@/config/routing/routePaths';
+import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
+import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
 import { post } from '@/lib/apiClient';
-import { useAuth } from '@/stores/AuthProvider';
 
 export interface ILoginRequestModel {
   email: string;
@@ -13,18 +12,15 @@ export interface ILoginRequestModel {
 }
 
 export const useLogin = () => {
+  const invalidateQuery = useQueryInvalidation();
   const { control, handleSubmit } = useForm<ILoginRequestModel>();
-
-  const { login: authLogin } = useAuth();
-  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: async (data: ILoginRequestModel) => {
       return post<void, ILoginRequestModel>(endpoints.auth.login, data);
     },
     onSuccess: () => {
-      authLogin();
-      navigate(routePaths.home.path);
+      invalidateQuery({ queryKey: [endpointsOptions.getUserAccountData.key] });
     },
     onError: () => {
       console.log('Auth error');
