@@ -3,6 +3,7 @@
 
 import * as path from 'path';
 
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
@@ -16,6 +17,7 @@ export default defineConfig({
     checker({
       typescript: true,
     }),
+    basicSsl(),
   ],
   resolve: {
     alias: {
