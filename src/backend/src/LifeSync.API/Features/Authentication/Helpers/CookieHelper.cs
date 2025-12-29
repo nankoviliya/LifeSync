@@ -9,7 +9,7 @@ public static class CookieHelper
         => GetCookie(request, AccessCookieType.RefreshToken);
 
     public static void SetAccessTokenCookie(HttpResponse response, string token) =>
-        SetCookie(response, AccessCookieType.AccessToken, token, TimeSpan.FromMinutes(1));
+        SetCookie(response, AccessCookieType.AccessToken, token, TimeSpan.FromMinutes(15));
 
     public static void SetRefreshTokenCookie(HttpResponse response, string token) =>
         SetCookie(response, AccessCookieType.RefreshToken, token, TimeSpan.FromDays(7));

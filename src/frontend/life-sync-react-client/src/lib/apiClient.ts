@@ -37,7 +37,6 @@ apiClient.interceptors.response.use(
     if (!refreshPromise) {
       refreshPromise = refreshToken()
         .catch((err) => {
-          window.location.href = '/login';
           throw err;
         })
         .finally(() => {
