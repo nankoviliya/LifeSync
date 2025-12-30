@@ -1,15 +1,12 @@
-import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
-import { classNames } from 'primereact/utils';
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/buttons/Button';
+import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { routePaths } from '@/config/routing/routePaths';
 import { useLogin } from '@/hooks/auth/useLogin';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-
-import styles from './Login.module.scss';
 
 export const Login = () => {
   const { translate } = useAppTranslations();
@@ -18,8 +15,11 @@ export const Login = () => {
   const noAccountMessage = "Don't have an account?";
 
   return (
-    <form className={styles['login-page']} onSubmit={onSubmit}>
-      <div className={styles['login-page__label']}>
+    <form
+      className="mt-4 flex max-h-[400px] max-w-[400px] flex-col justify-center gap-4 rounded-lg bg-card px-4 text-card-foreground shadow-md transition-colors"
+      onSubmit={onSubmit}
+    >
+      <div className="inline-flex justify-center">
         <h2>Login</h2>
       </div>
 
@@ -28,12 +28,12 @@ export const Login = () => {
         control={control}
         rules={{ required: 'Email is required.' }}
         render={({ field, fieldState }) => (
-          <InputText
+          <Input
             id={field.name}
             placeholder="Enter a email"
             {...field}
             autoFocus
-            className={classNames({ 'p-invalid': fieldState.invalid })}
+            aria-invalid={fieldState.invalid}
           />
         )}
       />
@@ -43,12 +43,11 @@ export const Login = () => {
         control={control}
         rules={{ required: 'Password is required.' }}
         render={({ field, fieldState }) => (
-          <Password
+          <PasswordInput
             id={field.name}
             placeholder="Enter a password"
             {...field}
-            className={classNames({ 'p-invalid': fieldState.invalid })}
-            toggleMask
+            aria-invalid={fieldState.invalid}
           />
         )}
       />
@@ -56,14 +55,18 @@ export const Login = () => {
       <Button
         label={translate('login-button-label')}
         type="submit"
-        loadingIcon="pi pi-spinner"
         loading={isLoginPending}
       />
 
-      <div className={styles['login-page__signup-container']}>
+      <div className="inline-flex justify-center">
         <span>
           {noAccountMessage + ' '}
-          <Link to={routePaths.register.path}>{routePaths.register.name}</Link>
+          <Link
+            to={routePaths.register.path}
+            className="text-primary hover:underline"
+          >
+            {routePaths.register.name}
+          </Link>
         </span>
       </div>
     </form>

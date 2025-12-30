@@ -1,14 +1,19 @@
-import { Dropdown } from 'primereact/dropdown';
-import { InputText } from 'primereact/inputtext';
+import { Check, X } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 
 import { Button } from '@/components/buttons/Button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProfileEditable';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
-
-import styles from './UserProfileDataEditable.module.scss';
 
 export interface IUserProfileDataEditableProps {
   userData: IUserProfileDataModel;
@@ -31,7 +36,7 @@ export const UserProfileDataEditable = ({
 
   return (
     <form
-      className={styles['user-profile-data']}
+      className="inline-flex flex-col gap-4"
       onSubmit={handleSubmit(onSubmit)}
     >
       {isLoading && <div>Loading configuration...</div>}
@@ -51,7 +56,7 @@ export const UserProfileDataEditable = ({
             <Controller
               control={control}
               name="firstName"
-              render={({ field }) => <InputText {...field} />}
+              render={({ field }) => <Input {...field} />}
             />
           </span>
           <span>
@@ -59,7 +64,7 @@ export const UserProfileDataEditable = ({
             <Controller
               control={control}
               name="lastName"
-              render={({ field }) => <InputText {...field} />}
+              render={({ field }) => <Input {...field} />}
             />
           </span>
           <span>
@@ -73,28 +78,34 @@ export const UserProfileDataEditable = ({
             name="languageId"
             control={control}
             render={({ field }) => (
-              <Dropdown
-                value={field.value}
-                onChange={(e) => field.onChange(e.value)}
-                options={frontendSettings.languageOptions}
-                optionLabel="name"
-                optionValue="id"
-                placeholder="Select a language"
-              />
+              <Select
+                value={field.value?.toString()}
+                onValueChange={(val) => field.onChange(Number(val))}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
+                <SelectContent>
+                  {frontendSettings.languageOptions.map((opt) => (
+                    <SelectItem key={opt.id} value={opt.id.toString()}>
+                      {opt.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             )}
           />
-          <br />
-          <div className={styles['user-profile-data__navigation-buttons']}>
+          <div className="mt-4 inline-flex flex-row gap-4">
             <Button
               type="submit"
               label="Save"
               loading={isSubmitting}
-              icon="pi pi-check"
+              icon={<Check className="h-4 w-4" />}
             />
             <Button
               label="Cancel"
-              icon="pi pi-times"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+              icon={<X className="h-4 w-4" />}
+              onClick={(e) => {
                 e.stopPropagation();
                 disableEditMode();
               }}

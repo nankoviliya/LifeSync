@@ -1,8 +1,6 @@
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
-import styles from './UserProfileDataReadonly.module.scss';
-
 export interface IUserProfileDataReadonlyProps {
   userData: IUserProfileDataModel;
 }
@@ -24,7 +22,7 @@ export const UserProfileDataReadonly = ({
   } = userData;
 
   return (
-    <div className={styles['user-profile-data']}>
+    <div className="inline-flex flex-col gap-4">
       <span>
         {translate('profile-user-id-label')}: {userId}
       </span>

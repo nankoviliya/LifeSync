@@ -1,8 +1,5 @@
-import { Sidebar } from 'primereact/sidebar';
-import { classNames } from 'primereact/utils';
-import { useCallback, useEffect, useState } from 'react';
-
-import styles from './SidebarContainer.module.scss';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 
 export interface ISidebarContainerProps {
   isOpen: boolean;
@@ -19,26 +16,17 @@ export const SidebarContainer = ({
   children,
   className,
 }: ISidebarContainerProps) => {
-  const [isVisible, setIsVisible] = useState<boolean>(isOpen);
-
-  useEffect(() => {
-    setIsVisible(isOpen);
-  }, [isOpen]);
-
-  const onCloseBase = useCallback(() => {
-    setIsVisible(false);
-    onClose?.();
-  }, [onClose]);
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose?.();
+    }
+  };
 
   return (
-    <div
-      className={classNames(styles['sidebar-container'], {
-        className,
-      })}
-    >
-      <Sidebar visible={isVisible} onHide={onCloseBase} position={position}>
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+      <SheetContent side={position} className={cn(className)}>
         {children}
-      </Sidebar>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 };

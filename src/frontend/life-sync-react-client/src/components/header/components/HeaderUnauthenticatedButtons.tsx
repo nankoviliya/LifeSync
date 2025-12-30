@@ -1,27 +1,18 @@
-import { classNames } from 'primereact/utils';
 import { Link } from 'react-router-dom';
 
 import { routePaths } from '@/config/routing/routePaths';
 
-import styles from './HeaderUnauthenticatedButtons.module.scss';
-
 export const HeaderUnauthenticatedButtons = () => {
   return (
-    <div className={styles['header-unauthenticated-buttons']}>
+    <div className="flex items-center gap-4">
       <Link
-        className={classNames(
-          styles['header-unauthenticated-buttons__button'],
-          styles['header-unauthenticated-buttons__button__login'],
-        )}
+        className="inline-block cursor-pointer rounded-md bg-primary px-4 py-2 text-base font-medium text-primary-foreground no-underline transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring"
         to={routePaths.login.path}
       >
         {routePaths.login.name}
       </Link>
       <Link
-        className={classNames(
-          styles['header-unauthenticated-buttons__button'],
-          styles['header-unauthenticated-buttons__button--signup'],
-        )}
+        className="inline-block cursor-pointer rounded-md bg-emerald-600 px-4 py-2 text-base font-medium text-white no-underline transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-ring"
         to={routePaths.register.path}
       >
         {routePaths.register.name}
