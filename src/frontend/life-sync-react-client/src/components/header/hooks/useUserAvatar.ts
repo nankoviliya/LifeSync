@@ -1,6 +1,3 @@
-import { Menu } from 'primereact/menu';
-import { MenuItem } from 'primereact/menuitem';
-import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { routePaths } from '@/config/routing/routePaths';
@@ -17,30 +14,14 @@ export const useUserAvatar = () => {
     navigate(routePaths.userProfile.path);
   };
 
-  const avatarMenuRef = useRef<Menu>(null);
-
   const handleLogout = () => {
     logout();
   };
 
-  const avatarMenuItems: MenuItem[] = [
-    {
-      label: translate('profile-button-name'),
-      command: navigateToUserProfile,
-    },
-    {
-      label: translate('logout-button-name'),
-      command: handleLogout,
-    },
-  ];
-
-  const toggleAvatarMenu = (e: React.MouseEvent<HTMLElement>) => {
-    avatarMenuRef.current?.toggle(e);
-  };
-
   return {
-    avatarMenuRef,
-    avatarMenuItems,
-    toggleAvatarMenu,
+    profileLabel: translate('profile-button-name'),
+    logoutLabel: translate('logout-button-name'),
+    navigateToUserProfile,
+    handleLogout,
   };
 };

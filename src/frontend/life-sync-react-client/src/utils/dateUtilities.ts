@@ -1,6 +1,6 @@
-import { Nullable } from 'primereact/ts-helpers';
-
-export function parseCalendarDate(localDate: Nullable<Date>): Date | null {
+export function parseCalendarDate(
+  localDate: Date | null | undefined,
+): Date | null {
   if (!localDate) {
     return null;
   }

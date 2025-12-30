@@ -1,17 +1,19 @@
-import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
-import { InputText } from 'primereact/inputtext';
-import { classNames } from 'primereact/utils';
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/buttons/Button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { routePaths } from '@/config/routing/routePaths';
 import { useRegistration } from '@/features/auth/register/hooks/useRegistration';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
-
-import styles from './Register.module.scss';
 
 export const Register = () => {
   const { translate } = useAppTranslations();
@@ -19,27 +21,30 @@ export const Register = () => {
   const { frontendSettings, isLoading } = useFrontendSettings();
 
   return (
-    <form className={styles['register-page']} onSubmit={onSubmit}>
+    <form
+      className="mt-4 flex max-w-[600px] flex-col justify-center gap-4 rounded-lg bg-card px-4 pb-4 text-card-foreground shadow-md transition-colors"
+      onSubmit={onSubmit}
+    >
       {isLoading && <div>Loading configuration...</div>}
       {!isLoading && frontendSettings && (
         <>
-          <div className={styles['register-page__label']}>
+          <div className="inline-flex justify-center">
             <h2>Register</h2>
           </div>
 
-          <div className={styles['register-page__form']}>
-            <div className={styles['register-page__form__section']}>
+          <div className="inline-flex flex-row gap-4">
+            <div className="inline-flex flex-col gap-4">
               <Controller
                 name="firstName"
                 control={control}
                 rules={{ required: 'First Name is required.' }}
                 render={({ field, fieldState }) => (
-                  <InputText
+                  <Input
                     id={field.name}
                     placeholder={'Enter a First Name'}
                     {...field}
                     autoFocus
-                    className={classNames({ 'p-invalid': fieldState.invalid })}
+                    aria-invalid={fieldState.invalid}
                   />
                 )}
               />
@@ -49,12 +54,11 @@ export const Register = () => {
                 control={control}
                 rules={{ required: 'Last Name is required.' }}
                 render={({ field, fieldState }) => (
-                  <InputText
+                  <Input
                     id={field.name}
                     placeholder={'Enter a Last Name'}
                     {...field}
-                    autoFocus
-                    className={classNames({ 'p-invalid': fieldState.invalid })}
+                    aria-invalid={fieldState.invalid}
                   />
                 )}
               />
@@ -64,13 +68,12 @@ export const Register = () => {
                 control={control}
                 rules={{ required: 'Email is required.' }}
                 render={({ field, fieldState }) => (
-                  <InputText
+                  <Input
                     id={field.name}
                     placeholder={'Enter a Email'}
                     type="email"
                     {...field}
-                    autoFocus
-                    className={classNames({ 'p-invalid': fieldState.invalid })}
+                    aria-invalid={fieldState.invalid}
                   />
                 )}
               />
@@ -80,32 +83,36 @@ export const Register = () => {
                 control={control}
                 rules={{ required: 'Password is required.' }}
                 render={({ field, fieldState }) => (
-                  <InputText
+                  <Input
                     id={field.name}
                     placeholder={'Enter a Password'}
                     type="password"
                     {...field}
-                    autoFocus
-                    className={classNames({ 'p-invalid': fieldState.invalid })}
+                    aria-invalid={fieldState.invalid}
                   />
                 )}
               />
             </div>
 
-            <div className={styles['register-page__form__section']}>
+            <div className="inline-flex flex-col gap-4">
               <Controller
                 name={'balance'}
                 control={control}
                 rules={{ required: 'Balance is required.' }}
                 render={({ field, fieldState }) => (
-                  <InputNumber
+                  <Input
                     id={field.name}
+                    type="number"
                     placeholder={'Enter initial balance'}
-                    ref={field.ref}
-                    value={field.value}
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number(e.target.value) : null,
+                      )
+                    }
                     onBlur={field.onBlur}
-                    onValueChange={(e) => field.onChange(e)}
-                    className={classNames({ 'p-invalid': fieldState.invalid })}
+                    ref={field.ref}
+                    aria-invalid={fieldState.invalid}
                   />
                 )}
               />
@@ -114,14 +121,18 @@ export const Register = () => {
                 name="currency"
                 control={control}
                 render={({ field }) => (
-                  <Dropdown
-                    value={field.value}
-                    onChange={(e) => field.onChange(e.value)}
-                    options={frontendSettings.currencyOptions}
-                    optionLabel="name"
-                    optionValue="code"
-                    placeholder="Select a currency"
-                  />
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a currency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {frontendSettings.currencyOptions.map((opt) => (
+                        <SelectItem key={opt.code} value={opt.code}>
+                          {opt.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 )}
               />
 
@@ -129,14 +140,21 @@ export const Register = () => {
                 name="languageId"
                 control={control}
                 render={({ field }) => (
-                  <Dropdown
-                    value={field.value}
-                    onChange={(e) => field.onChange(e.value)}
-                    options={frontendSettings.languageOptions}
-                    optionLabel="name"
-                    optionValue="id"
-                    placeholder="Select a language"
-                  />
+                  <Select
+                    value={field.value?.toString()}
+                    onValueChange={(val) => field.onChange(Number(val))}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {frontendSettings.languageOptions.map((opt) => (
+                        <SelectItem key={opt.id} value={opt.id.toString()}>
+                          {opt.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 )}
               />
             </div>
@@ -145,14 +163,18 @@ export const Register = () => {
           <Button
             label={translate('register-button-label')}
             type="submit"
-            loadingIcon="pi pi-spinner"
             loading={isSubmitting}
           />
 
-          <div className={styles['register-page__login-container']}>
+          <div className="inline-flex justify-center">
             <span>
               Already have an account?{' '}
-              <Link to={routePaths.login.path}>{routePaths.login.name}</Link>
+              <Link
+                to={routePaths.login.path}
+                className="text-primary hover:underline"
+              >
+                {routePaths.login.name}
+              </Link>
             </span>
           </div>
         </>

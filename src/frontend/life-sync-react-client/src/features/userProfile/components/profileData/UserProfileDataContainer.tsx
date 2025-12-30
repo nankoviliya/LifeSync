@@ -4,8 +4,6 @@ import { UserProfileDataEditable } from '@/features/userProfile/components/profi
 import { UserProfileDataReadonly } from '@/features/userProfile/components/profileData/UserProfileDataReadonly';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
-import styles from './UserProfileDataContainer.module.scss';
-
 export interface IUserProfileDataContainerProps {
   userData: IUserProfileDataModel;
 }
@@ -32,7 +30,7 @@ export const UserProfileDataContainer = ({
 
   return (
     <div
-      className={styles['user-profile-data-container']}
+      className="inline-flex cursor-text flex-col rounded border border-transparent p-4 transition-colors hover:border-border"
       onClick={enableEditMode}
       role="button"
       tabIndex={0}

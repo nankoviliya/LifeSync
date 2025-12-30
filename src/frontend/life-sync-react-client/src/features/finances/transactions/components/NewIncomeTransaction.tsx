@@ -1,15 +1,10 @@
-import { Calendar } from 'primereact/calendar';
-import { InputNumber } from 'primereact/inputnumber';
-import { InputText } from 'primereact/inputtext';
-import { classNames } from 'primereact/utils';
 import { Controller } from 'react-hook-form';
 
 import { Button } from '@/components/buttons/Button';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Input } from '@/components/ui/input';
 import { useNewIncomeTransaction } from '@/features/finances/transactions/hooks/useNewIncomeTransaction';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { parseCalendarDate } from '@/utils/dateUtilities';
-
-import styles from './NewIncomeTransaction.module.scss';
 
 export interface INewExpenseTransactionProps {
   closeForm: () => void;
@@ -23,7 +18,7 @@ export const NewIncomeTransaction = ({
   const { control, isSubmitting, handleSubmit } =
     useNewIncomeTransaction(closeForm);
   return (
-    <form className={styles['form']} onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <Controller
         name={'amount'}
         control={control}
@@ -33,13 +28,16 @@ export const NewIncomeTransaction = ({
             <label htmlFor="amount">
               {translate('new-transaction-input-amount-label')}
             </label>
-            <InputNumber
+            <Input
               id={field.name}
-              ref={field.ref}
-              value={field.value}
+              type="number"
+              value={field.value ?? ''}
+              onChange={(e) =>
+                field.onChange(e.target.value ? Number(e.target.value) : null)
+              }
               onBlur={field.onBlur}
-              onValueChange={(e) => field.onChange(e)}
-              className={classNames({ 'p-invalid': fieldState.invalid })}
+              ref={field.ref}
+              aria-invalid={fieldState.invalid}
             />
           </>
         )}
@@ -53,11 +51,11 @@ export const NewIncomeTransaction = ({
             <label htmlFor="currency">
               {translate('new-transaction-input-currency-label')}
             </label>
-            <InputText
+            <Input
               id={field.name}
               {...field}
               autoFocus
-              className={classNames({ 'p-invalid': fieldState.invalid })}
+              aria-invalid={fieldState.invalid}
             />
           </>
         )}
@@ -68,17 +66,13 @@ export const NewIncomeTransaction = ({
         rules={{ required: 'Date is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">
+            <label htmlFor="date">
               {translate('new-transaction-input-date-label')}
             </label>
-            <Calendar
-              id={field.name}
-              {...field}
-              className={classNames({ 'p-invalid': fieldState.invalid })}
-              onChange={(e) => {
-                const utcDate = parseCalendarDate(e.value);
-                field.onChange(utcDate);
-              }}
+            <DatePicker
+              value={field.value}
+              onChange={field.onChange}
+              aria-invalid={fieldState.invalid}
             />
           </>
         )}
@@ -89,14 +83,13 @@ export const NewIncomeTransaction = ({
         rules={{ required: 'Description is required.' }}
         render={({ field, fieldState }) => (
           <>
-            <label htmlFor="currency">
+            <label htmlFor="description">
               {translate('new-transaction-input-description-label')}
             </label>
-            <InputText
+            <Input
               id={field.name}
               {...field}
-              autoFocus
-              className={classNames({ 'p-invalid': fieldState.invalid })}
+              aria-invalid={fieldState.invalid}
             />
           </>
         )}

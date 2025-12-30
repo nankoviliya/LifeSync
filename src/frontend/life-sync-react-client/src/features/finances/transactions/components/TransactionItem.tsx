@@ -1,13 +1,10 @@
-import { classNames } from 'primereact/utils';
-
 import { appConstants } from '@/config/constants/appConstants';
 import {
   IExpenseTransactionGetModel,
   IIncomeTransactionGetModel,
   TransactionType,
 } from '@/features/finances/transactions/models/transactionsGetModel';
-
-import styles from './TransactionItem.module.scss';
+import { cn } from '@/lib/utils';
 
 export interface ITransactionItemProps {
   transactionData: IExpenseTransactionGetModel | IIncomeTransactionGetModel;
@@ -24,22 +21,25 @@ export const TransactionItem = ({ transactionData }: ITransactionItemProps) => {
 
   return (
     <div
-      className={classNames(styles['transaction-item'], {
-        [styles['transaction-item--income']]:
-          transactionType === TransactionType.Income,
-        [styles['transaction-item--expense']]:
-          transactionType === TransactionType.Expense,
-      })}
+      className={cn(
+        'inline-flex items-center justify-between border-l border-border px-2',
+        transactionType === TransactionType.Income &&
+          'border-r-[0.5rem] border-r-emerald-600',
+        transactionType === TransactionType.Expense &&
+          'border-r-[0.5rem] border-r-red-500',
+      )}
     >
-      <div className={styles['transaction-item__description']}>
+      <div className="inline-flex flex-col gap-2">
         <span>{description}</span>
-        <i>{expenseType ?? appConstants.emptySpanFallback}</i>
+        <i className="text-muted-foreground">
+          {expenseType ?? appConstants.emptySpanFallback}
+        </i>
       </div>
-      <div className={styles['transaction-item__main-info']}>
+      <div className="inline-flex flex-col gap-2 text-right">
         <strong>
           {transactionSign} {amount} {currency}
         </strong>
-        <span>{date}</span>
+        <span className="text-sm text-muted-foreground">{date}</span>
       </div>
     </div>
   );

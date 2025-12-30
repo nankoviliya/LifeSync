@@ -1,18 +1,16 @@
-import { Calendar } from 'primereact/calendar';
-import { InputText } from 'primereact/inputtext';
-import { MultiSelect } from 'primereact/multiselect';
+import { Check, RefreshCw } from 'lucide-react';
 import { Control, Controller } from 'react-hook-form';
 
 import { Button } from '@/components/buttons/Button';
+import { DatePicker } from '@/components/ui/date-picker';
+import { Input } from '@/components/ui/input';
+import { MultiSelect } from '@/components/ui/multi-select';
 import { ITransactionsFiltersModel } from '@/features/finances/transactions/models/transactionsFiltersModel';
 import {
   ExpenseType,
   TransactionType,
 } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-import { parseCalendarDate } from '@/utils/dateUtilities';
-
-import styles from './TransactionsFilters.module.scss';
 
 export interface ITransactionsFiltersProps {
   control: Control<ITransactionsFiltersModel>;
@@ -43,100 +41,98 @@ export const TransactionsFilters = ({
   };
 
   return (
-    <div className={styles['transactions-filters']}>
-      <h2>{translate('filters-label')}</h2>
+    <div className="flex flex-col gap-4 p-4">
+      <h2 className="text-lg font-semibold">{translate('filters-label')}</h2>
 
       <Controller
         name={'description'}
         control={control}
         render={({ field }) => (
-          <>
-            <label htmlFor="description">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="description" className="text-sm font-medium">
               {translate('finances-filters-description-label')}
             </label>
-            <InputText id={field.name} {...field} autoFocus />
-          </>
+            <Input
+              id={field.name}
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
+              autoFocus
+            />
+          </div>
         )}
       />
       <Controller
         name={'startDate'}
         control={control}
         render={({ field }) => (
-          <>
-            <label htmlFor="startDate">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="startDate" className="text-sm font-medium">
               {translate('finances-filters-start-date-label')}
             </label>
-            <Calendar
-              id={field.name}
-              {...field}
-              onChange={(e) => {
-                const utcDate = parseCalendarDate(e.value);
-                field.onChange(utcDate);
-              }}
-            />
-          </>
+            <DatePicker value={field.value} onChange={field.onChange} />
+          </div>
         )}
       />
       <Controller
         name={'endDate'}
         control={control}
         render={({ field }) => (
-          <>
-            <label htmlFor="endDate">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="endDate" className="text-sm font-medium">
               {translate('finances-filters-end-date-label')}
             </label>
-            <Calendar
-              id={field.name}
-              {...field}
-              onChange={(e) => {
-                const utcDate = parseCalendarDate(e.value);
-                field.onChange(utcDate);
-              }}
-            />
-          </>
+            <DatePicker value={field.value} onChange={field.onChange} />
+          </div>
         )}
       />
       <Controller
         name={'transactionTypes'}
         control={control}
         render={({ field }) => (
-          <>
-            <label htmlFor="transactionTypes">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="transactionTypes" className="text-sm font-medium">
               {translate('finances-filters-transaction-types-label')}
             </label>
             <MultiSelect
               id={field.name}
-              {...field}
+              name={field.name}
+              value={field.value ?? []}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
               options={transactionTypeOptions}
-              autoFocus
             />
-          </>
+          </div>
         )}
       />
       <Controller
         name={'expenseTypes'}
         control={control}
         render={({ field }) => (
-          <>
-            <label htmlFor="expenseTypes">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="expenseTypes" className="text-sm font-medium">
               {translate('finances-filters-expense-types-label')}
             </label>
             <MultiSelect
               id={field.name}
-              {...field}
+              name={field.name}
+              value={field.value ?? []}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
               options={expenseTypeOptions}
-              autoFocus
             />
-          </>
+          </div>
         )}
       />
 
-      <div className={styles['transactions-filters__control-buttons']}>
+      <div className="mt-4 flex gap-2">
         <Button
           label={translate('filters-apply-button-label')}
           type="button"
           onClick={onFiltersApply}
-          icon="pi pi-check"
+          icon={<Check className="h-4 w-4" />}
           severity="success"
           rounded
         />
@@ -144,7 +140,7 @@ export const TransactionsFilters = ({
           label={translate('filters-reset-button-label')}
           type="button"
           onClick={onFiltersReset}
-          icon="pi pi-refresh"
+          icon={<RefreshCw className="h-4 w-4" />}
           severity="secondary"
           rounded
         />

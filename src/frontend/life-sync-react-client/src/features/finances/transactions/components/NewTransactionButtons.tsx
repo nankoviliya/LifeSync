@@ -1,12 +1,14 @@
-import { Dialog } from 'primereact/dialog';
-
 import { Button } from '@/components/buttons/Button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { NewExpenseTransaction } from '@/features/finances/transactions/components/NewExpenseTransaction';
 import { NewIncomeTransaction } from '@/features/finances/transactions/components/NewIncomeTransaction';
 import { useNewTransactionButtons } from '@/features/finances/transactions/hooks/useNewTransactionButtons';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-
-import styles from './NewTransactionButtons.module.scss';
 
 export const NewTransactionButtons = () => {
   const { translate } = useAppTranslations();
@@ -18,53 +20,52 @@ export const NewTransactionButtons = () => {
     setIsIncomeFormVisible,
   } = useNewTransactionButtons();
 
-  const handleOpenNewExpenseTransactionModal = () =>
-    setIsExpenseFormVisible(true);
   const handleCloseNewExpenseTransactionModal = () =>
     setIsExpenseFormVisible(false);
 
-  const handleOpenNewIncomeTransactionModal = () =>
-    setIsIncomeFormVisible(true);
   const handleCloseNewIncomeTransactionModal = () =>
     setIsIncomeFormVisible(false);
 
   return (
-    <div className={styles['new-transaction-buttons']}>
-      <div className={styles['new-transaction-buttons__container']}>
+    <div className="my-4">
+      <div className="flex flex-wrap gap-2">
         <Button
           label={translate('add-new-income-transaction-button-label')}
-          onClick={handleOpenNewIncomeTransactionModal}
+          onClick={() => setIsIncomeFormVisible(true)}
           outlined
           severity="success"
         />
         <Button
           label={translate('add-new-expense-transaction-button-label')}
-          onClick={handleOpenNewExpenseTransactionModal}
+          onClick={() => setIsExpenseFormVisible(true)}
           outlined
           severity="danger"
         />
       </div>
 
       <Dialog
-        header="New expense transaction"
-        visible={isExpenseFormVisible}
-        style={{ width: '50vw' }}
-        onHide={handleCloseNewExpenseTransactionModal}
+        open={isExpenseFormVisible}
+        onOpenChange={setIsExpenseFormVisible}
       >
-        <NewExpenseTransaction
-          closeForm={handleCloseNewExpenseTransactionModal}
-        />
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>New expense transaction</DialogTitle>
+          </DialogHeader>
+          <NewExpenseTransaction
+            closeForm={handleCloseNewExpenseTransactionModal}
+          />
+        </DialogContent>
       </Dialog>
 
-      <Dialog
-        header="New income transaction"
-        visible={isIncomeFormVisible}
-        style={{ width: '50vw' }}
-        onHide={handleCloseNewIncomeTransactionModal}
-      >
-        <NewIncomeTransaction
-          closeForm={handleCloseNewIncomeTransactionModal}
-        />
+      <Dialog open={isIncomeFormVisible} onOpenChange={setIsIncomeFormVisible}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>New income transaction</DialogTitle>
+          </DialogHeader>
+          <NewIncomeTransaction
+            closeForm={handleCloseNewIncomeTransactionModal}
+          />
+        </DialogContent>
       </Dialog>
     </div>
   );

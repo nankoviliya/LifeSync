@@ -1,41 +1,41 @@
-import styles from './Footer.module.scss';
+import { ExternalLink, Github, Linkedin } from 'lucide-react';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={styles['footer']}>
-      <div className={styles['footer__content']}>
-        <p className={styles['footer__text']}>
+    <footer className="bg-muted py-2.5 text-center text-muted-foreground transition-colors">
+      <div className="mx-auto max-w-[1200px]">
+        <p className="my-2.5 text-sm">
           &copy; {currentYear} nankoviliya. All Rights Reserved.
         </p>
-        <div className={styles['footer__links']}>
+        <div className="mt-2.5">
           <a
             href="https://google.com"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles['footer__link']}
+            className="mx-4 inline-flex items-center gap-1 text-muted-foreground no-underline transition-colors hover:text-foreground focus:outline-none"
           >
             Portfolio
-            <i className="pi pi-external-link"></i>
+            <ExternalLink className="h-4 w-4" />
           </a>
           <a
             href="https://github.com/nankoviliya"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles['footer__link']}
+            className="mx-4 inline-flex items-center gap-1 text-muted-foreground no-underline transition-colors hover:text-foreground focus:outline-none"
           >
             GitHub
-            <i className="pi pi-github"></i>
+            <Github className="h-4 w-4" />
           </a>
           <a
             href="https://www.linkedin.com/in/iliya-nankov/"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles['footer__link']}
+            className="mx-4 inline-flex items-center gap-1 text-muted-foreground no-underline transition-colors hover:text-foreground focus:outline-none"
           >
             LinkedIn
-            <i className="pi pi-linkedin"></i>
+            <Linkedin className="h-4 w-4" />
           </a>
         </div>
       </div>
