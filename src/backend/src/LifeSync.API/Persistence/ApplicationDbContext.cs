@@ -36,7 +36,7 @@ public class ApplicationDbContext : DbContext
         if (!optionsBuilder.IsConfigured && secretsManager is not null)
         {
             var connectionString = secretsManager.GetConnectionStringAsync().GetAwaiter().GetResult();
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
         }
     }
 

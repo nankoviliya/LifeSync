@@ -31,18 +31,16 @@ public class SecretsManager(
 
         if (appSecrets.IsDocker)
         {
-            return $"Data Source={dbSecret.Host},{dbSecret.Port};" +
-                   $"Initial Catalog={dbSecret.DbInstanceIdentifier};" +
-                   $"User Id={dbSecret.Username};" +
-                   $"Password={dbSecret.Password};" +
-                   $"TrustServerCertificate=True;" +
-                   $"Integrated Security=False;";
-        } 
-        
-        return $"Server=localhost;" +
+            return $"Host={dbSecret.Host};Port={dbSecret.Port};" +
+                   $"Database={dbSecret.DbInstanceIdentifier};" +
+                   $"Username={dbSecret.Username};" +
+                   $"Password={dbSecret.Password}";
+        }
+
+        return $"Host=localhost;Port={dbSecret.Port};" +
                $"Database={dbSecret.DbInstanceIdentifier};" +
-               $"Trusted_Connection=True;" +
-               $"TrustServerCertificate=True;";
+               $"Username={dbSecret.Username};" +
+               $"Password={dbSecret.Password}";
     }
 
     public async Task<JwtSecrets> GetJwtSecretsAsync()

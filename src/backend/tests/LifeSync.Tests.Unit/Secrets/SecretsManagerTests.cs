@@ -55,7 +55,7 @@ public class SecretsManagerTests
 
         var connectionString = await secretsManager.GetConnectionStringAsync();
 
-        connectionString.Should().Be("Server=localhost;Database=TestDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        connectionString.Should().Be("Host=localhost;Port=1433;Database=TestDb;Username=TestDbUser;Password=TestDbPasswd");
     }
     
     [Fact]
@@ -66,7 +66,7 @@ public class SecretsManagerTests
 
         var connectionString = await secretsManager.GetConnectionStringAsync();
 
-        connectionString.Should().Be("Data Source=TestDbHost,1433;Initial Catalog=TestDb;User Id=TestDbUser;Password=TestDbPasswd;TrustServerCertificate=True;Integrated Security=False;");
+        connectionString.Should().Be("Host=TestDbHost;Port=1433;Database=TestDb;Username=TestDbUser;Password=TestDbPasswd");
     }
 
     [Fact]
