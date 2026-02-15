@@ -98,7 +98,6 @@ export const TransactionsFilters = ({
             </label>
             <MultiSelect
               id={field.name}
-              name={field.name}
               value={field.value ?? []}
               onChange={field.onChange}
               onBlur={field.onBlur}
@@ -117,7 +116,6 @@ export const TransactionsFilters = ({
             </label>
             <MultiSelect
               id={field.name}
-              name={field.name}
               value={field.value ?? []}
               onChange={field.onChange}
               onBlur={field.onBlur}

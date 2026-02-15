@@ -17,7 +17,6 @@ export interface MultiSelectOption {
 
 export interface MultiSelectProps {
   id?: string;
-  name?: string;
   value?: string[];
   options: MultiSelectOption[];
   onChange?: (value: string[]) => void;
@@ -31,7 +30,6 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
   (
     {
       id,
-      name,
       value = [],
       options,
       onChange,
