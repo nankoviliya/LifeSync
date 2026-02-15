@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { parseCalendarDate } from '@/utils/dateUtilities';
 
 interface DatePickerProps {
   value?: Date | null;
@@ -25,6 +26,11 @@ export function DatePicker({
   className,
   'aria-invalid': ariaInvalid,
 }: DatePickerProps) {
+  const handleSelect = (date: Date | undefined) => {
+    const utcDate = parseCalendarDate(date);
+    onChange?.(utcDate ?? undefined);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -45,7 +51,7 @@ export function DatePicker({
         <Calendar
           mode="single"
           selected={value ?? undefined}
-          onSelect={onChange}
+          onSelect={handleSelect}
           initialFocus
         />
       </PopoverContent>

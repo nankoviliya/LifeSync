@@ -28,11 +28,13 @@ export function parseCalendarDate(
 export function getCurrentMonthFirstDayDate(): Date {
   const todayDate = new Date();
 
-  return new Date(todayDate.getFullYear(), todayDate.getMonth(), 1);
+  return new Date(Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), 1));
 }
 
 export function getCurrentMonthLastDayDate(): Date {
   const todayDate = new Date();
 
-  return new Date(todayDate.getFullYear(), todayDate.getMonth() + 1, 0);
+  return new Date(
+    Date.UTC(todayDate.getFullYear(), todayDate.getMonth() + 1, 0),
+  );
 }
