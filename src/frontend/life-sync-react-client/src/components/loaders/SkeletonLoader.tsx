@@ -19,7 +19,9 @@ export const SkeletonLoader = () => {
       </div>
 
       <div className="m-4 flex items-center justify-center">
-        <div className={`h-[400px] w-full max-w-[600px] rounded-lg ${skeletonClass}`} />
+        <div
+          className={`h-[400px] w-full max-w-[600px] rounded-lg ${skeletonClass}`}
+        />
       </div>
 
       <div className="flex flex-col items-center gap-2.5 py-2.5">

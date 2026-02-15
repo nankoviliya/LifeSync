@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint src --ignore-path .gitignore",
+    "lint:fix": "eslint src/ --fix --ignore-path .gitignore",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "check-types": "tsc --project tsconfig.json --pretty --noEmit"
   },
   "dependencies": {

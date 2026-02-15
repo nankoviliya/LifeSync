@@ -1,4 +1,4 @@
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';

@@ -117,10 +117,7 @@ export const NewExpenseTransaction = ({
             <label htmlFor="expenseType">
               {translate('new-expense-transaction-input-expense-type-label')}
             </label>
-            <Select
-              value={field.value}
-              onValueChange={field.onChange}
-            >
+            <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger
                 className="w-full"
                 aria-invalid={fieldState.invalid}
