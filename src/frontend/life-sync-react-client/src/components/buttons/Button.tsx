@@ -41,6 +41,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       if (outlined) return 'outline';
       if (severity === 'secondary') return 'secondary';
       if (severity === 'danger') return 'destructive';
+      if (severity === 'success') return 'default';
       return 'default';
     };
 
@@ -55,7 +56,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         variant={getVariant()}
         size={getSize()}
         disabled={loading || disabled}
-        className={cn(rounded && 'rounded-full', className)}
+        className={cn(
+          severity === 'success' &&
+            'bg-emerald-600 text-white hover:bg-emerald-700',
+          rounded && 'rounded-full',
+          className,
+        )}
         asChild={asChild}
         {...props}
       >
