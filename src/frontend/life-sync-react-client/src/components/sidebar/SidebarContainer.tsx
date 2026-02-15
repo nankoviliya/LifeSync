@@ -1,4 +1,4 @@
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
 export interface ISidebarContainerProps {
@@ -25,6 +25,7 @@ export const SidebarContainer = ({
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetContent side={position} className={cn(className)}>
+        <SheetTitle className="sr-only">Sidebar</SheetTitle>
         {children}
       </SheetContent>
     </Sheet>
