@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/buttons/Button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import {
   Select,
   SelectContent,
@@ -83,10 +84,9 @@ export const Register = () => {
                 control={control}
                 rules={{ required: 'Password is required.' }}
                 render={({ field, fieldState }) => (
-                  <Input
+                  <PasswordInput
                     id={field.name}
                     placeholder={'Enter a Password'}
-                    type="password"
                     {...field}
                     aria-invalid={fieldState.invalid}
                   />
@@ -122,7 +122,7 @@ export const Register = () => {
                 control={control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full" onBlur={field.onBlur}>
                       <SelectValue placeholder="Select a currency" />
                     </SelectTrigger>
                     <SelectContent>
@@ -144,7 +144,7 @@ export const Register = () => {
                     value={field.value?.toString()}
                     onValueChange={(val) => field.onChange(Number(val))}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full" onBlur={field.onBlur}>
                       <SelectValue placeholder="Select a language" />
                     </SelectTrigger>
                     <SelectContent>
