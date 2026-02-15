@@ -82,7 +82,7 @@ export const UserProfileDataEditable = ({
                 value={field.value?.toString()}
                 onValueChange={(val) => field.onChange(Number(val))}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full" onBlur={field.onBlur}>
                   <SelectValue placeholder="Select a language" />
                 </SelectTrigger>
                 <SelectContent>

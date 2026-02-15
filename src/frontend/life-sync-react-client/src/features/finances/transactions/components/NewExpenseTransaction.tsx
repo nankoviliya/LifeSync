@@ -124,6 +124,7 @@ export const NewExpenseTransaction = ({
               <SelectTrigger
                 className="w-full"
                 aria-invalid={fieldState.invalid}
+                onBlur={field.onBlur}
               >
                 <SelectValue placeholder="Select expense type" />
               </SelectTrigger>
