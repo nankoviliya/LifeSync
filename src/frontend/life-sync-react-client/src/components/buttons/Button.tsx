@@ -1,14 +1,13 @@
-import { Loader2 } from 'lucide-react';
 import { forwardRef } from 'react';
 
 import { Button as ShadcnButton } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { cn } from '@/lib/utils';
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   loading?: boolean;
-  loadingIcon?: string;
   icon?: React.ReactNode;
   severity?: 'secondary' | 'success' | 'danger';
   outlined?: boolean;
@@ -22,7 +21,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       label,
       loading,
-      loadingIcon,
       icon,
       severity,
       outlined,
@@ -65,7 +63,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         asChild={asChild}
         {...props}
       >
-        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {loading && <Spinner data-icon="inline-start" />}
         {!loading && icon}
         {label || children}
       </ShadcnButton>
