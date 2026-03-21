@@ -1,49 +1,19 @@
-import { useState } from 'react';
-
-import { UserProfileDataEditable } from '@/features/userProfile/components/profileData/UserProfileDataEditable';
-import { UserProfileDataReadonly } from '@/features/userProfile/components/profileData/UserProfileDataReadonly';
+import { UserProfileIcon } from '@/features/userProfile/components/profileData/UserProfileIcon';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
-export interface IUserProfileDataContainerProps {
+import { UserProfileData } from '@/features/userProfile/components/profileData/UserProfileData';
+
+interface IProps {
   userData: IUserProfileDataModel;
 }
 
-export const UserProfileDataContainer = ({
-  userData,
-}: IUserProfileDataContainerProps) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
-  const enableEditMode = () => {
-    setIsEditing(true);
-  };
-
-  const disableEditMode = () => {
-    setIsEditing(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      enableEditMode();
-    }
-  };
+export const UserProfileDataContainer = ({ userData }: IProps) => {
+  const { firstName, lastName } = userData;
 
   return (
-    <div
-      className="inline-flex cursor-text flex-col rounded border border-transparent p-4 transition-colors hover:border-border"
-      onClick={enableEditMode}
-      role="button"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-    >
-      {isEditing ? (
-        <UserProfileDataEditable
-          userData={userData}
-          disableEditMode={disableEditMode}
-        />
-      ) : (
-        <UserProfileDataReadonly userData={userData} />
-      )}
+    <div className="w-[260px] rounded-xl border bg-card p-5 shadow-sm flex flex-col gap-4">
+      <UserProfileIcon userFirstName={firstName} userLastName={lastName} />
+      <UserProfileData userData={userData} />
     </div>
   );
 };
