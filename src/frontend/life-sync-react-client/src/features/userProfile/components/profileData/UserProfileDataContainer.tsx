@@ -1,7 +1,6 @@
+import { UserProfileData } from '@/features/userProfile/components/profileData/UserProfileData';
 import { UserProfileIcon } from '@/features/userProfile/components/profileData/UserProfileIcon';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
-
-import { UserProfileData } from '@/features/userProfile/components/profileData/UserProfileData';
 
 interface IProps {
   userData: IUserProfileDataModel;

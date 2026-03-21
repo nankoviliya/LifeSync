@@ -8,10 +8,7 @@ import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
 import { put } from '@/lib/apiClient';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
-export const useUserProfileEditable = (
-  userData: IUserProfileDataModel,
-  disableEditMode: () => void,
-) => {
+export const useUserProfileEditable = (userData: IUserProfileDataModel) => {
   const invalidateQuery = useQueryInvalidation();
 
   const { control, handleSubmit } = useForm<IModifyUserProfileDataModel>({
@@ -33,7 +30,6 @@ export const useUserProfileEditable = (
       invalidateQuery({
         queryKey: [endpointsOptions.getUserAccountData.key],
       });
-      disableEditMode();
     },
     onError: () => {
       console.log('Auth error');

@@ -11,12 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProfileEditable';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
-
-import { Separator } from '@/components/ui/separator';
 
 interface IProps {
   userData: IUserProfileDataModel;
@@ -24,10 +23,11 @@ interface IProps {
 
 export const UserProfileData = ({ userData }: IProps) => {
   const [isEditing, setIsEditing] = useState(false);
+
   const { translate } = useAppTranslations();
   const { frontendSettings, isLoading } = useFrontendSettings();
   const { control, handleSubmit, onSubmit, isSubmitting } =
-    useUserProfileEditable(userData, () => setIsEditing(false));
+    useUserProfileEditable(userData);
 
   const {
     userId,
@@ -67,7 +67,9 @@ export const UserProfileData = ({ userData }: IProps) => {
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
       {readonlyRows.map(({ label, value }) => (
         <Row key={label} label={label}>
-          <span className="font-medium text-right">{value}</span>
+          <span className="font-medium text-right truncate max-w-[160px]">
+            {value}
+          </span>
         </Row>
       ))}
 
