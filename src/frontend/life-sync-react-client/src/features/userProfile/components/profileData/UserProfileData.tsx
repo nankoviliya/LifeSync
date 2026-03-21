@@ -143,14 +143,21 @@ export const UserProfileData = ({ userData }: IProps) => {
             <Button
               label="Cancel"
               icon={<X className="h-4 w-4" />}
-              onClick={() => setIsEditing(false)}
+              onClick={(e) => {
+                setIsEditing(false);
+                e.preventDefault();
+              }}
             />
           </>
         ) : (
           <Button
+            type="button"
             label="Edit profile"
             icon={<Pencil className="h-4 w-4" />}
-            onClick={() => setIsEditing(true)}
+            onClick={(e) => {
+              setIsEditing(true);
+              e.preventDefault();
+            }}
           />
         )}
       </div>
