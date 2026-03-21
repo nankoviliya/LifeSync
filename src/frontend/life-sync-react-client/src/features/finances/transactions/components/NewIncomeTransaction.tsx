@@ -38,6 +38,7 @@ export const NewIncomeTransaction = ({
               onBlur={field.onBlur}
               ref={field.ref}
               aria-invalid={fieldState.invalid}
+              autoFocus
             />
           </>
         )}
@@ -54,7 +55,6 @@ export const NewIncomeTransaction = ({
             <Input
               id={field.name}
               {...field}
-              autoFocus
               aria-invalid={fieldState.invalid}
             />
           </>
