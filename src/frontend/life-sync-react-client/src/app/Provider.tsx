@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { PrimeReactProvider } from 'primereact/api';
 import * as React from 'react';
 import { PropsWithChildren, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -25,15 +24,13 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
     <Suspense fallback={<SkeletonLoader />}>
       <ErrorBoundary FallbackComponent={MainErrorFallback}>
         <ThemeProvider>
-          <PrimeReactProvider>
-            <QueryClientProvider client={queryClient}>
-              <I18nextProvider i18n={i18n}>
-                <AuthProvider>
-                  <LanguageSync>{children}</LanguageSync>
-                </AuthProvider>
-              </I18nextProvider>
-            </QueryClientProvider>
-          </PrimeReactProvider>
+          <QueryClientProvider client={queryClient}>
+            <I18nextProvider i18n={i18n}>
+              <AuthProvider>
+                <LanguageSync>{children}</LanguageSync>
+              </AuthProvider>
+            </I18nextProvider>
+          </QueryClientProvider>
         </ThemeProvider>
       </ErrorBoundary>
     </Suspense>

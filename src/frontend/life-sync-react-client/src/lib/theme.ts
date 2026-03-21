@@ -5,6 +5,8 @@ import {
   THEME_STORAGE_KEY,
 } from '@/types/theme';
 
+export type { Theme, EffectiveTheme };
+
 /**
  * Gets the stored theme preference from localStorage
  */
@@ -34,10 +36,11 @@ export const getEffectiveTheme = (theme: Theme): EffectiveTheme => {
 
 /**
  * Initializes theme on app startup (before React renders)
- * Sets data-theme attribute on document root to prevent FOUC
+ * Sets class on document root to prevent FOUC
  */
 export const initializeTheme = (): void => {
   const theme = getStoredTheme();
   const effectiveTheme = getEffectiveTheme(theme);
-  document.documentElement.dataset.theme = effectiveTheme;
+  document.documentElement.classList.remove('light', 'dark');
+  document.documentElement.classList.add(effectiveTheme);
 };

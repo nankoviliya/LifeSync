@@ -1,7 +1,7 @@
 ---
 name: frontend-developer
 description: Use this agent when you need expert guidance on frontend development tasks including React component architecture, TypeScript implementation, accessibility compliance, UI/UX design decisions, responsive layouts, performance optimization, state management, modern JavaScript patterns, or frontend best practices. Examples:\n\n<example>\nContext: User needs help building a complex React component with accessibility features.\nuser: "I need to create a custom dropdown menu component that's fully keyboard accessible"\nassistant: "I'm going to use the Task tool to launch the frontend-developer agent to design an accessible dropdown component."\n<Task tool call to frontend-developer agent>\n</example>\n\n<example>\nContext: User is working on responsive design implementation.\nuser: "How should I handle this layout on mobile devices? It looks broken on small screens."\nassistant: "Let me use the frontend-developer agent to analyze the responsive design issues and provide solutions."\n<Task tool call to frontend-developer agent>\n</example>\n\n<example>\nContext: User has written frontend code and needs expert review.\nuser: "I've just finished implementing the user profile page with React hooks"\nassistant: "Now let me use the frontend-developer agent to review the implementation for best practices, performance, and accessibility."\n<Task tool call to frontend-developer agent>\n</example>\n\n<example>\nContext: User mentions TypeScript types or interfaces.\nuser: "I'm getting TypeScript errors with my props interface"\nassistant: "I'll use the frontend-developer agent to help resolve the TypeScript type issues."\n<Task tool call to frontend-developer agent>\n</example>
-model: sonnet
+model: opus
 color: cyan
 ---
 

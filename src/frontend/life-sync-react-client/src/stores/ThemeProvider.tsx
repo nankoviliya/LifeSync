@@ -47,7 +47,8 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const isDarkMode = effectiveTheme === 'dark';
 
   useLayoutEffect(() => {
-    document.documentElement.setAttribute('data-theme', effectiveTheme);
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(effectiveTheme);
   }, [effectiveTheme]);
 
   const contextValue = useMemo(

@@ -5,8 +5,6 @@ import { TransactionsSummary } from '@/features/finances/transactions/components
 import { useTransactions } from '@/features/finances/transactions/hooks/useTransactions';
 import { useTransactionsFilters } from '@/features/finances/transactions/hooks/useTransactionsFilters';
 
-import styles from './Transactions.module.scss';
-
 export const Transactions = () => {
   const { control, watch, handleReset } = useTransactionsFilters();
 
@@ -19,15 +17,15 @@ export const Transactions = () => {
   };
 
   return (
-    <div className={styles['transactions']}>
-      <div className={styles['transactions__filters']}>
+    <div className="inline-flex w-full flex-row gap-4">
+      <div className="inline-flex">
         <TransactionsFilters
           control={control}
           onFiltersApply={onFiltersApply}
           resetFilters={handleReset}
         />
       </div>
-      <div className={styles['transactions__main-content']}>
+      <div className="inline-flex w-full flex-col gap-4">
         {isSuccess && data && (
           <TransactionsSummary
             expenseSummaryData={data.expenseSummary}
@@ -35,7 +33,7 @@ export const Transactions = () => {
           />
         )}
         {data && <NewTransactionButtons />}
-        <div className={styles['transactions__main-content__list']}>
+        <div className="grid grid-cols-1 gap-4">
           {isLoading && <p>Loading...</p>}
           {!isLoading && !data && <p>No records</p>}
           {isSuccess &&

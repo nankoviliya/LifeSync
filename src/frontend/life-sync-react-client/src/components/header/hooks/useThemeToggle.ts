@@ -1,53 +1,21 @@
-import { Menu } from 'primereact/menu';
-import { MenuItem } from 'primereact/menuitem';
-import { useMemo, useRef } from 'react';
-
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useTheme } from '@/hooks/useTheme';
+import { Theme } from '@/lib/theme';
 
 export const useThemeToggle = () => {
   const { translate } = useAppTranslations();
   const { theme, effectiveTheme, setTheme } = useTheme();
 
-  const menuRef = useRef<Menu>(null);
-
-  const themeMenuItems = useMemo<MenuItem[]>(
-    () => [
-      {
-        label: translate('theme-light-label'),
-        icon: 'pi pi-sun',
-        className: theme === 'light' ? 'selected-theme' : '',
-        command: () => setTheme('light'),
-      },
-      {
-        label: translate('theme-dark-label'),
-        icon: 'pi pi-moon',
-        className: theme === 'dark' ? 'selected-theme' : '',
-        command: () => setTheme('dark'),
-      },
-      {
-        label: translate('theme-system-label'),
-        icon: 'pi pi-desktop',
-        className: theme === 'system' ? 'selected-theme' : '',
-        command: () => setTheme('system'),
-      },
-    ],
-    [theme, setTheme, translate],
-  );
-
-  const toggleMenu = (e: React.MouseEvent<HTMLElement>) => {
-    menuRef.current?.toggle(e);
-  };
-
-  const icon = useMemo(
-    () => (effectiveTheme === 'dark' ? 'pi pi-moon' : 'pi pi-sun'),
-    [effectiveTheme],
-  );
+  const themeOptions: { value: Theme; label: string }[] = [
+    { value: 'light', label: translate('theme-light-label') },
+    { value: 'dark', label: translate('theme-dark-label') },
+    { value: 'system', label: translate('theme-system-label') },
+  ];
 
   return {
-    menuRef,
-    themeMenuItems,
-    toggleMenu,
-    icon,
+    theme,
+    effectiveTheme,
+    setTheme,
+    themeOptions,
   };
 };
