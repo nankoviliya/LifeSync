@@ -5,8 +5,6 @@ import {
 } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
-import styles from './TransactionsSummary.module.scss';
-
 export interface ITransactionsSummaryProps {
   expenseSummaryData: IExpenseSummaryData;
   incomeSummaryData: IIncomeSummaryData;
@@ -37,17 +35,17 @@ export const TransactionsSummary = ({
     {
       label: 'expense-summary-total-spent-needs-label',
       value: totalSpentOnNeeds,
-      className: styles['transaction-summary__section--total-needs'],
+      className: 'text-emerald-600',
     },
     {
       label: 'expense-summary-total-spent-wants-label',
       value: totalSpentOnWants,
-      className: styles['transaction-summary__section--total-wants'],
+      className: 'text-red-500',
     },
     {
       label: 'expense-summary-total-spent-savings-label',
       value: totalSpentOnSavings,
-      className: styles['transaction-summary__section--total-savings'],
+      className: 'text-primary',
     },
   ];
 
@@ -60,8 +58,8 @@ export const TransactionsSummary = ({
   ];
 
   return (
-    <div className={styles['transaction-summary']}>
-      <div className={styles['transaction-summary__section']}>
+    <div className="inline-flex flex-col rounded-md px-4 py-2 text-sm shadow-md">
+      <div className="inline-flex flex-row gap-4">
         {expenseSummaryItems.map(({ label, value, className }) => (
           <TransactionsSummaryItem
             key={label}
@@ -72,7 +70,7 @@ export const TransactionsSummary = ({
           />
         ))}
       </div>
-      <div className={styles['transaction-summary__section']}>
+      <div className="inline-flex flex-row gap-4">
         {incomeSummaryItems.map(({ label, value, className }) => (
           <TransactionsSummaryItem
             key={label}

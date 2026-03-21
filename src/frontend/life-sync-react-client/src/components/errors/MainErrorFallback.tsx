@@ -1,18 +1,19 @@
 import { Button } from '@/components/buttons/Button';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
-import styles from './MainErrorFallback.module.scss';
-
 export const MainErrorFallback = () => {
   const { translate } = useAppTranslations();
 
   return (
-    <div className={styles['main-error-fallback']} role="alert">
-      <span className={styles['main-error-fallback__header']}>
+    <div
+      className="flex h-screen w-screen flex-col items-center justify-center gap-8 text-destructive"
+      role="alert"
+    >
+      <span className="text-xl font-semibold">
         {translate('main-error-fallback-label')}
       </span>
       <Button
-        className={styles['main-error-fallback__button']}
+        className="mt-4"
         onClick={() => window.location.assign(window.location.origin)}
       >
         {translate('main-error-fallback-refresh-button-label')}

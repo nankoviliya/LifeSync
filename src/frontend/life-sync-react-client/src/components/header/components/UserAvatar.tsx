@@ -1,29 +1,34 @@
-import { Button } from 'primereact/button';
-import { Menu } from 'primereact/menu';
+import { User } from 'lucide-react';
 
 import { useUserAvatar } from '@/components/header/hooks/useUserAvatar';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export const UserAvatar = () => {
-  const { avatarMenuRef, avatarMenuItems, toggleAvatarMenu } = useUserAvatar();
+  const { profileLabel, logoutLabel, navigateToUserProfile, handleLogout } =
+    useUserAvatar();
 
   return (
-    <div>
-      <Button
-        icon="pi pi-user"
-        onClick={toggleAvatarMenu}
-        rounded
-        text
-        aria-label="User avatar"
-        aria-haspopup="menu"
-        aria-controls="avatar-menu"
-      />
-      <Menu
-        model={avatarMenuItems}
-        popup
-        ref={avatarMenuRef}
-        id="avatar-menu"
-        popupAlignment="left"
-      />
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="rounded-full">
+          <User className="h-5 w-5" />
+          <span className="sr-only">User avatar</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={navigateToUserProfile}>
+          {profileLabel}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
+          {logoutLabel}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
