@@ -18,9 +18,9 @@ export const UserProfile = () => {
     <div className="p-4">
       {isLoading && <UserProfileDataContainerSkeleton />}
       {!isLoading && user && (
-        <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
+        <div className="flex flex-col items-center gap-6 md:flex-row md:items-stretch">
           <UserProfileDataContainer userData={user} />
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 flex-1">
             <ExportAccountData />
             <ImportAccountData />
           </div>

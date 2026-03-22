@@ -19,7 +19,7 @@ export const UserProfileDataContainer = ({ userData }: IProps) => {
   const color = getProfileColor(initials);
 
   return (
-    <Card className="w-[260px]">
+    <Card className="w-[260px] self-stretch">
       <CardContent className="flex flex-col gap-4 pt-5">
         <UserProfileDataHeader
           initials={initials}
