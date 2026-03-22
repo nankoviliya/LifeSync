@@ -1,37 +1,15 @@
 import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
 
+import { IProfileColor } from '@/features/userProfile/utils/profileColors';
 import { cn } from '@/lib/utils';
 
 export interface IUserProfileIconProps {
-  userFirstName: string;
-  userLastName: string;
+  initials: string;
+  color: IProfileColor;
 }
 
-const COLORS = [
-  { bg: 'bg-red-500', text: 'text-red-100' },
-  { bg: 'bg-blue-500', text: 'text-blue-100' },
-  { bg: 'bg-green-500', text: 'text-green-100' },
-  { bg: 'bg-yellow-400', text: 'text-yellow-100' },
-  { bg: 'bg-purple-500', text: 'text-purple-100' },
-  { bg: 'bg-pink-500', text: 'text-pink-100' },
-  { bg: 'bg-indigo-500', text: 'text-indigo-100' },
-];
-
-function getColor(initials: string) {
-  const hash = initials.charCodeAt(0) + initials.charCodeAt(1);
-  return COLORS[hash % COLORS.length];
-}
-
-export const UserProfileIcon = ({
-  userFirstName,
-  userLastName,
-}: IUserProfileIconProps) => {
-  const initials =
-    userFirstName && userLastName
-      ? `${userFirstName[0]}${userLastName[0]}`.toUpperCase()
-      : '..';
-
-  const { bg, text } = getColor(initials);
+export const UserProfileIcon = ({ initials, color }: IUserProfileIconProps) => {
+  const { bg, text } = color;
 
   return (
     <Avatar className="h-14 w-14 flex rounded-full overflow-hidden">
