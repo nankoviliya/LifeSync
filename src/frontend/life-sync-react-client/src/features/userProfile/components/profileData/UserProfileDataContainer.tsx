@@ -1,3 +1,4 @@
+import { Card, CardContent } from '@/components/ui/card';
 import { UserProfileData } from '@/features/userProfile/components/profileData/UserProfileData';
 import { UserProfileIcon } from '@/features/userProfile/components/profileData/UserProfileIcon';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
@@ -10,9 +11,11 @@ export const UserProfileDataContainer = ({ userData }: IProps) => {
   const { firstName, lastName } = userData;
 
   return (
-    <div className="w-[260px] rounded-xl border bg-card p-5 shadow-sm flex flex-col gap-4">
-      <UserProfileIcon userFirstName={firstName} userLastName={lastName} />
-      <UserProfileData userData={userData} />
-    </div>
+    <Card className="w-[260px]">
+      <CardContent className="flex flex-col gap-4 pt-5">
+        <UserProfileIcon userFirstName={firstName} userLastName={lastName} />
+        <UserProfileData userData={userData} />
+      </CardContent>
+    </Card>
   );
 };
