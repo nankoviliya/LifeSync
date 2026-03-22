@@ -10,9 +10,11 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card';
+import {
+  ExportFormat,
+  useExportAccountData,
+} from '@/features/userProfile/components/dataExport/useExportAccountData';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
-
-type ExportFormat = 'json';
 
 const EXPORT_FORMATS: ExportFormat[] = ['json'];
 
@@ -20,9 +22,19 @@ export const ExportAccountData = () => {
   const { translate } = useAppTranslations();
   const [format, setFormat] = useState<ExportFormat>('json');
 
-  const handleExport = () => {
-    // TODO: trigger export with selected format
-    console.log('Exporting as', format);
+  const { refetch, isFetching } = useExportAccountData(format);
+
+  const handleExport = async () => {
+    const { data } = await refetch();
+    if (!data) return;
+    const { encodedData, contentType, fileName } = data;
+    const blob = new Blob([atob(encodedData)], { type: contentType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -52,6 +64,7 @@ export const ExportAccountData = () => {
 
         <Button
           type="button"
+          loading={isFetching}
           label={translate('export-button')}
           icon={<Download className="h-4 w-4" />}
           className="w-full"

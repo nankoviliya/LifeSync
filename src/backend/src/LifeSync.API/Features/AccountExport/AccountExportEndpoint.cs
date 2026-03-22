@@ -33,7 +33,7 @@ public sealed class AccountExportEndpoint : Endpoint<ExportAccountRequest, Expor
 
     public override void Configure()
     {
-        Post("api/accountExport");
+        Get("api/accountExport");
 
         Summary(s =>
         {
