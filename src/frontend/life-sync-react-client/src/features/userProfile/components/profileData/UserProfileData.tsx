@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { useUserProfileEditable } from '@/features/userProfile/hooks/useUserProfileEditable';
+import { useUserProfileEditable } from '@/features/userProfile/components/profileData/hooks/useUserProfileEditable';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';

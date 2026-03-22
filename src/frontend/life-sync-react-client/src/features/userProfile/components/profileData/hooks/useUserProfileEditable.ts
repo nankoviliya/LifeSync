@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { endpoints } from '@/config/endpoints/endpoints';
 import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
-import { IModifyUserProfileDataModel } from '@/features/userProfile/models/modifyUserProfileDataModel';
+import { IModifyUserProfileDataModel } from '@/features/userProfile/components/profileData/models/modifyUserProfileDataModel';
 import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
 import { put } from '@/lib/apiClient';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
