@@ -128,7 +128,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
         )}
       </Row>
 
-      <div className="flex gap-2 mt-2">
+      <div className="flex justify-center gap-2 mt-2">
         {isEditing ? (
           <>
             <Button
