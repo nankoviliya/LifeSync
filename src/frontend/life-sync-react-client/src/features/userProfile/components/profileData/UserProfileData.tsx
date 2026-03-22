@@ -109,16 +109,13 @@ export const UserProfileData = ({ userData }: IProps) => {
             name="languageId"
             control={control}
             render={({ field }) => (
-              <Select
-                value={field.value?.toString()}
-                onValueChange={(val) => field.onChange(Number(val))}
-              >
+              <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="w-32" onBlur={field.onBlur}>
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
                   {frontendSettings.languageOptions.map((opt) => (
-                    <SelectItem key={opt.id} value={opt.id.toString()}>
+                    <SelectItem key={opt.id} value={opt.id}>
                       {opt.name}
                     </SelectItem>
                   ))}
