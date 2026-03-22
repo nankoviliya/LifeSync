@@ -1,5 +1,5 @@
 import { ExportAccountData } from '@/features/userProfile/components/dataExport/ExportAccountData';
-import { UserDataImport } from '@/features/userProfile/components/dataImport/UserDataImport';
+import { ImportAccountData } from '@/features/userProfile/components/dataImport/ImportAccountData';
 import { UserProfileDataContainer } from '@/features/userProfile/components/profileData/UserProfileDataContainer';
 import { useAuth } from '@/stores/AuthProvider';
 
@@ -15,7 +15,7 @@ export const UserProfile = () => {
           <UserProfileDataContainer userData={user} />
           <div className="flex flex-col gap-6">
             <ExportAccountData />
-            <UserDataImport />
+            <ImportAccountData />
           </div>
         </div>
       )}
