@@ -21,7 +21,7 @@ interface IProps {
   userData: IUserProfileDataModel;
 }
 
-export const UserProfileData = ({ userData }: IProps) => {
+export const UserProfileDataBody = ({ userData }: IProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { translate } = useAppTranslations();

@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { UserProfileData } from '@/features/userProfile/components/profileData/UserProfileData';
+import { UserProfileDataBody } from '@/features/userProfile/components/profileData/UserProfileDataBody';
 import { UserProfileDataHeader } from '@/features/userProfile/components/profileData/UserProfileDataHeader';
 import { getProfileColor } from '@/features/userProfile/utils/profileColors';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
@@ -26,7 +26,7 @@ export const UserProfileDataContainer = ({ userData }: IProps) => {
           color={color}
           userData={userData}
         />
-        <UserProfileData userData={userData} />
+        <UserProfileDataBody userData={userData} />
       </CardContent>
     </Card>
   );
