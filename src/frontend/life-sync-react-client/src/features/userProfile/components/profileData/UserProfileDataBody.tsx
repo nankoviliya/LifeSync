@@ -16,6 +16,7 @@ import { useUserProfileEditable } from '@/features/userProfile/components/profil
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
+import { getLanguageTranslation } from '@/app/translations/data/languageUtilities';
 
 interface IProps {
   userData: IUserProfileDataModel;
@@ -118,7 +119,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
                 <SelectContent>
                   {frontendSettings.languageOptions.map((opt) => (
                     <SelectItem key={opt.id} value={opt.id}>
-                      {opt.name}
+                      {getLanguageTranslation(opt.code, translate)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -126,7 +127,9 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
             )}
           />
         ) : (
-          <span className="font-medium text-right">{language.name}</span>
+          <span className="font-medium text-right">
+            {getLanguageTranslation(language.code, translate)}
+          </span>
         )}
       </Row>
 
