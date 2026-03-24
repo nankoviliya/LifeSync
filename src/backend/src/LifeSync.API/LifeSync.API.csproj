@@ -13,6 +13,7 @@
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301"/>
         <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.400.45"/>
         <PackageReference Include="FastEndpoints" Version="7.1.1"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
@@ -43,6 +44,9 @@
         </Compile>
         <Compile Update="Features\Authentication\Helpers\AccessCookieType.cs">
             <DependentUpon>CookieHelper.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Features\AccountImport\Models\ImportAccountDataValidator.cs">
+            <DependentUpon>ImportAccountData.cs</DependentUpon>
         </Compile>
     </ItemGroup>
 

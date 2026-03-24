@@ -1,4 +1,6 @@
-﻿using LifeSync.API.Features.AccountImport.DataReaders;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.AccountImport.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses;
@@ -26,15 +28,18 @@ public class AccountImportService : BaseService, IAccountImportService
 {
     private readonly ApplicationDbContext _databaseContext;
     private readonly IEnumerable<IAccountDataReader> _dataReaders;
+    private readonly IValidator<ImportAccountData> _validator;
     private readonly ILogger<AccountImportService> _logger;
 
     public AccountImportService(
         ApplicationDbContext databaseContext,
         IEnumerable<IAccountDataReader> dataReaders,
+        IValidator<ImportAccountData> validator,
         ILogger<AccountImportService> logger)
     {
         _databaseContext = databaseContext;
         _dataReaders = dataReaders;
+        _validator = validator;
         _logger = logger;
     }
 
@@ -57,6 +62,14 @@ public class AccountImportService : BaseService, IAccountImportService
         {
             _logger.LogWarning("Cannot read data from file");
             return MessageResult.Failure("Cannot read data from file.");
+        }
+
+        ValidationResult validationResult = await _validator.ValidateAsync(data, ct);
+        if (!validationResult.IsValid)
+        {
+            string errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+            _logger.LogWarning("Invalid import data: {Errors}", errors);
+            return MessageResult.Failure(errors);
         }
 
         User? user = await _databaseContext.Users.FindAsync(new object[] { userId.Value }, ct);
