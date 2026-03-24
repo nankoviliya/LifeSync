@@ -1,11 +1,15 @@
 ﻿using LifeSync.API.Features.AccountImport.Models;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Features.AccountImport.DataReaders;
 
 public class JsonAccountDataReader : IAccountDataReader
 {
-    private static readonly JsonSerializerOptions CachedJsonSerializerOptions = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions CachedJsonSerializerOptions = new()
+    {
+        WriteIndented = true, PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() }
+    };
 
     public AccountImportFileFormat Format => AccountImportFileFormat.Json;
 

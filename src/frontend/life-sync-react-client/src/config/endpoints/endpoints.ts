@@ -15,6 +15,7 @@ export const endpoints = {
     getAccountData: 'Account',
     modifyAccountData: 'Account',
     exportAccountData: 'AccountExport',
+    importAccountData: 'AccountImport',
   },
   finances: {
     getUserTransactions: 'Finances/Transactions',

@@ -12,8 +12,9 @@ import {
 } from '@/components/ui/card';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
-type ImportFormat = 'json';
+import { useImportAccountData } from './useImportAccountData';
 
+type ImportFormat = 'json';
 const IMPORT_FORMATS: ImportFormat[] = ['json'];
 
 export const ImportAccountData = () => {
@@ -22,6 +23,8 @@ export const ImportAccountData = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { importData, isImporting } = useImportAccountData(() => setFile(null));
 
   const acceptedExtensions = IMPORT_FORMATS.map((f) => `.${f}`).join(',');
 
@@ -42,8 +45,7 @@ export const ImportAccountData = () => {
 
   const handleImport = () => {
     if (!file) return;
-    // TODO: trigger import with file and format
-    console.log('Importing', file.name, 'as', format);
+    importData({ file, format });
   };
 
   return (
@@ -70,7 +72,6 @@ export const ImportAccountData = () => {
             ))}
           </div>
         </div>
-
         <div
           className={`flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-6 text-center transition-colors ${
             isDragging
@@ -107,13 +108,12 @@ export const ImportAccountData = () => {
             onClick={() => inputRef.current?.click()}
           />
         </div>
-
         <Button
           type="button"
           label={translate('import-button')}
           icon={<Upload className="h-4 w-4" />}
           className="w-full"
-          disabled={!file}
+          disabled={!file || isImporting}
           onClick={handleImport}
         />
       </CardContent>
