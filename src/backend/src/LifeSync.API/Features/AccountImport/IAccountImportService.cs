@@ -3,11 +3,13 @@ using LifeSync.API.Features.AccountImport.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
+using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LifeSync.API.Features.AccountImport;
@@ -64,6 +66,19 @@ public class AccountImportService : BaseService, IAccountImportService
             return MessageResult.Failure("User account not found.");
         }
 
+        string languageCode = data.ProfileData.LanguageCode.ToLower();
+
+        Language? language = await _databaseContext.Languages
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                l => l.Code.ToLower().Equals(languageCode),
+                ct);
+        if (language is null)
+        {
+            _logger.LogWarning("Language not found, Language code: {LanguageCode}", languageCode);
+            return MessageResult.Failure($"Language with code: {languageCode} not found");
+        }
+
         await using IDbContextTransaction? tx = await _databaseContext.Database.BeginTransactionAsync(ct);
         try
         {
@@ -72,7 +87,7 @@ public class AccountImportService : BaseService, IAccountImportService
                     data.ProfileData.BalanceCurrency.ToRequiredString())
             );
 
-            user.UpdateLanguage(data.ProfileData.LanguageId.ToRequiredStruct());
+            user.UpdateLanguage(language.Id.ToRequiredStruct());
 
             IEnumerable<ExpenseTransaction> incomeTransactions = data.ExpenseTransactions.Select(e =>
                 ExpenseTransaction.From(
