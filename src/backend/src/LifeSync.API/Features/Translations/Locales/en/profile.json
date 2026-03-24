@@ -10,6 +10,7 @@
   "profile-cancel-button": "Cancel",
   "profile-edit-button": "Edit Profile",
   "profile-language-placeholder": "Select language",
+  "profile-current-balance-label": "Current Balance",
   "import-title": "Import Account Data",
   "import-description": "Upload a file to import your account data",
   "import-format-label": "Format",

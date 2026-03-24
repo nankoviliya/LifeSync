@@ -1,5 +1,6 @@
 import { UserProfileIcon } from '@/features/userProfile/components/profileData/UserProfileIcon';
 import { IProfileColor } from '@/features/userProfile/utils/profileColors';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { cn } from '@/lib/utils';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
@@ -14,6 +15,8 @@ export const UserProfileDataHeader = ({
   color,
   userData,
 }: UserProfileDataHeaderProps) => {
+  const { translate } = useAppTranslations();
+
   const { firstName, lastName, email, balanceAmount, balanceCurrency } =
     userData;
 
@@ -25,7 +28,9 @@ export const UserProfileDataHeader = ({
       </p>
       <p className="text-sm text-muted-foreground">{email}</p>
       <div className={cn('rounded-lg px-4 py-3', color.bgLight)}>
-        <p className={cn('text-xs mb-0.5', color.textLight)}>Current balance</p>
+        <p className={cn('text-xs mb-0.5', color.textLight)}>
+          {translate('profile-current-balance-label')}
+        </p>
         <p className={cn('text-xl font-medium', color.textLight)}>
           {balanceAmount} {balanceCurrency}
         </p>

@@ -10,6 +10,7 @@
   "profile-cancel-button": "Скасувати",
   "profile-edit-button": "Редагувати профіль",
   "profile-language-placeholder": "Оберіть мову",
+  "profile-current-balance-label": "Поточний баланс",
   "import-title": "Імпорт даних",
   "import-description": "Завантажте файл для імпорту даних акаунту",
   "import-format-label": "Формат",
