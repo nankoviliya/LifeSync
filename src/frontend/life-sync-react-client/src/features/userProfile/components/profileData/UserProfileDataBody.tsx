@@ -111,7 +111,9 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="w-32" onBlur={field.onBlur}>
-                  <SelectValue placeholder="Select language" />
+                  <SelectValue
+                    placeholder={translate('profile-language-placeholder')}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {frontendSettings.languageOptions.map((opt) => (
@@ -133,12 +135,12 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
           <>
             <Button
               type="submit"
-              label="Save"
+              label={translate('profile-save-button')}
               loading={isSubmitting}
               icon={<Check className="h-4 w-4" />}
             />
             <Button
-              label="Cancel"
+              label={translate('profile-cancel-button')}
               icon={<X className="h-4 w-4" />}
               onClick={(e) => {
                 setIsEditing(false);
@@ -149,7 +151,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
         ) : (
           <Button
             type="button"
-            label="Edit profile"
+            label={translate('profile-edit-button')}
             icon={<Pencil className="h-4 w-4" />}
             onClick={(e) => {
               setIsEditing(true);
