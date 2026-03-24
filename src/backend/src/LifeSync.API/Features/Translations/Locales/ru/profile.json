@@ -5,5 +5,19 @@
   "profile-first-name-label": "Имя",
   "profile-last-name-label": "Фамилия",
   "profile-balance-label": "Баланс",
-  "profile-language-label": "Язык"
+  "profile-language-label": "Язык",
+  "profile-save-button": "Сохранить",
+  "profile-cancel-button": "Отмена",
+  "profile-edit-button": "Редактировать профиль",
+  "profile-language-placeholder": "Выберите язык",
+  "import-title": "Импорт данных",
+  "import-description": "Загрузите файл для импорта данных аккаунта",
+  "import-format-label": "Формат",
+  "import-drop-label": "Перетащите файл сюда",
+  "import-browse-button": "Обзор",
+  "import-button": "Импортировать",
+  "export-title": "Экспорт данных",
+  "export-description": "Скачайте данные аккаунта в виде файла",
+  "export-format-label": "Формат",
+  "export-button": "Экспортировать"
 }
