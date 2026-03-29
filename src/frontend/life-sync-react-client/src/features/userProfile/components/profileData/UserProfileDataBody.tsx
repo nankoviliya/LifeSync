@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { Button } from '@/components/buttons/Button';
+import { CopyableRow } from '@/components/common/copyable-row';
+import { Row } from '@/components/common/row';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -51,30 +53,13 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
     },
   ];
 
-  const Row = ({
-    label,
-    children,
-  }: {
-    label: string;
-    children: React.ReactNode;
-  }) => (
-    <div className="flex justify-between items-center gap-2 text-sm">
-      <span className="text-muted-foreground shrink-0">{label}</span>
-      {children}
-    </div>
-  );
-
   return (
     <form
       className="flex flex-col gap-3 flex-1"
       onSubmit={handleSubmit(onSubmit)}
     >
       {readonlyRows.map(({ label, value }) => (
-        <Row key={label} label={label}>
-          <span className="font-medium text-right truncate max-w-[160px]">
-            {value}
-          </span>
-        </Row>
+        <CopyableRow key={label} label={label} value={value ?? ''} />
       ))}
 
       <Separator />
