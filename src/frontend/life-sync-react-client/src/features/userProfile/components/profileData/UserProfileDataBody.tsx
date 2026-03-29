@@ -16,7 +16,7 @@ import { useUserProfileEditable } from '@/features/userProfile/components/profil
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 import { useFrontendSettings } from '@/hooks/useFrontendSettings';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
-import { getLanguageTranslation } from '@/app/translations/data/languageUtilities';
+import { getLanguageTranslation } from '@/utils/translationsUtilities';
 
 interface IProps {
   userData: IUserProfileDataModel;

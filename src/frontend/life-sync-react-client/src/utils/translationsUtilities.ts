@@ -1,4 +1,4 @@
-import { appLanguages } from '@/app/translations/data/appLanguages';
+import { appLanguages } from '@/types/appLanguages';
 
 export function getLanguageTranslation(
   languageCode: string,
