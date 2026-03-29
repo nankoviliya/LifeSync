@@ -1,7 +1,6 @@
 using FluentValidation;
-using LifeSync.API.Features.AccountImport.Models;
 
-namespace LifeSync.API.Features.AccountImport.Validators;
+namespace LifeSync.API.Features.AccountImport.Models;
 
 public class ImportAccountDataValidator : AbstractValidator<ImportAccountData>
 {

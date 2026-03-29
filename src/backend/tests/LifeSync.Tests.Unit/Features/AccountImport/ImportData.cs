@@ -9,11 +9,14 @@ namespace LifeSync.Tests.Unit.Features.AccountImport;
 
 public static class ImportData
 {
-    public static ImportAccountData GetData(RequiredStruct<Guid> languageId) =>
+    public static ImportAccountData GetData(RequiredString languageCode) =>
         new()
         {
             ProfileData =
-                new ImportAccountProfile { BalanceAmount = 1000.50m, BalanceCurrency = "BGN", LanguageId = languageId },
+                new ImportAccountProfile
+                {
+                    BalanceAmount = 1000.50m, BalanceCurrency = "BGN", LanguageCode = languageCode
+                },
             ExpenseTransactions = new List<ImportAccountExpenseTransaction>
             {
                 new()

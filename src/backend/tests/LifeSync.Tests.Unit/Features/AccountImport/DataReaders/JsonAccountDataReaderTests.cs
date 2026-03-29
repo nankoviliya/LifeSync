@@ -10,6 +10,8 @@ namespace LifeSync.Tests.Unit.Features.AccountImport.DataReaders;
 
 public class JsonAccountDataReaderTests
 {
+    private readonly string _testLanguageCode = "en";
+
     [Fact]
     public void Format_ShouldReturnJson()
     {
@@ -25,7 +27,7 @@ public class JsonAccountDataReaderTests
     {
         JsonAccountDataReader dataReader = new();
 
-        ImportAccountData expectedData = ImportData.GetData(Guid.NewGuid().ToRequiredStruct());
+        ImportAccountData expectedData = ImportData.GetData(_testLanguageCode.ToRequiredString());
 
         string json = JsonSerializer.Serialize(expectedData);
         IFormFile file = ImportData.CreateSubstituteFormFile("test.json", json);
@@ -36,6 +38,7 @@ public class JsonAccountDataReaderTests
         result.Should().NotBeNull();
         result!.ProfileData.BalanceAmount.Should().Be(expectedData.ProfileData.BalanceAmount);
         result.ProfileData.BalanceCurrency.Should().Be(expectedData.ProfileData.BalanceCurrency);
+        result.ProfileData.LanguageCode.Should().Be(expectedData.ProfileData.LanguageCode);
         result.ExpenseTransactions.Should().HaveCount(1);
         result.IncomeTransactions.Should().HaveCount(1);
     }
