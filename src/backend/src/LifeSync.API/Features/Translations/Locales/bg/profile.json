@@ -5,5 +5,20 @@
   "profile-first-name-label": "Първо име",
   "profile-last-name-label": "Фамилия",
   "profile-balance-label": "Баланс",
-  "profile-language-label": "Език"
+  "profile-language-label": "Език",
+  "profile-save-button": "Запази",
+  "profile-cancel-button": "Отказ",
+  "profile-edit-button": "Редактиране на профил",
+  "profile-language-placeholder": "Изберете език",
+  "profile-current-balance-label": "Текущ баланс",
+  "import-title": "Импортиране на данни",
+  "import-description": "Качете файл, за да импортирате данните си",
+  "import-format-label": "Формат",
+  "import-drop-label": "Плъзнете и пуснете файл тук",
+  "import-browse-button": "Преглед",
+  "import-button": "Импортиране",
+  "export-title": "Експортиране на данни",
+  "export-description": "Изтеглете данните си като файл",
+  "export-format-label": "Формат",
+  "export-button": "Експортиране"
 }

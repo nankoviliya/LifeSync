@@ -17,7 +17,7 @@ public record ImportAccountProfile
 
     public required string BalanceCurrency { get; init; }
 
-    public required Guid LanguageId { get; init; }
+    public required string LanguageCode { get; init; }
 }
 
 public record ImportAccountExpenseTransaction

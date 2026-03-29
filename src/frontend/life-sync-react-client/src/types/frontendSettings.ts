@@ -6,6 +6,7 @@ export interface IFrontendSettings {
 export interface ILanguageOption {
   id: string;
   name: string;
+  code: string;
 }
 
 export interface ICurrencyOption {

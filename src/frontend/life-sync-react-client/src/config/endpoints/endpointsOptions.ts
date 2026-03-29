@@ -27,4 +27,8 @@ export const endpointsOptions: IEndpointsOptions = {
     endpoint: endpoints.finances.getUserExpenseTransactions,
     key: 'user-expense-transactions',
   },
+  exportAccountData: {
+    endpoint: endpoints.account.exportAccountData,
+    key: 'export-account-data',
+  },
 };

@@ -1,13 +1,17 @@
-﻿using LifeSync.API.Features.AccountImport.DataReaders;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.AccountImport.Models;
 using LifeSync.API.Models.ApplicationUser;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
+using LifeSync.API.Models.Languages;
 using LifeSync.API.Persistence;
 using LifeSync.API.Shared;
 using LifeSync.API.Shared.Services;
 using LifeSync.Common.Required;
 using LifeSync.Common.Results;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LifeSync.API.Features.AccountImport;
@@ -24,15 +28,18 @@ public class AccountImportService : BaseService, IAccountImportService
 {
     private readonly ApplicationDbContext _databaseContext;
     private readonly IEnumerable<IAccountDataReader> _dataReaders;
+    private readonly IValidator<ImportAccountData> _validator;
     private readonly ILogger<AccountImportService> _logger;
 
     public AccountImportService(
         ApplicationDbContext databaseContext,
         IEnumerable<IAccountDataReader> dataReaders,
+        IValidator<ImportAccountData> validator,
         ILogger<AccountImportService> logger)
     {
         _databaseContext = databaseContext;
         _dataReaders = dataReaders;
+        _validator = validator;
         _logger = logger;
     }
 
@@ -57,11 +64,32 @@ public class AccountImportService : BaseService, IAccountImportService
             return MessageResult.Failure("Cannot read data from file.");
         }
 
+        ValidationResult validationResult = await _validator.ValidateAsync(data, ct);
+        if (!validationResult.IsValid)
+        {
+            string errors = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+            _logger.LogWarning("Invalid import data: {Errors}", errors);
+            return MessageResult.Failure(errors);
+        }
+
         User? user = await _databaseContext.Users.FindAsync(new object[] { userId.Value }, ct);
         if (user is null)
         {
             _logger.LogWarning("User not found, User Id: {UserId}", userId);
             return MessageResult.Failure("User account not found.");
+        }
+
+        string languageCode = data.ProfileData.LanguageCode.ToLower();
+
+        Language? language = await _databaseContext.Languages
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                l => l.Code.ToLower().Equals(languageCode),
+                ct);
+        if (language is null)
+        {
+            _logger.LogWarning("Language not found, Language code: {LanguageCode}", languageCode);
+            return MessageResult.Failure($"Language with code: {languageCode} not found");
         }
 
         await using IDbContextTransaction? tx = await _databaseContext.Database.BeginTransactionAsync(ct);
@@ -72,7 +100,7 @@ public class AccountImportService : BaseService, IAccountImportService
                     data.ProfileData.BalanceCurrency.ToRequiredString())
             );
 
-            user.UpdateLanguage(data.ProfileData.LanguageId.ToRequiredStruct());
+            user.UpdateLanguage(language.Id.ToRequiredStruct());
 
             IEnumerable<ExpenseTransaction> incomeTransactions = data.ExpenseTransactions.Select(e =>
                 ExpenseTransaction.From(

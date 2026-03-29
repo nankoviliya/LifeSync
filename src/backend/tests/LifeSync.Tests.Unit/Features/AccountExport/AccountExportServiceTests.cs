@@ -23,6 +23,7 @@ namespace LifeSync.Tests.Unit.Features.AccountExport;
 public class AccountExportServiceTests
 {
     private readonly Guid _testLanguageId;
+    private readonly string _testLanguageCode;
     private readonly string _testUserId;
 
     private readonly DbConnection _connection;
@@ -53,6 +54,7 @@ public class AccountExportServiceTests
             context.Add(language);
 
             _testLanguageId = language.Id;
+            _testLanguageCode = language.Code;
 
             User user = User.From(
                 "user123@gmail.com".ToRequiredString(),
@@ -162,7 +164,7 @@ public class AccountExportServiceTests
         capturedAccountData.ProfileData.LastName.Should().Be("L");
         capturedAccountData.ProfileData.BalanceAmount.Should().Be(200);
         capturedAccountData.ProfileData.BalanceCurrency.Should().Be("BGN");
-        capturedAccountData.ProfileData.LanguageId.Should().Be(_testLanguageId);
+        capturedAccountData.ProfileData.LanguageCode.Should().Be(_testLanguageCode);
         capturedAccountData.ProfileData.LanguageCode.Should().Be("en");
     }
 

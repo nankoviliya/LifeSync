@@ -5,5 +5,20 @@
   "profile-first-name-label": "Ім’я",
   "profile-last-name-label": "Прізвище",
   "profile-balance-label": "Баланс",
-  "profile-language-label": "Мова"
+  "profile-language-label": "Мова",
+  "profile-save-button": "Зберегти",
+  "profile-cancel-button": "Скасувати",
+  "profile-edit-button": "Редагувати профіль",
+  "profile-language-placeholder": "Оберіть мову",
+  "profile-current-balance-label": "Поточний баланс",
+  "import-title": "Імпорт даних",
+  "import-description": "Завантажте файл для імпорту даних акаунту",
+  "import-format-label": "Формат",
+  "import-drop-label": "Перетягніть файл сюди",
+  "import-browse-button": "Огляд",
+  "import-button": "Імпортувати",
+  "export-title": "Експорт даних",
+  "export-description": "Завантажте дані акаунту у вигляді файлу",
+  "export-format-label": "Формат",
+  "export-button": "Експортувати"
 }

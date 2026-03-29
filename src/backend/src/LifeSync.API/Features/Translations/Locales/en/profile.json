@@ -5,5 +5,20 @@
   "profile-first-name-label": "First Name",
   "profile-last-name-label": "Last Name",
   "profile-balance-label": "Balance",
-  "profile-language-label": "Language"
+  "profile-language-label": "Language",
+  "profile-save-button": "Save",
+  "profile-cancel-button": "Cancel",
+  "profile-edit-button": "Edit Profile",
+  "profile-language-placeholder": "Select language",
+  "profile-current-balance-label": "Current Balance",
+  "import-title": "Import Account Data",
+  "import-description": "Upload a file to import your account data",
+  "import-format-label": "Format",
+  "import-drop-label": "Drag & drop a file here",
+  "import-browse-button": "Browse",
+  "import-button": "Import",
+  "export-title": "Export Account Data",
+  "export-description": "Download your account data as a file",
+  "export-format-label": "Format",
+  "export-button": "Export"
 }

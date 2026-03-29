@@ -7,4 +7,5 @@ export interface IEndpointsOptions {
   getUserTransactions: IReadQueryBaseOptions;
   getUserIncomeTransactions: IReadQueryBaseOptions;
   getUserExpenseTransactions: IReadQueryBaseOptions;
+  exportAccountData: IReadQueryBaseOptions;
 }

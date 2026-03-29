@@ -3,15 +3,12 @@ import { useForm } from 'react-hook-form';
 
 import { endpoints } from '@/config/endpoints/endpoints';
 import { endpointsOptions } from '@/config/endpoints/endpointsOptions';
-import { IModifyUserProfileDataModel } from '@/features/userProfile/models/modifyUserProfileDataModel';
+import { IModifyUserProfileDataModel } from '@/features/userProfile/components/profileData/models/modifyUserProfileDataModel';
 import { useQueryInvalidation } from '@/hooks/api/useQueryInvalidation';
 import { put } from '@/lib/apiClient';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
-export const useUserProfileEditable = (
-  userData: IUserProfileDataModel,
-  disableEditMode: () => void,
-) => {
+export const useUserProfileEditable = (userData: IUserProfileDataModel) => {
   const invalidateQuery = useQueryInvalidation();
 
   const { control, handleSubmit } = useForm<IModifyUserProfileDataModel>({
@@ -33,7 +30,6 @@ export const useUserProfileEditable = (
       invalidateQuery({
         queryKey: [endpointsOptions.getUserAccountData.key],
       });
-      disableEditMode();
     },
     onError: () => {
       console.log('Auth error');

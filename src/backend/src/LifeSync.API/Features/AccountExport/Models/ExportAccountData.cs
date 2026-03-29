@@ -27,8 +27,6 @@ public record ExportAccountProfile
 
     public string BalanceCurrency { get; init; } = default!;
 
-    public Guid LanguageId { get; init; }
-
     public string LanguageCode { get; init; } = default!;
 }
 

@@ -20,7 +20,7 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
 
         List<CurrencyOption>? currencyOptions = GetCurrencyOptions();
 
-        FrontendSettingsResponse? frontendSettings = new FrontendSettingsResponse
+        FrontendSettingsResponse? frontendSettings = new()
         {
             LanguageOptions = languageOptions, CurrencyOptions = currencyOptions
         };
@@ -33,20 +33,14 @@ public class FrontendSettingsService : BaseService, IFrontendSettingsService
     {
         List<LanguageOption>? languageOptions = await _databaseContext.Languages
             .AsNoTracking()
-            .Select(l => new LanguageOption { Id = l.Id, Name = l.Name })
+            .Select(l => new LanguageOption { Id = l.Id, Name = l.Name, Code = l.Code })
             .ToListAsync(cancellationToken);
 
         return languageOptions;
     }
 
-    private static List<CurrencyOption> GetCurrencyOptions()
-    {
-        return CurrencyRegistry.All
-            .Select(c => new CurrencyOption
-            {
-                Code = c.Code,
-                Name = $"{c.Name} ({c.NativeName})"
-            })
+    private static List<CurrencyOption> GetCurrencyOptions() =>
+        CurrencyRegistry.All
+            .Select(c => new CurrencyOption { Code = c.Code, Name = $"{c.Name} ({c.NativeName})" })
             .ToList();
-    }
 }

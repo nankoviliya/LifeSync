@@ -1,7 +1,7 @@
 export interface IUserProfileDataModel {
   userId: string;
   userName?: string;
-  email?: string;
+  email: string;
   firstName: string;
   lastName: string;
   language: ILanguage;

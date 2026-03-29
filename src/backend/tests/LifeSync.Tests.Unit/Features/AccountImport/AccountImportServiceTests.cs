@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentValidation;
 using LifeSync.API.Features.AccountImport;
 using LifeSync.API.Features.AccountImport.DataReaders;
 using LifeSync.API.Features.AccountImport.Models;
@@ -23,6 +24,7 @@ namespace LifeSync.Tests.Unit.Features.AccountImport;
 public class AccountImportServiceTests
 {
     private readonly Guid _testLanguageId;
+    private readonly string _testLanguageCode;
     private readonly string _testUserId;
 
     private readonly DbConnection _connection;
@@ -53,6 +55,7 @@ public class AccountImportServiceTests
             context.Add(language);
 
             _testLanguageId = language.Id;
+            _testLanguageCode = language.Code;
 
             User user = User.From(
                 "user123@gmail.com".ToRequiredString(),
@@ -73,12 +76,13 @@ public class AccountImportServiceTests
     }
 
     private ApplicationDbContext CreateContext() => new(_contextOptions, _secretsManager);
+    private IValidator<ImportAccountData> CreateValidator() => new ImportAccountDataValidator();
 
     public void Dispose() => _connection.Dispose();
 
     private (AccountImportRequest request, ImportAccountData testData) CreateValidTestData()
     {
-        ImportAccountData testData = ImportData.GetData(_testLanguageId.ToRequiredStruct());
+        ImportAccountData testData = ImportData.GetData(_testLanguageCode.ToRequiredString());
 
         string json = JsonSerializer.Serialize(testData);
         IFormFile file = ImportData.CreateSubstituteFormFile("test.json", json);
@@ -93,7 +97,7 @@ public class AccountImportServiceTests
     {
         (AccountImportRequest request, ImportAccountData testData) = CreateValidTestData();
 
-        AccountImportService accountImportService = new(CreateContext(), [_dataReader], _logger);
+        AccountImportService accountImportService = new(CreateContext(), [_dataReader], CreateValidator(), _logger);
 
         _dataReader.Format.Returns(AccountImportFileFormat.Json);
         _dataReader.ReadAsync(request.File, Arg.Any<CancellationToken>()).Returns(testData);
@@ -109,11 +113,12 @@ public class AccountImportServiceTests
         result.Message.Should().Be("Account data imported successfully.");
 
         await using ApplicationDbContext assertContext = CreateContext();
-        User? updatedUser = await assertContext.Users.FindAsync(_testUserId);
+        User? updatedUser =
+            await assertContext.Users.Include(x => x.Language).FirstOrDefaultAsync(x => x.Id == _testUserId);
         updatedUser.Should().NotBeNull();
         updatedUser!.Balance.Amount.Should().Be(testData.ProfileData.BalanceAmount);
         updatedUser.Balance.CurrencyCode.Should().Be(testData.ProfileData.BalanceCurrency);
-        updatedUser.LanguageId.Should().Be(testData.ProfileData.LanguageId);
+        updatedUser.Language.Code.Should().Be(testData.ProfileData.LanguageCode);
 
         int incomeCount = await assertContext.IncomeTransactions.CountAsync();
         int expenseCount = await assertContext.ExpenseTransactions.CountAsync();
@@ -126,7 +131,7 @@ public class AccountImportServiceTests
     {
         (AccountImportRequest request, _) = CreateValidTestData();
 
-        AccountImportService sut = new(CreateContext(), [], _logger);
+        AccountImportService sut = new(CreateContext(), [], CreateValidator(), _logger);
 
         MessageResult result =
             await sut.ImportAccountDataAsync(_testUserId.ToRequiredString(), request, CancellationToken.None);
@@ -144,7 +149,7 @@ public class AccountImportServiceTests
         _dataReader.Format.Returns(AccountImportFileFormat.Json);
         _dataReader.ReadAsync(request.File, Arg.Any<CancellationToken>()).Returns((ImportAccountData?)null);
 
-        AccountImportService sut = new(CreateContext(), [_dataReader], _logger);
+        AccountImportService sut = new(CreateContext(), [_dataReader], CreateValidator(), _logger);
 
         MessageResult result =
             await sut.ImportAccountDataAsync(_testUserId.ToRequiredString(), request, CancellationToken.None);
@@ -163,7 +168,7 @@ public class AccountImportServiceTests
 
         string nonExistentUserId = Guid.NewGuid().ToString();
 
-        AccountImportService sut = new(CreateContext(), [_dataReader], _logger);
+        AccountImportService sut = new(CreateContext(), [_dataReader], CreateValidator(), _logger);
 
         MessageResult result =
             await sut.ImportAccountDataAsync(nonExistentUserId.ToRequiredString(), request, CancellationToken.None);
@@ -183,7 +188,7 @@ public class AccountImportServiceTests
         FailingApplicationDbContext dbContext = new(_contextOptions, _secretsManager);
         dbContext.SetSaveChangesShouldFail(true);
 
-        AccountImportService sut = new(dbContext, [_dataReader], _logger);
+        AccountImportService sut = new(dbContext, [_dataReader], CreateValidator(), _logger);
 
         MessageResult result =
             await sut.ImportAccountDataAsync(_testUserId.ToRequiredString(), request, CancellationToken.None);

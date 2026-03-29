@@ -1,5 +1,7 @@
 using Amazon.SecretsManager;
 using FastEndpoints;
+using FluentValidation;
+using LifeSync.API;
 using LifeSync.API.BackgroundJobs;
 using LifeSync.API.Extensions;
 using LifeSync.API.OpenApi;
@@ -7,7 +9,7 @@ using LifeSync.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
@@ -26,6 +28,7 @@ if (!builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddApplicationSecrets(builder.Environment);
+builder.Services.AddValidatorsFromAssemblyContaining<IApiMarker>();
 
 builder.Services.AddIdentityServices();
 
@@ -68,11 +71,11 @@ builder.Services.AddOpenApi(options =>
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
 });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     await context.Database.MigrateAsync();
 }

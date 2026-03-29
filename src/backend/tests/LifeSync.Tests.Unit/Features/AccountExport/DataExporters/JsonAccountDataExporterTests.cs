@@ -4,6 +4,7 @@ using LifeSync.API.Features.AccountExport.DataExporters;
 using LifeSync.API.Features.AccountExport.Models;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LifeSync.Tests.Unit.Features.AccountExport.DataExporters;
 
@@ -45,7 +46,11 @@ public class JsonAccountDataExporterTests
 
         string json = Encoding.UTF8.GetString(Convert.FromBase64String(result.EncodedData));
 
-        ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(json);
+        JsonSerializerOptions options = new()
+        {
+            PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() }
+        };
+        ExportAccountData? deserializedData = JsonSerializer.Deserialize<ExportAccountData>(json, options);
 
         deserializedData.Should().NotBeNull();
         deserializedData.Should().BeEquivalentTo(accountData);

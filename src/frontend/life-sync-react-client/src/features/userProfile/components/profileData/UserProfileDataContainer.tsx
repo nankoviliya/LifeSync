@@ -1,49 +1,33 @@
-import { useState } from 'react';
-
-import { UserProfileDataEditable } from '@/features/userProfile/components/profileData/UserProfileDataEditable';
-import { UserProfileDataReadonly } from '@/features/userProfile/components/profileData/UserProfileDataReadonly';
+import { Card, CardContent } from '@/components/ui/card';
+import { UserProfileDataBody } from '@/features/userProfile/components/profileData/UserProfileDataBody';
+import { UserProfileDataHeader } from '@/features/userProfile/components/profileData/UserProfileDataHeader';
+import { getProfileColor } from '@/features/userProfile/utils/profileColors';
 import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
-export interface IUserProfileDataContainerProps {
+interface IProps {
   userData: IUserProfileDataModel;
 }
 
-export const UserProfileDataContainer = ({
-  userData,
-}: IUserProfileDataContainerProps) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+export const UserProfileDataContainer = ({ userData }: IProps) => {
+  const { firstName, lastName } = userData;
 
-  const enableEditMode = () => {
-    setIsEditing(true);
-  };
+  const initials =
+    firstName && lastName
+      ? `${firstName[0]}${lastName[0]}`.toUpperCase()
+      : '..';
 
-  const disableEditMode = () => {
-    setIsEditing(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      enableEditMode();
-    }
-  };
+  const color = getProfileColor(initials);
 
   return (
-    <div
-      className="inline-flex cursor-text flex-col rounded border border-transparent p-4 transition-colors hover:border-border"
-      onClick={enableEditMode}
-      role="button"
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-    >
-      {isEditing ? (
-        <UserProfileDataEditable
+    <Card className="w-[260px] self-stretch">
+      <CardContent className="flex flex-col gap-4 pt-5 h-full">
+        <UserProfileDataHeader
+          initials={initials}
+          color={color}
           userData={userData}
-          disableEditMode={disableEditMode}
         />
-      ) : (
-        <UserProfileDataReadonly userData={userData} />
-      )}
-    </div>
+        <UserProfileDataBody userData={userData} />
+      </CardContent>
+    </Card>
   );
 };

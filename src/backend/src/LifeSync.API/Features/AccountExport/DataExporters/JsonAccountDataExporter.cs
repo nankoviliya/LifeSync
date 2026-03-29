@@ -1,11 +1,15 @@
 ﻿using LifeSync.API.Features.AccountExport.Models;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LifeSync.API.Features.AccountExport.DataExporters;
 
 public class JsonAccountDataExporter : IAccountDataExporter
 {
-    private static readonly JsonSerializerOptions CachedJsonSerializerOptions = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions CachedJsonSerializerOptions = new()
+    {
+        WriteIndented = true, PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() }
+    };
 
     public ExportAccountFileFormat Format => ExportAccountFileFormat.Json;
 

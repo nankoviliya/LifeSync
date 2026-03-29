@@ -27,33 +27,55 @@ public class AccountExportEndpointTests : IntegrationTestsBase
         HttpClient.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
-        ExportAccountRequest exportRequest = new() { Format = ExportAccountFileFormat.Json };
-
-        HttpResponseMessage exportResponse = await HttpClient.PostAsJsonAsync("/api/accountExport", exportRequest);
+        HttpResponseMessage exportResponse =
+            await HttpClient.GetAsync($"/api/accountExport?format={ExportAccountFileFormat.Json}");
         ExportAccountResponse? data = await exportResponse.Content.ReadFromJsonAsync<ExportAccountResponse>();
 
+        // Response shape
         exportResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         data.Should().NotBeNull();
         data!.ContentType.Should().Be("application/json");
-        data.FileName.Should().EndWith(".json");
+        data.FileName.Should().MatchRegex(@".+\.json$");
         data.EncodedData.Should().NotBeNullOrEmpty();
 
+        // Decodable
         ExportAccountData exportedData = DecodeExportData(data.EncodedData);
         exportedData.Should().NotBeNull();
 
-        // Profile data matches user
+        // Profile matches registered user
         exportedData!.ProfileData.Should().NotBeNull();
+        exportedData.ProfileData.UserId.Should().NotBeNullOrEmpty();
         exportedData.ProfileData.Email.Should().Be(registerRequest.Email);
         exportedData.ProfileData.FirstName.Should().Be(registerRequest.FirstName);
         exportedData.ProfileData.LastName.Should().Be(registerRequest.LastName);
+        exportedData.ProfileData.LanguageCode.Should().NotBeNullOrEmpty();
+        exportedData.ProfileData.BalanceCurrency.Should().NotBeNullOrEmpty();
+        exportedData.ProfileData.BalanceAmount.Should().BeGreaterThanOrEqualTo(0);
 
-        // Transactions are present
+        // Transactions present and well-formed
         exportedData.ExpenseTransactions.Should().NotBeNull();
         exportedData.IncomeTransactions.Should().NotBeNull();
 
+        foreach (ExportAccountExpenseTransaction tx in exportedData.ExpenseTransactions)
+        {
+            tx.Id.Should().NotBeEmpty();
+            tx.Amount.Should().BeGreaterThan(0);
+            tx.Currency.Should().NotBeNullOrEmpty();
+            tx.Date.Should().BeBefore(DateTime.UtcNow);
+        }
+
+        foreach (ExportAccountIncomeTransaction tx in exportedData.IncomeTransactions)
+        {
+            tx.Id.Should().NotBeEmpty();
+            tx.Amount.Should().BeGreaterThan(0);
+            tx.Currency.Should().NotBeNullOrEmpty();
+            tx.Date.Should().BeBefore(DateTime.UtcNow);
+        }
+
         // No sensitive data exposed
         string encodedDataJson = Encoding.UTF8.GetString(Convert.FromBase64String(data.EncodedData));
-        encodedDataJson.Should().NotContain("password", "passwordHash");
+        encodedDataJson.Should().NotContain("password");
+        encodedDataJson.Should().NotContain("passwordHash");
     }
 
     private static ExportAccountData DecodeExportData(string encodedData)
