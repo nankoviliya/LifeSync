@@ -27,9 +27,8 @@ public class AccountExportEndpointTests : IntegrationTestsBase
         HttpClient.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
-        ExportAccountRequest exportRequest = new() { Format = ExportAccountFileFormat.Json };
-
-        HttpResponseMessage exportResponse = await HttpClient.PostAsJsonAsync("/api/accountExport", exportRequest);
+        HttpResponseMessage exportResponse =
+            await HttpClient.GetAsync($"/api/accountExport?format={ExportAccountFileFormat.Json}");
         ExportAccountResponse? data = await exportResponse.Content.ReadFromJsonAsync<ExportAccountResponse>();
 
         // Response shape
