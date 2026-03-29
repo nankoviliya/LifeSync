@@ -65,7 +65,10 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
   );
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-3 flex-1"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {readonlyRows.map(({ label, value }) => (
         <Row key={label} label={label}>
           <span className="font-medium text-right truncate max-w-[160px]">
@@ -133,7 +136,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
         )}
       </Row>
 
-      <div className="flex justify-center gap-2 mt-2">
+      <div className="flex justify-center gap-2 mt-auto">
         {isEditing ? (
           <>
             <Button
