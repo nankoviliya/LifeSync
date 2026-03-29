@@ -59,7 +59,6 @@ public class AccountExportService : BaseService, IAccountExportService
                     LastName = u.LastName,
                     BalanceAmount = u.Balance.Amount,
                     BalanceCurrency = u.Balance.CurrencyCode,
-                    LanguageId = u.Language.Id,
                     LanguageCode = u.Language.Code
                 },
                 IncomeTransactions = u.IncomeTransactions
