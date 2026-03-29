@@ -72,8 +72,7 @@ export const ImportAccountData = () => {
             ))}
           </div>
         </div>
-        <div
-          role="region"
+        <section
           aria-label={translate('import-drop-label')}
           className={`flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-6 text-center transition-colors ${
             isDragging
@@ -109,7 +108,7 @@ export const ImportAccountData = () => {
             outlined
             onClick={() => inputRef.current?.click()}
           />
-        </div>
+        </section>
         <Button
           type="button"
           label={translate('import-button')}
