@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { Button } from '@/components/buttons/Button';
-import { CopyableRow } from '@/components/common/copyable-row';
+import { CopyableLabel } from '@/components/common/copyable-label';
 import { Row } from '@/components/common/row';
 import { Input } from '@/components/ui/input';
 import {
@@ -59,7 +59,9 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       {readonlyRows.map(({ label, value }) => (
-        <CopyableRow key={label} label={label} value={value ?? ''} />
+        <Row key={label} label={label}>
+          <CopyableLabel value={value ?? ''} />
+        </Row>
       ))}
 
       <Separator />
@@ -74,7 +76,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
             )}
           />
         ) : (
-          <span className="font-medium text-right">{firstName}</span>
+          <CopyableLabel value={firstName} />
         )}
       </Row>
 
@@ -88,7 +90,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
             )}
           />
         ) : (
-          <span className="font-medium text-right">{lastName}</span>
+          <CopyableLabel value={lastName} />
         )}
       </Row>
 
@@ -115,9 +117,9 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
             )}
           />
         ) : (
-          <span className="font-medium text-right">
-            {getLanguageTranslation(language.code, translate)}
-          </span>
+          <CopyableLabel
+            value={getLanguageTranslation(language.code, translate)}
+          />
         )}
       </Row>
 
