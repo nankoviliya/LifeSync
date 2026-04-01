@@ -28,10 +28,10 @@ jobs:
         env:
           ASPNETCORE_ENVIRONMENT: Development
           DOCKER: "false"
-          DB_USER: "SA"
+          DB_USER: "postgres"
           DB_PASSWD: "YourStrongPassword123!"
           DB_HOST: "localhost"
-          DB_PORT: "1433"
+          DB_PORT: "5432"
           DB_NAME: "LifeSync_Test"
           JWT_SECRET_KEY: "test-secret-key-for-integration-tests-minimum-32-characters-long"
           JWT_ISSUER: "LifeSyncApp"

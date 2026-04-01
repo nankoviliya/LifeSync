@@ -32,25 +32,19 @@ services:
       - ${NETWORK_NAME}
 
   database:
-    image: "mcr.microsoft.com/mssql/server"
-    # TODO: Configure non-root user
-    user: "0:0"
+    image: "postgres:17"
     ports:
-      - "1433:1433"
+      - "5432:5432"
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: ${DB_PASSWD}
-      MSSQL_PID: "Express"
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
-      - lifesyncdb-data:/var/opt/mssql
+      - lifesyncdb-data:/var/lib/postgresql/data
     networks:
       - ${NETWORK_NAME}
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P ${DB_PASSWD} -Q 'SELECT 1' -C || exit 1",
-        ]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 10s
       timeout: 3s
       retries: 5
