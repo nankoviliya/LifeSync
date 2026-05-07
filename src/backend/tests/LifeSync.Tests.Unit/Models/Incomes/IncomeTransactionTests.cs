@@ -1,4 +1,5 @@
 using FluentAssertions;
+using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
@@ -298,6 +299,22 @@ public class IncomeTransactionTests
         EntityTestHelper.SetId(income2, sharedId);
 
         income1.Should().Be(income2);
+    }
+
+    [Fact]
+    public void IncomeTransaction_ShouldImplementIDomainEntity()
+    {
+        IncomeTransaction income = CreateTestIncome();
+
+        income.Should().BeAssignableTo<IDomainEntity>();
+    }
+
+    [Fact]
+    public void EntityType_ShouldReturnIncomeTransaction()
+    {
+        IncomeTransaction income = CreateTestIncome();
+
+        income.EntityType.Should().Be(EntityType.IncomeTransaction);
     }
 
     private IncomeTransaction CreateTestIncome(decimal amount = 1000m, DateTime? date = null)
