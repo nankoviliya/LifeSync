@@ -10,23 +10,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301"/>
-        <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.400.45"/>
-        <PackageReference Include="FastEndpoints" Version="7.1.1"/>
+        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.36"/>
+        <PackageReference Include="AWSSDK.SecretsManager" Version="4.0.4.20"/>
+        <PackageReference Include="FastEndpoints" Version="8.1.0"/>
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.7"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0"/>
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.7"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0"/>
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1"/>
-        <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -51,8 +50,5 @@
         </Compile>
     </ItemGroup>
 
-    <PropertyGroup>
-        <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
-    </PropertyGroup>
 
 </Project>

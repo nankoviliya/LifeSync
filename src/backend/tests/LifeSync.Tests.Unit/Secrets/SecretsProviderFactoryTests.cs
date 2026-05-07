@@ -32,8 +32,7 @@ public class SecretsProviderFactoryTests
         // Register AWS Secrets Service
         var amazonSecretsManager = Substitute.For<IAmazonSecretsManager>();
 
-        serviceCollection.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        serviceCollection.AddAWSService<IAmazonSecretsManager>();
+        serviceCollection.AddSingleton(amazonSecretsManager);
         serviceCollection.AddTransient<CloudSecretsProvider>();
 
         // Register Local Secrets Service
