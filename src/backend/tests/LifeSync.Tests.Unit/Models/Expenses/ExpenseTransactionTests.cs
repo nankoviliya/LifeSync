@@ -1,4 +1,5 @@
 using FluentAssertions;
+using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.Expenses;
 using LifeSync.API.Shared;
 using LifeSync.Common.Required;
@@ -307,6 +308,22 @@ public class ExpenseTransactionTests
         EntityTestHelper.SetId(expense2, sharedId);
 
         expense1.Should().Be(expense2);
+    }
+
+    [Fact]
+    public void ExpenseTransaction_ShouldImplementIDomainEntity()
+    {
+        ExpenseTransaction expense = CreateTestExpense();
+
+        expense.Should().BeAssignableTo<IDomainEntity>();
+    }
+
+    [Fact]
+    public void EntityType_ShouldReturnExpenseTransaction()
+    {
+        ExpenseTransaction expense = CreateTestExpense();
+
+        expense.EntityType.Should().Be(EntityType.ExpenseTransaction);
     }
 
     private ExpenseTransaction CreateTestExpense(ExpenseType type = ExpenseType.Needs, DateTime? date = null)

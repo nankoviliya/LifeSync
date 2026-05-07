@@ -5,12 +5,14 @@ using LifeSync.Common.Required;
 
 namespace LifeSync.API.Models.Expenses;
 
-public class ExpenseTransaction : Entity
+public class ExpenseTransaction : Entity, IDomainEntity
 {
     private const int MaxDescriptionLength = 500;
     private const int MinDescriptionLength = 1;
 
     private ExpenseTransaction() { }
+
+    public EntityType EntityType => EntityType.ExpenseTransaction;
 
     public static ExpenseTransaction From(
         RequiredReference<Money> amount,
