@@ -7,19 +7,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 
 namespace LifeSync.Tests.Integration.Infrastructure;
 
 public class IntegrationTestsWebAppFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _databaseContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server")
-        .WithEnvironment("DB_PORT", "1433")
-        .WithEnvironment("DB_HOST", "localhost")
-        .WithEnvironment("DB_NAME", "LifeSync_Test")
-        .WithEnvironment("DB_USER", "SA")
-        .WithEnvironment("DB_PASSWD", "YourStrongPassword123!")
+    private readonly PostgreSqlContainer _databaseContainer = new PostgreSqlBuilder()
+        .WithImage("postgres:17")
+        .WithDatabase("LifeSync_Test")
+        .WithUsername("postgres")
+        .WithPassword("YourStrongPassword123!")
         .Build();
 
     public async Task InitializeAsync() => await _databaseContainer.StartAsync();
@@ -40,7 +38,7 @@ public class IntegrationTestsWebAppFactory : WebApplicationFactory<IApiMarker>, 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options
-                    .UseSqlServer(_databaseContainer.GetConnectionString());
+                    .UseNpgsql(_databaseContainer.GetConnectionString());
             });
         });
 

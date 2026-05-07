@@ -38,23 +38,23 @@ LifeSync aims to provide a unified platform for managing personal tasks on a dai
 - xUnit
 
 ### Database
-- SQL Server
+- PostgreSQL
 
 ## Setup and Installation
 
 Follow these steps to set up your development environment for LifeSync.
 
-### 1. Install and Configure MSSQL Developer Edition
+### 1. Install and Configure PostgreSQL
 
 1. **Download & Install:**
-   - Download [MSSQL Developer Edition](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) and run the installer. Follow the prompts in the installation wizard.
+   - Download [PostgreSQL](https://www.postgresql.org/download/) and run the installer. Follow the prompts in the installation wizard.
 
 2. **Configure the Server:**
-   - Launch SQL Server Management Studio (SSMS) and connect to your server instance (typically `localhost` on port `1433`).
-   - *(Optional)* Adjust the authentication mode (Windows or Mixed Mode) as needed.
+   - Set a password for the `postgres` user during installation.
+   - The server runs on `localhost` port `5432` by default.
 
 3. **Verify the Connection:**
-   - Ensure the server is running and you can connect to it.
+   - Use `psql` or a GUI tool like pgAdmin to verify connection.
 
 ---
 
@@ -84,7 +84,7 @@ To securely store sensitive information (e.g., JWT secret, database credentials)
            "Password": "INSERT_YOUR_PASSWORD",
            "Engine": "",
            "Host": "localhost",
-           "Port": 1433,
+           "Port": 5432,
            "DbInstanceIdentifier": "LifeSync"
          }
        }
@@ -105,7 +105,7 @@ To securely store sensitive information (e.g., JWT secret, database credentials)
 ### 3. Apply Entity Framework Core Migrations
 
 1. **Update the Connection String:**
-   - Ensure your ASP.NET Core configuration (in *appsettings.json* or via user secrets) correctly points to your `LifeSync` MSSQL database.
+   - Ensure your ASP.NET Core configuration (in *appsettings.json* or via user secrets) correctly points to your `LifeSync` PostgreSQL database.
 
 2. **Run Migrations:**
    - Open a terminal in your project’s solution directory and run:
