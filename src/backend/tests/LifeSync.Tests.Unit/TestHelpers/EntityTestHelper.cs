@@ -1,4 +1,8 @@
 using LifeSync.API.Models.Abstractions;
+using LifeSync.API.Models.Expenses;
+using LifeSync.API.Models.Incomes;
+using LifeSync.API.Shared;
+using LifeSync.Common.Required;
 
 namespace LifeSync.Tests.Unit.TestHelpers;
 
@@ -61,5 +65,32 @@ public static class EntityTestHelper
         SetId(second, sharedId);
 
         return (first, second);
+    }
+
+    /// <summary>
+    /// Builds an EntityRef pointing at a given EntityType with a chosen ID. Constructs a real
+    /// IDomainEntity behind the scenes so EntityRef is built through its public From(IDomainEntity)
+    /// path (no internal/test-only constructor needed).
+    /// </summary>
+    public static EntityRef BuildEntityRef(Guid entityId, EntityType entityType)
+    {
+        Entity entity = entityType switch
+        {
+            EntityType.ExpenseTransaction => ExpenseTransaction.From(
+                new Money(1m, "USD").ToRequiredReference(),
+                DateTime.UtcNow.ToRequiredStruct(),
+                "test".ToRequiredString(),
+                ExpenseType.Needs,
+                "user".ToRequiredString()),
+            EntityType.IncomeTransaction => IncomeTransaction.From(
+                new Money(1m, "USD").ToRequiredReference(),
+                DateTime.UtcNow.ToRequiredStruct(),
+                "test".ToRequiredString(),
+                "user".ToRequiredString()),
+            _ => throw new ArgumentOutOfRangeException(nameof(entityType), entityType, "Unsupported EntityType in test helper."),
+        };
+
+        SetId(entity, entityId);
+        return EntityRef.From((IDomainEntity)entity);
     }
 }

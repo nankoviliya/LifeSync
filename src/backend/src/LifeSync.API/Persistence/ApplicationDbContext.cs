@@ -4,6 +4,7 @@ using LifeSync.API.Models.Expenses;
 using LifeSync.API.Models.Incomes;
 using LifeSync.API.Models.Languages;
 using LifeSync.API.Models.RefreshTokens;
+using LifeSync.API.Models.Tags;
 using LifeSync.API.Secrets.Contracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,4 +81,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+    public DbSet<Tag> Tags { get; set; } = default!;
+
+    public DbSet<TagAssignment> TagAssignments { get; set; } = default!;
 }

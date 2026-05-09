@@ -7,18 +7,8 @@ namespace LifeSync.API.Models.Abstractions;
 /// </summary>
 public readonly record struct EntityRef
 {
-    public EntityRef(Guid entityId, EntityType entityType)
+    private EntityRef(Guid entityId, EntityType entityType)
     {
-        if (entityId == Guid.Empty)
-        {
-            throw new ArgumentException("Entity ID cannot be empty.", nameof(entityId));
-        }
-
-        if (!Enum.IsDefined(typeof(EntityType), entityType))
-        {
-            throw new ArgumentException("Invalid entity type.", nameof(entityType));
-        }
-
         EntityId = entityId;
         EntityType = entityType;
     }
@@ -31,6 +21,26 @@ public readonly record struct EntityRef
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        return new EntityRef(((Entity)entity).Id, entity.EntityType);
+        var entityId = ((Entity)entity).Id;
+        var entityType = entity.EntityType;
+
+        if (entityId == Guid.Empty)
+        {
+            throw new ArgumentException("Entity ID cannot be empty.", nameof(entity));
+        }
+
+        if (!Enum.IsDefined(typeof(EntityType), entityType))
+        {
+            throw new ArgumentException("Invalid entity type.", nameof(entity));
+        }
+
+        return new EntityRef(entityId, entityType);
+    }
+
+    // Rehydration path for persistence — values were already validated when the row was first written,
+    // so we skip re-validation here (mirrors the Money.FromPersistence pattern).
+    internal static EntityRef From(Guid entityId, EntityType entityType)
+    {
+        return new EntityRef(entityId, entityType);
     }
 }

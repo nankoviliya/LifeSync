@@ -2,6 +2,7 @@ using FluentAssertions;
 using LifeSync.API.Models.Abstractions;
 using LifeSync.API.Models.Tags;
 using LifeSync.Common.Required;
+using LifeSync.Tests.Unit.TestHelpers;
 
 namespace LifeSync.Tests.Unit.Models.Tags;
 
@@ -12,7 +13,7 @@ public class TagAssignmentTests
     {
         Guid tagId = Guid.NewGuid();
         Guid entityId = Guid.NewGuid();
-        EntityRef entity = new(entityId, EntityType.ExpenseTransaction);
+        EntityRef entity = EntityTestHelper.BuildEntityRef(entityId, EntityType.ExpenseTransaction);
 
         TagAssignment assignment = TagAssignment.From(
             tagId.ToRequiredStruct(),
@@ -27,7 +28,7 @@ public class TagAssignmentTests
     [Fact]
     public void From_WithEmptyTagId_ShouldThrow()
     {
-        EntityRef entity = new(Guid.NewGuid(), EntityType.ExpenseTransaction);
+        EntityRef entity = EntityTestHelper.BuildEntityRef(Guid.NewGuid(), EntityType.ExpenseTransaction);
 
         Action act = () => TagAssignment.From(
             Guid.Empty.ToRequiredStruct(),
@@ -40,7 +41,7 @@ public class TagAssignmentTests
     [Fact]
     public void From_WithEmptyUserId_ShouldThrow()
     {
-        EntityRef entity = new(Guid.NewGuid(), EntityType.ExpenseTransaction);
+        EntityRef entity = EntityTestHelper.BuildEntityRef(Guid.NewGuid(), EntityType.ExpenseTransaction);
 
         Action act = () => TagAssignment.From(
             Guid.NewGuid().ToRequiredStruct(),
