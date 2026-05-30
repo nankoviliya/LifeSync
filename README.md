@@ -7,6 +7,8 @@
 - [Technologies Used](#technologies-used)
 - [Setup and Installation](#setup-and-installation)
 - [Running the Application](#running-the-application)
+  - [With Docker](#with-docker)
+  - [Locally](#locally)
 - [Quick Start with LifeSync StartupScripts](#quick-start-with-lifesync-startupscripts)
 
 ## Project Overview
@@ -120,7 +122,38 @@ To securely store sensitive information (e.g., JWT secret, database credentials)
 
 ## Running the Application
 
-### 1. Run the Backend API
+You can run the whole stack with Docker (no local MSSQL or secrets setup required), or run each project manually.
+
+### With Docker
+
+This is the fastest way to get everything running. It builds and starts the API, both frontends, and SQL Server in containers.
+
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine + Compose) installed and running.
+
+**Steps:**
+
+1. From the repository root, start all services:
+   ```bash
+   docker compose up -d --wait
+   ```
+   The first run builds the images and applies the database setup; subsequent runs reuse them.
+
+2. Once the containers are healthy, access the apps:
+   - API: `http://localhost:7200`
+   - React frontend: `http://localhost:4200`
+   - Angular frontend: `http://localhost:4300`
+   - SQL Server: `localhost:1433`
+
+3. To stop the stack (keeps the database volume):
+   ```bash
+   docker compose down
+   ```
+
+> Configuration is read from the `.env` file in the repository root. No additional setup is needed for local development.
+
+### Locally
+
+#### 1. Run the Backend API
 
 1. **Start the API:**
    - Navigate to your ASP.NET Core backend project folder.
@@ -135,7 +168,7 @@ To securely store sensitive information (e.g., JWT secret, database credentials)
 
 ---
 
-### 2. Run the React Frontend
+#### 2. Run the React Frontend
 
 1. **Install Dependencies:**
    - Navigate to your React project folder.
