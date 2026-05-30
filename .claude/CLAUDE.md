@@ -23,9 +23,7 @@
 LifeSync/
 ├── .github/workflows/          # CI/CD pipelines
 ├── .claude/                    # AI assistant documentation
-│   ├── CLAUDE.md              # This file
-│   ├── agents/                # Specialized agent prompts
-│   └── prompts/               # Reusable prompt templates
+│   └── CLAUDE.md              # This file
 ├── src/
 │   ├── backend/               # .NET 10 API (FastEndpoints, EF Core, SQL Server)
 │   ├── frontend/
@@ -153,11 +151,7 @@ docker-compose up -d --wait  # Starts API, frontends, and SQL Server
 
 ---
 
-## Agents
-
-- **Agent Prompts**: `.claude/agents/*.md`
-
-### External Resources
+## External Resources
 
 - [.NET 10 Documentation](https://learn.microsoft.com/en-us/dotnet/)
 - [FastEndpoints Documentation](https://fast-endpoints.com/)
