@@ -1,6 +1,6 @@
 import { Controller } from 'react-hook-form';
 
-import { Button } from '@/components/buttons/Button';
+import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { useNewIncomeTransaction } from '@/features/finances/transactions/hooks/useNewIncomeTransaction';
@@ -95,7 +95,9 @@ export const NewIncomeTransaction = ({
         )}
       />
 
-      <Button label="Submit" type="submit" loading={isSubmitting} />
+      <Button type="submit" loading={isSubmitting}>
+        Submit
+      </Button>
     </form>
   );
 };

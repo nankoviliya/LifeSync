@@ -4,10 +4,9 @@ import { routePaths } from '@/config/routing/routePaths';
 import { useLogout } from '@/hooks/auth/useLogout';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
-export const useUserAvatar = () => {
+export const useUserCard = () => {
   const navigate = useNavigate();
   const { translate } = useAppTranslations();
-
   const { logout } = useLogout();
 
   const navigateToUserProfile = () => {
@@ -19,8 +18,8 @@ export const useUserAvatar = () => {
   };
 
   return {
-    profileLabel: translate('profile-button-name'),
-    logoutLabel: translate('logout-button-name'),
+    profileLabel: translate('profile-button-name', { defaultValue: 'Profile' }),
+    logoutLabel: translate('logout-button-name', { defaultValue: 'Logout' }),
     navigateToUserProfile,
     handleLogout,
   };

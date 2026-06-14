@@ -32,12 +32,7 @@ export const useRegistration = () => {
     onSuccess: () => {
       navigate(routePaths.login.path);
     },
-    onError: () => {
-      console.log('Registration error');
-    },
   });
-
-  const { isPending } = mutation;
 
   const onSubmit: SubmitHandler<IRegisterRequestModel> = (data) => {
     mutation.mutate(data);
@@ -46,6 +41,8 @@ export const useRegistration = () => {
   return {
     control,
     onSubmit: handleSubmit(onSubmit),
-    isSubmitting: isPending,
+    isSubmitting: mutation.isPending,
+    error: mutation.error,
+    isError: mutation.isError,
   };
 };

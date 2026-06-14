@@ -1,4 +1,4 @@
-import { Button } from '@/components/buttons/Button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -29,18 +29,12 @@ export const NewTransactionButtons = () => {
   return (
     <div className="my-4">
       <div className="flex flex-wrap gap-2">
-        <Button
-          label={translate('add-new-income-transaction-button-label')}
-          onClick={() => setIsIncomeFormVisible(true)}
-          outlined
-          severity="success"
-        />
-        <Button
-          label={translate('add-new-expense-transaction-button-label')}
-          onClick={() => setIsExpenseFormVisible(true)}
-          outlined
-          severity="danger"
-        />
+        <Button variant="outline" onClick={() => setIsIncomeFormVisible(true)}>
+          {translate('add-new-income-transaction-button-label')}
+        </Button>
+        <Button variant="outline" onClick={() => setIsExpenseFormVisible(true)}>
+          {translate('add-new-expense-transaction-button-label')}
+        </Button>
       </div>
 
       <Dialog

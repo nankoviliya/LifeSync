@@ -3,15 +3,18 @@ import { useReadQuery } from '@/hooks/api/useReadQuery';
 import { IFrontendSettings } from '@/types/frontendSettings';
 
 export const useFrontendSettings = () => {
-  const { data, isLoading, isSuccess } = useReadQuery<IFrontendSettings>({
-    endpoint: endpointsOptions.getFrontendSettings.endpoint,
-    queryKey: [endpointsOptions.getFrontendSettings.key],
-    staleTime: Infinity,
-  });
+  const { data, isLoading, isSuccess, isError, refetch } =
+    useReadQuery<IFrontendSettings>({
+      endpoint: endpointsOptions.getFrontendSettings.endpoint,
+      queryKey: [endpointsOptions.getFrontendSettings.key],
+      staleTime: Infinity,
+    });
 
   return {
     frontendSettings: data,
     isLoading,
     isSuccess,
+    isError,
+    refetch,
   };
 };

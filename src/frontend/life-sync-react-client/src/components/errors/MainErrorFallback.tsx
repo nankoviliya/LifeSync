@@ -1,4 +1,4 @@
-import { Button } from '@/components/buttons/Button';
+import { Button } from '@/components/ui/button';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
 
 export const MainErrorFallback = () => {
