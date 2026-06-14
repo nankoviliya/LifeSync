@@ -1,3 +1,7 @@
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '@fontsource/instrument-serif';
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
