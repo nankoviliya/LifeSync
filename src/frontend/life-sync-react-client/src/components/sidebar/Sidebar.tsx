@@ -84,7 +84,7 @@ export const Sidebar = ({ activeId, user }: SidebarProps) => {
   // mobile SidebarMobileDrawer Sheet) is responsible for width/height/positioning.
   // This component just owns the visual content + dark surface tokens.
   return (
-    <div className="flex h-full flex-col bg-side text-side-foreground">
+    <div className="flex h-full w-full flex-col bg-side text-side-foreground">
       <div className="flex items-center gap-2.5 border-b border-side-border px-5 py-4">
         <div className="grid size-7 place-items-center rounded-md bg-primary font-mono text-sm font-bold text-primary-foreground">
           L

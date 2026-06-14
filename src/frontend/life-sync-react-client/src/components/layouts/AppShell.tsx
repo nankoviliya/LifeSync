@@ -65,7 +65,7 @@ export const AppShell = () => {
     <AppShellHeaderContext.Provider value={ctxValue}>
       <div className="flex h-dvh w-full overflow-hidden bg-background text-foreground">
         {/* Desktop sidebar — hidden below md, visible at md+ */}
-        <aside className="hidden h-dvh w-56 shrink-0 border-r border-side-border md:flex">
+        <aside className="hidden h-dvh w-56 shrink-0 border-r border-side-border bg-side md:flex">
           <Sidebar activeId={activeId} user={userInfo} />
         </aside>
         <main className="flex-1 overflow-auto px-4 pb-6 pt-5 md:px-9 md:pb-9 md:pt-7">

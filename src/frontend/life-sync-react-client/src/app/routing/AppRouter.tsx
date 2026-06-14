@@ -1,4 +1,3 @@
-import { PropsWithChildren } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   createBrowserRouter,
@@ -10,9 +9,10 @@ import {
 } from 'react-router-dom';
 
 import { AppRoot } from '@/app/AppRoot';
+import { RequireAuth } from '@/app/routing/RequireAuth';
+import { RequireUnauth } from '@/app/routing/RequireUnauth';
 import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 import { AppShell } from '@/components/layouts/AppShell';
-import { AppShellHeader } from '@/components/layouts/AppShellHeader';
 import { routePaths } from '@/config/routing/routePaths';
 import { Login } from '@/features/auth/login/components/Login';
 import { Register } from '@/features/auth/register/components/Register';
@@ -20,25 +20,6 @@ import { Finances } from '@/features/finances/Finances';
 import { Transactions } from '@/features/finances/transactions/components/Transactions';
 import { Home } from '@/features/home/Home';
 import { UserProfile } from '@/features/userProfile/components/UserProfile';
-import { useAuth } from '@/stores/AuthProvider';
-
-const ProtectedRoute = ({ children }: PropsWithChildren) => {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) return null; // or <LoadingSpinner />
-  if (!isAuthenticated) return <Navigate to={routePaths.login.path} replace />;
-
-  return children ?? <Outlet />;
-};
-
-const GuestRoute = ({ children }: PropsWithChildren) => {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) return null;
-  if (isAuthenticated) return <Navigate to={routePaths.home.path} replace />;
-
-  return children ?? <Outlet />;
-};
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,14 +31,26 @@ const router = createBrowserRouter(
       }
       errorElement={<MainErrorFallback />}
     >
-      {/* Guest routes */}
-      <Route element={<GuestRoute />}>
+      {/* Guest routes — AuthShell wired in Phase 4 */}
+      <Route
+        element={
+          <RequireUnauth>
+            <Outlet />
+          </RequireUnauth>
+        }
+      >
         <Route path={routePaths.login.path} element={<Login />} />
         <Route path={routePaths.register.path} element={<Register />} />
       </Route>
 
-      {/* Protected routes */}
-      <Route element={<ProtectedRoute />}>
+      {/* Protected routes inside AppShell */}
+      <Route
+        element={
+          <RequireAuth>
+            <AppShell />
+          </RequireAuth>
+        }
+      >
         <Route path={routePaths.app.path} element={<Home />} />
         <Route path={routePaths.home.path} element={<Home />} />
         <Route path={routePaths.userProfile.path} element={<UserProfile />} />
@@ -65,23 +58,6 @@ const router = createBrowserRouter(
         <Route
           path={routePaths.financeTransactions.path}
           element={<Transactions />}
-        />
-      </Route>
-
-      {/* TEMP preview — remove in Task 14 */}
-      <Route path="/__shell-preview" element={<AppShell />}>
-        <Route
-          index
-          element={
-            <>
-              <AppShellHeader
-                title="Preview"
-                subtitle="DEV"
-                actions={<button type="button">Action</button>}
-              />
-              <div>Preview content goes here.</div>
-            </>
-          }
         />
       </Route>
 
