@@ -1,7 +1,7 @@
 import { Check, RefreshCw } from 'lucide-react';
 import { Control, Controller } from 'react-hook-form';
 
-import { Button } from '@/components/buttons/Button';
+import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { MultiSelect } from '@/components/ui/multi-select';
@@ -127,21 +127,23 @@ export const TransactionsFilters = ({
 
       <div className="mt-4 flex gap-2">
         <Button
-          label={translate('filters-apply-button-label')}
           type="button"
+          variant="default"
+          className="rounded-full"
           onClick={onFiltersApply}
-          icon={<Check className="h-4 w-4" />}
-          severity="success"
-          rounded
-        />
+        >
+          <Check className="h-4 w-4" />
+          {translate('filters-apply-button-label')}
+        </Button>
         <Button
-          label={translate('filters-reset-button-label')}
           type="button"
+          variant="secondary"
+          className="rounded-full"
           onClick={onFiltersReset}
-          icon={<RefreshCw className="h-4 w-4" />}
-          severity="secondary"
-          rounded
-        />
+        >
+          <RefreshCw className="h-4 w-4" />
+          {translate('filters-reset-button-label')}
+        </Button>
       </div>
     </div>
   );

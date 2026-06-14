@@ -2,9 +2,9 @@ import { Check, Pencil, X } from 'lucide-react';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
-import { Button } from '@/components/buttons/Button';
 import { CopyableLabel } from '@/components/common/copyable-label';
 import { Row } from '@/components/common/row';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -126,31 +126,31 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
       <div className="flex justify-center gap-2 mt-auto">
         {isEditing ? (
           <>
+            <Button type="submit" loading={isSubmitting}>
+              {!isSubmitting && <Check className="h-4 w-4" />}
+              {translate('profile-save-button')}
+            </Button>
             <Button
-              type="submit"
-              label={translate('profile-save-button')}
-              loading={isSubmitting}
-              icon={<Check className="h-4 w-4" />}
-            />
-            <Button
-              label={translate('profile-cancel-button')}
-              icon={<X className="h-4 w-4" />}
               onClick={(e) => {
                 setIsEditing(false);
                 e.preventDefault();
               }}
-            />
+            >
+              <X className="h-4 w-4" />
+              {translate('profile-cancel-button')}
+            </Button>
           </>
         ) : (
           <Button
             type="button"
-            label={translate('profile-edit-button')}
-            icon={<Pencil className="h-4 w-4" />}
             onClick={(e) => {
               setIsEditing(true);
               e.preventDefault();
             }}
-          />
+          >
+            <Pencil className="h-4 w-4" />
+            {translate('profile-edit-button')}
+          </Button>
         )}
       </div>
     </form>

@@ -1,8 +1,8 @@
 import { Download } from 'lucide-react';
 import { useState } from 'react';
 
-import { Button } from '@/components/buttons/Button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardHeader,
@@ -65,11 +65,12 @@ export const ExportAccountData = () => {
         <Button
           type="button"
           loading={isFetching}
-          label={translate('export-button')}
-          icon={<Download className="h-4 w-4" />}
           className="w-full"
           onClick={handleExport}
-        />
+        >
+          {!isFetching && <Download className="h-4 w-4" />}
+          {translate('export-button')}
+        </Button>
       </CardContent>
     </Card>
   );

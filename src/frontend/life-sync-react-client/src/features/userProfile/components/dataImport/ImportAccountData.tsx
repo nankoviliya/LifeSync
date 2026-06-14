@@ -1,8 +1,8 @@
 import { Upload } from 'lucide-react';
 import { useRef, useState } from 'react';
 
-import { Button } from '@/components/buttons/Button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -104,19 +104,21 @@ export const ImportAccountData = () => {
           />
           <Button
             type="button"
-            label={translate('import-browse-button')}
-            outlined
+            variant="outline"
             onClick={() => inputRef.current?.click()}
-          />
+          >
+            {translate('import-browse-button')}
+          </Button>
         </section>
         <Button
           type="button"
-          label={translate('import-button')}
-          icon={<Upload className="h-4 w-4" />}
           className="w-full"
           disabled={!file || isImporting}
           onClick={handleImport}
-        />
+        >
+          <Upload className="h-4 w-4" />
+          {translate('import-button')}
+        </Button>
       </CardContent>
     </Card>
   );

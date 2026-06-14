@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-import { Button } from '@/components/buttons/Button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { routePaths } from '@/config/routing/routePaths';
@@ -52,11 +52,9 @@ export const Login = () => {
         )}
       />
 
-      <Button
-        label={translate('login-button-label')}
-        type="submit"
-        loading={isLoginPending}
-      />
+      <Button type="submit" loading={isLoginPending}>
+        {translate('login-button-label')}
+      </Button>
 
       <div className="inline-flex justify-center">
         <span>

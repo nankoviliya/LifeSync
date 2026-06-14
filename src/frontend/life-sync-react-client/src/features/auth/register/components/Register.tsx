@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-import { Button } from '@/components/buttons/Button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import {
@@ -160,11 +160,9 @@ export const Register = () => {
             </div>
           </div>
 
-          <Button
-            label={translate('register-button-label')}
-            type="submit"
-            loading={isSubmitting}
-          />
+          <Button type="submit" loading={isSubmitting}>
+            {translate('register-button-label')}
+          </Button>
 
           <div className="inline-flex justify-center">
             <span>
