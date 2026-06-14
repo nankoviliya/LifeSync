@@ -11,6 +11,8 @@ import {
 
 import { AppRoot } from '@/app/AppRoot';
 import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
+import { AppShell } from '@/components/layouts/AppShell';
+import { AppShellHeader } from '@/components/layouts/AppShellHeader';
 import { routePaths } from '@/config/routing/routePaths';
 import { Login } from '@/features/auth/login/components/Login';
 import { Register } from '@/features/auth/register/components/Register';
@@ -63,6 +65,23 @@ const router = createBrowserRouter(
         <Route
           path={routePaths.financeTransactions.path}
           element={<Transactions />}
+        />
+      </Route>
+
+      {/* TEMP preview — remove in Task 14 */}
+      <Route path="/__shell-preview" element={<AppShell />}>
+        <Route
+          index
+          element={
+            <>
+              <AppShellHeader
+                title="Preview"
+                subtitle="DEV"
+                actions={<button type="button">Action</button>}
+              />
+              <div>Preview content goes here.</div>
+            </>
+          }
         />
       </Route>
 
