@@ -22,20 +22,17 @@ export const useLogin = () => {
     onSuccess: () => {
       invalidateQuery({ queryKey: [endpointsOptions.getUserAccountData.key] });
     },
-    onError: () => {
-      console.log('Auth error');
-    },
   });
 
   const onSubmit: SubmitHandler<ILoginRequestModel> = (data) => {
     mutation.mutate(data);
   };
 
-  const { isPending } = mutation;
-
   return {
     control,
     onSubmit: handleSubmit(onSubmit),
-    isLoginPending: isPending,
+    isLoginPending: mutation.isPending,
+    error: mutation.error,
+    isError: mutation.isError,
   };
 };

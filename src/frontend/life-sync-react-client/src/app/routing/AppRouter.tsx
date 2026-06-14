@@ -3,7 +3,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Navigate,
-  Outlet,
   Route,
   RouterProvider,
 } from 'react-router-dom';
@@ -13,6 +12,7 @@ import { RequireAuth } from '@/app/routing/RequireAuth';
 import { RequireUnauth } from '@/app/routing/RequireUnauth';
 import { MainErrorFallback } from '@/components/errors/MainErrorFallback';
 import { AppShell } from '@/components/layouts/AppShell';
+import { AuthShell } from '@/components/layouts/AuthShell';
 import { routePaths } from '@/config/routing/routePaths';
 import { Login } from '@/features/auth/login/components/Login';
 import { Register } from '@/features/auth/register/components/Register';
@@ -31,11 +31,11 @@ const router = createBrowserRouter(
       }
       errorElement={<MainErrorFallback />}
     >
-      {/* Guest routes — AuthShell wired in Phase 4 */}
+      {/* Guest routes inside AuthShell */}
       <Route
         element={
           <RequireUnauth>
-            <Outlet />
+            <AuthShell />
           </RequireUnauth>
         }
       >
