@@ -9,6 +9,7 @@ export interface ToolNavItemProps {
   to?: string;
   active?: boolean;
   ready: boolean;
+  onClick?: () => void;
 }
 
 const baseClasses =
@@ -23,6 +24,7 @@ export const ToolNavItem = ({
   to,
   active,
   ready,
+  onClick,
 }: ToolNavItemProps) => {
   const { translate } = useAppTranslations();
   const soonLabel = translate('nav-soon-badge', { defaultValue: 'SOON' });
@@ -42,7 +44,12 @@ export const ToolNavItem = ({
   }
 
   return (
-    <NavLink to={to} className={cn(baseClasses, active && activeClasses)} end>
+    <NavLink
+      to={to}
+      className={cn(baseClasses, active && activeClasses)}
+      onClick={onClick}
+      end
+    >
       <span className="grid size-4 place-items-center">{icon}</span>
       <span>{label}</span>
     </NavLink>

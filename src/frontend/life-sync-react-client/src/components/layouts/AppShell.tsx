@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { AppShellHeaderContext } from '@/components/layouts/AppShellHeader';
 import { Sidebar } from '@/components/sidebar/Sidebar';
+import { SidebarMobileDrawer } from '@/components/sidebar/SidebarMobileDrawer';
 import { ThemeSegmentedToggle } from '@/components/topbar/ThemeSegmentedToggle';
 import { Topbar } from '@/components/topbar/Topbar';
 import { routePaths } from '@/config/routing/routePaths';
@@ -72,6 +73,9 @@ export const AppShell = () => {
           <Topbar
             title={header.title}
             subtitle={header.subtitle}
+            leading={
+              <SidebarMobileDrawer activeId={activeId} user={userInfo} />
+            }
             actions={
               <>
                 <ThemeSegmentedToggle />

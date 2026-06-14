@@ -16,6 +16,8 @@ import { useAppTranslations } from '@/hooks/useAppTranslations';
 export interface SidebarProps {
   activeId: string;
   user: { name: string; email: string; initials: string };
+  /** Called whenever a nav link is clicked — used by the mobile drawer to auto-close. */
+  onNavigate?: () => void;
 }
 
 interface ToolDef {
@@ -74,7 +76,7 @@ const TOOLS: ReadonlyArray<ToolDef> = [
   },
 ];
 
-export const Sidebar = ({ activeId, user }: SidebarProps) => {
+export const Sidebar = ({ activeId, user, onNavigate }: SidebarProps) => {
   const { translate } = useAppTranslations();
   const toolsLabel = translate('sidebar-tools-label', {
     defaultValue: 'Tools',
@@ -106,6 +108,7 @@ export const Sidebar = ({ activeId, user }: SidebarProps) => {
             to={tool.to}
             active={tool.id === activeId}
             ready={tool.ready}
+            onClick={onNavigate}
           />
         ))}
       </nav>
