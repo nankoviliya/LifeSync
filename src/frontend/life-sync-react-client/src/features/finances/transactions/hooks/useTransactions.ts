@@ -4,7 +4,7 @@ import { ITransactionsGetModel } from '@/features/finances/transactions/models/t
 import { useReadQuery } from '@/hooks/api/useReadQuery';
 
 export const useTransactions = (filters: ITransactionsFiltersModel) => {
-  const { data, isLoading, isSuccess, refetch } =
+  const { data, isLoading, isSuccess, isError, error, refetch } =
     useReadQuery<ITransactionsGetModel>({
       endpoint: endpointsOptions.getUserTransactions.endpoint,
       queryKey: [endpointsOptions.getUserTransactions.key],
@@ -16,6 +16,8 @@ export const useTransactions = (filters: ITransactionsFiltersModel) => {
     data,
     isLoading,
     isSuccess,
+    isError,
+    error,
     refetch,
   };
 };

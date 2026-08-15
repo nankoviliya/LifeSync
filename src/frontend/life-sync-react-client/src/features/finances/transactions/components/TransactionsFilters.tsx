@@ -41,7 +41,7 @@ export const TransactionsFilters = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-[18px] text-card-foreground shadow-xs">
       <h2 className="text-lg font-semibold">{translate('filters-label')}</h2>
 
       <Controller

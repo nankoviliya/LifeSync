@@ -21,12 +21,18 @@ export const MoneyStatStrip = ({
 }: MoneyStatStripProps) => {
   const { translate } = useAppTranslations();
 
-  const { totalIncome, currency: incomeCurrency } = incomeSummary;
+  const { totalIncome, currency: incomeSummaryCurrency } = incomeSummary;
   const {
     totalSpent,
     totalSpentOnSavings,
-    currency: expenseCurrency,
+    currency: expenseSummaryCurrency,
   } = expenseSummary;
+
+  // A summary's currency can be empty when it has no transactions (e.g. zero
+  // income), which would render a bare number with no currency symbol. Fall
+  // back to the account's default currency so the figure always reads sensibly.
+  const incomeCurrency = incomeSummaryCurrency || balanceCurrency;
+  const expenseCurrency = expenseSummaryCurrency || balanceCurrency;
 
   // Savings rate is the only honestly-derivable delta (savings ÷ income).
   // Period-over-period deltas need backend history (deferred — afterwork).
