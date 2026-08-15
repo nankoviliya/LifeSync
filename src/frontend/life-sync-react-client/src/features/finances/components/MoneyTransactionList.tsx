@@ -2,13 +2,12 @@ import { useState } from 'react';
 
 import { TransactionRow } from '@/components/composites/TransactionRow';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
 import {
-  ExpenseType,
   IExpenseTransactionGetModel,
   IIncomeTransactionGetModel,
-  TransactionType,
-} from '@/features/finances/transactions/models/transactionsGetModel';
-import { useAppTranslations } from '@/hooks/useAppTranslations';
+} from '@/hooks/useTransactions';
+import { ExpenseType, TransactionType } from '@/types/transactionTypes';
 import { formatSignedCurrency } from '@/utils/formatCurrency';
 
 type AnyTransaction = IExpenseTransactionGetModel | IIncomeTransactionGetModel;

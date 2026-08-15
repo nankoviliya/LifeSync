@@ -1,9 +1,9 @@
 import { StatCard } from '@/components/composites/StatCard';
+import { useAppTranslations } from '@/hooks/useAppTranslations';
 import {
   IExpenseSummaryData,
   IIncomeSummaryData,
-} from '@/features/finances/transactions/models/transactionsGetModel';
-import { useAppTranslations } from '@/hooks/useAppTranslations';
+} from '@/hooks/useTransactions';
 import { formatCurrency } from '@/utils/formatCurrency';
 
 export interface MoneyStatStripProps {

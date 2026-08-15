@@ -1,10 +1,7 @@
 import { useForm } from 'react-hook-form';
 
-import { ITransactionsFiltersModel } from '@/features/finances/transactions/models/transactionsFiltersModel';
-import {
-  ExpenseType,
-  TransactionType,
-} from '@/features/finances/transactions/models/transactionsGetModel';
+import { ITransactionsFiltersModel } from '@/hooks/useTransactions';
+import { ExpenseType, TransactionType } from '@/types/transactionTypes';
 import {
   getCurrentMonthFirstDayDate,
   getCurrentMonthLastDayDate,

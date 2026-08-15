@@ -5,12 +5,9 @@ import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Input } from '@/components/ui/input';
 import { MultiSelect } from '@/components/ui/multi-select';
-import { ITransactionsFiltersModel } from '@/features/finances/transactions/models/transactionsFiltersModel';
-import {
-  ExpenseType,
-  TransactionType,
-} from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { ITransactionsFiltersModel } from '@/hooks/useTransactions';
+import { ExpenseType, TransactionType } from '@/types/transactionTypes';
 
 export interface ITransactionsFiltersProps {
   control: Control<ITransactionsFiltersModel>;

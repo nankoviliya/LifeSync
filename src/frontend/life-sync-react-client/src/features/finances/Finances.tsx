@@ -6,9 +6,9 @@ import { MoneyStatStrip } from '@/features/finances/components/MoneyStatStrip';
 import { MoneyTransactionList } from '@/features/finances/components/MoneyTransactionList';
 import { NewTransactionButtons } from '@/features/finances/transactions/components/NewTransactionButtons';
 import { TransactionsFilters } from '@/features/finances/transactions/components/TransactionsFilters';
-import { useTransactions } from '@/features/finances/transactions/hooks/useTransactions';
 import { useTransactionsFilters } from '@/features/finances/transactions/hooks/useTransactionsFilters';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { useTransactions } from '@/hooks/useTransactions';
 import { useAuth } from '@/stores/AuthProvider';
 
 export const Finances = () => {
