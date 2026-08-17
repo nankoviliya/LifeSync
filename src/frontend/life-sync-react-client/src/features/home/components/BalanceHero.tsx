@@ -21,24 +21,28 @@ export const BalanceHero = ({
 }: BalanceHeroProps) => {
   const { translate } = useAppTranslations();
 
+  // A summary's currency can be empty when it has no transactions (e.g. zero
+  // income), which would render a bare number with no currency symbol. Fall
+  // back to the account's default currency so the figure always reads sensibly.
+  const incomeCurrency = incomeSummary.currency || balanceCurrency;
+  const expenseCurrency = expenseSummary.currency || balanceCurrency;
+
   const miniStats: ReadonlyArray<[string, string]> = [
     [
       translate('dashboard-hero-income', { defaultValue: 'INCOME' }),
-      formatCurrency(incomeSummary.totalIncome, incomeSummary.currency, {
+      formatCurrency(incomeSummary.totalIncome, incomeCurrency, {
         cents: false,
       }),
     ],
     [
       translate('dashboard-hero-spent', { defaultValue: 'SPENT' }),
-      formatCurrency(expenseSummary.totalSpent, expenseSummary.currency),
+      formatCurrency(expenseSummary.totalSpent, expenseCurrency),
     ],
     [
       translate('dashboard-hero-saved', { defaultValue: 'SAVED' }),
-      formatCurrency(
-        expenseSummary.totalSpentOnSavings,
-        expenseSummary.currency,
-        { cents: false },
-      ),
+      formatCurrency(expenseSummary.totalSpentOnSavings, expenseCurrency, {
+        cents: false,
+      }),
     ],
   ];
 
