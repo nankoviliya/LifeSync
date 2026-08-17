@@ -6,9 +6,15 @@ import { IUserProfileDataModel } from '@/types/userProfileDataModel';
 
 interface IProps {
   userData: IUserProfileDataModel;
+  isEditing: boolean;
+  onEditingChange: (editing: boolean) => void;
 }
 
-export const UserProfileDataContainer = ({ userData }: IProps) => {
+export const UserProfileDataContainer = ({
+  userData,
+  isEditing,
+  onEditingChange,
+}: IProps) => {
   const { firstName, lastName } = userData;
 
   const initials =
@@ -26,7 +32,11 @@ export const UserProfileDataContainer = ({ userData }: IProps) => {
           color={color}
           userData={userData}
         />
-        <UserProfileDataBody userData={userData} />
+        <UserProfileDataBody
+          userData={userData}
+          isEditing={isEditing}
+          onEditingChange={onEditingChange}
+        />
       </CardContent>
     </Card>
   );

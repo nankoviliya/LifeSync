@@ -1,5 +1,4 @@
 import { Check, Pencil, X } from 'lucide-react';
-import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { CopyableLabel } from '@/components/common/copyable-label';
@@ -22,11 +21,15 @@ import { getLanguageTranslation } from '@/utils/translationsUtilities';
 
 interface IProps {
   userData: IUserProfileDataModel;
+  isEditing: boolean;
+  onEditingChange: (editing: boolean) => void;
 }
 
-export const UserProfileDataBody = ({ userData }: IProps) => {
-  const [isEditing, setIsEditing] = useState(false);
-
+export const UserProfileDataBody = ({
+  userData,
+  isEditing,
+  onEditingChange,
+}: IProps) => {
   const { translate } = useAppTranslations();
   const { frontendSettings, isLoading } = useFrontendSettings();
   const { control, handleSubmit, onSubmit, isSubmitting } =
@@ -132,7 +135,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
             </Button>
             <Button
               onClick={(e) => {
-                setIsEditing(false);
+                onEditingChange(false);
                 e.preventDefault();
               }}
             >
@@ -144,7 +147,7 @@ export const UserProfileDataBody = ({ userData }: IProps) => {
           <Button
             type="button"
             onClick={(e) => {
-              setIsEditing(true);
+              onEditingChange(true);
               e.preventDefault();
             }}
           >
