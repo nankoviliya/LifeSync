@@ -49,7 +49,7 @@ export const ImportAccountData = () => {
   };
 
   return (
-    <Card>
+    <Card className="gap-4 py-5">
       <CardHeader>
         <CardTitle className="text-base">{translate('import-title')}</CardTitle>
         <CardDescription>{translate('import-description')}</CardDescription>

@@ -38,7 +38,7 @@ export const ExportAccountData = () => {
   };
 
   return (
-    <Card>
+    <Card className="gap-4 py-5">
       <CardHeader>
         <CardTitle className="text-base">{translate('export-title')}</CardTitle>
         <CardDescription>{translate('export-description')}</CardDescription>
