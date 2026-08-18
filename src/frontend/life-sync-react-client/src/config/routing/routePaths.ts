@@ -32,4 +32,8 @@ export const routePaths = {
     path: '/finances/transactions',
     name: 'Transactions',
   },
+  settings: {
+    path: '/settings',
+    name: 'Settings',
+  },
 } as const;

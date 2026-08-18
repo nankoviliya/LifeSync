@@ -13,14 +13,22 @@ export const useUserCard = () => {
     navigate(routePaths.userProfile.path);
   };
 
+  const navigateToSettings = () => {
+    navigate(routePaths.settings.path);
+  };
+
   const handleLogout = () => {
     logout();
   };
 
   return {
     profileLabel: translate('profile-button-name', { defaultValue: 'Profile' }),
+    settingsLabel: translate('settings-button-name', {
+      defaultValue: 'Settings',
+    }),
     logoutLabel: translate('logout-button-name', { defaultValue: 'Logout' }),
     navigateToUserProfile,
+    navigateToSettings,
     handleLogout,
   };
 };

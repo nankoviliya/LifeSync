@@ -18,6 +18,7 @@ import { Login } from '@/features/auth/login/components/Login';
 import { Register } from '@/features/auth/register/components/Register';
 import { Finances } from '@/features/finances/Finances';
 import { Home } from '@/features/home/Home';
+import { Settings } from '@/features/settings/Settings';
 import { UserProfile } from '@/features/userProfile/components/UserProfile';
 
 const router = createBrowserRouter(
@@ -58,6 +59,7 @@ const router = createBrowserRouter(
           path={routePaths.financeTransactions.path}
           element={<Navigate to={routePaths.finances.path} replace />}
         />
+        <Route path={routePaths.settings.path} element={<Settings />} />
       </Route>
 
       {/* Fallback */}
