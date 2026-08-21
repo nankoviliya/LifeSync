@@ -13,8 +13,7 @@ namespace LifeSync.Tests.Integration.Infrastructure;
 
 public class IntegrationTestsWebAppFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _databaseContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server")
+    private readonly MsSqlContainer _databaseContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server")
         .WithEnvironment("DB_PORT", "1433")
         .WithEnvironment("DB_HOST", "localhost")
         .WithEnvironment("DB_NAME", "LifeSync_Test")
