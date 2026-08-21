@@ -11,8 +11,14 @@ export interface UserCardProps {
 }
 
 export const UserCard = ({ user }: UserCardProps) => {
-  const { profileLabel, logoutLabel, navigateToUserProfile, handleLogout } =
-    useUserCard();
+  const {
+    profileLabel,
+    settingsLabel,
+    logoutLabel,
+    navigateToUserProfile,
+    navigateToSettings,
+    handleLogout,
+  } = useUserCard();
 
   return (
     <DropdownMenu>
@@ -37,6 +43,9 @@ export const UserCard = ({ user }: UserCardProps) => {
       <DropdownMenuContent side="top" align="start" className="w-56">
         <DropdownMenuItem onClick={navigateToUserProfile}>
           {profileLabel}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={navigateToSettings}>
+          {settingsLabel}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>
           {logoutLabel}

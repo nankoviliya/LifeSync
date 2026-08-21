@@ -11,8 +11,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useNewExpenseTransaction } from '@/features/finances/transactions/hooks/useNewExpenseTransaction';
-import { ExpenseType } from '@/features/finances/transactions/models/transactionsGetModel';
 import { useAppTranslations } from '@/hooks/useAppTranslations';
+import { ExpenseType } from '@/types/transactionTypes';
 
 export interface INewExpenseTransactionProps {
   closeForm: () => void;

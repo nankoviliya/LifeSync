@@ -1,4 +1,4 @@
-import { ExpenseType } from '@/features/finances/transactions/models/transactionsGetModel';
+import { ExpenseType } from '@/types/transactionTypes';
 
 export interface INewExpenseTransactionRequest {
   amount: number;

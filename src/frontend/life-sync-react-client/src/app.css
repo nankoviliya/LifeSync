@@ -33,12 +33,26 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* New: side-* tokens for the dark sidebar surface */
+  /* side-* tokens for the dark sidebar surface */
   --color-side: var(--side);
   --color-side-foreground: var(--side-foreground);
   --color-side-muted: var(--side-muted);
   --color-side-border: var(--side-border);
   --color-side-accent-soft: var(--side-accent-soft);
+
+  /* Success (positive amounts / income), soft-tinted surfaces (primary-soft,
+     success-soft) for badges and callouts, a stronger border for emphasis,
+     a higher-contrast muted foreground, and the finance allocation chart
+     accents (wants / saved). Bridged here so Tailwind emits the utilities. */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-foreground: var(--primary-soft-foreground);
+  --color-border-strong: var(--border-strong);
+  --color-muted-foreground-hi: var(--muted-foreground-hi);
+  --color-chart-wants: var(--chart-wants);
+  --color-chart-saved: var(--chart-saved);
 
   /* Shadows (must live in @theme so shadow-* utilities pick them up, not :root) */
   --shadow-xs: 0 1px 2px rgba(20, 19, 15, 0.05);
@@ -86,6 +100,20 @@
   --input: rgba(30, 28, 25, 0.08);
   --ring: #b35a3e;
 
+  /* Semantic status + soft-surface tokens, plus finance chart accents.
+     success: positive/income text & fills; *-soft: low-emphasis tinted
+     backgrounds; border-strong: emphasized dividers; muted-foreground-hi:
+     muted text that still meets contrast; chart-*: allocation ring segments. */
+  --success: #2f5a3a;
+  --success-foreground: #ffffff;
+  --success-soft: #dde8dd;
+  --primary-soft: #f4e0d6;
+  --primary-soft-foreground: #8a3f28;
+  --border-strong: rgba(30, 28, 25, 0.14);
+  --muted-foreground-hi: rgba(27, 26, 23, 0.78);
+  --chart-wants: #d9a86a;
+  --chart-saved: #4a7a58;
+
   /* Sidebar (dark surface in light mode) */
   --side: #14130f;
   --side-foreground: #ffffff;
@@ -118,6 +146,19 @@
   --border: rgba(244, 243, 240, 0.08);
   --input: rgba(244, 243, 240, 0.08);
   --ring: #c7775a;
+
+  /* Dark-mode counterparts of the semantic status, soft-surface, and chart
+     tokens: lighter success/accent hues for contrast on dark surfaces, and
+     soft tints expressed as low-alpha overlays instead of opaque pastels. */
+  --success: #8fb89a;
+  --success-foreground: #14130f;
+  --success-soft: rgba(143, 184, 154, 0.15);
+  --primary-soft: rgba(199, 119, 90, 0.18);
+  --primary-soft-foreground: #d99a7c;
+  --border-strong: rgba(244, 243, 240, 0.14);
+  --muted-foreground-hi: rgba(244, 243, 240, 0.78);
+  --chart-wants: #d9a86a;
+  --chart-saved: #8fb89a;
 
   --side: #0d0c0a;
   --side-foreground: #f4f3f0;

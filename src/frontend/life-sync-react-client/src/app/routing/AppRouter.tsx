@@ -17,8 +17,8 @@ import { routePaths } from '@/config/routing/routePaths';
 import { Login } from '@/features/auth/login/components/Login';
 import { Register } from '@/features/auth/register/components/Register';
 import { Finances } from '@/features/finances/Finances';
-import { Transactions } from '@/features/finances/transactions/components/Transactions';
 import { Home } from '@/features/home/Home';
+import { Settings } from '@/features/settings/Settings';
 import { UserProfile } from '@/features/userProfile/components/UserProfile';
 
 const router = createBrowserRouter(
@@ -57,8 +57,9 @@ const router = createBrowserRouter(
         <Route path={routePaths.finances.path} element={<Finances />} />
         <Route
           path={routePaths.financeTransactions.path}
-          element={<Transactions />}
+          element={<Navigate to={routePaths.finances.path} replace />}
         />
+        <Route path={routePaths.settings.path} element={<Settings />} />
       </Route>
 
       {/* Fallback */}
